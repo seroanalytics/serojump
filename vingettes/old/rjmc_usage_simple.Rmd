@@ -1,0 +1,207 @@
+---
+title: "rjmc_usage"
+author: "David Hodgson"
+output: rmarkdown::github_document
+vignette: >
+  %\VignetteIndexEntry{PTMC_usage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r setup}
+#devtools::install("..") #install if needed
+devtools::load_all()
+
+library(rjmc)
+library(tidyverse) 
+library(coda)
+library(parallel)
+
+```
+
+# Reversible Jump Markov Chain Monte Carlo
+
+## Model 
+
+## Implementation  
+
+### Create the model
+The `model` list should be a list with three functions, `samplePriorDistributions`, `evaluateLogLikelihood`, and `evaluateLogPrior` and a vector string with the parameter names used in the calibration, `namesOfParameters`.
+
+#### numeric string `lowerParSupport_fitted` 
+A numeric vector showing the upper support for parameters
+
+#### numeric string `upperParSupport_fitted` 
+A numeric vector showing the lower support for parameters
+
+#### vector string `par_names` 
+A vector string of the parameter names.
+
+#### func `samplePriorDistributions` 
+A function which generates the initial values (usually by sampling the prior distributions)
+
+* (no arguments)
+* @return vector of values 
+
+#### func `evaluateLogLikelihood` 
+A function which generates the log-likelihood for a set of parameter values
+
+* @param data, data needed to calculate the log-likelihood
+* @param params, parameter values
+* @return log-likelihood 
+
+#### func `evaluateLogPrior`
+A function which calculates the log-prior for a set of parameter values
+
+* @param params, parameter values
+* @return log-prior 
+
+
+```{r model definition}
+
+# model is a list of three functions and a vector string
+model <- list(
+
+  lowerParSupport_fitted = c(0, 0),
+  upperParSupport_fitted = c(10, 1),
+
+  namesOfParameters = c("mu", "psi"),
+
+  samplePriorDistributions = function(datalist) {
+     c(rgamma(1, 2, 20), rbeta(1, 2, 40))
+  },
+
+  evaluateLogPrior = function(params, jump, datalist) {
+    lpr <- 0
+    lpr <- lpr + log(pgamma( params[1], 2, 20))
+    lpr <- lpr + log(pbeta( params[2], 2, 40))
+    lpr
+  },
+
+  initialiseJump =  function(jump, datalist) {
+    rep(0, 10)
+  },
+
+  jumpSampling =  function(jump, datalist) {
+    jump[1] <- 1
+    jump
+  },
+
+  evaluateLogLikelihood = function(params, jump, covariance, datalist) {
+    y <- datalist$y
+    mu <- params[1]
+    psi <- params[2]
+    ll <- 0;
+    for (t in 1:length(datalist$y))
+    {
+      sum_x = 0
+      lambda = 1000*exp(-mu*(t+1))*psi;
+      for (i in 1:y[t]){
+        sum_x <- sum_x + i
+      }
+      ll <- ll - lambda + y[t]*log(lambda) - sum_x
+    }
+    ll
+  }
+)
+
+dataMos <- read.csv(here::here("vingettes", "RWM_mosquito.csv") )
+# restructure the data for the log-likelihood function
+data_t <-   list(
+  time = dataMos$time,
+  y = dataMos$recaptured
+)
+
+```
+
+
+
+### Settings
+The settings for the parallel tempering algorithm are summarised here.
+
+#### Settings Options
+
+* numberChainRuns, number of independent chains to run
+* numberTempChains, number of dependent chains per chain run (i.e. the number of rungs in the temperature ladder)
+* iterations, the number of steps to take in the Markov chain, (including the burn-in)
+* burninPosterior, the number of steps in the burn-in (these are discarded)
+* thin, thinning of the chain (i.e. =10 means only every 10th sample is saved)
+* consoleUpdates, frequency at which the console updates (i. =100 means every 100th step)
+* numberFittedPar, number of parameters
+* onAdaptiveCov, whether to include adaptive covariance
+* updatesAdaptiveCov, frequency at which the adaptive covariance matrix is updated
+* burninAdaptiveCov, number of steps to take before using the adaptive covariance matrix 
+* onAdaptiveTemp, whether to include adaptive temperature ladder
+* updatesAdaptiveTemp, frequency at which the adaptive temperature ladder is updated
+* Debug, run with debug output 
+
+```{r settings}
+
+# settings used for the ptmc model 
+settings <-  list(
+  numberChainRuns = 2,
+  numberTempChains = 1,
+  iterations = 10000,
+  burninPosterior = 5000,
+  thin = 10,
+  consoleUpdates = 1,
+  numberFittedPar = 2,
+  onAdaptiveCov = TRUE,
+  updatesAdaptiveCov = 200,
+  burninAdaptiveCov = 100,
+  onAdaptiveTemp = TRUE,
+  updatesAdaptiveTemp = 10,
+  onDebug = FALSE,
+  lowerParBounds = model$lowerParSupport_fitted,
+  upperParBounds = model$upperParSupport_fitted,
+  covarInitVal = 1e-8, # make very small if struggling to sample to beginning
+  covarInitValAdapt = 1e-4, # make very small if struggling to sample to beginning
+  covarMaxVal = 1, # decrease if struggling to sample in the middle
+  runParallel = TRUE,
+  numberCores = 2,
+  lengthJumpVec = 10
+)
+
+post <- rjmc_func(model=model, data=data_t, settings=settings)
+
+
+```
+
+### Run the model.
+
+```{r run model,  message=FALSE, results = 'hide'}
+ 
+
+```
+
+## Plot the data 
+`ptmc_func` returns a list of length two. The first entry is `post$mcmc` a mcmc or mcmc.list object (from the coda package). I can plot these and calculate convergence diagnostics using coda functions:
+
+```{r plot outcomes}
+library(posterior)
+library(coda)
+library(bayesplot)
+summary(post$mcmc)
+
+post$mcmc %>% mcmc_trace
+
+# Plot the Gelman-Rubin diagnostic for the parameters
+gelman.plot(post$mcmc)
+gelman.diag(post$mcmc)
+
+```
+
+The second entry is `post$lpost` and is long table dataframe of the log-posterior values. These values can be easily plotted using ggplot2:
+```{r}
+# Plot of the logposterior for the three chains
+lpost_conv <- post$lpost %>% filter(sample_no>5000)
+logpostplot <- ggplot(lpost_conv, aes(x = sample_no, y = lpost)) + 
+  geom_line(aes(color = chain_no), size = 0.2, alpha=0.8) +
+  theme_minimal()
+logpostplot
+
+```

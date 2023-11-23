@@ -3,105 +3,12 @@
 
 #include "./headers/mvn.hpp"
 #include "./headers/rjmc.hpp"
+#include "./headers/rjmc_sero.hpp"
 
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::plugins("cpp14")]]
 
-////////////////////////////////////////
-////////////////////////////////////////
-//////////// CONTINUOUS PTMC //////////
-///////////////////////////////////
-///////////////////////////////////
 
-/*
-void init_samplePriorDistributions(RPTMC* model, Rcpp::Function samplePriorDistributions) {
-  auto func = [samplePriorDistributions]() {
-    PutRNGstate();
-    auto rData = samplePriorDistributions();
-    GetRNGstate();
-    return Rcpp::as<VectorXd>(rData);
-  };
-  model->samplePriorDistributions = func;
-}
-
-void init_evaluateLogPrior(RPTMC* model, Rcpp::Function evaluateLogPrior) {
-  auto func = [evaluateLogPrior](VectorXd params) {
-    PutRNGstate();
-    auto rData = evaluateLogPrior(params);
-    GetRNGstate();
-    return Rcpp::as<double>(rData);
-  };
-  model->evaluateLogPrior = func;
-}
-
-void init_evaluateLogLikelihood(RPTMC* model, Rcpp::Function evaluateLogLikelihood) {
-  auto func = [evaluateLogLikelihood](VectorXd params, MatrixXd covariance, RObject dataList) {
-    PutRNGstate();
-    auto rData = evaluateLogLikelihood(params, covariance, dataList);
-    GetRNGstate();
-    return Rcpp::as<double>(rData);
-  };
-  model->evaluateLogLikelihood = func;
-}
-*/
-
-
-////////////////////////////////////////
-////////////////////////////////////////
-//////////// DISCRETE PTMC //////////
-///////////////////////////////////
-///////////////////////////////////
-/*
-void init_samplePriorDistributions_discrete(ptmc_discrete::PTMC_D* model, Rcpp::Function samplePriorDistributions) {
-  auto func = [samplePriorDistributions](S4 dataList) {
-    PutRNGstate();
-    auto rData = samplePriorDistributions(dataList);
-    GetRNGstate();
-    return Rcpp::as<VectorXd>(rData);
-  };
-  model->samplePriorDistributions = func;
-}
-
-void init_evaluateLogPrior_discrete(ptmc_discrete::PTMC_D* model, Rcpp::Function evaluateLogPrior) {
-  auto func = [evaluateLogPrior](VectorXd params, VectorXi discrete, S4 dataList) {
-    PutRNGstate();
-    auto rData = evaluateLogPrior(params, discrete, dataList);
-    GetRNGstate();
-    return Rcpp::as<double>(rData);
-  };
-  model->evaluateLogPrior = func;
-}
-
-void init_evaluateLogLikelihood_discrete(ptmc_discrete::PTMC_D* model, Rcpp::Function evaluateLogLikelihood) {
-  auto func = [evaluateLogLikelihood](VectorXd params, VectorXi discrete, MatrixXd covariance, S4 dataList) {
-    PutRNGstate();
-    auto rData = evaluateLogLikelihood(params, discrete, covariance, dataList);
-    GetRNGstate();
-    return Rcpp::as<double>(rData);
-  };
-  model->evaluateLogLikelihood = func;
-}
-
-void init_initialiseDiscrete_discrete(ptmc_discrete::PTMC_D* model, Rcpp::Function initialiseDiscrete) {
-  auto func = [initialiseDiscrete](S4 dataList) {
-    PutRNGstate();
-    auto rData = initialiseDiscrete(dataList);
-    GetRNGstate();
-    return Rcpp::as<VectorXi>(rData);
-  };
-  model->initialiseDiscrete = func;
-}
-
-void init_discreteSampling_discrete(ptmc_discrete::PTMC_D* model, Rcpp::Function discreteSampling) {
-  auto func = [discreteSampling](VectorXi discrete, S4 dataList) {
-    PutRNGstate();
-    auto rData = discreteSampling(discrete, dataList);
-    GetRNGstate();
-    return Rcpp::as<VectorXi>(rData);
-  };
-  model->discreteSampling = func;
-}
-*/
 // [[Rcpp::export]]
 List run_rjmc(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i)
 {
@@ -124,6 +31,36 @@ List run_rjmc(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, boo
   output_full = RJMC.runRJMCC();
 
   RJMCpar = RJMC.saveRJMCpar();
+  output = output_full[0];
+  jump = output_full[1];
+  return Rcpp::List::create(_["output"] = output, _["jump"] = jump, _["RJMCpar"] = RJMCpar);
+
+}
+
+// [[Rcpp::export]]
+List run_rjmc_sero(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i)
+{
+  rjmc_sero::RJMC_SERO_D RJMC_SERO; List output_full;
+  MatrixXd output;
+  MatrixXd jump;
+  rjmc_sero::init_samplePriorDistributions(&RJMC_SERO, model["samplePriorDistributions"]);
+  rjmc_sero::init_evaluateLogPrior(&RJMC_SERO, model["evaluateLogPrior"]);
+  rjmc_sero::init_initialiseJump(&RJMC_SERO, model["initialiseJump"]);
+  rjmc_sero::init_evaluateLogLikelihood(&RJMC_SERO, model["evaluateLogLikelihood"]);
+
+  rjmc_sero::init_exposureFunctionSample(&RJMC_SERO, model["exposureFunctionSample"]);
+  rjmc_sero::init_exposureFunctionDensity(&RJMC_SERO, model["exposureFunctionDensity"]);
+
+
+  if (update_ind) {
+    RJMC_SERO.updateClass(settings, dataList, RJMCpar);
+  } else {  
+    RJMC_SERO.initialiseClass(settings, dataList, i);
+  }
+
+  output_full = RJMC_SERO.runRJMCC();
+
+  RJMCpar = RJMC_SERO.saveRJMCpar();
   output = output_full[0];
   jump = output_full[1];
   return Rcpp::List::create(_["output"] = output, _["jump"] = jump, _["RJMCpar"] = RJMCpar);
