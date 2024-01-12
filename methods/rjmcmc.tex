@@ -8,6 +8,9 @@
 \usepackage{amsmath}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{subcaption} 
+\newcommand{\myimagepath}{/Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc/}
+
 
 \geometry{
     top=1in,
@@ -110,7 +113,7 @@ f_{ab}(s, z, a, b, c, \alpha) = F_{ab}(s, a, b, c)f_{tp}(z, \alpha)
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\textwidth]{/Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc/outputs/sim_data/summary_fig_A_CES.pdf}     \caption{Schematics showing the simulated data structure from \texttt{serosim}[ref]}
+    \includegraphics[width=1\textwidth]{\myimagepath/outputs/sim_data/summary_fig_A_CES.pdf}     \caption{Schematics showing the simulated data structure from \texttt{serosim}[ref]}
     \label{fig:sim_A}
 \end{figure}
 
@@ -120,7 +123,7 @@ f_{ab}(s, z, a, b, c, \alpha) = F_{ab}(s, a, b, c)f_{tp}(z, \alpha)
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\textwidth]{/Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc/outputs/sim_data/summary_fig_B_CES.pdf}     \caption{Schematics showing three levels of individual-level uncertainty and the impact on the  variability of antibody kinetics.   }
+    \includegraphics[width=1\textwidth]{\myimagepath/outputs/sim_data/summary_fig_B_CES.pdf}     \caption{Schematics showing three levels of individual-level uncertainty and the impact on the  variability of antibody kinetics.   }
     \label{fig:sim_B}
 \end{figure}
 
@@ -218,6 +221,47 @@ If $N_{E=0}$ and $N_{E = 1}$ is the set of individuals which are not exposure an
 L(Z|I, N_{E=0}, N_{E=1}, \theta) = \prod_{i \in N_{E=0}}L_{E_i = 0}(Z_{i}| \theta) \prod_{i \in N_{E=1}}L_{E_i = 1}(Z_{i}| I_i, \theta) 
 \end{equation}
 
+\subsubsection{Prior distributions}
+
+\paragraph{}We choose prior distributions for each parameter \pi($\theta$). Table gives a summary of the priors we choose with the support. 
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Parameter} & \textbf{Prior ($\pi$)} & \textbf{Support ($\mathcal{S}$)} \\
+        \hline
+        a & $\mathcal{N}(1.5, 0.5)$ & $[0.5, 4]$ \\
+        \hline
+        b & $\mathcal{N}(0.3, 0.05)$ & $[0, 1]$ \\
+        \hline
+        c & $\mathcal{U}(0, 4)$ & $[0, 4]$ \\
+        \hline
+        $\alpha$ & $\mathcal{U}(0, 1)$ & $[0, 1]$ \\
+        \hline
+        $\beta_0$ & $\mathcal{U}(-10, 10)$ & $[-10, 10]$ \\
+        \hline
+        $\beta_1$ & $\mathcal{U}(-10, 10)$ & $[-10, 10]$ \\
+        \hline
+        $\sigma$ &  $\mathcal{U}(0.01, 1)$ & $[0.01, 1]$ \\
+        \hline
+    \end{tabular}
+    \caption{Table with Headers: Parameter, Prior, and Support}
+    \label{tab:mytable}
+\end{table}
+
+\paragraph{}We also choose the prior for the number of infections $\mathcal{N}_I$ given the number of exposed individuals $\mathcal{N}_E$ to be a Beta Binomial distribution: $\pi(\mathbf{I}) = \text{BetaBinomial}(\mathcal{N}_I | \mathcal{N}_E, 1, 1)$. Choosing this prior prevents any implicit priors that might rise from products of Bernoullis(HAY) as $\text{BetaBinomial}(\mathcal{N}_E, 1, 1) = 1 / \mathcal{N}_E$, further in this example as $\mathcal{N}_E$ is fixed. Thus, this term cancels in the acceptance probability. 
+
+
+\subsubsection{Posterior distributions}
+
+\paragraph{}Bayes' rule stipulates that the product of the prior distribution and likelihood is proportional to the posterior distribution; we can use this rule to approximate the posterior for use in the metropolis algorithm. Specifically 
+
+\begin{equation}
+P(\theta, I | Z) \propto \mathcal{L}(Z | \theta, I)\pi(\theta)\pi(I)
+\end{equation}
+
+
 \subsection{Metropolis-Hasting algorithm}
 
 \subsubsection{Overview}
@@ -230,7 +274,7 @@ L(Z|I, N_{E=0}, N_{E=1}, \theta) = \prod_{i \in N_{E=0}}L_{E_i = 0}(Z_{i}| \thet
 \begin{algorithmic}[1]
     \State Initialize the chain with an initial state $\theta_0$
     \For{$i = 1$ to $N$}
-        \State Generate a candidate state $\theta'$ from the proposal distribution: $\theta' \sim Q(\theta' \mid \theta_i)$
+        \State Generate a candidate state $\theta'$ from the proposal distribution: $\theta' \sim Q(\theta_i)$
         \State Compute the acceptance ratio:
         \[
         \alpha = \min\left(1, \frac{P(\theta')}{P(\theta_i)} \cdot \frac{Q(\theta_i \mid \theta')}{Q(\theta' \mid \theta_i)}\right)
@@ -247,44 +291,169 @@ L(Z|I, N_{E=0}, N_{E=1}, \theta) = \prod_{i \in N_{E=0}}L_{E_i = 0}(Z_{i}| \thet
 
 \subsubsection{MH for serological inference with known exposure }
 
-\paragraph{}In our datasets we wish to infer $\theta$, and infectious statuses $I_i$ within one framework algorithm. For the proposal distribution we define separate proposal distribution for each $I_i$ and $\theta$, such that $Q(\theta) = q()q()$. The proposal distribution for $q(\theta)$ comes from an adaptive metropolis hasting algorithm with XX. The proposal distribution for $I$, which is a discrete space, is performed by choosing a individual $i$ such that $E_i = 1$ at each time step, then sampling a value according to a betabinoamial distribution. These prosposal are both symmetric and thus cancel out in the acceptance ratio. Consequently, we edit the algorithm to that as given in Algorithm~\ref{alg:metropolis_hastings_inf}.
+\paragraph{}In our datasets we wish to infer $\theta$, and infectious statuses ${I_j} \in \mathcal{I}$, for $1 \leq j \leq M$ individuals. By letting $J_i \in(\theta_i, I_i)$) . For the proposal distribution, we define independent proposal distribution for each $\theta$ and $I_i$,  such that $Q(\theta_i, \mathcal{I}_i) = q_\theta(\theta)q_I(\mathcal{I}_i)$. The proposal distribution for $q_\theta(\theta_i, \theta_{i, adapt})$ is a multivariate normal distribution with an adaptive covariance matrix which requires a set of parameters to be updated at each time step $\theta_{i, adapt}$.[ref] (See Appendix). The proposal distribution for $q_I(\mathcal{I}_i)$, which is a discrete space, is performed by choosing an individual $j$ such that $E_i = 1$ uniformly, at each time step, $i$, then sampling a value for $I_{i, j} sim \text{Bernoulli(0.5)}$. These prosposal are both symmetric and thus cancel out in the acceptance ratio. Consequently, we edit the algorithm as given in Algorithm~\ref{alg:metropolis_hastings_inf}.
 
 \begin{algorithm}
-\caption{Generic Metropolis-Hastings Algorithm}
+\caption{Metropolis-Hastings Algorithm for antibody kinetics and infection inference}
 \label{alg:metropolis_hastings_inf}
 \begin{algorithmic}[1]
-    \State Initialize the chain with an initial state $\theta_0$
+    \State Initialize the chain with an initial state $\theta_0$ from the priors $\pi(\theta)$ and $I_{0, j} \sim \text{Bernoulli(0.5)}$ for all $M$ individuals and determine $\theta_{0, adapt}$.
     \For{$i = 1$ to $N$}
-        \State Generate a candidate state $\theta'$ from the proposal distribution: $\theta' \sim Q(\theta' \mid \theta_i)$
-        \State Generate a candidate inidividual $i$ and then candidate state $I'_i$ from the proposal distribution: $\theta' \sim Q(\theta' \mid \theta_i)$
+        \State Generate a candidate state $\theta' \sim q_\theta(\theta_i, \theta_{i, adapt})$
+        \State Generate a candidate individual $j \in N_{E = 1} $ and then a candidate state $I'_j \sim \text{Bernoulli(0.5)}$
         \State Compute the acceptance ratio:
         \[
-        \alpha = \min\left(1, \frac{P(\theta')}{P(\theta_i)} \right)
+        \alpha = \min\left(1, \frac{P(\theta', I'_{j}|Z)}{P(\theta_i, I_{i, j}|Z)} \right)
         \]
         \State Generate a uniform random number $u$ from the interval $[0, 1]$
         \If{$u \leq \alpha$}
-            \State Accept the candidate state: $\theta_{i+1} \leftarrow \theta'$
+            \State Accept the candidate state: $\theta_{i+1} \leftarrow \theta'$ and $I_{i + 1, j}  \leftarrow I'_j$
         \Else
-            \State Reject the candidate state: $\theta_{i+1} \leftarrow \theta_i$
-        \EndIf
+            \State Reject the candidate state: $\theta_{i+1} \leftarrow \theta_i$ and $I_{i + 1, j}  \leftarrow I_{i, j} $
+        \EndIf 
+        \State Update $\theta_{i + 1, adapt} \leftarrow \theta_{i, adapt}$
     \EndFor
-\end{algorithmic}
+\end{algorithmic} 
 \end{algorithm}
 
 \subsection{Implementation }
-\paragraph{} We code the algorithm manually in cpp with an R interface. We run the algorhtm for XX steps, with XX burn-in and for 4 chains. The starting value is taken from the prior distributions of the for $\theta$ and $I$ respectively. We initialise the adaptive covariance by running with an identity matix with each parameter scales according for 1,000 steps then sample from the adaptive scheme as in XX. 
+\paragraph{} We code the algorithm manually in cpp with an R interface. We run the algorithm for 200,000 steps, with 100,000 burn-in and for 4 chains. The starting value is taken from the prior distributions of the for $\theta$ and $I$ respectively. We initialise the adaptive covariance by running with an identity matrix with each parameter scale according to 1,000 steps, then sample from the adaptive scheme as in XX. 
 
 \subsection{Simulation recovery }
-\paragraph{} After running the algorithm we  show the ability of the metropolis hasting algorithm to recover the simulated data highlight in section X.
-
-\subsubsection{Antibody kinetics}
-
-\subsubsection{Correlate of protection}
+\paragraph{} After running the algorithm, we demonstrate the ability of MH algorithm X to recover the simulated data derived in section X.
 
 \subsubsection{Infection recovery}
 
+\paragraph{}We assess the ability of the algorithm to recover the infection status of each individual in the study. If the set posterior samples of the infection status is given by $\hat{I_i}$, then we defined an inferred infection to be the case where 75\% or more samples are equal to 1, similarly we define a non-infection event for an individual to be the case were 75\% or are equal to 0. In the case where a individual is netiher infered to be infected or non-infected, we define their infection status as 'non-inferable'.  Given no COP, we find when the pre-infection titre < 3 that all six models considered are able to recover the infection status of all individuals exactly. When the pre-infection titre is greater than 3, the remaining samples are 'non-inferable'; this is due to the attenuation of boosting for infected individuals causing no meaningful change in ab-boosting, and thus, these infections are no longer inferable. In our COP model (model B) we find that the inclusion of the correlate of protection influence the inferrable infection status, causing all infection status, regardless of pre-infection titre to be recoverable. 
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesNoCOP/knownExp/figs/obs_0/infection_recov.png}
+        \caption{No COP, 0\% observation error}
+    \end{subfigure}
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesNoCOP/knownExp/figs/obs_0.2/infection_recov.png}
+        \caption{No COP, 20\% observation error}
+    \end{subfigure}
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesNoCOP/knownExp/figs/obs_0.5/infection_recov.png}
+        \caption{No COP, 50\% observation error}
+    \end{subfigure}
+    
+  \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesCOP/knownExp/figs/obs_0/infection_recov.png}
+        \caption{ COP, 0\% observation error}
+    \end{subfigure}
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesCOP/knownExp/figs/obs_0.2/infection_recov.png}
+        \caption{ COP, 20\% observation error}
+    \end{subfigure}
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesCOP/knownExp/figs/obs_0.5/infection_recov.png}
+        \caption{ COP, 50\% observation error}
+    \end{subfigure}
+    
+    \caption{Simulation recovery of infection status and epidemic curve for two COP models (top: No COP, bottom: logistic COP) and three different levels antibody kinetics variability (0, 20\%, 50\%)}
+\end{figure}
+
+
+\subsubsection{Correlate of protection}
+
+\paragraph{}We next assess the ability of the MH Algorithm to recover the correlate of protection. WE consider two COP models; Model A, no correlate of protection, Model B; logsitical curve for COP. For cour No correlate model we find that the COP curve is most recovered, with the simulated line within a 50\% confidence interval of the posterior sample. Though the model seems to estimate higher change of protection at higher pre-infection values comopare to lower infection values. This is likle an artifact of both fitting a logsitical curve to a straight line which is intrinsically tricky and small sample size leading to biases at one extreme. for the COP model, we find the COP structure is recovered. The variability in the antibody kinetics seemed to have a negligible effect on the recoverability of the COP curve. 
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesNoCOP/knownExp/figs/obs_0/cop_recov.png}
+        \caption{No COP, 0\% observation error}
+    \end{subfigure}
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesNoCOP/knownExp/figs/obs_0.2/cop_recov.png}
+        \caption{No COP, 20\% observation error}
+    \end{subfigure}
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesNoCOP/knownExp/figs/obs_0.5/cop_recov.png}
+        \caption{No COP, 50\% observation error}
+    \end{subfigure}
+    
+  \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesCOP/knownExp/figs/obs_0/cop_recov.png}
+        \caption{ COP, 0\% observation error}
+    \end{subfigure}
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesCOP/knownExp/figs/obs_0.2/cop_recov.png}
+        \caption{ COP, 20\% observation error}
+    \end{subfigure}
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesCOP/knownExp/figs/obs_0.5/cop_recov.png}
+        \caption{ COP, 50\% observation error}
+    \end{subfigure}
+    
+    \caption{Simulation recovery of the COP models (top: No COP, bottom: logistic COP) and three different levels antibody kinetics variability (0, 20\%, 50\%)}
+\end{figure}
+
+
+\subsubsection{Antibody kinetics}
+
+
+\paragraph{}We next assess the ability of the MH Algorithm to recover the antibody kinetics model. A low levels of variability the kinetics are completely recovered. At higher level sof variablity the ability to recovery the simulated antibody kinetics weakens. 
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesNoCOP/knownExp/figs/obs_0/ab_kinetics_recov.png}
+        \caption{No COP, 0\% observation error}
+    \end{subfigure}
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesNoCOP/knownExp/figs/obs_0.2/ab_kinetics_recov.png}
+        \caption{No COP, 20\% observation error}
+    \end{subfigure}
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesNoCOP/knownExp/figs/obs_0.5/ab_kinetics_recov.png}
+        \caption{No COP, 50\% observation error}
+    \end{subfigure}
+    
+  \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesCOP/knownExp/figs/obs_0/ab_kinetics_recov.png}
+        \caption{ COP, 0\% observation error}
+    \end{subfigure}
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesCOP/knownExp/figs/obs_0.2/ab_kinetics_recov.png}
+        \caption{ COP, 20\% observation error}
+    \end{subfigure}
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{\myimagepath/outputs/fits/cesCOP/knownExp/figs/obs_0.5/ab_kinetics_recov.png}
+        \caption{ COP, 50\% observation error}
+    \end{subfigure}
+    
+    \caption{Simulation recovery of the COP models (top: No COP, bottom: logistic COP) and three different levels antibody kinetics variability (0, 20\%, 50\%)}
+\end{figure}
+
+
 \subsubsection{Summary}
-\paragraph{}For known exposure we have shown this MH algorithm is able to recovery to correlate of protection, infection status, and antibody kinetics for varying correlates of protection models and individual-level variability. In practice this algorithm is unlikely to be useful as the exposure state is not know. In the next section we will expand on this algorithm for the case when exposure status is not known throughout the serosurvey. 
+\paragraph{}For the known exposure status of an individual, we have shown this MH algorithm can recover the individual-level infection status, a population-level correlate of protection, and antibody kinetics for two different correlate of protection assumptions and three different levels of individual-level kinetics variability. In practice, this algorithm is unlikely to be useful as the individual-level exposure state is unknown. In the next section, we will expand on this algorithm for the case when exposure status is also unknown throughout the serosurvey. 
+
+
 
 
 \newpage
@@ -335,6 +504,44 @@ where $p(k)$ is the prior probability that model $\mathcal{M}_k$ is chosen, $p(\
 \section{Looking forward}
 
 \section{Appendix}
+\subsection{Adaptive Proposal Distribution}
+
+\paragraph{}I use an adaptive proposal distribution $q_\theta(\theta)$ to sample the parameter space $\theta$. The adaptive metropolis hasting algorithm provides systematic method for modifying the shape of the proposal distribution based on the accepted steps of the current markov chain, allowing for more efficient mixing of chains. That is the $q_\theta(\theta_i) = N(\theta_i, \Sigma_i(\theta_i))$ follows a Gaussian distribution. To provide a reasonable estimate for the covariance matrix $\Sigma_i$, the Markov chain runs for an initial number of steps ($T_{init}$) from a truncated multivariate normal proposal distribution with a covariance matrix, $I_s$, whose entries are calculated using the upper and lower bounds of the support of the priors $[s^k_0, s^k_1] \in \mathcal{S}$, through $i_{k,k} = (s^k_1 - s^k_0)/\zeta$ and $i_{i,j} = 0$ otherwise, where $\zeta$ is a scaling factor.
+ 
+Problematically, the proposal distribution using the updated covariance matrix, $\Sigma_i$, is no longer memoryless, and therefore chain may no longer converge to the correct stationary distribution. To overcome this problem, the proposal distribution must also sample from a non-adaptive multivariate Gaussian distribution modified to ensure that changes to the covariance matrix diminish over time. Further, to improve chain mixing and to optimise convergence rates, I include adaptive scaling factors, $\lambda_i$ and $M_i$ for the initial non-adaptive and adaptive proposals, respectively, whose magnitude diminishes with the number of steps in the chain. The adaptive scaling factor for the non-adaptive proposal distributions stops once the model starts sampling from the adaptive proposal distributions. Overall, the combined non-adaptive and adaptive proposal distributions for the adaptive Metropolis Hastings is given by
+
+\begin{equation}
+\begin{array}{l | l | l}
+\label{eq:proposal}
+
+i & i \leq T_{init} & i > T_{init} \\ \hline
+q(\cdot|\theta_i)&\mathcal{N}(\theta_i, \exp(\lambda_i)I_{s};\mathcal{S})  &
+
+
+\begin{array}{ll}
+\mathcal{N}(\theta_i, \Sigma_i;\mathcal{S}) & \text{with probability }\beta, \\
+\mathcal{N}(\theta_i, \exp(\lambda_{t_{init}})I_{s};\mathcal{S}) & \text{with probability }1 - \beta \\ 
+\end{array}
+ \end{array}
+ \end{equation}
+ 
+ 
+where $\Sigma_t = \exp(M_i)\Gamma_i$ and $M_{i}$, $\lambda_i$ and $\Gamma_{i}$ are updated iteratively through the stochastic approximation algorithm:
+ \begin{center}
+ \begin{tabular}{l l l}
+  $\lambda_{i+1}$ & = & $ \lambda_i + \gamma_1(i)(a(\theta_i, \theta^*) - 0.234) $\\
+ $M_{i+1}$& = & $M_i + \gamma_2(i)(a(\theta_t, \theta^*)- 0.234) $ \\
+ $\mu_{i+1}$ & = & $\mu_i + \gamma_3(i)(\mu_t - \theta_t) $ \\
+ $\Gamma_{i+1}$ & = & $ \Gamma_i + \gamma_4(i)[(\theta_i - \mu_{i+1}))(\theta_t - \mu_{i+1})^T - \Gamma_t]$ \\
+\end{tabular} 
+ \end{center}
+ 
+ where $ \gamma_i(t)$ are gain factors. Note when $i > T_{init}$ up stop updaing $\lambda_i$.
+ 
+ 
+\paragraph{}In our implementation, we define $\theta_{i, adapt} = \{M_i, \mu_i, \Gamma_i, \lambda_i\}$, and choose values, $\beta = 0.05$, $\zeta = 100$,  $\lambda_0 = \log(0.1^2/|\theta_i|)$, $M_0 = \log(2.382^2/|\theta_i|)$,  $\mu_0 = \pi_0$,  $\Gamma_0 = I_s$, and $\gamma_x(i) = (1 + i)^{-0.5}$ for all $x$. 
+
+
 \subsection{Application to PPES}
 
 

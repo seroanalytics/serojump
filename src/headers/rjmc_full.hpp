@@ -100,8 +100,15 @@ namespace rjmc_full{
                     logLikelihood_time += (exposureFunctionDensity(jump[i]) + copFunction(jump[i], jumpInf[i], param, initialTitreValue[i]));
                 }
             }
+            
+            double logPriorInf;
+            if (this->propInferredExpN == 0) {
+                logPriorInf = -1000;
+            }  else {
+                logPriorInf = log(1.0 / this->propInferredExpN);
+            }
 
-            return logPrior + logLikelihood_ab + logLikelihood_time;
+            return logPrior + logPriorInf + logLikelihood_ab + logLikelihood_time;
         }
         
         // "A handy approximation for the error function and its inverse" by Sergei Winitzki.
@@ -451,9 +458,7 @@ namespace rjmc_full{
             if (this->propInferredInfN == 0) {
                 this->proposalInf(t) = 1;
             } else {
-                boost::random::beta_distribution<> b(1, 1); 
-                double p = b(rng); //1.0 / (1.0 + exp(-(b0 + b1 * initialTitreValue[t]))); 
-                boost::random::bernoulli_distribution<> l(p); 
+                boost::random::bernoulli_distribution<> l(0.5); 
                 this->proposalInf(t) = l(rng);
             }
             bookKeepingSize();
