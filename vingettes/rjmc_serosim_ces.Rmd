@@ -413,8 +413,7 @@ par_tab <- bind_rows(
     add_par_df("alpha", 0, 1, "unif", 0, 1), # has to be mininum boost        
     add_par_df("sigma_obs", 0.01, 1, "unif", 0.01, 1),
     add_par_df("beta0", -10, 10, "unif", -10, 10),
-    add_par_df("beta1", -10, 10, "unif", -10, 10),
-
+    add_par_df("beta1", -10, 10, "unif", -10, 10)
 )
 
 
@@ -553,9 +552,9 @@ runsaveRJMCMC( "inferExp", "cesNoCOP", "0", 0, evaluateLogLikelihood, par_tab, e
 runsaveRJMCMC( "inferExp", "cesNoCOP", "0.2", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
 runsaveRJMCMC( "inferExp", "cesNoCOP", "0.5", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
 
-postprocessFigsExp("inferExp", "cesNoCOP", "0", 4)
-postprocessFigsExp("inferExp", "cesNoCOP", "0.2", 4)
-postprocessFigsExp("inferExp", "cesNoCOP", "0.5", 4)
+postprocessFigs("inferExp", "cesNoCOP", "0", 4)
+postprocessFigs("inferExp", "cesNoCOP", "0.2", 4)
+postprocessFigs("inferExp", "cesNoCOP", "0.5", 4)
 
 # Run on the exposure known cycle
 runsaveRJMCMC( "knownExp", "cesCOP", "0", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
