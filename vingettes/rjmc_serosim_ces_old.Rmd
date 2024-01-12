@@ -1,0 +1,888 @@
+
+# colors
+## - Simulated values, red
+## - priors and post, light blue, dark blue
+## - inferred infections, nice green
+## - inferred no infections, gray
+## - cop curve, pink
+## - known vs unknown, diamond, circle
+## - incidence, orange/yellow`
+
+
+```{r}
+
+devtools::load_all()
+library(tidyverse)
+library(brms)
+library(furrr)
+library(rjmc)
+library(serosim)
+library(furrr)
+library(patchwork)
+
+source("r/utils.r")
+
+plan(multisession, workers = 12)
+
+# Define parameters and priors for ab kinetics model
+par_tab <- bind_rows( 
+    # regression parameters
+    add_par_df("a", 0.5, 4, "norm",  1.5, 0.5), # has to be mininum boost      
+    add_par_df("b", 0, 1, "norm",  0.3, 0.05), # has to be mininum boost        
+    add_par_df("c_slope", 0, 4, "unif", 0,  4), # has to be mininum boost     
+    add_par_df("alpha", 0, 1, "unif", 0, 1), # has to be mininum boost        
+    add_par_df("sigma_obs", 0.01, 1, "unif", 0.01, 1)
+)
+
+
+# Likelihood on ab kinetics
+evaluateLogLikelihood <- function(params, jump, covariance, datalist) {
+
+    N = datalist$N
+    knownInfsVec =  datalist$knownInfsVec        
+    knownInfsN = datalist$knownInfsN
+    knownInfsDate = datalist$knownInfsDate
+    endTitreTime = datalist$endTitreTime
+
+    N_data = datalist$N_data
+    initialTitreValue = datalist$initialTitreValue
+    initialTitreTime = datalist$initialTitreTime
+    titre_full = datalist$titre_full
+    times_full = datalist$times_full
+    id_full = datalist$id_full
+
+    # Matrices
+    a <- params[1]
+    b <- params[2]
+    c_slope <- params[3]
+
+    c <- c_slope
+    alpha <- params[4]
+    sigma_obs <- params[5]
+
+    ll <- 0
+    # Likelihood of antibody kinetics
+    for (i in 1:N_data) {
+        titre_val <- titre_full[i]
+        time <- times_full[i]
+        i_idx <- id_full[i]
+        titre_init <- initialTitreValue[i_idx]
+        titre_time_init <- initialTitreTime[i_idx]
+        if (jump[i_idx] == -1) {
+            titre_est <- titre_init
+        } else if ((jump[i_idx] > -1) & (time < jump[i_idx])) {
+            titre_est <- titre_init
+        } else if ((jump[i_idx] > -1) & (time >= jump[i_idx])){
+            if ((time-jump[i_idx]) < 14) {
+                titre_est <- titre_init + max(0, (1 - alpha * titre_init)) * (log(exp(a) +  exp(c)) * (time-jump[i_idx]) / 14);
+            } else {
+                titre_est <- titre_init + max(0, (1 - alpha * titre_init)) * (log(exp(a) * exp(-b/10 * ((time-jump[i_idx]) - 14)) + exp(c)));
+            }
+        }
+        ll <- ll + dnorm(titre_val, titre_est, sigma_obs, log = TRUE)
+    }
+    ll
+}
+
+runsaveRJMCMC <- function(modelname, obs_er, prob_known, evaluateLogLikelihood, par_tab, exp_prior) {
+    # settings used for the ptmc model 
+    data_t <- clean_simulated_rjmcmc(modelname, obs_er, prob_known)
+    model_define <- createModelRJCMC(evaluateLogLikelihood, par_tab, exp_prior)
+
+    settings <-  list(
+        numberChainRuns = 4,
+        numberTempChains = 1,
+        iterations = 20000,
+        burninPosterior = 10000,
+        thin = 10,
+        consoleUpdates =  100,
+        numberFittedPar = 5,
+        onAdaptiveCov = TRUE,
+        updatesAdaptiveCov = 100,
+        burninAdaptiveCov = 1000,
+        onAdaptiveTemp = TRUE,
+        updatesAdaptiveTemp = 10,
+        onDebug = FALSE,
+        lowerParBounds = model_define$lowerParSupport_fitted,
+        upperParBounds = model_define$upperParSupport_fitted,
+        covarInitVal = 1e-2, # make very small if struggling to sample to beginning
+        covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
+        covarMaxVal = 1, # decrease if struggling to sample in the middle
+        runParallel = TRUE,
+        numberCores = 4,
+        lengthJumpVec = data_t$N,
+        noGibbsSteps = 5
+    )
+
+
+    post <- rjmc_sero_func(model = model_define, data = data_t, settings = settings)
+    fitfull <- list(post = post,  model = model_define, data_t = data_t, par_tab = par_tab, exp_prior = exp_prior)
+    saveRDS(fitfull, here::here("outputs", "sim", modelname, paste0("rjmc_fit_", "obs_", obs_er, ".RDS")))
+}
+
+
+# Simulation recovery for ces
+# Define priors on incidence
+exp_prior <- data.frame(
+    lb = "1",
+    ub = "120",
+    func = "unif",
+    par1 = "1",
+    par2 = "120"
+)
+
+runsaveRJMCMC( "ces", "0", 0, evaluateLogLikelihood, par_tab, exp_prior)
+runsaveRJMCMC( "ces", "0.2", 0, evaluateLogLikelihood, par_tab, exp_prior)
+runsaveRJMCMC( "ces", "0.5", 0, evaluateLogLikelihood, par_tab, exp_prior)
+
+exp_prior <- data.frame(
+    lb = "1",
+    ub = "120",
+    func = "norm",
+    par1 = "60",
+    par2 = "20"
+)
+# Simulation recovery for ppes
+runsaveRJMCMC( "ppes", "0", 0.5, evaluateLogLikelihood, par_tab, exp_prior)
+runsaveRJMCMC( "ppes", "0.2", 0.5, evaluateLogLikelihood, par_tab, exp_prior)
+runsaveRJMCMC( "ppes", "0.5", 0.5, evaluateLogLikelihood, par_tab, exp_prior)
+
+
+````
+
+
+# Post-processing
+```{r}
+
+
+modelname <- "ces"
+obs_er <- "0.2"
+
+library(ggdist)
+dir.create(here::here("outputs", "sim", modelname, "figs", paste0("obs_", obs_er)))
+modelA <- readRDS(here::here("outputs", "sim", modelname, "inputs.RDS"))
+res <- readRDS(file = here::here("outputs", "sim", modelname, paste0("sim_data_", obs_er, ".rds")))
+fitfull <- readRDS(here::here("outputs", "sim", modelname, paste0("rjmc_fit_", "obs_", obs_er, ".RDS")))
+post <- fitfull$post
+data_t <- fitfull$data_t
+
+knowndate <- data_t$knownInfsDate
+
+knownid <- which(knowndate != -1)
+N <- data_t$N
+initialTitreValue <- data_t$initialTitreValue
+
+n_chains <- 4
+n_post <- post$mcmc[[1]] %>% nrow
+true_inf_time <- res$immune_histories_long %>% filter(value == 1) %>% 
+    complete(i = 1:N, fill = list(value = 0, t = -1))
+
+add_known <- function(df) {
+    df %>% mutate(known = case_when(id %in% knownid ~ "known", TRUE ~ "unknown"))
+}
+
+add_known_2 <- function(df) {
+    df %>% mutate(known = case_when(pid %in% knownid ~ "known", TRUE ~ "unknown"))
+}
+
+add_inferred_inf <- function(df, cutoff) {
+    df %>% mutate(infer_inf = case_when(prop_inf < cutoff ~ 0, prop_inf >= cutoff ~ 1))
+}
+add_uncertainty <- function(df, no_sample) {
+    df %>% mutate(id = as.numeric(id)) %>% mutate(prop_inf = samples_inf / no_sample, 
+    ub = prop_inf + 1.98 * sqrt(prop_inf * (1-prop_inf) / no_sample),
+    lb = prop_inf - 1.98 * sqrt(prop_inf * (1-prop_inf) / no_sample),
+    )
+} 
+
+post_jump_chain_inf <- map_df(1:n_chains,
+    function(x) {
+        post_jump_chaim <- post$jump[[x]]
+        data.frame(
+            chain = x,
+            id = as.character(1:N),
+            samples_inf = 1:N %>% map( ~(post_jump_chaim[, .x] != -1) %>% sum ) %>% unlist
+        )
+    }
+) %>% add_uncertainty(n_post) %>% add_inferred_inf(0.5) %>% left_join(true_inf_time %>% rename(id = i)) %>% add_known
+
+post_jump_chain_all <- map_df(1:n_chains,
+    function(x) {
+        post_jump_chaim <- post$jump[[x]]
+        data.frame(
+            chain = x,
+            id = as.character(1:N),
+            samples_inf = 1:N %>% map( ~(post_jump_chaim[, .x] != -1) %>% sum ) %>% unlist 
+        )
+    }
+) %>% add_uncertainty(n_post) %>% left_join(true_inf_time %>% rename(id = i))  %>% add_known
+
+
+jump_post_combined <- do.call(rbind, post$jump)
+
+post_jump_pooled_inf <- data.frame(
+    id = as.character(1:N),
+    samples_inf = 1:N %>% map( ~(jump_post_combined[, .x] != -1) %>% sum ) %>% unlist
+) %>% add_uncertainty(n_post * n_chains) %>% add_inferred_inf(0.5) %>% left_join(true_inf_time %>% rename(id = i)) %>% add_known
+
+post_jump_pooled_all <- data.frame(
+    id = as.character(1:N),
+    samples_inf = 1:N %>% map( ~(jump_post_combined[, .x] != -1) %>% sum ) %>% unlist
+) %>% add_uncertainty(n_post * n_chains) %>% left_join(true_inf_time %>% rename(id = i))  %>% add_known
+
+
+size_missed <- post_jump_pooled_inf$prop_inf 
+pid_missed_inf <- c(1:N)[which(size_missed > 0.5)]
+n_missed_d <- length(pid_missed_inf)
+post_dist_jump <- jump_post_combined[,which(size_missed > 0.5) ]
+df_jump_time_chain_inf <- map_df(1:n_missed_d,
+    function(x) {
+        lol <- post_dist_jump[, x][post_dist_jump[, x] > -1] 
+        chain_no <- c(rep(1, 500), rep(2, 500), rep(3, 500), rep(4, 500))
+        lol2 <- chain_no[post_dist_jump[, x] > -1] 
+        data.frame(
+            pid = pid_missed_inf[x],
+            chain = lol2,
+            value = lol
+        )
+    }
+) %>% group_by(pid, chain) %>% mean_qi(.width = 0.95) %>% dplyr::select(pid, chain, value, .lower, .upper) %>%
+    mutate(type = "missed") %>% left_join(true_inf_time %>% rename(pid = i) %>% dplyr::select(!value)) %>% add_known_2
+
+
+size_missed <- post_jump_pooled_all$prop_inf 
+pid_missed_inf <- 1:N
+post_dist_jump <- jump_post_combined
+df_jump_time_chain_all <- map_df(1:N,
+    function(x) {
+        lol <- post_dist_jump[, x][post_dist_jump[, x] > -1] 
+        chain_no <- c(rep(1, 500), rep(2, 500), rep(3, 500), rep(4, 500))
+        lol2 <- chain_no[post_dist_jump[, x] > -1] 
+        if (length(lol) > 0) {
+            data.frame(
+                pid = pid_missed_inf[x],
+                size_inf = length(lol),
+                chain = lol2,
+                value = lol
+            )
+        }
+    }
+) %>% group_by(pid, chain, size_inf) %>% mean_qi(.width = 0.95) %>% dplyr::select(pid, chain, size_inf, value, .lower, .upper) %>%
+    mutate(type = "missed") %>% left_join(true_inf_time %>% rename(pid = i) %>% dplyr::select(!value)) %>% add_known_2
+
+
+
+size_missed <- post_jump_pooled_inf$prop_inf 
+pid_missed_inf <- c(1:N)[which(size_missed > 0.5)]
+n_missed_d <- length(pid_missed_inf)
+post_dist_jump <- jump_post_combined[,which(size_missed > 0.5) ]
+
+df_jump_time_inf <- map_df(1:n_missed_d,
+    function(x) {
+        lol <- post_dist_jump[, x][post_dist_jump[, x] > -1] 
+        if (length(lol) > 0) {
+            data.frame(
+                pid = pid_missed_inf[x],
+                value = lol
+            )
+        }
+    }
+) %>% group_by(pid) %>% mean_qi(.width = 0.95) %>% dplyr::select(pid, value, .lower, .upper) %>%
+    mutate(type = "missed") %>% left_join(true_inf_time %>% rename(pid = i, true_status = value) ) %>% add_known_2
+
+    # # # # # # # # 
+
+pid_missed_all <- 1:N
+post_dist_jump <- jump_post_combined
+df_jump_time_all <- map_df(1:N,
+    function(x) {
+        lol <- post_dist_jump[, x][post_dist_jump[, x] > -1] 
+        if (length(lol) > 0) {
+            data.frame(
+                pid = pid_missed_all[x],
+                size_inf = length(lol),
+                value = lol
+            )
+        }
+    }
+) %>% group_by(pid, size_inf) %>% mean_qi(.width = 0.95) %>% dplyr::select(pid, value, size_inf, .lower, .upper) %>%
+    mutate(type = "missed") %>% left_join(true_inf_time %>% rename(pid = i, true_status = value) ) %>% add_known_2
+
+    # # # # # # # # # # # # # # # # 
+    # COMBINE INFO FROM THOSE PLOT
+    # # # # # # # # # # # # # # # # 
+
+jump_format_inf <- list(
+    chain = post_jump_chain_inf,
+    pooled = post_jump_pooled_inf,
+    time_chain = df_jump_time_chain_inf,
+    time = df_jump_time_inf
+)
+
+jump_format_all <- list(
+    chain = post_jump_chain_all,
+    pooled = post_jump_pooled_all,
+    time_chain = df_jump_time_chain_all,
+    time = df_jump_time_all
+)
+
+
+
+### find IDs of each from groups 
+jump_format_inf_type <- jump_format_inf$pooled %>% mutate(type = 
+    case_when(
+        infer_inf == 1 & value == 1 ~ "Successfully recovered infection",
+        infer_inf == 0 & value == 1 ~ "Missed infection",
+        infer_inf == 1 & value == 0 ~ "Incorrectly identified infection",
+        infer_inf == 0 & value == 0 ~ "Successfully recovered escape"    
+        ))
+
+jump_format_notinferable <- jump_format_inf_type %>% filter(samples_inf < n_post * n_chains * (0.75) & samples_inf > n_post * n_chains * (0.25))
+
+jump_format_inf_type_missed <- jump_format_inf_type %>% filter(type == "Missed infection")
+jump_format_inf_type_wrong <- jump_format_inf_type %>% filter(type == "Incorrectly identified infection")
+
+
+jump_format_inf$pooled$initialTitreValue <- initialTitreValue
+jump_format_all$pooled$initialTitreValue <- initialTitreValue
+saveRDS(list(jumpmcmc = jump_post_combined, jump_noninf = jump_format_notinferable, jump_infer_processed = jump_format_inf, jump_all_processed = jump_format_all), 
+    file = here::here("outputs", "sim", modelname, "figs", paste0("obs_", obs_er), "processed.RDS"))
+
+
+
+
+```
+
+
+
+# PART 1: Antibody kinetics recovery
+```{r}
+
+
+require(posterior)
+require(bayesplot)
+require(ggdist)
+
+chain_samples <- 1:n_chains %>% map(~c(rep(.x, n_post))) %>% unlist
+
+modelA <- readRDS(here::here("outputs", "sim", modelname, "inputs.RDS"))
+res <- readRDS(file = here::here("outputs", "sim", modelname, paste0("sim_data_", obs_er, ".rds")))
+fitfull <- readRDS(here::here("outputs", "sim", modelname, paste0("rjmc_fit_", "obs_", obs_er, ".RDS")))
+post <- fitfull$post
+data_t <- fitfull$data_t
+par_tab <- fitfull$par_tab
+model_outline <- fitfull$model
+T <- modelA$sim$T
+
+post$mcmc %>% summary
+p1 <- post$mcmc %>% mcmc_trace
+p2 <- post$lpost %>% ggplot() + geom_line(aes(x = sample_no, y = lpost, color = chain_no))
+p1 / p2
+ggsave(here::here("outputs", "sim", modelname, "figs", paste0("obs_", obs_er), "trace_plots.png"))
+
+
+true_ab_par <- data.frame(
+    param = c("a", "b", "c", "alpha"),
+    value = c(modelA$simpar$a, modelA$simpar$b, modelA$simpar$c, modelA$simpar$biomarker_ceiling_gradient)
+)
+
+compare <- bind_rows(
+    post$mcmc %>% combine %>% as.data.frame %>% mutate(c = c_slope) %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
+        mutate(type = "Posterior distribution") %>% filter(param %in% c("a", "b", "c", "alpha")) ,
+    map_df(1:n_post,
+        ~model_outline$samplePriorDistributions(par_tab)
+    ) %>% rename(c = c_slope) %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%  mutate(type = "Prior distribution")  %>%
+    filter(param %in% c("a", "b", "c", "alpha")) 
+)
+
+
+ab_function <- function(a, b, c, alpha, T) {
+    1:T %>% map( 
+        function(t) {
+            if (t < 14) {
+                titre_init <- 0 + max(0, (1 - alpha * 0)) * (log(exp(a) +  exp(c)) * (t) / 14);
+            } else {
+                titre_init <- 0 + max(0, (1 - alpha * 0)) * (log(exp(a) * exp(-b/10 * ((t) - 14)) + exp(c)));
+            }
+        }
+    ) %>% unlist
+}
+
+traj_true <- data.frame(
+    time = 1:T,
+    titre = ab_function(modelA$simpar$a, modelA$simpar$b, modelA$simpar$c, modelA$simpar$biomarker_ceiling_gradient, T)
+)
+
+post_fit <- post$mcmc %>% combine %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
+a_post <- post_fit[["a"]]
+b_post <- post_fit[["b"]]
+c_slope_post <- post_fit[["c_slope"]]
+
+c_post <- c_slope_post #(c_trans_post - exp(- c_slope_post * b_post))
+alpha_post <- post_fit[["alpha"]]
+
+p1 <- post_fit %>% ggplot() + geom_point(aes(a, b, color = chain))
+p2 <- post_fit %>% ggplot() + geom_point(aes(a, c_slope, color = chain))
+p3 <- post_fit %>% ggplot() + geom_point(aes(b, c_slope, color = chain))
+
+(p1 + p2) / (p3 )
+
+
+traj_post <- 1:(n_post * n_chains) %>% map_df(
+    ~data.frame(
+        time = 1:T,
+        value = ab_function(a_post[.x], b_post[.x], c_post[.x], alpha_post[.x], T)
+    )
+)
+traj_post_summ <- traj_post %>% group_by(time) %>% mean_qi()
+
+p1 <- compare %>% 
+    ggplot() + 
+        geom_density(aes(x = value, fill = type), alpha = 0.5) +
+        geom_vline(data = true_ab_par, aes(xintercept = value), size = 3, alpha = 0.7) +
+        scale_fill_manual(values = c("red", "gray")) +
+        facet_wrap(vars(param), scale = "free") + theme_bw() + 
+        labs(x = "Value", y = "Density", fill = "Type") + theme_bw() + 
+        ggtitle("Antibody kinetics parameters")
+p2 <- traj_post_summ %>%  
+    ggplot() + 
+    geom_ribbon(aes(ymin = .lower, ymax = .upper, x = time), fill = "red", alpha = 0.5) + 
+    geom_line(aes(y = value, x = time), color = "red") + 
+    geom_line(data = traj_true, aes(y = titre, x = time), color = "black", size = 1, alpha = 0.7) + 
+    theme_bw() + labs(x = "Time post-infection", y = "Log10 sVNT") + 
+    ggtitle("Antibody trajectories post-infection")
+
+require(patchwork)
+p1 / p2 + plot_annotation(title = "Simualtion recovery of the antibody kinetics")
+ggsave(here::here("outputs", "sim", "ces", "figs", paste0("obs_", obs_er), "ab_kinetics_recov.png"), height = 10, width = 10)
+
+
+```
+
+
+# PART 2: Infection status recovery
+
+```{r}
+
+
+library(pROC)
+df_inf_no <- data.frame(
+    type = c("Simulated", "Recovered"),
+    no_infs = c(sum(jump_format_inf$pooled$value), sum(jump_format_inf$pooled$infer_inf))
+)
+
+roc_obj <- roc(jump_format_inf$pooled$value, jump_format_inf$pooled$infer_inf)
+df_sensspec <- data.frame(
+    ROCAUC = as.numeric(roc_obj$auc),
+    Sensitivity = roc_obj$sensitivities[2],
+    Specificity = roc_obj$specificities[2]
+) %>% pivot_longer(everything(), names_to = "metric", values_to = "value")
+p1 <- df_inf_no %>% 
+    ggplot() + 
+        geom_col(aes(no_infs, type, fill = type), alpha = 0.5) + 
+        scale_fill_manual(values = c("red", "black")) + theme_bw() + 
+        labs(x = "Number of infections", y = "", fill = "Type")
+
+p2 <- df_sensspec %>% 
+    ggplot() + 
+        geom_col(aes(value, metric, fill = metric), alpha = 0.9) + 
+        theme_bw() + labs(x = "Value", fill = "Metric", y = "")
+p1 + p2
+
+p3 <- jump_format_inf$pooled %>% 
+    ggplot() + 
+    geom_rect(xmin = -0.5, xmax = 4.5, ymin = 0.25, ymax = 0.75, fill = "gray90", alpha = 0.05) + 
+    geom_hline(yintercept = 0.25, color = "gray50", linetype = "dashed") + 
+    geom_hline(yintercept = 0.75, color = "gray50", linetype = "dashed") +
+    geom_text(x = 1, y = 0.6, label = "Not serologically inferable", size = 10) + 
+    geom_point(aes(x = initialTitreValue, y = prop_inf, color = as.character(value)), 
+        size = 4, alpha = 0.6) + 
+    geom_text(data = jump_format_inf$pooled %>% filter(samples_inf < n_post * n_chains * (0.75) & samples_inf > n_post * n_chains * (0.25)),
+        aes(x = initialTitreValue, y = prop_inf, label = as.character(id)), 
+        size = 4, alpha = 0.6) + 
+    theme_bw() + labs(x = "Titre at start of season", 
+    y = "Probability of infection from model", 
+    color = "True infection status")
+
+
+# Infections that are missed in the modle 
+res$biomarker_states %>% filter(i %in% jump_format_notinferable$id) %>% 
+    ggplot() + 
+        geom_vline(data = res$observed_biomarker_states %>% filter(i %in% jump_format_notinferable$id), aes(xintercept = t), color = "red") + 
+        geom_line(aes(x = t, y = value)) + 
+        facet_wrap(vars(i)) + 
+        theme_bw() + ggtitle("Dynamics of the infections which were missed in the model")
+
+# Infections which are incorrectly thoughts to be infections
+res$observed_biomarker_states %>% filter(i %in% jump_format_inf_type_wrong$id)
+
+jump_format_all$time %>% filter(pid %in% jump_format_notinferable$id) %>% rename(i = pid)
+
+p4 <- res$biomarker_states %>% filter(i %in% jump_format_notinferable$id) %>% 
+    ggplot() + 
+        geom_vline(data = res$observed_biomarker_states %>% filter(i %in% jump_format_notinferable$id), aes(xintercept = t), color = "red") + 
+        geom_rect(data = jump_format_all$time %>% filter(pid %in% jump_format_notinferable$id) %>% rename(i = pid), 
+            aes(xmin = .lower, xmax = .upper, ymin = 0, ymax = 5, alpha = size_inf)) +
+        geom_vline(data = jump_format_all$time %>% filter(pid %in% jump_format_notinferable$id) %>% rename(i = pid), 
+            aes(xintercept = value)) +
+        geom_line(aes(x = t, y = value)) + 
+        scale_alpha_continuous(range = c(0, 0.5)) + 
+        facet_wrap(vars(i)) + 
+        theme_bw() + ggtitle("Trajectories for those who are not serologiallly inferable")
+
+(p1 + p2) / p3 / p4 + plot_layout(heights = c(1, 3, 3))
+ggsave(here::here("outputs", "sim", "ces", "figs", paste0("obs_", obs_er), "inf_recov.png"), height = 12)
+
+
+#jump_format_all$chain %>% mutate(id = factor(id, levels = as.character(1:100))) %>% ggplot() + 
+#    geom_linerange(aes(y = id, xmin = lb, xmax = ub, color = as.character(chain)), position = position_dodge(0.75)) +
+#    geom_point(aes(y = id, x = prop_inf, color = as.character(chain )), position = position_dodge(0.75))
+#ggsave(here::here("outputs", "sim", "ces", "figs", "inf_recov_chain.png"), height = 20)
+
+
+#jump_format_all$pooled  %>% mutate(id = factor(id, levels = as.character(1:100))) %>% ggplot() +
+  #  geom_linerange(aes(y = id, xmin = lb, xmax = ub, color = as.character(value))) +
+  #  geom_point(aes(y = id, x = prop_inf, color = as.character(value ))) + 
+  #  geom_vline(xintercept = 0.5, linetype = "dashed") +
+  #  theme_bw() + 
+  #  labs(x = "Proportion of posterior samples infected", y = "ID", color = "True infection status")
+#ggsave(here::here("outputs", "sim", "ces", "figs", "inf_recov_pooled.png"), height = 20)
+
+```
+
+# PART 3: Epidemiological recovery
+
+```{r}
+
+
+# What to do with the serologically non-inferable - remove?
+id_notinferable <- jump_format_notinferable$id
+
+dataplt <- jump_format_all$time %>%
+    left_join(jump_format_all$pooled %>% rename(pid = id) %>% select(!c(t, value))) %>% 
+    mutate(inferable = case_when(pid %in% id_notinferable~"Not inferable", TRUE~"Inferable"))
+
+
+pid_order1 <- dataplt %>% filter(true_status == 1) %>% arrange(t) %>% pull(pid)
+pid_order0 <- dataplt %>% filter(true_status == 0) %>% arrange(t) %>% pull(pid)
+
+p1 <- dataplt %>% filter(true_status == 1) %>% filter(inferable == "Inferable") %>%
+    mutate(pid = factor(pid, levels = as.character(rev(pid_order1))) ) %>%
+    ggplot() +
+        geom_linerange(aes(y = pid, xmin = .lower, xmax = .upper, color = initialTitreValue, alpha = size_inf), position = position_dodge(0.75)) +
+        geom_point(aes(y = pid, x = value, fill = initialTitreValue,  alpha = size_inf), shape = 21, position = position_dodge(0.75)) + 
+        geom_point(aes(y = pid, x = t, shape = known), alpha = 0.8, size =2,  color = "red") +
+        xlim(0, 120) + 
+        scale_shape_manual(values = c(20, 17)) + 
+    labs(x = "Day in model", y = "PID", color = "Infection type") + theme_bw() + 
+    ggtitle("Recovery of serologically inferable true positives")
+
+p2 <- dataplt %>% filter(true_status == 1) %>% filter(inferable == "Not inferable") %>%
+    mutate(pid = factor(pid, levels = as.character(rev(pid_order1))) ) %>%
+    ggplot() +
+        geom_linerange(aes(y = pid, xmin = .lower, xmax = .upper, color = initialTitreValue, alpha = size_inf), position = position_dodge(0.75)) +
+        geom_point(aes(y = pid, x = value, fill = initialTitreValue,  alpha = size_inf), shape = 21, position = position_dodge(0.75)) + 
+        geom_point(aes(y = pid, x = t, shape = known), alpha = 0.8, size =2,  color = "red") +
+        xlim(0, 120) + 
+    labs(x = "Day in model", y = "PID", color = "Infection type") + theme_bw() + 
+    ggtitle("Recovery of serologically non-inferable true positives")
+
+p3 <- dataplt %>% filter(true_status == 0) %>% filter(inferable == "Inferable") %>% mutate(pid = factor(pid, levels = as.character(rev(pid_order0))) ) %>%
+    ggplot() +
+        geom_linerange(aes(y = pid, xmin = .lower, xmax = .upper, alpha = size_inf), position = position_dodge(0.75)) +
+        geom_point(aes(y = pid, x = value, alpha = size_inf), position = position_dodge(0.75)) + 
+        scale_alpha_continuous(range(0, 0.5)) +
+        xlim(0, 120) +
+    labs(x = "Day in model", y = "PID", color = "Infection type") + theme_bw() + 
+    ggtitle("Recovery of serologically inferable true negatives")
+
+
+p4 <- dataplt %>% filter(true_status == 0) %>% filter(inferable == "Not inferable")%>% mutate(pid = factor(pid, levels = as.character(rev(pid_order0))) ) %>%
+    ggplot() +
+        geom_linerange(aes(y = pid, xmin = .lower, xmax = .upper, alpha = size_inf), position = position_dodge(0.75)) +
+        geom_point(aes(y = pid, x = value, alpha = size_inf), position = position_dodge(0.75)) + 
+        scale_alpha_continuous(range(0, 0.5)) +
+        xlim(0, 120) +
+    labs(x = "Day in model", y = "PID", color = "Infection type") + theme_bw() + 
+    ggtitle("Recovery of serologically non-inferable true negatives")
+
+
+p5 <- dataplt %>% filter(inferable == "Inferable") %>%
+    ggplot() +
+        geom_density(aes(t, y = after_stat(count), color = "Simulated epidemic"), fill = "black",  size = 3, alpha = 0.1) + 
+        geom_density(aes(value, y = after_stat(count), color = "Recovered epidemic"), fill = "red", size = 3, alpha = 0.1) + theme_bw() +
+        geom_density(data = dataplt %>% filter(inferable == "Inferable", known == "known"), aes(value, y = after_stat(count), color = "Known epidemic"), fill = "green", size = 3, alpha = 0.1) + theme_bw() +
+        scale_color_manual(values = c("Simulated epidemic" = "black", "Recovered epidemic" = "red", "Known epidemic" = "green")) +
+        labs(x = "Day of simulations", y = "No of infections per day", color = "Data type") + ggtitle("Epidemiological recovery")
+
+(p1 + p2) / (p3 + p4) / p5 
+ggsave(here::here("outputs", "sim", "ppes", "figs", paste0("obs_", obs_er), "epi_recov.png"))
+
+
+N <- modelA$simpar$N
+inf_times_sim <- res$immune_histories_long %>% filter(value == 1) %>% complete(i = 1:N, fill = list(t = NA)) %>% arrange(t)
+ids_order <- inf_times_sim %>% pull(i)
+inf_times_sim <- inf_times_sim %>% mutate(i = factor(i, levels = rev(ids_order))) 
+
+start_bleed <- res$observed_biomarker_states %>% as.data.frame %>% group_by(i) %>% filter(t == min(t)) %>%
+    mutate(i = factor(i, levels = rev(ids_order)))
+end_bleed <- res$observed_biomarker_states %>% as.data.frame %>% group_by(i) %>% filter(t == max(t)) %>%
+    mutate(t = t - 7) %>%
+    mutate(i = factor(i, levels = rev(ids_order)))
+T <- modelA$simpar$T
+jump_clean <- jump_post_combined %>% as.data.frame %>% pivot_longer(everything(), names_to = "i", values_to = "value") %>% 
+    mutate(i = substr(i, 2, 4))  %>% filter(value > -1) %>%
+    complete(i = as.character(1:N), fill = list(t = value)) %>% mutate(i = factor(i, levels = rev(ids_order))) 
+
+res$observed_biomarker_states %>% mutate(i = factor(i, levels = rev(ids_order))) %>%
+    ggplot() + 
+    stat_halfeye(data = jump_clean, aes(y = i, x = value ), alpha = 0.5, color = "#3EB489", size = 2, shape = 21) +
+    geom_tile(data = start_bleed, aes(y = i, x = t / 2, width = t ), alpha = 0.9, fill = "gray90") +
+    geom_tile(data = end_bleed, aes(y = i, x = t + (T - t) / 2, width = (T - t) ), alpha = 0.9, fill = "gray90") +
+    geom_point(aes(x = t, y = i), shape = "|", size = 2.5) + 
+    geom_point(data = inf_times_sim, aes(x = t, y = i), color = "red", shape = 4) + theme_bw() + 
+    labs(x = "Time in study (days)", y = "Id of individual") + 
+    geom_hline(yintercept = seq(0.5, N + 0.5, 1), color = "gray90") +
+    theme(panel.grid.major.y = element_blank())
+ggsave(here::here("outputs", "sim", "ppes", "figs", paste0("obs_", obs_er), "epi_recov_nice.png"), height = 12)
+
+
+
+
+```
+
+# PART 4: COP Recovery
+
+```{r}
+
+library(rstanarm)
+
+id_notinferable <- jump_format_notinferable$id
+df_infer_inf <- jump_format_inf$pooled %>% 
+    mutate(inferable = case_when(id %in% id_notinferable~"Not inferable", TRUE~"Inferable")) %>% filter(inferable == "Inferable")
+
+
+N_inf <- df_infer_inf$id 
+titre_inf <- vector(mode = "numeric", length = length(N_inf))
+j <- 1
+for (i in N_inf) {
+    if (df_infer_inf$infer_inf[j] == 1) {
+        titre_inf[j] <- data_t$initialTitreValue[i] #+ max(boost_short - wane_short * (time_bleed2[i] - jump[i + 2]), 0)
+    } else {
+        titre_inf[j] <- data_t$initialTitreValue[i] #+ max(boost_short - wane_short * (time_bleed2[i] - jump[i + 2]), 0)
+    }
+    j <- j + 1
+}
+
+df_cop <- data.frame(
+    x_titre_inf = titre_inf,
+    y_infer_inf = df_infer_inf$infer_inf
+) 
+
+fit_cop1 <- stan_glm(y_infer_inf ~ x_titre_inf, data = df_cop, family = binomial(link = "logit"))
+df_post1 <- as.data.frame(fit_cop1)
+
+pr_switch <- function(x, ests, exp) pmin(plogis(ests[1] + ests[2] * x), 1)
+
+df_traj <- 1:1000 %>% map_df(
+    ~data.frame(
+    sample = .x,
+    titre = seq(0, 4, 0.1),
+    inf = pr_switch(seq(0, 4, 0.1), as.numeric(df_post1[.x, ]), 1)
+)) %>% group_by(titre) %>% mean_qi(inf)
+ 
+p1 <- df_cop %>% 
+    ggplot() + 
+        geom_density(aes(x_titre_inf, fill = "sVNT density") ,  alpha = 0.3, color = "white") +
+        geom_point(aes(x = x_titre_inf, y = y_infer_inf), 
+            size = 3, alpha = 0.5) +
+        geom_line(data = df_traj, aes(x = titre, y = inf, color = "Probability of infection"))  +
+       geom_ribbon(data = df_traj, aes(x = titre, ymin = .lower, ymax = .upper), 
+            fill = "#bea9de", alpha = 0.4)  +
+        theme_bw() +  scale_y_continuous(
+        # Features of the first axis
+        name = "Probability of infection during serosurveillence",
+        # Add a second axis and specify its features
+        sec.axis = sec_axis(trans=~.*1, name="Density")
+        ) +
+        xlim(0, 4) + 
+        labs(x = "sVNT titre at start of study", y = "Probability of infection over serosurveillence", fill = "", color = "") + 
+        scale_fill_manual(values = c(
+            "sVNT density" = "#3d80cd"
+            )) + 
+        scale_color_manual(values = c(
+            "sVNT density" = "#3d80cd",
+            "Probability of infection" = "#bea9de"
+            )) + ggtitle("Protection over season")
+
+
+min_exp <- (df_cop$y_infer_inf %>% sum) / (df_cop$y_infer_inf %>% length)
+
+calculate_cop <- function(df_cop, exp_rate) {
+
+
+    N_exp <- round(nrow(df_cop) * exp_rate)
+    N_exp_0 <- N_exp - df_cop$y_infer_inf %>% sum
+    if (N_exp_0 < 0) {
+        stop("exp_rate must be greater than: ", N_exp / N)
+    }
+    df_ptmc_cop <- list(
+        N = nrow(df_cop),
+        titre_val = df_cop$x_titre_inf,
+        base_inf = df_cop$y_infer_inf,
+        inf_pos = which(df_cop$y_infer_inf == 1),
+        noinf_pos = which(df_cop$y_infer_inf == 0),
+        inf_vec = df_cop$y_infer_inf,
+        N_exp_0 = N_exp_0
+    )
+
+    library(ptmc)
+
+    model_cop <- list(
+
+        # Upper and lower bounds for parameters
+        lowerParSupport_fitted = c(-5, -5),
+        upperParSupport_fitted = c(5, 5),
+
+        namesOfParameters = c("b0", "b1"),
+
+        samplePriorDistributions = function(datalist) {
+            s <- vector()
+            s[1] <-  runif(1, -5, 5) # mu
+            s[2] <- runif(1, -5, 5) # sigma
+            s
+        },
+
+        evaluateLogPrior = function(params, discrete, datalist) {
+            p <- 0
+
+            # log-normal distribution parameters
+            p <- p + dunif(params[1], -5, 5, log = TRUE) # mu
+            p <- p + dunif(params[2], -5, 5, log = TRUE) # sigma
+            return(p)
+        },
+
+
+        initialiseDiscrete = function(datalist) { 
+            require(purrr)
+
+            discrete_pos <- sample(datalist$noinf_pos, N_exp_0)
+
+            discrete <- rep(0, datalist$N)
+            # Initiate infection binary
+            for (i in discrete_pos) {
+                discrete[i] <- 1
+            }
+            for (i in datalist$inf_pos) {
+                discrete[i] <- 1
+            }
+            discrete
+        },
+
+        discreteSampling = function(discrete, datalist) {
+            discrete_pos <- sample(datalist$noinf_pos, 2)
+            # Initiate infection binary
+            temp1 <- discrete[discrete_pos[1]]
+            temp2 <- discrete[discrete_pos[2]]
+            discrete[discrete_pos[1]]<- temp2 
+            discrete[discrete_pos[2]]<- temp1
+
+            return(discrete)
+        },
+
+        evaluateLogLikelihood = function(params, discrete, covariance, datalist) {
+
+            ll <- 0
+            b0 <- params[1]
+            b1 <- params[2]
+            xs <- datalist$titre_val
+            pos_in_ll <- which(discrete == 1)
+            xs_in <- xs[pos_in_ll]
+            base_inf_in <- df_ptmc_cop$base_inf[pos_in_ll]
+            prop_outcome <- 1 / (1 + exp(-(b0 + b1 * xs_in)))
+            ll <- sum(base_inf_in * log(prop_outcome) + (1 - base_inf_in) * log(1 - prop_outcome) )
+
+            return(ll)
+        }
+    )
+
+    settingsPT <-  list(
+    numberChainRuns = 4,
+    numberTempChains = 10,
+    iterations = 10000,
+    burninPosterior = 5000,
+    thin = 100,
+    consoleUpdates = 100,
+    numberFittedPar = 2,
+    onAdaptiveCov = TRUE,
+    updatesAdaptiveCov = 100,
+    burninAdaptiveCov = 200,
+    onAdaptiveTemp = TRUE,
+    updatesAdaptiveTemp = 10,
+    onDebug = FALSE,
+    lowerParBounds = model_cop$lowerParSupport_fitted,
+    upperParBounds = model_cop$upperParSupport_fitted,
+    covarInitVal = 1e-0, # make very small if struggling to sample to beginning
+    covarMaxVal = 0.5, # decrease if struggling to sample in the middle
+    runParallel = TRUE,
+    lengthDiscreteVec = df_ptmc_cop$N,
+    updateDiscreteFreq = 0,
+    numberCores = 4,
+    covarInitValAdapt = 1
+    )
+
+    ## Get likelihood
+
+    post_cop <- ptmc_discrete_func(model_cop, df_ptmc_cop, settingsPT)
+
+    post_cop_mcmc <- post_cop$mcmc %>% combine
+    pr_switch <- function(x, ests) pmin(plogis(ests[1] + ests[2] * x), 1)
+
+    df_full_dist  <- 1:nrow(post_cop_mcmc) %>% map_df(~data.frame(
+        titre = seq(0, 4, 0.1),
+        cop = pr_switch(seq(0, 4, 0.1), post_cop_mcmc[.x, ]))
+    )
+
+    df_full_dist_sum <- df_full_dist %>% group_by(titre) %>% mean_qi
+
+    output_sum <- list(
+        exp = exp_rate,
+        post_cop = post_cop,
+        traj_sum = df_full_dist_sum %>% mutate(exp = exp_rate)
+    )
+}
+
+df_cop_06 <- calculate_cop(df_cop, 0.6)
+df_cop_07 <- calculate_cop(df_cop, 0.7) 
+df_cop_08 <- calculate_cop(df_cop, 0.8)
+df_cop_09 <- calculate_cop(df_cop, 0.9) 
+
+df_cop_sum <- bind_rows(df_cop_06$traj_sum, df_cop_07$traj_sum, df_cop_08$traj_sum, df_cop_09$traj_sum)
+
+biomarker_protection <- function(biomarker_quantity, biomarker_prot_midpoint, biomarker_prot_width) {
+    risk <- 1 - 1/(1 + exp(biomarker_prot_width * (biomarker_quantity - biomarker_prot_midpoint)))
+    return(risk)
+}
+
+require(tidybayes)
+df_here <- data.frame(
+    titre = seq(0, 4, 0.1),
+    true_data = (1 - biomarker_protection(seq(0, 4, 0.1), 2, modelA$protection_curve))
+)
+
+p2 <- ggplot(df_cop_sum) +
+    scale_y_continuous(breaks = c(0, 0.5, 1), limits = c(0, 1)) +
+    xlim(0, 4) + 
+    geom_ribbon(aes(x = titre, ymin = .lower, ymax = .upper), fill = "#79B791", alpha = 0.5) +
+    geom_line(aes(x = titre, y = cop, color = "Recovered COP curve")) + 
+    theme_bw() + 
+    geom_line(data = df_here, aes(x = titre, y = true_data, color = "Simulated COP curve"), size = 3) +
+    labs(x = "Titre at infection, (log10)", y = "Probability of protection given exposure", color = "Curve type" ) + 
+    scale_color_manual(values = c("Recovered COP curve" = "#79B791", "Simulated COP curve" = "red")) +
+    facet_wrap(vars(exp)) + ggtitle("Protection over season for a given exposure rate")
+
+p1 / p2
+ggsave(here::here("outputs", "sim", "ces", "figs", paste0("obs_", obs_er), "cop_recov.png") )
+
+
+```

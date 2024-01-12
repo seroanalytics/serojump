@@ -115,6 +115,7 @@ exp_prior <- data.frame(
     par1 = "60",
     par2 = "20"
 )
+
 # Simulation recovery for ppes
 #runsaveRJMCMC( "ppes", "0", 0.5, evaluateLogLikelihood, par_tab, exp_prior)
 #runsaveRJMCMC( "ppes", "0.2", 0.5, evaluateLogLikelihood, par_tab, exp_prior)
