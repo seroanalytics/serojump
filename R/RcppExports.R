@@ -9,3 +9,7 @@ run_rjmc_sero <- function(model, dataList, settings, update_ind, RJMCpar, i) {
     .Call('_rjmc_run_rjmc_sero', PACKAGE = 'rjmc', model, dataList, settings, update_ind, RJMCpar, i)
 }
 
+run_rjmc_full <- function(model, dataList, settings, update_ind, RJMCpar, i) {
+    .Call('_rjmc_run_rjmc_full', PACKAGE = 'rjmc', model, dataList, settings, update_ind, RJMCpar, i)
+}
+

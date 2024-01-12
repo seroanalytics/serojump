@@ -63,9 +63,10 @@ check_boundaries <- function(x, lb, ub) {
 }
 
 
-clean_simulated_rjmcmc <- function(modelname, obs_er, prob_known) {
-    modeli <- readRDS(here::here("outputs", "sim", modelname, "inputs.RDS"))
-    res <- readRDS(file = here::here("outputs", "sim", modelname, paste0("sim_data_", obs_er, ".rds")))
+clean_simulated_rjmcmc <- function(modelname_sim, obs_er, prob_known, known_exp = FALSE) {
+
+    modeli <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
+    res <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", obs_er, ".rds")))
 
     name <- modeli$name
     protection_curve <- modeli$protection_curve
@@ -117,9 +118,18 @@ clean_simulated_rjmcmc <- function(modelname, obs_er, prob_known) {
     id_full <- observed_biomarker_statesStudy$i
     N_data <- length(id_full)
 
+    if (known_exp) {
+        knownExpVec <- modeli$simpar$exp %>% as.data.frame %>% 
+        mutate(i = 1:N) %>% pivot_longer(!i, names_to = "t", values_to = "exp") %>% mutate(t = as.numeric(substr(t, 2, 4))) %>% 
+        filter(exp == 1) %>% complete(i = 1:N, fill = list(t = -1, exp = -1)) %>% pull(t)
+    } else {
+        knownExpVec <- NA
+    }
+
     # Things needed, data for likelihood and sampler
     data_t <- list(
         N = N,
+        knownExpVec = knownExpVec,
         knownInfsVec = known,        
         knownInfsN = sum(known),
         knownInfsDate = dayinf,
@@ -173,3 +183,50 @@ createModelRJCMC <- function(ab_ll, par_tab, exp_prior) {
 
     model_type
 }
+
+
+createModelRJCMCFull <- function(ab_ll, par_tab, exp_prior, cop_func) {
+    model_type <- list()
+    
+    model_type$evaluateLogLikelihood <- ab_ll 
+    model_type$lowerParSupport_fitted <- par_tab$lb
+    model_type$upperParSupport_fitted <- par_tab$ub
+
+    model_type$namesOfParameters <- par_tab$par_name
+
+    model_type$samplePriorDistributions = function(datalist) {
+        get_sample_non_centered(par_tab)
+    }
+
+    model_type$evaluateLogPrior <- function(params, jump, datalist) {
+        cal_lprior_non_centered(par_tab, params)
+    }
+
+    model_type$copFunction <- cop_func
+
+    model_type$initialiseJump <- function(datalist) {
+        c(datalist$knownInfsDate)
+    }
+
+    model_type$exposureFunctionSample <- function() {
+        dist_name <- paste0("r", exp_prior[1, 3])
+        my_dist_name <- get(dist_name)
+        s <- do.call(my_dist_name, list(1, as.numeric(exp_prior[1, 4]),  as.numeric(exp_prior[1, 5])) )
+        s
+    }
+
+    model_type$exposureFunctionDensity <- function(jump_i) {
+        dist_name <- paste0("d", exp_prior[1, 3])
+        my_dist_name <- get(dist_name)
+        d <- do.call(my_dist_name, list(as.numeric(jump_i), as.numeric(exp_prior[1, 4]), as.numeric(exp_prior[1, 5])) )
+        d
+    }
+
+    model_type
+}
+
+
+
+safe_colorblind_palette <- c("#88CCEE", "#CC6677", "#DDCC77", "#117733", "#332288", "#AA4499", 
+                             "#44AA99", "#999933", "#882255", "#661100", "#6699CC", "#888888")
+scales::show_col(safe_colorblind_palette)

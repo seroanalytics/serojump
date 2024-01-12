@@ -43,10 +43,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// run_rjmc_full
+List run_rjmc_full(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i);
+RcppExport SEXP _rjmc_run_rjmc_full(SEXP modelSEXP, SEXP dataListSEXP, SEXP settingsSEXP, SEXP update_indSEXP, SEXP RJMCparSEXP, SEXP iSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type model(modelSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type dataList(dataListSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type settings(settingsSEXP);
+    Rcpp::traits::input_parameter< bool >::type update_ind(update_indSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type RJMCpar(RJMCparSEXP);
+    Rcpp::traits::input_parameter< int >::type i(iSEXP);
+    rcpp_result_gen = Rcpp::wrap(run_rjmc_full(model, dataList, settings, update_ind, RJMCpar, i));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rjmc_run_rjmc", (DL_FUNC) &_rjmc_run_rjmc, 6},
     {"_rjmc_run_rjmc_sero", (DL_FUNC) &_rjmc_run_rjmc_sero, 6},
+    {"_rjmc_run_rjmc_full", (DL_FUNC) &_rjmc_run_rjmc_full, 6},
     {NULL, NULL, 0}
 };
 
