@@ -101,6 +101,7 @@ namespace rjmc_full{
                 }
             }
             
+            // Prior distribution on number of infected persons given number of exposed people, this is the evlaution of a betabinomial(E, 1, 1) distribution 
             double logPriorInf;
             if (this->propInferredExpN == 0) {
                 logPriorInf = -1000;
@@ -253,6 +254,14 @@ namespace rjmc_full{
                 initialJump = this->knownExpVec;
             } else {
                 initialJump = this->initialiseJump(this->dataList);
+                /*for (int i = 0; i < this->N; i ++) {
+                    if ((initialJump[i] > -1) & (this->knownInfsVec(i) != 1)) {
+                        double u = uniformContinuousDist(0, 1);
+                        if (u > 0.5) {
+                            initialJump[i] = this->exposureFunctionSample();
+                        }
+                    }
+                }*/ 
             }
             this->currentJump = initialJump;
 
@@ -494,7 +503,6 @@ namespace rjmc_full{
             if (onDebug) Rcpp::Rcout << "In: sampleNewTime" << std::endl;
 
             double r = uniformContinuousDist(0, 1);
-            //double r_inf = uniformContinuousDist(0, 1);
 
 
             if ((this->historicJump(t) < 0) | (r < 0.05)) { 
@@ -661,11 +669,11 @@ namespace rjmc_full{
                 this->alpha = 0;
             } else {
                 if (this->currJumpType == 0) {
-                    rjadjustmentFactor = log(this->propInferredExpN - this->knownInfsN) - log((this->N - this->propInferredExpN + 1) ) + this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)) + this->copFunction(this->currentJump(this->currJumpIdx), this->currentInf(this->currJumpIdx), this->currentSample,  this->initialTitreTime(this->currJumpIdx));
+                    rjadjustmentFactor = log(this->currInferredExpN - this->knownInfsN) - log((this->N - this->currInferredExpN + 1) ) + this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)) + this->copFunction(this->currentJump(this->currJumpIdx), this->currentInf(this->currJumpIdx), this->currentSample,  this->initialTitreTime(this->currJumpIdx));
                 } else if (this->currJumpType == 1) {
                     rjadjustmentFactor = 0;
                 } else if (this->currJumpType == 2) {
-                    rjadjustmentFactor = log((this->N - this->propInferredExpN)) - log(this->propInferredExpN - this->knownInfsN + 1) - this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx)) - this->copFunction(this->proposalJump(this->currJumpIdx), this->proposalInf(this->currJumpIdx), this->proposalSample,  this->initialTitreTime(this->currJumpIdx)); // dlnorm(proposalJump[currJumpIdx], 3.395, 0.5961)
+                    rjadjustmentFactor = log((this->N - this->currInferredExpN)) - log(this->currInferredExpN - this->knownInfsN + 1) - this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx)) - this->copFunction(this->proposalJump(this->currJumpIdx), this->proposalInf(this->currJumpIdx), this->proposalSample,  this->initialTitreTime(this->currJumpIdx)); // dlnorm(proposalJump[currJumpIdx], 3.395, 0.5961)
                 }
                 this->alpha = min(1.0, exp((this->proposedLogPosterior - this->currentLogPosterior + rjadjustmentFactor)));
             }

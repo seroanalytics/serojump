@@ -122,13 +122,20 @@ plot_abkinetics <- function(outputfull) {
         value = c(modelA$simpar$a, modelA$simpar$b, modelA$simpar$c, modelA$simpar$biomarker_ceiling_gradient)
     )
 
+    res$kinetics_parameters %>% filter(name %in% c("a", "b", "c", "biomarker_ceiling_gradient")) %>% mutate(name = case_when(
+        name == "biomarker_ceiling_gradient"~"alpha", TRUE~name
+    )) %>% select(name, value) %>% rename(param = name)
+
     compare <- bind_rows(
         post$mcmc %>% combine %>% as.data.frame %>% mutate(c = c_slope) %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
             mutate(type = "Posterior distribution") %>% filter(param %in% c("a", "b", "c", "alpha")) ,
+        res$kinetics_parameters %>% filter(name %in% c("a", "b", "c", "biomarker_ceiling_gradient")) %>% mutate(name = case_when(
+            name == "biomarker_ceiling_gradient"~"alpha", TRUE~name
+        )) %>% select(name, value)  %>% rename(param = name) %>%  mutate(type = "Simulated distribution") ,
         map_df(1:n_post,
             ~model_outline$samplePriorDistributions(par_tab)
         ) %>% rename(c = c_slope) %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%  mutate(type = "Prior distribution")  %>%
-        filter(param %in% c("a", "b", "c", "alpha")) 
+        filter(param %in% c("a", "b", "c", "alpha")) %>% filter(type != "Prior distribution")
     )
 
 
@@ -144,10 +151,6 @@ plot_abkinetics <- function(outputfull) {
         ) %>% unlist
     }
 
-    traj_true <- data.frame(
-        time = 1:T,
-        titre = ab_function(modelA$simpar$a, modelA$simpar$b, modelA$simpar$c, modelA$simpar$biomarker_ceiling_gradient, T)
-    )
 
     post_fit <- post$mcmc %>% combine %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
     a_post <- post_fit[["a"]]
@@ -172,21 +175,38 @@ plot_abkinetics <- function(outputfull) {
     )
     traj_post_summ <- traj_post %>% group_by(time) %>% mean_qi()
 
+    a_sim <- res$kinetics_parameters %>% filter(name == "a") %>% pull(value)
+    b_sim <- res$kinetics_parameters %>% filter(name == "b") %>% pull(value)
+    c_sim <- res$kinetics_parameters %>% filter(name == "c") %>% pull(value)
+    alpha_sim <- res$kinetics_parameters %>% filter(name == "biomarker_ceiling_gradient") %>% pull(value)
+
+    traj_true <- 1:(length(a_sim)) %>% map_df(
+        ~data.frame(
+            time = 1:T,
+            value = ab_function(a_sim[.x], b_sim[.x], c_sim[.x], alpha_sim[.x], T),
+            sim = .x
+        )
+    )
+
+
+
     p1 <- compare %>% 
         ggplot() + 
             geom_density(aes(x = value, fill = type), alpha = 0.5) +
-            geom_vline(data = true_ab_par, aes(xintercept = value), size = 3, alpha = 0.7) +
+            geom_vline(data = true_ab_par, aes(xintercept = value), size = 2, alpha = 0.7) +
             scale_fill_manual(values = c("red", "gray")) +
             facet_wrap(vars(param), scale = "free") + theme_bw() + 
             labs(x = "Value", y = "Density", fill = "Type") + theme_bw() + 
             ggtitle("Antibody kinetics parameters")
     p2 <- traj_post_summ %>%  
         ggplot() + 
-        geom_ribbon(aes(ymin = .lower, ymax = .upper, x = time), fill = "red", alpha = 0.5) + 
-        geom_line(aes(y = value, x = time), color = "red") + 
-        geom_line(data = traj_true, aes(y = titre, x = time), color = "black", size = 1, alpha = 0.7) + 
-        theme_bw() + labs(x = "Time post-infection", y = "Log10 sVNT") + 
-        ggtitle("Antibody trajectories post-infection")
+        geom_line(data = traj_true, aes(y = value, x = time, group = sim, color = "black"),  size = 0.4, alpha = 0.4) + 
+        geom_ribbon(aes(ymin = .lower, ymax = .upper, x = time), fill = "red", size = 3, alpha = 0.5) + 
+        geom_line(aes(y = value, x = time, color = "red"), size = 2) + 
+        theme_bw() + labs(x = expression("Time post-infection, s", y = "Titre boost, f"[ab])) + 
+        ggtitle("Antibody trajectories post-infection,") + 
+        scale_colour_manual(name = "Line type", 
+         values =c('black'='black','red'='red'), labels = c('Simualted trajectory','Posterior trajectory'))
 
     require(patchwork)
 
@@ -195,6 +215,47 @@ plot_abkinetics <- function(outputfull) {
 
 }
 
+obs_er <- "0.1"
+modelname <- "inferExp"
+modelname_sim <-  "cesNoCOP"
+outputfull_1 <- readRDS(file = here::here("outputs", "fits", modelname_sim, modelname, paste0("pp_obs_", obs_er, ".RDS")))
+modelA_1 <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
+
+obs_er <- "0.1"
+modelname <- "inferExp"
+modelname_sim <-  "cesCOP"
+outputfull_2 <- readRDS(file = here::here("outputs", "fits", modelname_sim, modelname, paste0("pp_obs_", obs_er, ".RDS")))
+modelA_2 <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
+
+biomarker_protection <- function(biomarker_quantity, biomarker_prot_midpoint, biomarker_prot_width) {
+    risk <- 1 - 1/(1 + exp(biomarker_prot_width * (biomarker_quantity - biomarker_prot_midpoint)))
+    return(risk)
+}
+
+require(tidybayes)
+df_here <- data.frame(
+    titre = seq(0, 4, 0.1),
+    true_data_A = (1 - biomarker_protection(seq(0, 4, 0.1), 2, modelA_1$protection_curve)),
+    true_data_B = (1 - biomarker_protection(seq(0, 4, 0.1), 2, modelA_2$protection_curve))
+)
+
+p1 <- outputfull_1$sim_states %>% filter(exp_ind_sim == 1) %>% mutate(inf_state = case_when(inf_ind_sim==0~"Not infected", inf_ind_sim==1~"Infected")) %>%
+    ggplot() + geom_point(aes(x = init_titre, y = inf_ind_sim, fill =  inf_state), alpha = 0.8, size = 2, shape = 21) +
+        geom_line(data = df_here, aes(x = titre, y = true_data_A, color = "red"), size = 2) + 
+        geom_smooth(aes(x = init_titre, y = inf_ind_sim , color = "black")) + theme_bw() + 
+        scale_color_manual(name = "Line type", values = c("red" = "red", "black" = "black"), labels = c("Realised simualted curve", "Functional simulated curve")) + 
+        labs(x = expression("Pre-infection titre, Z"[j]^0), y = "Probability of infection", fill = "Simulated infection state") + 
+        ggtitle("Correlate of protection in simulated data for Model A (No COP)")
+
+p2 <- outputfull_2$sim_states %>% filter(exp_ind_sim == 1)  %>% mutate(inf_state = case_when(inf_ind_sim==0~"Not infected", inf_ind_sim==1~"Infected")) %>%
+    ggplot() + geom_point(aes(x = init_titre, y = inf_ind_sim, fill = inf_state), alpha = 0.8, size = 2, shape = 21) +
+        geom_line(data = df_here, aes(x = titre, y = true_data_B, color = "red"), size = 2) + 
+        geom_smooth(aes(x = init_titre, y = inf_ind_sim, color = "black" )) + theme_bw() + 
+        scale_color_manual(values = c("red" = "red", "black" = "black"), labels = c("Functional simulated curve", "Realised simualted curve")) + 
+        labs(x = expression("Pre-infection titre, Z"[j]^0), y = "Probability of infection", fill = "Simulated infection state") + 
+        ggtitle("Correlate of protection in simulated data for Model B (Logistic COP)")
+
+p1 / p2
 
 plot_exp_rec <- function(outputfull) {
 
@@ -286,16 +347,6 @@ plot_inf_rec <- function(outputfull) {
     )
 
 
-    # a) Infection over whole process
-
-    figA <- left_join(
-        sim_states %>% select(id, inf_ind_sim) %>% mutate(inf_status_data = recode(inf_ind_sim, "1" = "Infected", "0" = "Not infected")),
-        fit_states %>% select(id, inf_ind) %>% summarise(inf_post = mean(inf_ind), .by = "id")
-    ) %>% left_join(df_data) %>% 
-        ggplot() + 
-            geom_point(aes(x = start_titre, y = inf_post, fill = inf_status_data), size = 2, alpha = 0.7, shape = 21) + 
-            theme_bw() + 
-            labs(x = "Titre at start of study", y = "Posterior probability of infected\n(regardless of exposure)", fill = "Infection status")
 
     # b) Infection given exposure 
 
@@ -306,23 +357,37 @@ plot_inf_rec <- function(outputfull) {
         ggplot() + 
             geom_point(aes(x = start_titre, y = inf_post, fill = inf_status_data), size = 2, alpha = 0.7, shape = 21) + 
             theme_bw() +
-            labs(x = "Titre at start of study", y = "Posterior probability of infection given exposure", fill = "Infection status")
+            labs(x = expression("Titre at start of study Z"[j]^0), y = expression("Expectation of posterior distribution of infection E[I"[j]*"]"), fill = "Simulated infection status") + 
+            ggtitle("Recovery of individual-level infection status")
+
+
+    no_inf_sim <- sim_states %>% filter(exp_ind_sim == 1) %>% select(id, inf_ind_sim) %>% pull(inf_ind_sim) %>% sum
+    no_inf_fit_df <- fit_states %>% filter(exp_ind == 1) %>% select(id, sample, inf_ind) %>% summarise(inf_ind_sum = sum(inf_ind), .by = "sample")
+
+    figC <- no_inf_fit_df %>% summarise(n = n()  / 4000, .by = inf_ind_sum) %>%
+        ggplot() + 
+            geom_col(aes(x = inf_ind_sum, y = n), alpha = 0.8) + 
+            theme_bw()  + 
+            geom_vline(xintercept = no_inf_sim, size = 3, color = "white") +
+            geom_vline(xintercept = no_inf_sim, size = 2, color = "red") +
+            labs(y = "Posterior density", x = expression("Estimated number of infections in epidemic, n"[I])) + 
+            ggtitle("Recovery of population-level infection burden")
 
     dataplt_inf <- left_join(
         sim_states %>% filter(inf_ind_sim == 1) %>% select(id, exp_time_sim),
         fit_states %>% filter(inf_ind == 1) %>% select(id, exp_time) %>% group_by(id) %>% mean_qi(exp_time)
     )
 
-    figC <- dataplt_inf %>% select(id, exp_time_sim, exp_time) %>% 
-        rename(Data = exp_time_sim, `Model recovery` = exp_time) %>%
-        pivot_longer(!id, names_to = "type", values_to = "time") %>%
-    ggplot() + 
-            geom_density(aes(x = time, fill = type), size = 2, alpha = 0.7, shape = 21) + 
-            theme_bw()  + 
-            labs(x = "Time in study", y = "Density", fill = "") + 
-            ggtitle("Recovery of infection timings")
+    #figD <- dataplt_inf %>% select(id, exp_time_sim, exp_time) %>% 
+    #    rename(Data = exp_time_sim, `Model recovery` = exp_time) %>%
+    #    pivot_longer(!id, names_to = "type", values_to = "time") %>%
+   # ggplot() + 
+    #        geom_density(aes(x = time, fill = type), size = 2, alpha = 0.5, shape = 21) + 
+     #       theme_bw()  + 
+      #      labs(x = "Time in study", y = "Density", fill = "") + 
+       #     ggtitle("Recovery of infection timings")
 
-    (figA + figB) / figC + plot_annotation(title = "Infection and epidemic recovery")
+    (figB) / figC + plot_annotation(tag_levels = "A")
     ggsave(here::here("outputs", "fits", modelname_sim, modelname, "figs", paste0("obs_", obs_er), "infection_recov.png"), height = 10, width = 10)
 }
 
@@ -367,14 +432,19 @@ plot_cop_rec <- function(outputfull) {
         geom_line(data = df_here, aes(x = titre, y = true_data), color = "white", size = 5) + 
         geom_line(data = df_here, aes(x = titre, y = true_data, color = "Simulated COP curve"), size = 3) + 
         theme_bw() + 
+        ylim(0, 1) +
         scale_color_manual(values = c("black", "red")) +
-        labs(x = "log Titre", y = "Probability of infection given exposure", color = "Curve type")
+        labs(x = expression("Titre at start of study Z"[j]^0), y = expression("Posterior probability of infection for correlate of protection, f"[cop]*"(Z"[j]^0*", "*theta[cop]*")"), color = "Curve type")
     ggsave(here::here("outputs", "fits", modelname_sim, modelname, "figs", paste0("obs_", obs_er), "cop_recov.png"), height = 10, width = 10)
 
 }
 
 
 postprocessFigs <- function(modelname, modelname_sim, obs_er, n_chains) {
+   # modelname <- "knownExp"
+   # modelname_sim <-  "cesCOP"
+   # obs_er <- "0.1"
+   # n_chains <- 4
 
     postprocess_run( modelname, modelname_sim, obs_er, n_chains)
     outputfull <- readRDS(file = here::here("outputs", "fits", modelname_sim, modelname, paste0("pp_obs_", obs_er, ".RDS")))
@@ -385,6 +455,7 @@ postprocessFigs <- function(modelname, modelname_sim, obs_er, n_chains) {
     plot_exp_rec(outputfull)
     plot_cop_rec(outputfull)
 }
+
 
 ```
 
@@ -492,8 +563,8 @@ runsaveRJMCMC <- function(modelname, modelname_sim, obs_er, prob_known, evaluate
     settings <-  list(
         numberChainRuns = 4,
         numberTempChains = 1,
-        iterations = 200000,
-        burninPosterior = 100000,
+        iterations = 300000,
+        burninPosterior = 200000,
         thin = 100,
         consoleUpdates =  100,
         numberFittedPar = 7,
@@ -536,43 +607,77 @@ exp_prior <- data.frame(
     par2 = "120"
 )
 
+```
+
+Run all!
+```{r}
 
 
 # Run on the exposure inferred cycle
-runsaveRJMCMC( "inferExp", "cesCOP", "0", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
-runsaveRJMCMC( "inferExp", "cesCOP", "0.2", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
+runsaveRJMCMC( "inferExp", "cesCOP", "0.1", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
+runsaveRJMCMC( "inferExp", "cesCOP", "0.3", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
 runsaveRJMCMC( "inferExp", "cesCOP", "0.5", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
 
-postprocessFigs("inferExp", "cesCOP", "0", 4)
-postprocessFigs("inferExp", "cesCOP", "0.2", 4)
+postprocessFigs("inferExp", "cesCOP", "0.1", 4)
+postprocessFigs("inferExp", "cesCOP", "0.3", 4)
 postprocessFigs("inferExp", "cesCOP", "0.5", 4)
 
 
-runsaveRJMCMC( "inferExp", "cesNoCOP", "0", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
-runsaveRJMCMC( "inferExp", "cesNoCOP", "0.2", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
+runsaveRJMCMC( "inferExp", "cesNoCOP", "0.1", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
+runsaveRJMCMC( "inferExp", "cesNoCOP", "0.3", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
 runsaveRJMCMC( "inferExp", "cesNoCOP", "0.5", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
 
-postprocessFigs("inferExp", "cesNoCOP", "0", 4)
-postprocessFigs("inferExp", "cesNoCOP", "0.2", 4)
+postprocessFigs("inferExp", "cesNoCOP", "0.1", 4)
+postprocessFigs("inferExp", "cesNoCOP", "0.3", 4)
 postprocessFigs("inferExp", "cesNoCOP", "0.5", 4)
 
 # Run on the exposure known cycle
-runsaveRJMCMC( "knownExp", "cesCOP", "0", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
-runsaveRJMCMC( "knownExp", "cesCOP", "0.2", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
+runsaveRJMCMC( "knownExp", "cesCOP", "0.1", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
+runsaveRJMCMC( "knownExp", "cesCOP", "0.3", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
 runsaveRJMCMC( "knownExp", "cesCOP", "0.5", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
 
-postprocessFigs("knownExp", "cesCOP", "0", 4)
-postprocessFigs("knownExp", "cesCOP", "0.2", 4)
+postprocessFigs("knownExp", "cesCOP", "0.1", 4)
+postprocessFigs("knownExp", "cesCOP", "0.3", 4)
 postprocessFigs("knownExp", "cesCOP", "0.5", 4)
 
 
-runsaveRJMCMC( "knownExp", "cesNoCOP", "0", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
-runsaveRJMCMC( "knownExp", "cesNoCOP", "0.2", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
+runsaveRJMCMC( "knownExp", "cesNoCOP", "0.1", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
+runsaveRJMCMC( "knownExp", "cesNoCOP", "0.3", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
 runsaveRJMCMC( "knownExp", "cesNoCOP", "0.5", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
 
-postprocessFigs("knownExp", "cesNoCOP", "0", 4)
-postprocessFigs("knownExp", "cesNoCOP", "0.2", 4)
+postprocessFigs("knownExp", "cesNoCOP", "0.1", 4)
+postprocessFigs("knownExp", "cesNoCOP", "0.3", 4)
 postprocessFigs("knownExp", "cesNoCOP", "0.5", 4)
 
 
 ````
+
+Rerun figures
+```{r}
+
+postprocessFigs("inferExp", "cesCOP", "0.1", 4)
+postprocessFigs("inferExp", "cesCOP", "0.3", 4)
+postprocessFigs("inferExp", "cesCOP", "0.5", 4)
+
+postprocessFigs("inferExp", "cesNoCOP", "0.1", 4)
+postprocessFigs("inferExp", "cesNoCOP", "0.3", 4)
+postprocessFigs("inferExp", "cesNoCOP", "0.5", 4)
+
+postprocessFigs("knownExp", "cesCOP", "0.1", 4)
+postprocessFigs("knownExp", "cesCOP", "0.3", 4)
+postprocessFigs("knownExp", "cesCOP", "0.5", 4)
+
+postprocessFigs("knownExp", "cesNoCOP", "0.1", 4)
+postprocessFigs("knownExp", "cesNoCOP", "0.3", 4)
+postprocessFigs("knownExp", "cesNoCOP", "0.5", 4)
+
+```
+
+```{r}
+
+
+runsaveRJMCMC( "inferExp", "cesCOP", "0.1", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
+postprocessFigs("inferExp", "cesCOP", "0.1", 4)
+
+
+```
