@@ -1,0 +1,109 @@
+\documentclass{article}
+
+\usepackage{fontspec}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{subcaption} 
+\newcommand{\myimagepath}{/Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc/}
+
+
+\geometry{
+    top=1in,
+    bottom=1in,
+    left=1in,
+    right=1in,
+}
+\setmainfont{Avenir} 
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
+
+\begin{document}
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|c|l| l| }
+         \hline
+        \textbf{Symbol} & \textbf{Description} & \textbf{Value}\\
+        \hline
+         $M$ & Number of individuals in the sample, we use subscript $j$ to refer to an individual.& 200 \\
+         \hline
+         $T$ & Time over which the study is run.  & 120 days \\
+                  \hline
+    \end{tabular}
+    \caption{Table of parameters associated with the simulated data and their values}
+    \label{tab:state_var}
+\end{table}
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{| l | p{0.7\textwidth} |}
+         \hline
+        \textbf{Symbol} & \textbf{Description} \\
+        \textit{State variables} & \\
+               \hline
+        $Z_{j, t} \in \mathbf{Z}$ & Data on the antibody titre at time $t$ for individual $j$. \\
+        \hline
+        $Z^0_j$ & Initial titre (titre at first value of $t$ for individual $j$). \\ 
+        \hline
+         $X_{j, t} \in \mathbf{X}$ & Model estimated antibody titre at time $t$ for individual $j$. \\
+        \hline
+        $\mathbf{E} = \{E_1, \dots, E_j, \dots, E_M\}$ &Vector of exposure statuses (binary vector) for each individual $j$. A superscript $(i)$ specifies a specific value in the Markov chain.\\
+	\hline
+        $n_\mathbf{E}$ & Total number of individuals exposed. . A superscript $(i)$ specifies a specific value in the Markov chain.\\
+	\hline
+        $\mathbf{E_{1}} = \{j_1, \dots,j_{j^*} \dots, j_{n_\mathbf{E}}\}$ & Vector of individuals $j^*$ who are exposed. A superscript $(i)$ specifies a specific value in the Markov chain.\\
+	\hline
+        $\mathbf{E_{0}} = \{j_1, \dots,j_{j^*} \dots, j_{M - n_\mathbf{E}}\}$ & Vector of individuals $j^*$ who are not exposed. A superscript $(i)$ specifies a specific value in the Markov chain.\\
+	\hline
+        $\mathbf{E^\tau} = \{E^\tau_{j_1}, \dots, E^\tau_{j_{j^*}}, \dots, E^\tau_{j_{n_\mathbf{E}}}\}$ & Vector of exposure times for each individual $j$. A superscript $(i)$ specifies a specific value in the Markov chain.\\
+        \hline
+        $\mathbf{I} = \{I_1, \dots, I_{j^*}, \dots, I_{n_\mathbf{E}}}\}$ & Vector of infection statuses (binary vector) for each individual $j$. A superscript $(i)$ specifies a specific value in the Markov chain. \\
+        \hline
+         $n_\mathbf{I}$ & Total number of individuals infected.. A superscript $(i)$ specifies a specific value in the Markov chain. \\	 \hline
+         $\theta_{cop} = \{\beta_0, \beta_1\}$ & Fitted parameters for the correlate of protection model\\ \hline
+         $\theta_{ab} = \{a, b, c, \alpha\}$ & Fitted parameters for the antibody kinetics model \\ \hline
+         $\theta = \{\theta_{cop}, \theta_{ab}, \sigma\}$ & All fitted parameters in the model.  A superscript $(i)$ specifies a specific value in the Markov chain. \\
+
+       \textit{Functions} & \\
+              \hline
+       	$P( \theta, \mathbf{E}, \mathbf{E^\tau}, \mathbf{I}  | \mathbf{Z})$ & Posterior distribution function given inputs $\theta$, $\mathbf{E}$, $\mathbf{E^\tau}$, $\mathbf{I}$ and data $\mathbf{Z}$\\    \hline
+       	$\mathcal{L}( \mathbf{Z} | \theta, \mathbf{E}, \mathbf{E^\tau}, \mathbf{I} )$ & Likelihood function given inputs $\theta$, $\mathbf{E}$, $\mathbf{E^\tau}$, $\mathbf{I}$ and data $\mathbf{Z}$. \\         \hline
+        $\mathcal{L}_{E_j = 0}(Z_j, | I_j, E^\tau_j, E_j, \theta)$ & Likelihood function for individual $j$ who is not exposed \\   \hline
+       	$\mathcal{L}_{E_j = 1}(Z_j, | I_j, E^\tau_j, E_j, \theta)$ & Likelihood function for individual $j$ who is exposed \\   \hline
+	$P_t(E^\tau_j| E_j)$ & Likelihood of an exposure at time $E^\tau_j$ given individual $j$ is exposed  \\   \hline
+	$X_{j, t} = F_{ab}( t, I_i,  E_j^\tau, \theta_{ab}, Z^0_j)$ & Deterministic function for the estimated antibody titre at time $t$ for individual $j$ and starting titre values from the data, $Z_j^0$ for an exposure at time $E_j^\tau$ and infection status $I_j$. \\   \hline
+	$f^1_{ab}(s, a, b, c)$ & The function which determines the antibody titres at time $s$ after $E_j^\tau$\\  \hline 
+	$f^2_{ab}(Z^0_j, \alpha)$ & The function which scales the trajectory given pre-titre $Z^0_j$. \\   \hline
+	$P_{cop}(I_j | X_{j, E^\tau_j}, \theta_{cop})$ &  Likelihood for the correlate of protection for an individual $j$ with an exposure at time $E^\tau_j$, and estimated titre value $X_{j, E^\tau_j}$and infection status $I_j$.  \\   \hline
+	$f_{cop}(X_{j, t},  \beta_0, \beta_1)$ & Function describing the correlate of protection for infection at time $t$. (logistic).\\  \hline
+	$P_{obs}(Z_{j, t} | X_{j, t}, \sigma)$ & Likelihood of the observation model for the data $Z_{j, t}$ given model-estimated titre values $X_{j, t}$ for individual $j$ at time $t$. \\   \hline
+	$\pi(\theta) = \pi(a)\pi(b)\dots\pi(\sigma)$ & Prior distributions for all fitted parameters in the model. 
+         \hline
+    \end{tabular}
+    \caption{Symbols used in calculating the posterior distribution}
+    \label{tab:ll}
+\end{table}
+
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{| p{0.25\textwidth} | p{0.7\textwidth} |}
+         \hline
+        \textbf{Symbol} & \textbf{Description} \\ \hline
+        $N$ & Length of chain in metropolois hasting algorihtm \\ \hline
+       $ q_\theta\left(\cdot | \theta^{(i)}\right)$ & Proposal distribution for the values of $\theta$ at given state $i$. \\ \hline
+       $ q_I\left(\cdot | I_j^{(i)}\right)$ & Proposal distribution for the values of $I_j$ for individual $j$ at given state $i$ (See XX). \\  \hline
+       $ q_k\left(\cdot | k\right)$ & Proposal distribution for a new model given model is at $\mathcal{M}_k$ (See XX). \\  \hline
+       $ q_\tau\left(\cdot | E_j^{\tau, (i)}\right)$ & Proposal distribution for a new time of exposure for individual $j$ for a given state $i$.(See XX). \\  \hline
+
+    \end{tabular}
+    \caption{Symbols used in the mcmc algorithms}
+    \label{tab:mcmc_pars}
+\end{table}
+
+\end{document}

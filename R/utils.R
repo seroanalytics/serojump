@@ -205,7 +205,8 @@ createModelRJCMCFull <- function(ab_ll, par_tab, exp_prior, cop_func) {
     model_type$copFunction <- cop_func
 
     model_type$initialiseJump <- function(datalist) {
-        c(datalist$knownInfsDate)
+        init_exposure <- c(datalist$knownInfsDate)
+        init_exposure
     }
 
     model_type$exposureFunctionSample <- function() {

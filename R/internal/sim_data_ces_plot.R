@@ -12,6 +12,9 @@ require(tidybayes)
 ####################################
 ####### Titre-dep boost and no wane #######
 ####################################
+uncert_vec <- c(0.1, 0.3, 0.5)
+
+
 plot_sim <- function(modeli) {
 
   uncert_vec %>% 
@@ -106,14 +109,16 @@ plot_sim(modelppesCOP)
 
 ## PLOT A: Epidemiology and survery design
 modeli <- modelcesNoCOP
-res <- readRDS(file = here::here("outputs", "sim_data", modeli$name, paste0("sim_data_", round(0, 1), ".rds")))
+res <- readRDS(file = here::here("outputs", "sim_data", modeli$name, paste0("sim_data_", round(0.1, 1), ".rds")))
+
+res$kinetics_parameters
 
 N <- modeli$simpar$N
 exp_times_sim <- modeli$simpar$exp %>% as.data.frame %>% 
   mutate(i = 1:N) %>% pivot_longer(!i, names_to = "t", values_to = "exp") %>% mutate(t = as.numeric(substr(t, 2, 4))) %>% 
   filter(exp == 1) %>% complete(i = 1:N, fill = list(t = NA)) %>% arrange(t)
 ids_order <- exp_times_sim %>% pull(i)
-exp_times_sim <- exp_times_sim %>% mutate(i = factor(i, levels = rev(ids_order))) 
+exp_times_sim <- exp_times_sim %>% mutate(i = factor(i, levels = rev(ids_order))) %>% arrange(t)
 inf_times_sim <- res$immune_histories_long %>% filter(value == 1) %>% complete(i = 1:N, fill = list(t = NA)) %>% arrange(t) %>% 
   mutate(i = as.character(i)) %>% rename(inf = value)
 epi_times_sims <- left_join(exp_times_sim, inf_times_sim) %>% mutate(
@@ -124,8 +129,8 @@ epi_times_sims <- left_join(exp_times_sim, inf_times_sim) %>% mutate(
   )
 ) %>% filter(!is.na(exp_type))
 
-N_exp = (epi_times_sims$exp == 1) %>% sum
-N_inf =(!is.na(epi_times_sims$inf == 1)) %>% sum
+N_exp <- (epi_times_sims$exp == 1) %>% sum
+N_inf <- (!is.na(epi_times_sims$inf == 1)) %>% sum
 
 
 start_bleed <- res$observed_biomarker_states %>% as.data.frame %>% group_by(i) %>% filter(t == min(t)) %>%
@@ -242,7 +247,7 @@ p5 <- td_true %>%
 p1 | (p2 / p3 / p4 / p5) + plot_layout(width = c(1, 1)) + plot_annotation(tag_levels = "A")
 ggsave(here::here("outputs", "sim_data", "summary_fig_A_CES.pdf"))
 
-traj_post_all <- c(0.01, 0.20, 0.5) %>% map_df(
+traj_post_all <- c(0.1, 0.3, 0.5) %>% map_df(
   function(sigma) {
     a_dist <- rnorm(1000, sim_ab_par[["a"]], sim_ab_par[["a"]] * sigma)
     b_dist <- rnorm(1000, sim_ab_par[["b"]], sim_ab_par[["b"]] * sigma)
