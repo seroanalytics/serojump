@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.16.0 (TeX Live 2023)  (format=lualatex 2024.1.8)  24 JAN 2024 17:20
+This is LuaHBTeX, Version 1.16.0 (TeX Live 2023)  (format=lualatex 2024.1.8)  25 JAN 2024 11:15
  restricted system commands enabled.
  file:line:error style messages enabled.
 **rjmcmc.tex
@@ -267,6 +267,12 @@ LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
+(/usr/local/texlive/2023/texmf-dist/tex/latex/appendix/appendix.sty
+Package: appendix 2020/02/08 v1.2c extra appendix facilities
+\c@@pps=\count293
+\c@@ppsavesec=\count294
+\c@@ppsaveapp=\count295
+)
 (/usr/local/texlive/2023/texmf-dist/tex/latex/caption/subcaption.sty
 Package: subcaption 2023/02/19 v1.6 Sub-captions (AR)
 
@@ -285,14 +291,14 @@ Package: caption3 2023/03/12 v2.4 caption3 kernel (AR)
 \caption@hangindent=\dimen171
 Package caption Info: Standard document class detected.
 )
-\c@caption@flags=\count293
-\c@continuedfloat=\count294
+\c@caption@flags=\count296
+\c@continuedfloat=\count297
 Package caption Info: float package is loaded.
 )
 Package caption Info: New subtype `subfigure' on input line 239.
-\c@subfigure=\count295
+\c@subfigure=\count298
 Package caption Info: New subtype `subtable' on input line 239.
-\c@subtable=\count296
+\c@subtable=\count299
 )
 luaotfload | cache : Lookup cache loaded from /Users/davidhodgson/Library/texliv
 e/2023/texmf-var/luatex-cache/generic/names/luaotfload-lookup-cache.luc.
@@ -354,98 +360,98 @@ LaTeX Warning: Label `sub@fit1:inf' multiply defined.
 )
 \openout1 = rjmcmc.aux
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 31.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 32.
 LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 3
-1.
+2.
  (/usr/local/texlive/2023/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2022/07/10 v2.5l Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
 
 Package fontspec Info: Adjusting the maths setup (use [no-math] to avoid
 (fontspec)             this).
 
 \symlegacymaths=\mathgroup6
 LaTeX Font Info:    Overwriting symbol font `legacymaths' in version `bold'
-(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 31.
-LaTeX Font Info:    Redeclaring math accent \acute on input line 31.
-LaTeX Font Info:    Redeclaring math accent \grave on input line 31.
-LaTeX Font Info:    Redeclaring math accent \ddot on input line 31.
-LaTeX Font Info:    Redeclaring math accent \tilde on input line 31.
-LaTeX Font Info:    Redeclaring math accent \bar on input line 31.
-LaTeX Font Info:    Redeclaring math accent \breve on input line 31.
-LaTeX Font Info:    Redeclaring math accent \check on input line 31.
-LaTeX Font Info:    Redeclaring math accent \hat on input line 31.
-LaTeX Font Info:    Redeclaring math accent \dot on input line 31.
-LaTeX Font Info:    Redeclaring math accent \mathring on input line 31.
-LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 31.
-LaTeX Font Info:    Redeclaring math symbol \Delta on input line 31.
-LaTeX Font Info:    Redeclaring math symbol \Theta on input line 31.
-LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 31.
-LaTeX Font Info:    Redeclaring math symbol \Xi on input line 31.
-LaTeX Font Info:    Redeclaring math symbol \Pi on input line 31.
-LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 31.
-LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 31.
-LaTeX Font Info:    Redeclaring math symbol \Phi on input line 31.
-LaTeX Font Info:    Redeclaring math symbol \Psi on input line 31.
-LaTeX Font Info:    Redeclaring math symbol \Omega on input line 31.
-LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 31.
-LaTeX Font Info:    Redeclaring symbol font `operators' on input line 31.
+(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 32.
+LaTeX Font Info:    Redeclaring math accent \acute on input line 32.
+LaTeX Font Info:    Redeclaring math accent \grave on input line 32.
+LaTeX Font Info:    Redeclaring math accent \ddot on input line 32.
+LaTeX Font Info:    Redeclaring math accent \tilde on input line 32.
+LaTeX Font Info:    Redeclaring math accent \bar on input line 32.
+LaTeX Font Info:    Redeclaring math accent \breve on input line 32.
+LaTeX Font Info:    Redeclaring math accent \check on input line 32.
+LaTeX Font Info:    Redeclaring math accent \hat on input line 32.
+LaTeX Font Info:    Redeclaring math accent \dot on input line 32.
+LaTeX Font Info:    Redeclaring math accent \mathring on input line 32.
+LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 32.
+LaTeX Font Info:    Redeclaring math symbol \Delta on input line 32.
+LaTeX Font Info:    Redeclaring math symbol \Theta on input line 32.
+LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 32.
+LaTeX Font Info:    Redeclaring math symbol \Xi on input line 32.
+LaTeX Font Info:    Redeclaring math symbol \Pi on input line 32.
+LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 32.
+LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 32.
+LaTeX Font Info:    Redeclaring math symbol \Phi on input line 32.
+LaTeX Font Info:    Redeclaring math symbol \Psi on input line 32.
+LaTeX Font Info:    Redeclaring math symbol \Omega on input line 32.
+LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 32.
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 32.
 LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `normal' on input line 31.
+(Font)              `operators' in the math version `normal' on input line 32.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> TU/Avenir(0)/m/n on input line 31.
+(Font)                  OT1/cmr/m/n --> TU/Avenir(0)/m/n on input line 32.
 LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `bold' on input line 31.
+(Font)              `operators' in the math version `bold' on input line 32.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> TU/Avenir(0)/m/n on input line 31.
+(Font)                  OT1/cmr/bx/n --> TU/Avenir(0)/m/n on input line 32.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  TU/Avenir(0)/m/n --> TU/Avenir(0)/m/n on input line 31.
+(Font)                  TU/Avenir(0)/m/n --> TU/Avenir(0)/m/n on input line 32.
 
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> TU/Avenir(0)/m/it on input line 31.
+(Font)                  OT1/cmr/m/it --> TU/Avenir(0)/m/it on input line 32.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> TU/Avenir(0)/b/n on input line 31.
+(Font)                  OT1/cmr/bx/n --> TU/Avenir(0)/b/n on input line 32.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 31.
+(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 32.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 31.
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 32.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  TU/Avenir(0)/m/n --> TU/Avenir(0)/b/n on input line 31.
+(Font)                  TU/Avenir(0)/m/n --> TU/Avenir(0)/b/n on input line 32.
 
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> TU/Avenir(0)/b/it on input line 31.
+(Font)                  OT1/cmr/bx/it --> TU/Avenir(0)/b/it on input line 32.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> TU/lmss/b/n on input line 31.
+(Font)                  OT1/cmss/bx/n --> TU/lmss/b/n on input line 32.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 31.
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 32.
 
 (/usr/local/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count297
+\scratchcounter=\count300
 \scratchdimen=\dimen172
 \scratchbox=\box58
-\nofMPsegments=\count298
-\nofMParguments=\count299
+\nofMPsegments=\count301
+\nofMParguments=\count302
 \everyMPshowfont=\toks27
-\MPscratchCnt=\count300
+\MPscratchCnt=\count303
 \MPscratchDim=\dimen173
-\MPnumerator=\count301
-\makeMPintoPDFobject=\count302
+\MPnumerator=\count304
+\makeMPintoPDFobject=\count305
 \everyMPtoPDFconversion=\toks28
 ) (/usr/local/texlive/2023/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -492,73 +498,74 @@ e
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 33.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 34.
 
 (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 33.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 34.
 
 
 (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
+(./sections/s1_intro/body.tex
 
-LaTeX Warning: Citation `Cutts2016' on page 1 undefined on input line 39.
-
-
-LaTeX Warning: Citation `Haselbeck2022' on page 1 undefined on input line 41.
+LaTeX Warning: Citation `Cutts2016' on page 1 undefined on input line 5.
 
 
-LaTeX Warning: Citation `' on page 1 undefined on input line 41.
+LaTeX Warning: Citation `Haselbeck2022' on page 1 undefined on input line 7.
 
 
-LaTeX Warning: Citation `' on page 1 undefined on input line 41.
+LaTeX Warning: Citation `' on page 1 undefined on input line 7.
 
 
-LaTeX Warning: Citation `Hay2023' on page 1 undefined on input line 41.
+LaTeX Warning: Citation `' on page 1 undefined on input line 7.
+
+
+LaTeX Warning: Citation `Hay2023' on page 1 undefined on input line 7.
 
 
 LaTeX Warning: Citation `Haselbeck2022;Metcalfe2015' on page 1 undefined on inp
-ut line 43.
+ut line 9.
 
 
-LaTeX Warning: Citation `Xu2020' on page 1 undefined on input line 43.
+LaTeX Warning: Citation `Xu2020' on page 1 undefined on input line 9.
 
 
 LaTeX Warning: Citation `Chan2021;Cauchesmez2021' on page 1 undefined on input 
-line 43.
+line 9.
 
 
-LaTeX Warning: Citation `Hay2023' on page 1 undefined on input line 47.
+LaTeX Warning: Citation `Hay2023' on page 1 undefined on input line 13.
 
 
-LaTeX Warning: Citation `' on page 1 undefined on input line 47.
+LaTeX Warning: Citation `' on page 1 undefined on input line 13.
 
 [1
 
 {/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 
-LaTeX Warning: Citation `srivasta' on page 2 undefined on input line 54.
+LaTeX Warning: Citation `srivasta' on page 2 undefined on input line 20.
 
 
-LaTeX Warning: Citation `Plotkin' on page 2 undefined on input line 61.
+LaTeX Warning: Citation `Plotkin' on page 2 undefined on input line 27.
 
 
-LaTeX Warning: Citation `' on page 2 undefined on input line 61.
+LaTeX Warning: Citation `' on page 2 undefined on input line 27.
 
 
-LaTeX Warning: Citation `' on page 2 undefined on input line 63.
+LaTeX Warning: Citation `' on page 2 undefined on input line 29.
 
 
-LaTeX Warning: Citation `' on page 2 undefined on input line 67.
+LaTeX Warning: Citation `' on page 2 undefined on input line 33.
 
 
-LaTeX Warning: Citation `' on page 2 undefined on input line 67.
+LaTeX Warning: Citation `' on page 2 undefined on input line 33.
 
-[2] [3]
+[2]) [3] (./sections/s2_sim_data/body.tex
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <14.4> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 80.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 1.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /sim_data/summary_fig_A_CES.pdf, id=15, 830.10126pt x 608.2725pt>
 File: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//ou
@@ -566,8 +573,7 @@ tputs/sim_data/summary_fig_A_CES.pdf Graphic file (type pdf)
 <use /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
 puts/sim_data/summary_fig_A_CES.pdf>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
-/Rpackages/rjmc//outputs/sim_data/summary_fig_A_CES.pdf  used on input line 84.
-
+/Rpackages/rjmc//outputs/sim_data/summary_fig_A_CES.pdf  used on input line 5.
 (luatex.def)             Requested size: 469.75502pt x 344.22221pt.
  [4</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outpu
 ts/sim_data/summary_fig_A_CES.pdf>]
@@ -578,15 +584,15 @@ tputs/sim_data/summary_fig_B_CES.pdf Graphic file (type pdf)
 <use /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
 puts/sim_data/summary_fig_B_CES.pdf>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
-/Rpackages/rjmc//outputs/sim_data/summary_fig_B_CES.pdf  used on input line 120
-.
+/Rpackages/rjmc//outputs/sim_data/summary_fig_B_CES.pdf  used on input line 41.
+
 (luatex.def)             Requested size: 469.75502pt x 344.22221pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-LaTeX Warning: Reference `' on page 5 undefined on input line 130.
+LaTeX Warning: Reference `' on page 5 undefined on input line 51.
 
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /sim_data/summary_fig_C_CES.pdf, id=37, 700.6175pt x 608.2725pt>
@@ -595,17 +601,18 @@ tputs/sim_data/summary_fig_C_CES.pdf Graphic file (type pdf)
 <use /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
 puts/sim_data/summary_fig_C_CES.pdf>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
-/Rpackages/rjmc//outputs/sim_data/summary_fig_C_CES.pdf  used on input line 134
-.
+/Rpackages/rjmc//outputs/sim_data/summary_fig_C_CES.pdf  used on input line 55.
+
 (luatex.def)             Requested size: 469.75502pt x 407.84676pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[5] [6</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//ou
-tputs/sim_data/summary_fig_B_CES.pdf>] [7</Users/davidhodgson/Dropbox/Mac (3)/Do
-cuments/research/Rpackages/rjmc//outputs/sim_data/summary_fig_C_CES.pdf>]
+) [5] (./sections/s3_known_exp/body.tex [6</Users/davidhodgson/Dropbox/Mac (3)/D
+ocuments/research/Rpackages/rjmc//outputs/sim_data/summary_fig_B_CES.pdf>]
+[7</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//output
+s/sim_data/summary_fig_C_CES.pdf>]
 
-LaTeX Warning: Reference `' on page 8 undefined on input line 238.
+LaTeX Warning: Reference `' on page 8 undefined on input line 98.
 
 [8] [9] [10]
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
@@ -618,7 +625,7 @@ e png)
 puts/fits/cesNoCOP/knownExp/figs/obs_0.1/infection_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.1/infection_recov.pn
-g  used on input line 345.
+g  used on input line 205.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/knownExp/figs/obs_0.3/infection_recov.png, id=80, 722.7pt x 722.
@@ -630,7 +637,7 @@ e png)
 puts/fits/cesNoCOP/knownExp/figs/obs_0.3/infection_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.3/infection_recov.pn
-g  used on input line 350.
+g  used on input line 210.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/knownExp/figs/obs_0.5/infection_recov.png, id=81, 722.7pt x 722.
@@ -642,7 +649,7 @@ e png)
 puts/fits/cesNoCOP/knownExp/figs/obs_0.5/infection_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.5/infection_recov.pn
-g  used on input line 355.
+g  used on input line 215.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/knownExp/figs/obs_0.1/infection_recov.png, id=82, 722.7pt x 722.7p
@@ -654,7 +661,7 @@ png)
 puts/fits/cesCOP/knownExp/figs/obs_0.1/infection_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.1/infection_recov.png 
- used on input line 361.
+ used on input line 221.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/knownExp/figs/obs_0.3/infection_recov.png, id=83, 722.7pt x 722.7p
@@ -666,7 +673,7 @@ png)
 puts/fits/cesCOP/knownExp/figs/obs_0.3/infection_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.3/infection_recov.png 
- used on input line 366.
+ used on input line 226.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/knownExp/figs/obs_0.5/infection_recov.png, id=84, 722.7pt x 722.7p
@@ -678,22 +685,22 @@ png)
 puts/fits/cesCOP/knownExp/figs/obs_0.5/infection_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.5/infection_recov.png 
- used on input line 371.
+ used on input line 231.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
  [11]
 
-Package caption Warning: \label without proper reference on input line 383.
+Package caption Warning: \label without proper reference on input line 244.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fit1:cop' on page 12 undefined on input line 381.
+LaTeX Warning: Reference `fit1:cop' on page 12 undefined on input line 241.
 
 
-Package caption Warning: \label without proper reference on input line 383.
+Package caption Warning: \label without proper reference on input line 244.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fit1:cop' on page 12 undefined on input line 381.
+LaTeX Warning: Reference `fit1:cop' on page 12 undefined on input line 241.
 
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/knownExp/figs/obs_0.1/cop_recov.png, id=90, 722.7pt x 722.7pt>
@@ -704,7 +711,7 @@ tputs/fits/cesNoCOP/knownExp/figs/obs_0.1/cop_recov.png Graphic file (type png)
 puts/fits/cesNoCOP/knownExp/figs/obs_0.1/cop_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.1/cop_recov.png  use
-d on input line 388.
+d on input line 248.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/knownExp/figs/obs_0.3/cop_recov.png, id=91, 722.7pt x 722.7pt>
@@ -715,7 +722,7 @@ tputs/fits/cesNoCOP/knownExp/figs/obs_0.3/cop_recov.png Graphic file (type png)
 puts/fits/cesNoCOP/knownExp/figs/obs_0.3/cop_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.3/cop_recov.png  use
-d on input line 393.
+d on input line 253.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/knownExp/figs/obs_0.5/cop_recov.png, id=92, 722.7pt x 722.7pt>
@@ -726,7 +733,7 @@ tputs/fits/cesNoCOP/knownExp/figs/obs_0.5/cop_recov.png Graphic file (type png)
 puts/fits/cesNoCOP/knownExp/figs/obs_0.5/cop_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.5/cop_recov.png  use
-d on input line 398.
+d on input line 258.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/knownExp/figs/obs_0.1/cop_recov.png, id=93, 722.7pt x 722.7pt>
@@ -736,7 +743,7 @@ tputs/fits/cesCOP/knownExp/figs/obs_0.1/cop_recov.png Graphic file (type png)
 puts/fits/cesCOP/knownExp/figs/obs_0.1/cop_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.1/cop_recov.png  used 
-on input line 404.
+on input line 264.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/knownExp/figs/obs_0.3/cop_recov.png, id=94, 722.7pt x 722.7pt>
@@ -746,7 +753,7 @@ tputs/fits/cesCOP/knownExp/figs/obs_0.3/cop_recov.png Graphic file (type png)
 puts/fits/cesCOP/knownExp/figs/obs_0.3/cop_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.3/cop_recov.png  used 
-on input line 409.
+on input line 269.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/knownExp/figs/obs_0.5/cop_recov.png, id=95, 722.7pt x 722.7pt>
@@ -756,7 +763,7 @@ tputs/fits/cesCOP/knownExp/figs/obs_0.5/cop_recov.png Graphic file (type png)
 puts/fits/cesCOP/knownExp/figs/obs_0.5/cop_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.5/cop_recov.png  used 
-on input line 414.
+on input line 274.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 [12</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outpu
 ts/fits/cesNoCOP/knownExp/figs/obs_0.1/infection_recov.png></Users/davidhodgson/
@@ -770,11 +777,11 @@ wnExp/figs/obs_0.3/infection_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Docu
 ments/research/Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.5/infecti
 on_recov.png>]
 
-Package caption Warning: \label without proper reference on input line 426.
+Package caption Warning: \label without proper reference on input line 287.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fit1:ab' on page 13 undefined on input line 424.
+LaTeX Warning: Reference `fit1:ab' on page 13 undefined on input line 284.
 
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/knownExp/figs/obs_0.1/ab_kinetics_recov.png, id=99, 722.7pt x 72
@@ -786,7 +793,7 @@ ype png)
 puts/fits/cesNoCOP/knownExp/figs/obs_0.1/ab_kinetics_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.1/ab_kinetics_recov.
-png  used on input line 431.
+png  used on input line 291.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/knownExp/figs/obs_0.3/ab_kinetics_recov.png, id=100, 722.7pt x 7
@@ -798,7 +805,7 @@ ype png)
 puts/fits/cesNoCOP/knownExp/figs/obs_0.3/ab_kinetics_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.3/ab_kinetics_recov.
-png  used on input line 436.
+png  used on input line 296.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/knownExp/figs/obs_0.5/ab_kinetics_recov.png, id=101, 722.7pt x 7
@@ -810,7 +817,7 @@ ype png)
 puts/fits/cesNoCOP/knownExp/figs/obs_0.5/ab_kinetics_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.5/ab_kinetics_recov.
-png  used on input line 441.
+png  used on input line 301.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/knownExp/figs/obs_0.1/ab_kinetics_recov.png, id=102, 722.7pt x 722
@@ -822,7 +829,7 @@ e png)
 puts/fits/cesCOP/knownExp/figs/obs_0.1/ab_kinetics_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.1/ab_kinetics_recov.pn
-g  used on input line 447.
+g  used on input line 307.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/knownExp/figs/obs_0.3/ab_kinetics_recov.png, id=103, 722.7pt x 722
@@ -834,7 +841,7 @@ e png)
 puts/fits/cesCOP/knownExp/figs/obs_0.3/ab_kinetics_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.3/ab_kinetics_recov.pn
-g  used on input line 452.
+g  used on input line 312.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/knownExp/figs/obs_0.5/ab_kinetics_recov.png, id=104, 722.7pt x 722
@@ -846,7 +853,7 @@ e png)
 puts/fits/cesCOP/knownExp/figs/obs_0.5/ab_kinetics_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.5/ab_kinetics_recov.pn
-g  used on input line 457.
+g  used on input line 317.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 [13</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outpu
 ts/fits/cesNoCOP/knownExp/figs/obs_0.1/cop_recov.png></Users/davidhodgson/Dropbo
@@ -857,46 +864,52 @@ packages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.5/cop_recov.png></Users
 sCOP/knownExp/figs/obs_0.1/cop_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Do
 cuments/research/Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.3/cop_r
 ecov.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc/
-/outputs/fits/cesCOP/knownExp/figs/obs_0.5/cop_recov.png>] [14</Users/davidhodgs
-on/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits/cesNoCOP/know
-nExp/figs/obs_0.1/ab_kinetics_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Doc
-uments/research/Rpackages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.3/ab_k
-inetics_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpacka
-ges/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.5/ab_kinetics_recov.png></Us
-ers/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits
-/cesCOP/knownExp/figs/obs_0.1/ab_kinetics_recov.png></Users/davidhodgson/Dropbox
-/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/ob
-s_0.3/ab_kinetics_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/resea
-rch/Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.5/ab_kinetics_recov.
-png>]
+/outputs/fits/cesCOP/knownExp/figs/obs_0.5/cop_recov.png>]) [14</Users/davidhodg
+son/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits/cesNoCOP/kno
+wnExp/figs/obs_0.1/ab_kinetics_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Do
+cuments/research/Rpackages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.3/ab_
+kinetics_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpack
+ages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.5/ab_kinetics_recov.png></U
+sers/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fit
+s/cesCOP/knownExp/figs/obs_0.1/ab_kinetics_recov.png></Users/davidhodgson/Dropbo
+x/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/o
+bs_0.3/ab_kinetics_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/rese
+arch/Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.5/ab_kinetics_recov
+.png>] (./sections/s4_inf_exp/body.tex
 
-LaTeX Warning: Reference `' on page 15 undefined on input line 476.
+LaTeX Warning: Reference `' on page 15 undefined on input line 10.
 
 [15]
 
-LaTeX Warning: Reference `' on page 16 undefined on input line 521.
+LaTeX Warning: Reference `' on page 16 undefined on input line 55.
 
 
-LaTeX Warning: Reference `' on page 16 undefined on input line 536.
+LaTeX Warning: Reference `' on page 16 undefined on input line 70.
 
 [16] [17]
-./rjmcmc.tex:628: Double superscript.
+./sections/s4_inf_exp/body.tex:162: Double superscript.
 <recently read> ^
  
-l.628 ...u_j')q_{birth}(k'|k)(n_{\mathbf{E_1}} + 1)}
+l.162 ...u_j')q_{birth}(k'|k)(n_{\mathbf{E_1}} + 1)}
                                                    \right)
+? \
+Type <return> to proceed, S to scroll future error messages,
+R to run without stopping, Q to run quietly,
+I to insert something, E to edit your file,
+1 or ... or 9 to ignore the next 1 to 9 tokens of input,
+H for help, X to quit.
 ? 
 [18] [19] [20]
-./rjmcmc.tex:730: Double superscript.
+./sections/s4_inf_exp/body.tex:264: Double superscript.
 <recently read> ^
  
-l.730 ...mathbf{E^{\tau, (i)}}, \mathbf{I^{(i)}}|Z)}
+l.264 ...mathbf{E^{\tau, (i)}}, \mathbf{I^{(i)}}|Z)}
                                                    \right)
 ? 
-./rjmcmc.tex:734: Double superscript.
+./sections/s4_inf_exp/body.tex:268: Double superscript.
 <recently read> ^
  
-l.734 ...u, (i + 1)}}  \leftarrow \mathbf{E^{\tau}'}
+l.268 ...u, (i + 1)}}  \leftarrow \mathbf{E^{\tau}'}
                                                    $
 ? 
 [21]
@@ -910,7 +923,7 @@ tputs/fits/cesNoCOP/inferExp/figs/obs_0.1/exposure_recov.png Graphic file (type
 puts/fits/cesNoCOP/inferExp/figs/obs_0.1/exposure_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.1/exposure_recov.png
-  used on input line 761.
+  used on input line 295.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/inferExp/figs/obs_0.3/exposure_recov.png, id=135, 722.7pt x 722.
@@ -922,7 +935,7 @@ tputs/fits/cesNoCOP/inferExp/figs/obs_0.3/exposure_recov.png Graphic file (type
 puts/fits/cesNoCOP/inferExp/figs/obs_0.3/exposure_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.3/exposure_recov.png
-  used on input line 766.
+  used on input line 300.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/inferExp/figs/obs_0.5/exposure_recov.png, id=136, 722.7pt x 722.
@@ -934,7 +947,7 @@ tputs/fits/cesNoCOP/inferExp/figs/obs_0.5/exposure_recov.png Graphic file (type
 puts/fits/cesNoCOP/inferExp/figs/obs_0.5/exposure_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.5/exposure_recov.png
-  used on input line 771.
+  used on input line 305.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/inferExp/figs/obs_0.1/exposure_recov.png, id=137, 722.7pt x 722.7p
@@ -946,7 +959,7 @@ ng)
 puts/fits/cesCOP/inferExp/figs/obs_0.1/exposure_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.1/exposure_recov.png  
-used on input line 777.
+used on input line 311.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/inferExp/figs/obs_0.3/exposure_recov.png, id=138, 722.7pt x 722.7p
@@ -958,7 +971,7 @@ ng)
 puts/fits/cesCOP/inferExp/figs/obs_0.3/exposure_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.3/exposure_recov.png  
-used on input line 782.
+used on input line 316.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/inferExp/figs/obs_0.5/exposure_recov.png, id=139, 722.7pt x 722.7p
@@ -970,11 +983,11 @@ ng)
 puts/fits/cesCOP/inferExp/figs/obs_0.5/exposure_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.5/exposure_recov.png  
-used on input line 787.
+used on input line 321.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 
 
-LaTeX Warning: Reference `' on page 22 undefined on input line 795.
+LaTeX Warning: Reference `' on page 22 undefined on input line 329.
 
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/inferExp/figs/obs_0.1/exposure_time_recov.png, id=140, 722.7pt x
@@ -986,7 +999,7 @@ tputs/fits/cesNoCOP/inferExp/figs/obs_0.1/exposure_time_recov.png Graphic file
 puts/fits/cesNoCOP/inferExp/figs/obs_0.1/exposure_time_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.1/exposure_time_reco
-v.png  used on input line 803.
+v.png  used on input line 337.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/inferExp/figs/obs_0.3/exposure_time_recov.png, id=141, 722.7pt x
@@ -998,7 +1011,7 @@ tputs/fits/cesNoCOP/inferExp/figs/obs_0.3/exposure_time_recov.png Graphic file
 puts/fits/cesNoCOP/inferExp/figs/obs_0.3/exposure_time_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.3/exposure_time_reco
-v.png  used on input line 808.
+v.png  used on input line 342.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/inferExp/figs/obs_0.5/exposure_time_recov.png, id=142, 722.7pt x
@@ -1010,7 +1023,7 @@ tputs/fits/cesNoCOP/inferExp/figs/obs_0.5/exposure_time_recov.png Graphic file
 puts/fits/cesNoCOP/inferExp/figs/obs_0.5/exposure_time_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.5/exposure_time_reco
-v.png  used on input line 813.
+v.png  used on input line 347.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/inferExp/figs/obs_0.1/exposure_time_recov.png, id=143, 722.7pt x 7
@@ -1022,7 +1035,7 @@ ype png)
 puts/fits/cesCOP/inferExp/figs/obs_0.1/exposure_time_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.1/exposure_time_recov.
-png  used on input line 819.
+png  used on input line 353.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/inferExp/figs/obs_0.3/exposure_time_recov.png, id=144, 722.7pt x 7
@@ -1034,7 +1047,7 @@ ype png)
 puts/fits/cesCOP/inferExp/figs/obs_0.3/exposure_time_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.3/exposure_time_recov.
-png  used on input line 824.
+png  used on input line 358.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/inferExp/figs/obs_0.5/exposure_time_recov.png, id=145, 722.7pt x 7
@@ -1046,7 +1059,7 @@ ype png)
 puts/fits/cesCOP/inferExp/figs/obs_0.5/exposure_time_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.5/exposure_time_recov.
-png  used on input line 829.
+png  used on input line 363.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 [22</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outpu
 ts/fits/cesNoCOP/inferExp/figs/obs_0.1/exposure_recov.png></Users/davidhodgson/D
@@ -1060,11 +1073,11 @@ p/figs/obs_0.3/exposure_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Documents
 /research/Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.5/exposure_rec
 ov.png>]
 
-Package caption Warning: \label without proper reference on input line 842.
+Package caption Warning: \label without proper reference on input line 377.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fit2:inf' on page 23 undefined on input line 840.
+LaTeX Warning: Reference `fit2:inf' on page 23 undefined on input line 374.
 
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/inferExp/figs/obs_0.1/infection_recov.png, id=149, 722.7pt x 722
@@ -1076,7 +1089,7 @@ e png)
 puts/fits/cesNoCOP/inferExp/figs/obs_0.1/infection_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.1/infection_recov.pn
-g  used on input line 847.
+g  used on input line 381.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/inferExp/figs/obs_0.3/infection_recov.png, id=150, 722.7pt x 722
@@ -1088,7 +1101,7 @@ e png)
 puts/fits/cesNoCOP/inferExp/figs/obs_0.3/infection_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.3/infection_recov.pn
-g  used on input line 852.
+g  used on input line 386.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/inferExp/figs/obs_0.5/infection_recov.png, id=151, 722.7pt x 722
@@ -1100,7 +1113,7 @@ e png)
 puts/fits/cesNoCOP/inferExp/figs/obs_0.5/infection_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.5/infection_recov.pn
-g  used on input line 857.
+g  used on input line 391.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/inferExp/figs/obs_0.1/infection_recov.png, id=152, 722.7pt x 722.7
@@ -1112,7 +1125,7 @@ png)
 puts/fits/cesCOP/inferExp/figs/obs_0.1/infection_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.1/infection_recov.png 
- used on input line 863.
+ used on input line 397.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/inferExp/figs/obs_0.3/infection_recov.png, id=153, 722.7pt x 722.7
@@ -1124,7 +1137,7 @@ png)
 puts/fits/cesCOP/inferExp/figs/obs_0.3/infection_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.3/infection_recov.png 
- used on input line 868.
+ used on input line 402.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/inferExp/figs/obs_0.5/infection_recov.png, id=154, 722.7pt x 722.7
@@ -1136,7 +1149,7 @@ png)
 puts/fits/cesCOP/inferExp/figs/obs_0.5/infection_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.5/infection_recov.png 
- used on input line 873.
+ used on input line 407.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 [23</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outpu
 ts/fits/cesNoCOP/inferExp/figs/obs_0.1/exposure_time_recov.png></Users/davidhodg
@@ -1150,11 +1163,11 @@ packages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.1/exposure_time_recov.png
 Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits/cesCOP/inferExp/
 figs/obs_0.5/exposure_time_recov.png>]
 
-Package caption Warning: \label without proper reference on input line 884.
+Package caption Warning: \label without proper reference on input line 419.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fit2:cop' on page 24 undefined on input line 882.
+LaTeX Warning: Reference `fit2:cop' on page 24 undefined on input line 416.
 
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/inferExp/figs/obs_0.1/cop_recov.png, id=158, 722.7pt x 722.7pt>
@@ -1165,7 +1178,7 @@ tputs/fits/cesNoCOP/inferExp/figs/obs_0.1/cop_recov.png Graphic file (type png)
 puts/fits/cesNoCOP/inferExp/figs/obs_0.1/cop_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.1/cop_recov.png  use
-d on input line 889.
+d on input line 423.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/inferExp/figs/obs_0.3/cop_recov.png, id=159, 722.7pt x 722.7pt>
@@ -1176,7 +1189,7 @@ tputs/fits/cesNoCOP/inferExp/figs/obs_0.3/cop_recov.png Graphic file (type png)
 puts/fits/cesNoCOP/inferExp/figs/obs_0.3/cop_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.3/cop_recov.png  use
-d on input line 894.
+d on input line 428.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/inferExp/figs/obs_0.5/cop_recov.png, id=160, 722.7pt x 722.7pt>
@@ -1187,7 +1200,7 @@ tputs/fits/cesNoCOP/inferExp/figs/obs_0.5/cop_recov.png Graphic file (type png)
 puts/fits/cesNoCOP/inferExp/figs/obs_0.5/cop_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.5/cop_recov.png  use
-d on input line 899.
+d on input line 433.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/inferExp/figs/obs_0.1/cop_recov.png, id=161, 722.7pt x 722.7pt>
@@ -1197,7 +1210,7 @@ tputs/fits/cesCOP/inferExp/figs/obs_0.1/cop_recov.png Graphic file (type png)
 puts/fits/cesCOP/inferExp/figs/obs_0.1/cop_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.1/cop_recov.png  used 
-on input line 905.
+on input line 439.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/inferExp/figs/obs_0.3/cop_recov.png, id=162, 722.7pt x 722.7pt>
@@ -1207,7 +1220,7 @@ tputs/fits/cesCOP/inferExp/figs/obs_0.3/cop_recov.png Graphic file (type png)
 puts/fits/cesCOP/inferExp/figs/obs_0.3/cop_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.3/cop_recov.png  used 
-on input line 910.
+on input line 444.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/inferExp/figs/obs_0.5/cop_recov.png, id=163, 722.7pt x 722.7pt>
@@ -1217,7 +1230,7 @@ tputs/fits/cesCOP/inferExp/figs/obs_0.5/cop_recov.png Graphic file (type png)
 puts/fits/cesCOP/inferExp/figs/obs_0.5/cop_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.5/cop_recov.png  used 
-on input line 915.
+on input line 449.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 [24</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outpu
 ts/fits/cesNoCOP/inferExp/figs/obs_0.1/infection_recov.png></Users/davidhodgson/
@@ -1231,11 +1244,11 @@ erExp/figs/obs_0.3/infection_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Docu
 ments/research/Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.5/infecti
 on_recov.png>]
 
-Package caption Warning: \label without proper reference on input line 426.
+Package caption Warning: \label without proper reference on input line 287.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fit1:ab' on page 25 undefined on input line 926.
+LaTeX Warning: Reference `fit1:ab' on page 25 undefined on input line 460.
 
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/inferExp/figs/obs_0.1/ab_kinetics_recov.png, id=167, 722.7pt x 7
@@ -1247,7 +1260,7 @@ ype png)
 puts/fits/cesNoCOP/inferExp/figs/obs_0.1/ab_kinetics_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.1/ab_kinetics_recov.
-png  used on input line 933.
+png  used on input line 467.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/inferExp/figs/obs_0.3/ab_kinetics_recov.png, id=168, 722.7pt x 7
@@ -1259,7 +1272,7 @@ ype png)
 puts/fits/cesNoCOP/inferExp/figs/obs_0.3/ab_kinetics_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.3/ab_kinetics_recov.
-png  used on input line 938.
+png  used on input line 472.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesNoCOP/inferExp/figs/obs_0.5/ab_kinetics_recov.png, id=169, 722.7pt x 7
@@ -1271,7 +1284,7 @@ ype png)
 puts/fits/cesNoCOP/inferExp/figs/obs_0.5/ab_kinetics_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.5/ab_kinetics_recov.
-png  used on input line 943.
+png  used on input line 477.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/inferExp/figs/obs_0.1/ab_kinetics_recov.png, id=170, 722.7pt x 722
@@ -1283,7 +1296,7 @@ e png)
 puts/fits/cesCOP/inferExp/figs/obs_0.1/ab_kinetics_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.1/ab_kinetics_recov.pn
-g  used on input line 949.
+g  used on input line 483.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/inferExp/figs/obs_0.3/ab_kinetics_recov.png, id=171, 722.7pt x 722
@@ -1295,7 +1308,7 @@ e png)
 puts/fits/cesCOP/inferExp/figs/obs_0.3/ab_kinetics_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.3/ab_kinetics_recov.pn
-g  used on input line 954.
+g  used on input line 488.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
 </Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
 /fits/cesCOP/inferExp/figs/obs_0.5/ab_kinetics_recov.png, id=172, 722.7pt x 722
@@ -1307,35 +1320,232 @@ e png)
 puts/fits/cesCOP/inferExp/figs/obs_0.5/ab_kinetics_recov.png>
 Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
 /Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.5/ab_kinetics_recov.pn
-g  used on input line 959.
+g  used on input line 493.
 (luatex.def)             Requested size: 145.6229pt x 145.61813pt.
-[25</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outpu
-ts/fits/cesNoCOP/inferExp/figs/obs_0.1/cop_recov.png></Users/davidhodgson/Dropbo
-x/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs
-/obs_0.3/cop_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/research/R
-packages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.5/cop_recov.png></Users
-/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits/ce
-sCOP/inferExp/figs/obs_0.1/cop_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Do
-cuments/research/Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.3/cop_r
-ecov.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc/
-/outputs/fits/cesCOP/inferExp/figs/obs_0.5/cop_recov.png>] [26</Users/davidhodgs
-on/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits/cesNoCOP/infe
-rExp/figs/obs_0.1/ab_kinetics_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Doc
-uments/research/Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.3/ab_k
-inetics_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpacka
-ges/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.5/ab_kinetics_recov.png></Us
-ers/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits
-/cesCOP/inferExp/figs/obs_0.1/ab_kinetics_recov.png></Users/davidhodgson/Dropbox
-/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/ob
-s_0.3/ab_kinetics_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/resea
-rch/Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.5/ab_kinetics_recov.
-png>]
-Overfull \hbox (14.62029pt too wide) in paragraph at lines 986--987
+) [25</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
+puts/fits/cesNoCOP/inferExp/figs/obs_0.1/cop_recov.png></Users/davidhodgson/Drop
+box/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/fi
+gs/obs_0.3/cop_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/research
+/Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.5/cop_recov.png></Use
+rs/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits/
+cesCOP/inferExp/figs/obs_0.1/cop_recov.png></Users/davidhodgson/Dropbox/Mac (3)/
+Documents/research/Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.3/cop
+_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjm
+c//outputs/fits/cesCOP/inferExp/figs/obs_0.5/cop_recov.png>] [26</Users/davidhod
+gson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits/cesNoCOP/in
+ferExp/figs/obs_0.1/ab_kinetics_recov.png></Users/davidhodgson/Dropbox/Mac (3)/D
+ocuments/research/Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.3/ab
+_kinetics_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpac
+kages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.5/ab_kinetics_recov.png></
+Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fi
+ts/cesCOP/inferExp/figs/obs_0.1/ab_kinetics_recov.png></Users/davidhodgson/Dropb
+ox/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/
+obs_0.3/ab_kinetics_recov.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/res
+earch/Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.5/ab_kinetics_reco
+v.png>] (./sections/sx_looking/body.tex
+Overfull \hbox (14.62029pt too wide) in paragraph at lines 17--18
 \TU/Avenir(0)/m/n/10 jump mcmc al-go-rithm, which can in-fer im-por-tant epi-dem
 i-ol-ogy and im-muno-log-i-cal in-for-ma-tion from individual-
  []
 
-[27] [28] (./rjmcmc.aux)
+) [27] (./appendicies/notation/body.tex
+./appendicies/notation/body.tex:42: Extra }, or forgotten $.
+l.42 ..._1, \dots, I_{j^*}, \dots, I_{n_\mathbf{E}}}
+                                                  \}$ & Vector of infection ...
+? 
+
+Underfull \hbox (badness 1205) in paragraph at lines 61--61
+[]|\TU/Avenir(0)/m/n/10 Like-li-hood of the ob-ser-va-tion model for the data $
+\OML/cmm/m/it/10 Z[]$ \TU/Avenir(0)/m/n/10 given model-
+ []
+
+./appendicies/notation/body.tex:63: Misplaced \noalign.
+\hline ->\noalign 
+                  {\ifnum 0=`}\fi \hrule \@height \arrayrulewidth \futurelet...
+l.63          \hline
+                  
+? 
+
+Overfull \hbox (17.29262pt too wide) in paragraph at lines 21--65
+ [][] 
+ []
+
+[28]
+Overfull \hbox (1.71078pt too wide) in paragraph at lines 72--82
+ [][] 
+ []
+
+[29]) (./appendicies/adapt/body.tex) (./appendicies/trace/body.tex
+</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
+/fits/cesNoCOP/knownExp/figs/obs_0.1/trace_plots.png, id=188, 700.5372pt x 510.
+708pt>
+File: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//ou
+tputs/fits/cesNoCOP/knownExp/figs/obs_0.1/trace_plots.png Graphic file (type pn
+g)
+<use /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
+puts/fits/cesNoCOP/knownExp/figs/obs_0.1/trace_plots.png>
+Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
+/Rpackages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.1/trace_plots.png  u
+sed on input line 8.
+(luatex.def)             Requested size: 145.6229pt x 106.16084pt.
+</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
+/fits/cesNoCOP/knownExp/figs/obs_0.3/trace_plots.png, id=189, 700.5372pt x 510.
+708pt>
+File: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//ou
+tputs/fits/cesNoCOP/knownExp/figs/obs_0.3/trace_plots.png Graphic file (type pn
+g)
+<use /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
+puts/fits/cesNoCOP/knownExp/figs/obs_0.3/trace_plots.png>
+Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
+/Rpackages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.3/trace_plots.png  u
+sed on input line 13.
+(luatex.def)             Requested size: 145.6229pt x 106.16084pt.
+</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
+/fits/cesNoCOP/knownExp/figs/obs_0.5/trace_plots.png, id=190, 700.5372pt x 510.
+708pt>
+File: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//ou
+tputs/fits/cesNoCOP/knownExp/figs/obs_0.5/trace_plots.png Graphic file (type pn
+g)
+<use /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
+puts/fits/cesNoCOP/knownExp/figs/obs_0.5/trace_plots.png>
+Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
+/Rpackages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.5/trace_plots.png  u
+sed on input line 18.
+(luatex.def)             Requested size: 145.6229pt x 106.16084pt.
+</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
+/fits/cesCOP/knownExp/figs/obs_0.1/trace_plots.png, id=191, 700.5372pt x 510.70
+8pt>
+File: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//ou
+tputs/fits/cesCOP/knownExp/figs/obs_0.1/trace_plots.png Graphic file (type png)
+
+<use /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
+puts/fits/cesCOP/knownExp/figs/obs_0.1/trace_plots.png>
+Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
+/Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.1/trace_plots.png  use
+d on input line 24.
+(luatex.def)             Requested size: 145.6229pt x 106.16084pt.
+</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
+/fits/cesCOP/knownExp/figs/obs_0.3/trace_plots.png, id=192, 700.5372pt x 510.70
+8pt>
+File: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//ou
+tputs/fits/cesCOP/knownExp/figs/obs_0.3/trace_plots.png Graphic file (type png)
+
+<use /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
+puts/fits/cesCOP/knownExp/figs/obs_0.3/trace_plots.png>
+Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
+/Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.3/trace_plots.png  use
+d on input line 29.
+(luatex.def)             Requested size: 145.6229pt x 106.16084pt.
+</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
+/fits/cesCOP/knownExp/figs/obs_0.5/trace_plots.png, id=193, 700.5372pt x 510.70
+8pt>
+File: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//ou
+tputs/fits/cesCOP/knownExp/figs/obs_0.5/trace_plots.png Graphic file (type png)
+
+<use /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
+puts/fits/cesCOP/knownExp/figs/obs_0.5/trace_plots.png>
+Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
+/Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.5/trace_plots.png  use
+d on input line 34.
+(luatex.def)             Requested size: 145.6229pt x 106.16084pt.
+ [30]
+</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
+/fits/cesNoCOP/inferExp/figs/obs_0.1/trace_plots.png, id=197, 700.5372pt x 510.
+708pt>
+File: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//ou
+tputs/fits/cesNoCOP/inferExp/figs/obs_0.1/trace_plots.png Graphic file (type pn
+g)
+<use /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
+puts/fits/cesNoCOP/inferExp/figs/obs_0.1/trace_plots.png>
+Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
+/Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.1/trace_plots.png  u
+sed on input line 47.
+(luatex.def)             Requested size: 145.6229pt x 106.16084pt.
+</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
+/fits/cesNoCOP/inferExp/figs/obs_0.3/trace_plots.png, id=198, 700.5372pt x 510.
+708pt>
+File: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//ou
+tputs/fits/cesNoCOP/inferExp/figs/obs_0.3/trace_plots.png Graphic file (type pn
+g)
+<use /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
+puts/fits/cesNoCOP/inferExp/figs/obs_0.3/trace_plots.png>
+Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
+/Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.3/trace_plots.png  u
+sed on input line 52.
+(luatex.def)             Requested size: 145.6229pt x 106.16084pt.
+</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
+/fits/cesNoCOP/inferExp/figs/obs_0.5/trace_plots.png, id=199, 700.5372pt x 510.
+708pt>
+File: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//ou
+tputs/fits/cesNoCOP/inferExp/figs/obs_0.5/trace_plots.png Graphic file (type pn
+g)
+<use /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
+puts/fits/cesNoCOP/inferExp/figs/obs_0.5/trace_plots.png>
+Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
+/Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.5/trace_plots.png  u
+sed on input line 57.
+(luatex.def)             Requested size: 145.6229pt x 106.16084pt.
+
+Overfull \hbox (13.33pt too wide) in paragraph at lines 57--57
+ [][]\TU/Avenir(0)/m/n/10 ros 
+ []
+
+</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
+/fits/cesCOP/inferExp/figs/obs_0.1/trace_plots.png, id=200, 700.5372pt x 510.70
+8pt>
+File: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//ou
+tputs/fits/cesCOP/inferExp/figs/obs_0.1/trace_plots.png Graphic file (type png)
+
+<use /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
+puts/fits/cesCOP/inferExp/figs/obs_0.1/trace_plots.png>
+Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
+/Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.1/trace_plots.png  use
+d on input line 62.
+(luatex.def)             Requested size: 145.6229pt x 106.16084pt.
+</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
+/fits/cesCOP/inferExp/figs/obs_0.3/trace_plots.png, id=201, 700.5372pt x 510.70
+8pt>
+File: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//ou
+tputs/fits/cesCOP/inferExp/figs/obs_0.3/trace_plots.png Graphic file (type png)
+
+<use /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
+puts/fits/cesCOP/inferExp/figs/obs_0.3/trace_plots.png>
+Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
+/Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.3/trace_plots.png  use
+d on input line 67.
+(luatex.def)             Requested size: 145.6229pt x 106.16084pt.
+</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
+/fits/cesCOP/inferExp/figs/obs_0.5/trace_plots.png, id=202, 700.5372pt x 510.70
+8pt>
+File: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//ou
+tputs/fits/cesCOP/inferExp/figs/obs_0.5/trace_plots.png Graphic file (type png)
+
+<use /Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
+puts/fits/cesCOP/inferExp/figs/obs_0.5/trace_plots.png>
+Package luatex.def Info: /Users/davidhodgson/Dropbox/Mac (3)/Documents/research
+/Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.5/trace_plots.png  use
+d on input line 72.
+(luatex.def)             Requested size: 145.6229pt x 106.16084pt.
+) [31</Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//out
+puts/fits/cesNoCOP/knownExp/figs/obs_0.1/trace_plots.png></Users/davidhodgson/Dr
+opbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits/cesNoCOP/knownExp/
+figs/obs_0.3/trace_plots.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/rese
+arch/Rpackages/rjmc//outputs/fits/cesNoCOP/knownExp/figs/obs_0.5/trace_plots.png
+></Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs
+/fits/cesCOP/knownExp/figs/obs_0.1/trace_plots.png></Users/davidhodgson/Dropbox/
+Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs
+_0.3/trace_plots.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpa
+ckages/rjmc//outputs/fits/cesCOP/knownExp/figs/obs_0.5/trace_plots.png>] [32</Us
+ers/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits
+/cesNoCOP/inferExp/figs/obs_0.1/trace_plots.png></Users/davidhodgson/Dropbox/Mac
+ (3)/Documents/research/Rpackages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_
+0.3/trace_plots.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpac
+kages/rjmc//outputs/fits/cesNoCOP/inferExp/figs/obs_0.5/trace_plots.png></Users/
+davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rjmc//outputs/fits/ces
+COP/inferExp/figs/obs_0.1/trace_plots.png></Users/davidhodgson/Dropbox/Mac (3)/D
+ocuments/research/Rpackages/rjmc//outputs/fits/cesCOP/inferExp/figs/obs_0.3/trac
+e_plots.png></Users/davidhodgson/Dropbox/Mac (3)/Documents/research/Rpackages/rj
+mc//outputs/fits/cesCOP/inferExp/figs/obs_0.5/trace_plots.png>] (./rjmcmc.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -1345,15 +1555,15 @@ LaTeX Warning: There were multiply-defined labels.
 )
 
 Here is how much of LuaTeX's memory you used:
- 8567 strings out of 478285
- 100000,1977958 words of node,token memory allocated
+ 8928 strings out of 478285
+ 125009,1977958 words of node,token memory allocated
  795 words of node memory still in use:
    6 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 80 attribute, 55 glue_spec
 , 80 attribute_list, 1 write nodes
-   avail lists: 2:1050,3:268,4:28,5:427,6:70,7:10388,8:120,9:767,10:19,11:1041
- 28223 multiletter control sequences out of 65536+600000
- 78 fonts using 5455695 bytes
- 72i,13n,79p,1828b,574s stack positions out of 10000i,1000n,20000p,200000b,200000s
+   avail lists: 2:1050,3:268,4:28,5:427,6:79,7:10388,8:120,9:1258,10:19,11:1041
+ 28431 multiletter control sequences out of 65536+600000
+ 80 fonts using 5648895 bytes
+ 72i,13n,79p,1867b,587s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/opentype/public/lm/lmmono10-regular.ot
 f></usr/local/texlive/2023/texmf-dist/fonts/opentype/public/lm/lmmonolt10-bold.o
 tf></System/Library/Fonts/Avenir.ttc></System/Library/Fonts/Avenir.ttc></System/
@@ -1371,10 +1581,10 @@ pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb
 usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb
 ></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.p
 fb>
-Output written on rjmcmc.pdf (28 pages, 21589557 bytes).
+Output written on rjmcmc.pdf (32 pages, 35998613 bytes).
 
-PDF statistics: 258 PDF objects out of 1000 (max. 8388607)
- 144 compressed objects within 2 object streams
+PDF statistics: 283 PDF objects out of 1000 (max. 8388607)
+ 153 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 131072)
  1 words of extra memory for PDF output out of 10000 (max. 100000000)
 
