@@ -215,48 +215,6 @@ plot_abkinetics <- function(outputfull) {
 
 }
 
-obs_er <- "0.1"
-modelname <- "inferExp"
-modelname_sim <-  "cesNoCOP"
-outputfull_1 <- readRDS(file = here::here("outputs", "fits", modelname_sim, modelname, paste0("pp_obs_", obs_er, ".RDS")))
-modelA_1 <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
-
-obs_er <- "0.1"
-modelname <- "inferExp"
-modelname_sim <-  "cesCOP"
-outputfull_2 <- readRDS(file = here::here("outputs", "fits", modelname_sim, modelname, paste0("pp_obs_", obs_er, ".RDS")))
-modelA_2 <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
-
-biomarker_protection <- function(biomarker_quantity, biomarker_prot_midpoint, biomarker_prot_width) {
-    risk <- 1 - 1/(1 + exp(biomarker_prot_width * (biomarker_quantity - biomarker_prot_midpoint)))
-    return(risk)
-}
-
-require(tidybayes)
-df_here <- data.frame(
-    titre = seq(0, 4, 0.1),
-    true_data_A = (1 - biomarker_protection(seq(0, 4, 0.1), 2, modelA_1$protection_curve)),
-    true_data_B = (1 - biomarker_protection(seq(0, 4, 0.1), 2, modelA_2$protection_curve))
-)
-
-p1 <- outputfull_1$sim_states %>% filter(exp_ind_sim == 1) %>% mutate(inf_state = case_when(inf_ind_sim==0~"Not infected", inf_ind_sim==1~"Infected")) %>%
-    ggplot() + geom_point(aes(x = init_titre, y = inf_ind_sim, fill =  inf_state), alpha = 0.8, size = 2, shape = 21) +
-        geom_line(data = df_here, aes(x = titre, y = true_data_A, color = "red"), size = 2) + 
-        geom_smooth(aes(x = init_titre, y = inf_ind_sim , color = "black")) + theme_bw() + 
-        scale_color_manual(name = "Line type", values = c("red" = "red", "black" = "black"), labels = c("Realised simualted curve", "Functional simulated curve")) + 
-        labs(x = expression("Pre-infection titre, Z"[j]^0), y = "Probability of infection", fill = "Simulated infection state") + 
-        ggtitle("Correlate of protection in simulated data for Model A (No COP)")
-
-p2 <- outputfull_2$sim_states %>% filter(exp_ind_sim == 1)  %>% mutate(inf_state = case_when(inf_ind_sim==0~"Not infected", inf_ind_sim==1~"Infected")) %>%
-    ggplot() + geom_point(aes(x = init_titre, y = inf_ind_sim, fill = inf_state), alpha = 0.8, size = 2, shape = 21) +
-        geom_line(data = df_here, aes(x = titre, y = true_data_B, color = "red"), size = 2) + 
-        geom_smooth(aes(x = init_titre, y = inf_ind_sim, color = "black" )) + theme_bw() + 
-        scale_color_manual(values = c("red" = "red", "black" = "black"), labels = c("Functional simulated curve", "Realised simualted curve")) + 
-        labs(x = expression("Pre-infection titre, Z"[j]^0), y = "Probability of infection", fill = "Simulated infection state") + 
-        ggtitle("Correlate of protection in simulated data for Model B (Logistic COP)")
-
-p1 / p2
-
 plot_exp_rec <- function(outputfull) {
 
     sim_states <- outputfull$sim_states %>% mutate(
@@ -290,9 +248,49 @@ plot_exp_rec <- function(outputfull) {
             geom_point(aes(x = start_titre, y = exp_post, fill = expinf), shape = 21, size = 3, alpha = 0.6) + 
             scale_fill_manual(values = c("red", "blue", "green")) + 
             theme_bw() + 
-            labs(x = "Titre at start of study", y = "Posterior probability of exposure", full = "Exposure and infection status") + 
+            ylim(0, 1) +
+            labs(x = "Titre at start of study", y = "Posterior probability of exposure", fill = "Exposure and infection status") + 
             ggtitle("Posterior plots of probability of exposure compared to simulated data") 
 
+    no_exp_sim <- sim_states %>% select(id, exp_ind_sim) %>% pull(exp_ind_sim) %>% sum
+    no_exp_fit_df <- fit_states %>% select(id, sample, exp_ind) %>% summarise(exp_ind_sum = sum(exp_ind), .by = "sample")
+
+    figB <- no_exp_fit_df %>% summarise(n = n()  / 4000, .by = exp_ind_sum) %>%
+        ggplot() + 
+            geom_col(aes(x = exp_ind_sum, y = n), alpha = 0.8) + 
+            theme_bw()  + 
+            geom_vline(xintercept = no_exp_sim, size = 3, color = "white") +
+            geom_vline(xintercept = no_exp_sim, size = 2, color = "red") +
+            labs(y = "Posterior density", x = expression("Estimated number of exposures in epidemic, n"[I])) + 
+            ggtitle("Recovery of population-level exposure burden")
+
+    figA / figB + plot_annotation(tag_levels = "A") 
+    ggsave(here::here("outputs", "fits", modelname_sim, modelname, "figs", paste0("obs_", obs_er), "exposure_recov.png"), height = 10, width = 10)
+
+}
+
+plot_exp_times_rec <- function(outputfull) {
+
+    sim_states <- outputfull$sim_states %>% mutate(
+            expinf = case_when(
+                exp_ind_sim == 1 & inf_ind_sim == 1 ~ "Exposed and infected",
+                exp_ind_sim == 1 & inf_ind_sim == 0 ~ "Exposed and not infected",
+                exp_ind_sim == 0 ~ "Not exposed"                
+            )
+        )
+    fit_states <- outputfull$fit_states
+    modelname <- outputfull$modelname
+    modelname_sim <- outputfull$modelname_sim
+    obs_er <- outputfull$obs_er
+
+    fitfull <- readRDS(here::here("outputs", "fits", modelname_sim, modelname, paste0("fit_", "obs_", obs_er, ".RDS")))
+    data_t <- fitfull$data_t
+
+    df_data <- data.frame(
+        id = 1:200,
+        start_titre = data_t$initialTitreValue
+    )
+    fit_states_exp_prob <- fit_states %>% select(id, exp_ind) %>% summarise(exp_post = mean(exp_ind), .by = "id")
 
     dataplt <- left_join(
         sim_states %>% filter(exp_ind_sim == 1) %>% select(id, exp_time_sim, expinf),
@@ -311,23 +309,25 @@ plot_exp_rec <- function(outputfull) {
             theme(axis.text.y = element_text(size = 5)) + 
             ggtitle("Recovery of timings of exposure over epidemic") 
 
-    dataplt_exp <- left_join(
-        sim_states %>% filter(exp_ind_sim == 1) %>% select(id, exp_time_sim),
-        fit_states %>% filter(exp_ind == 1) %>% select(id, exp_time) %>% group_by(id) %>% mean_qi(exp_time)
+
+    dataplt_inf <- left_join(
+        sim_states %>% filter(inf_ind_sim == 1) %>% select(id, exp_time_sim),
+        fit_states %>% filter(inf_ind == 1) %>% select(id, exp_time) %>% group_by(id) %>% mean_qi(exp_time)
     )
 
-    figC <- dataplt_exp %>% select(id, exp_time_sim, exp_time) %>%
-        rename(Data = exp_time_sim, `Model recovery` = exp_time) %>% pivot_longer(!id, names_to = "type", values_to = "time") %>%
-    ggplot() + 
-            geom_density(aes(x = time, fill = type), size = 2, alpha = 0.7, shape = 21) + 
-            theme_bw() + 
+    figC <- dataplt_inf %>% select(id, exp_time_sim, exp_time) %>% 
+        rename(Data = exp_time_sim, `Model recovery` = exp_time) %>%
+        pivot_longer(!id, names_to = "type", values_to = "time") %>%
+        ggplot() + 
+            geom_density(aes(x = time, fill = type), size = 2, alpha = 0.5, shape = 21) + 
+            theme_bw()  + 
+            xlim(0, 120) + 
             labs(x = "Time in study", y = "Density", fill = "") + 
-            ggtitle("Recovery of exposure timings")
+            ggtitle("Recovery of infection timings")
 
-
-    figA / figB / figC + plot_annotation(tag_levels = "A") + plot_layout(heights = c(1, 1, 1))
-    ggsave(here::here("outputs", "fits", modelname_sim, modelname, "figs", paste0("obs_", obs_er), "exposure_recov.png"), height = 10, width = 10)
-
+ 
+    figB / figC + plot_annotation(tag_levels = "A") 
+    ggsave(here::here("outputs", "fits", modelname_sim, modelname, "figs", paste0("obs_", obs_er), "exposure_time_recov.png"), height = 10, width = 10)
 }
 
 
@@ -453,6 +453,7 @@ postprocessFigs <- function(modelname, modelname_sim, obs_er, n_chains) {
     plot_abkinetics(outputfull)
     plot_inf_rec(outputfull)
     plot_exp_rec(outputfull)
+    plot_exp_times_rec(outputfull)
     plot_cop_rec(outputfull)
 }
 
