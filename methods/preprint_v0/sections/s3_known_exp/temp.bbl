@@ -1,0 +1,27 @@
+\begin{thebibliography}{1}
+
+\bibitem{Green1995-kh}
+Peter~J Green.
+\newblock Reversible jump markov chain monte carlo computation and bayesian
+  model determination.
+\newblock {\em Biometrika}, 82(4):711--732, December 1995.
+
+\bibitem{Hay2020-pr}
+James~A Hay, Amanda Minter, Kylie E~C Ainslie, Justin Lessler, Bingyi Yang,
+  Derek A~T Cummings, Adam~J Kucharski, and Steven Riley.
+\newblock An open source tool to infer epidemiological and immunological
+  dynamics from serological data: serosolver.
+\newblock {\em PLoS Comput. Biol.}, 16(5):e1007840, May 2020.
+
+\bibitem{Roberts2012-ju}
+Gareth~O Roberts, Jeffrey~S Rosenthal, Gareth O~R Oberts, and Jeffrey S~R
+  Osenthal.
+\newblock Examples of adaptive {MCMC}.
+\newblock {\em J. Comput. Graph. Stat.}, 18(2):349--367, 2012.
+
+\bibitem{Andrieu2008-yx}
+Christophe Andrieu and Johannes Thoms.
+\newblock A tutorial on adaptive {MCMC}.
+\newblock {\em Stat. Comput.}, 18:343--373, 2008.
+
+\end{thebibliography}
