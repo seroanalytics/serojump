@@ -489,7 +489,7 @@ namespace rjmc_full{
             } else {
                 double temp = this->currentJump(t) + normalDistSample(0, exp(this->adaptiveGibbsSD(t)));
                 if (temp >= this->endTitreTime(t) - 7) {
-                    temp = this->endTitreTime(t) - 8; // this->exposureFunctionSample(); //runif(1, 1, 150) + 121 //
+                    temp = this->endTitreTime(t) - 7; // this->exposureFunctionSample(); //runif(1, 1, 150) + 121 //
                 } else if (temp < this->initialTitreTime(t)) {
                     temp = this->initialTitreTime(t); // this->exposureFunctionSample(); //runif(1, 1, 150) + 121 //
                 }
