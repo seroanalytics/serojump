@@ -19,7 +19,6 @@ NULL
 #' @export
 rjmc_full_func <- function(model, data, settings, par = NULL) {
   settings <- check_settings_full(settings)
-
   if (length(par) == 0) {
     par <- rep(list(list(type = "None")), settings[["numberChainRuns"]])
     output <- get_output_full(model, data, settings, FALSE, par)
@@ -48,7 +47,6 @@ get_output_full <- function(model, data_list, settings, update_ind, par) {
     )
   } else {
     for (i in 1:settings[["numberChainRuns"]]) {
-      cat(i)
       out_raw[[i]] <- run_rjmc_full(model, data_list, settings, update_ind, par[[i]], i)
     }
   }

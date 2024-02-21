@@ -1,3 +1,14 @@
+#' @useDynLib rjmc
+#' @importFrom Rcpp sourceCpp
+#' @import ggplot2
+#' @import purrr
+#' @import tidyr
+#' @import dplyr
+#' @import ggdist
+#' @import patchwork
+#' @import tidybayes
+#' @importFrom magrittr %>% %<>%
+NULL
 postprocess_run <- function(modelname, modelname_sim, obs_er, n_chains) {
 
     library(ggdist)
@@ -32,7 +43,7 @@ postprocess_run <- function(modelname, modelname_sim, obs_er, n_chains) {
     post_exp_combine <- post$jump %>% combine
     post_inf_combine <- post$inf %>% combine
 
-    fit_states <- map_df(1:N, 
+    fit_states <- purrr::map_df(1:N, 
         function(x) {
             data.frame(
                 id = x,
@@ -118,7 +129,7 @@ plot_abkinetics <- function(outputfull) {
         post$mcmc %>% combine %>% as.data.frame %>% mutate(c = c_slope) %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
             mutate(type = "Posterior distribution") %>% filter(param %in% c("a", "b", "c")) ,
         res$kinetics_parameters %>% filter(name %in% c("a", "b", "c")) %>% select(name, value)  %>% rename(param = name) %>%  mutate(type = "Simulated distribution") ,
-        map_df(1:n_post,
+        purrr::map_df(1:n_post,
             ~model_outline$samplePriorDistributions(par_tab)
         ) %>% rename(c = c_slope) %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%  mutate(type = "Prior distribution")  %>%
         filter(param %in% c("a", "b", "c")) %>% filter(type != "Prior distribution")
@@ -152,7 +163,7 @@ plot_abkinetics <- function(outputfull) {
     (p1 + p2) / (p3 )
 
 
-    traj_post <- 1:(n_post * n_chains) %>% map_df(
+    traj_post <- 1:(n_post * n_chains) %>% purrr::map_df(
         ~data.frame(
             time = 1:T,
             value = ab_function(a_post[.x], b_post[.x], c_post[.x], T)
@@ -164,7 +175,7 @@ plot_abkinetics <- function(outputfull) {
     b_sim <- res$kinetics_parameters %>% filter(name == "b") %>% pull(value)
     c_sim <- res$kinetics_parameters %>% filter(name == "c") %>% pull(value)
 
-    traj_true <- 1:(length(a_sim)) %>% map_df(
+    traj_true <- 1:(length(a_sim)) %>% purrr::map_df(
         ~data.frame(
             time = 1:T,
             value = ab_function(a_sim[.x], b_sim[.x], c_sim[.x], T),
@@ -432,7 +443,7 @@ plot_cop_rec <- function(outputfull) {
         true_data = (1 - biomarker_protection(seq(0, 4, 0.1), 2, modelA$protection_curve))
     )
 
-    lol <- 1:1000 %>% map_df(
+    lol <- 1:1000 %>% purrr::map_df(
         ~data.frame(
             t = seq(0, 4, 0.1),
             vals = 1.0 / (1.0 + exp(-(b0_rep[.x] + b1_rep[.x] * seq(0, 4, 0.1))))
