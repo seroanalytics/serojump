@@ -286,11 +286,13 @@ namespace rjmc_full{
         VectorXd initInfFunc() {
             VectorXd initialInf = VectorXd::Zero(this->N);
             for (int i = 0; i < this->N; i++) {
-                if (this->currentJump(i) > -1) {
+                if ((this->currentJump(i) > -1) && (this->knownInfsVec(i) != 1)){
                     boost::random::beta_distribution<> b(1, 1); 
-                    double p = b(rng); //1.0 / (1.0 + exp(-(b0 + b1 * initialTitreValue[t]))); 
+                    double p = b(rng);
                     boost::random::bernoulli_distribution<> l(p); 
                     initialInf(i) = l(rng);
+                } else if ((this->currentJump(i) > -1) && (this->knownInfsVec(i) == 1)) {
+                    initialInf(i) = 1;
                 }
             }
             return initialInf;
@@ -460,9 +462,6 @@ namespace rjmc_full{
 
         // Sample an new infection status for an exposed individual
         void proposeInfection(int t) {
-
-            //double b0 = this->currentSample(5);
-            //double b1 = this->currentSample(6);
 
             if (this->propInferredInfN == 0) {
                 this->proposalInf(t) = 1;

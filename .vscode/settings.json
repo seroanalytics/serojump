@@ -1,4 +1,11 @@
 {
+    "r.bracketedPaste": true,
+    "r.lsp.debug": true,
+    "r.lsp.diagnostics": true,
+    "r.rterm.option": [
+            "--no-save",
+            "--no-restore"
+        ],
     "files.associations": {
         "__bit_reference": "cpp",
         "__config": "cpp",
