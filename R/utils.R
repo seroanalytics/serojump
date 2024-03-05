@@ -278,7 +278,7 @@ rdunif <- function(n, lower_bound, upper_bound) {
 }
 
 
-generate_data_t <- function(data_titre_model, data_inf_model) {
+generate_data_t <- function(data_titre_model, data_inf_model, known_exp) {
     N <- data_titre_model$id %>% unique %>% length  
     N_data <- nrow(data_titre_model)
     titre_true <- data_titre_model$titre

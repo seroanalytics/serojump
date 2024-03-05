@@ -12,3 +12,4 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports: Rcpp (>= 1.0.3), coda, tidyr, dplyr, brms, purrr, furrr, patchwork, here, ggplot2, doParallel, foreach, parallel, coda
 LinkingTo: Rcpp, RcppEigen
+SystemRequirements: C++11

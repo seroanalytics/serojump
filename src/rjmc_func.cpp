@@ -1,5 +1,6 @@
 #include <Rcpp.h>
 #include <RcppEigen.h>
+#include <Eigen/Core>
 
 #include "./headers/mvn.hpp"
 #include "./headers/rjmc.hpp"
