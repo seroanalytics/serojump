@@ -107,7 +107,7 @@ runsaveRJMCMC <- function(modelname, modelname_sim, obs_er, prob_known, evaluate
     # data_inf_model format is [id, inf_time]
     data_inf_model <- data.frame(id = vector(), inf_time = vector()) # none known
     # Generate the data_t format
-    data_t <- generate_data_t(data_titre_model, data_inf_model)
+    data_t <- generate_data_t(data_titre_model, data_inf_model, known_exp)
 
     # This function creates the list of functions needed for the rjmc_full_func
     model_define <- createModelRJCMCFull(evaluateLogLikelihood, par_tab, exp_prior, cop_func)
@@ -160,35 +160,35 @@ runsaveRJMCMC( "inferExp", "cesCOP_notd", "0.1", 0, evaluateLogLikelihood, par_t
 runsaveRJMCMC( "inferExp", "cesCOP_notd", "0.3", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
 runsaveRJMCMC( "inferExp", "cesCOP_notd", "0.5", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
 
-postprocessFigs("inferExp", "cesCOP_notd", "0.1", 4)
-postprocessFigs("inferExp", "cesCOP_notd", "0.3", 4)
-postprocessFigs("inferExp", "cesCOP_notd", "0.5", 4)
+postprocessFigs_sim("inferExp", "cesCOP_notd", "0.1", 4)
+postprocessFigs_sim("inferExp", "cesCOP_notd", "0.3", 4)
+postprocessFigs_sim("inferExp", "cesCOP_notd", "0.5", 4)
 
 runsaveRJMCMC( "inferExp", "cesNoCOP_notd", "0.1", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
 runsaveRJMCMC( "inferExp", "cesNoCOP_notd", "0.3", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
 runsaveRJMCMC( "inferExp", "cesNoCOP_notd", "0.5", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
 
-postprocessFigs("inferExp", "cesNoCOP_notd", "0.1", 4)
-postprocessFigs("inferExp", "cesNoCOP_notd", "0.3", 4)
-postprocessFigs("inferExp", "cesNoCOP_notd", "0.5", 4)
+postprocessFigs_sim("inferExp", "cesNoCOP_notd", "0.1", 4)
+postprocessFigs_sim("inferExp", "cesNoCOP_notd", "0.3", 4)
+postprocessFigs_sim("inferExp", "cesNoCOP_notd", "0.5", 4)
 
 # Run on the exposure known cycle
 runsaveRJMCMC( "knownExp", "cesCOP_notd", "0.1", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
 runsaveRJMCMC( "knownExp", "cesCOP_notd", "0.3", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
 runsaveRJMCMC( "knownExp", "cesCOP_notd", "0.5", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
 
-postprocessFigs("knownExp", "cesCOP_notd", "0.1", 4)
-postprocessFigs("knownExp", "cesCOP_notd", "0.3", 4)
-postprocessFigs("knownExp", "cesCOP_notd", "0.5", 4)
+postprocessFigs_sim("knownExp", "cesCOP_notd", "0.1", 4)
+postprocessFigs_sim("knownExp", "cesCOP_notd", "0.3", 4)
+postprocessFigs_sim("knownExp", "cesCOP_notd", "0.5", 4)
 
 
 runsaveRJMCMC( "knownExp", "cesNoCOP_notd", "0.1", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
 runsaveRJMCMC( "knownExp", "cesNoCOP_notd", "0.3", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
 runsaveRJMCMC( "knownExp", "cesNoCOP_notd", "0.5", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
 
-postprocessFigs("knownExp", "cesNoCOP_notd", "0.1", 4)
-postprocessFigs("knownExp", "cesNoCOP_notd", "0.3", 4)
-postprocessFigs("knownExp", "cesNoCOP_notd", "0.5", 4)
+postprocessFigs_sim("knownExp", "cesNoCOP_notd", "0.1", 4)
+postprocessFigs_sim("knownExp", "cesNoCOP_notd", "0.3", 4)
+postprocessFigs_sim("knownExp", "cesNoCOP_notd", "0.5", 4)
 
 
 ````
@@ -197,20 +197,20 @@ postprocessFigs("knownExp", "cesNoCOP_notd", "0.5", 4)
 
 ```{r}
 
-postprocessFigs("inferExp", "cesCOP_notd", "0.1", 4)
-postprocessFigs("inferExp", "cesCOP_notd", "0.3", 4)
-postprocessFigs("inferExp", "cesCOP_notd", "0.5", 4)
+postprocessFigs_sim("inferExp", "cesCOP_notd", "0.1", 4)
+postprocessFigs_sim("inferExp", "cesCOP_notd", "0.3", 4)
+postprocessFigs_sim("inferExp", "cesCOP_notd", "0.5", 4)
 
-postprocessFigs("inferExp", "cesNoCOP_notd", "0.1", 4)
-postprocessFigs("inferExp", "cesNoCOP_notd", "0.3", 4)
-postprocessFigs("inferExp", "cesNoCOP_notd", "0.5", 4)
+postprocessFigs_sim("inferExp", "cesNoCOP_notd", "0.1", 4)
+postprocessFigs_sim("inferExp", "cesNoCOP_notd", "0.3", 4)
+postprocessFigs_sim("inferExp", "cesNoCOP_notd", "0.5", 4)
 
-postprocessFigs("knownExp", "cesCOP_notd", "0.1", 4)
-postprocessFigs("knownExp", "cesCOP_notd", "0.3", 4)
-postprocessFigs("knownExp", "cesCOP_notd", "0.5", 4)
+postprocessFigs_sim("knownExp", "cesCOP_notd", "0.1", 4)
+postprocessFigs_sim("knownExp", "cesCOP_notd", "0.3", 4)
+postprocessFigs_sim("knownExp", "cesCOP_notd", "0.5", 4)
 
-postprocessFigs("knownExp", "cesNoCOP_notd", "0.1", 4)
-postprocessFigs("knownExp", "cesNoCOP_notd", "0.3", 4)
-postprocessFigs("knownExp", "cesNoCOP_notd", "0.5", 4)
+postprocessFigs_sim("knownExp", "cesNoCOP_notd", "0.1", 4)
+postprocessFigs_sim("knownExp", "cesNoCOP_notd", "0.3", 4)
+postprocessFigs_sim("knownExp", "cesNoCOP_notd", "0.5", 4)
 
 ```

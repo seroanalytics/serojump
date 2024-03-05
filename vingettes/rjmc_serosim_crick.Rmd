@@ -91,6 +91,7 @@ evaluateLogLikelihood <- function(params, jump, jump_inf, covariance, datalist) 
     ll
 }
 
+
 # Logistic correlate of protection model, this is added to the likelihood for each exposed person. Can be defined as anything
 cop_func <- function(jump, jumpinf, params, initialTitreValue) {
     ll <- 0
@@ -98,8 +99,8 @@ cop_func <- function(jump, jumpinf, params, initialTitreValue) {
     beta0 <- params[8]
     beta1 <- params[9]
  
-    p <- 1.0 / (1.0 + exp(- (beta0 + beta1 * initialTitreValue) ) )
-    ll <- jumpinf * log(p) + (1 - jumpinf) * log(1 - p)
+    p <- 1.0 / (1.0 + exp(- (beta0 + beta1 * initialTitreValue) ) ) # logistic function
+    ll <- jumpinf * log(p) + (1 - jumpinf) * log(1 - p) 
 
     ll
 }

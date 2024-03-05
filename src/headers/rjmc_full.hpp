@@ -69,8 +69,8 @@ namespace rjmc_full{
         RObject dataList;
         List dataListCPP;
 
-        double counterFuncEval, counterAccepted, counterPosterior ,counterAdaptive;
-        double counterNonAdaptive;
+        int counterFuncEval, counterAccepted, counterPosterior ,counterAdaptive;
+        int counterNonAdaptive;
         double proposedLogPosterior, alpha, covarMaxVal, covarInitVal, covarInitValAdapt;
 
         std::function<VectorXd(RObject)> samplePriorDistributions;
