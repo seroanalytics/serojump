@@ -104,13 +104,21 @@ runsaveRJMCMC <- function(modelname, modelname_sim, obs_er, prob_known, evaluate
     # Clean the data into a format for the sampler
     # data_titre_model format is [id, time, titre]
     data_titre_model <- clean_simulated_rjmcmc(modelname_sim, obs_er, prob_known, known_exp)
+    
+    if (known_exp) {
+        modeli <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
+        known_exp_t <- modeli$simpar$exp 
+    } else {
+        known_exp_t <- NULL
+    }
+     
     # data_inf_model format is [id, inf_time]
-    data_inf_model <- data.frame(id = vector(), inf_time = vector()) # none known
     # Generate the data_t format
-    data_t <- generate_data_t(data_titre_model, data_inf_model, known_exp)
+    data_t <- generate_data_t(data_titre_model, data_inf_model = NULL, known_exp = known_exp_t)
 
     # This function creates the list of functions needed for the rjmc_full_func
-    model_define <- createModelRJCMCFull(evaluateLogLikelihood, par_tab, exp_prior, cop_func)
+    model_define <- createModelRJCMCFull(evaluateLogLikelihood, par_tab, cop_func)
+    model_define <- addExposurePrior(model_define, data_t, exp_prior, type = "func")
 
     # Settings used for the rjmcmc model, still playing around with optimal settings
     settings <-  list(
