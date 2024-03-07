@@ -7,6 +7,7 @@
 #' @import ggdist
 #' @import patchwork
 #' @import tidybayes
+#' @import furrr
 #' @importFrom magrittr %>% %<>%
 NULL
 postprocess_run_sim <- function(modelname, modelname_sim, obs_er, n_chains) {

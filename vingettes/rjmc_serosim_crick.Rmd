@@ -129,7 +129,8 @@ runsaveRJMCMC <- function(modelname, modelname_sim, obs_er, prob_known, evaluate
 
     # This function creates the list of functions needed for the rjmc_full_func
     model_define <- createModelRJCMCFull(evaluateLogLikelihood, par_tab, exp_prior, cop_func)
-
+    model_define <- addExposurePrior(model_define, exp_prior, type = "func")
+    
     # Settings used for the rjmcmc model, still playing around with optimal settings
     settings <-  list(
         numberChainRuns = 4,

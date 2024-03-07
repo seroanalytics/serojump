@@ -360,3 +360,81 @@ draw_parameters_random_fx_biomarker_dep <- function(i, t, x, demography, biomark
   all_pars <- tibble(i=rep(i,nrow(model_pars_tmp)),t=rep(t,nrow(model_pars_tmp)), x=rep(x,nrow(model_pars_tmp)), b=model_pars_tmp$biomarker_id, name=par_names, value=pars, realized_value=realized) 
   return(all_pars)
 }
+
+
+
+
+clean_simulated_rjmcmc <- function(modelname_sim, obs_er, prob_known, known_exp = FALSE) {
+
+    modeli <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
+    res <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", obs_er, ".rds")))
+
+    name <- modeli$name
+    N <- modeli$simpar$N    
+    T <- modeli$simpar$T    
+    #endregionplot_subset_individuals_history(res$biomarker_states, res$immune_histories_long, subset=30, demography)
+    #ggsave(here::here("outputs", "sim", modelname, "plot_subset_individuals_history.pdf"))
+
+    # Determine known infections
+    no_inf <- sum(res$immune_histories %>% apply(1, sum) > 0)
+    no_known <- round(no_inf * prob_known)
+    known_post <- rdunif(no_known, 1, no_inf)
+    known_times <- which(t(res$immune_histories[which(res$immune_histories %>% apply(1, sum) == 1), ][known_post, ]) == 1) %% T
+    known <- rep(0, N)
+    dayinf <- rep(-1, N)
+    known[which(res$immune_histories %>% apply(1, sum) == 1)][known_post] <- 1
+    dayinf[which(res$immune_histories %>% apply(1, sum) == 1)][known_post] <- known_times
+
+    # Add in titre daya and time of bleed data
+    initialTitreValue <- res$observed_biomarker_states %>% group_by(i) %>% filter(t == min(t)) %>% .[["value"]]
+    initialTitreTime <- res$observed_biomarker_states %>% group_by(i) %>% filter(t == min(t)) %>% .[["t"]]
+    endTitreTime <- res$observed_biomarker_states %>% group_by(i) %>% filter(t == max(t)) %>% .[["t"]]
+
+    if (length(initialTitreValue) > N) {
+        stop("ERROR: initialTitreValue wrong size ")
+    }
+    if (length(initialTitreTime) > N) {
+        stop("ERROR: initialTitreTime wrong size ")
+    }
+    if (length(endTitreTime) > N) {
+        stop("ERROR: endTitreTime wrong size ")
+    }
+
+    df_immune_hist <- res$immune_histories %>% as.data.frame %>% mutate(i = 1:N) %>%
+        pivot_longer(!i, names_to = "t", values_to = "inf") %>%
+        mutate(t = as.numeric(substr(t, 2, 4)))
+
+    observed_biomarker_statesStudy <- res$observed_biomarker_states %>% filter(t != 1)
+
+    titre_obs <- observed_biomarker_statesStudy$observed
+    titre_true <- observed_biomarker_statesStudy$value
+    times_full <- observed_biomarker_statesStudy$t
+    id_full <- observed_biomarker_statesStudy$i
+    N_data <- length(id_full)
+
+    if (known_exp) {
+        knownExpVec <- modeli$simpar$exp %>% as.data.frame %>% 
+        mutate(i = 1:N) %>% pivot_longer(!i, names_to = "t", values_to = "exp") %>% mutate(t = as.numeric(substr(t, 2, 4))) %>% 
+        filter(exp == 1) %>% complete(i = 1:N, fill = list(t = -1, exp = -1)) %>% pull(t)
+    } else {
+        knownExpVec <- NA
+    }
+
+    # Things needed, data for likelihood and sampler
+    data_t <- list(
+        N = N,
+        knownExpVec = knownExpVec,
+        knownInfsVec = known,        
+        knownInfsN = sum(known),
+        knownInfsDate = dayinf,
+
+        N_data = N_data,
+        initialTitreValue = initialTitreValue,
+        initialTitreTime = initialTitreTime,
+        endTitreTime = endTitreTime,
+
+        titre_full = titre_true,
+        times_full = times_full,
+        id_full = id_full
+    )
+}
