@@ -97,7 +97,11 @@ namespace rjmc_full{
             double logLikelihood_time = 0; 
             for (int i = 0; i < this->N; i++) {
                 if (jump[i] > -1) {
+                   // Rcpp::Rcout << "i: " << i << std::endl;
+                   // Rcpp::Rcout << "jump[i]: " << jump[i] << std::endl;
                     logLikelihood_time += (exposureFunctionDensity(jump[i]) + copFunction(jump[i], jumpInf[i], param, initialTitreValue[i]));
+                   // Rcpp::Rcout << "exposureFunctionDensity(jump[i]): " << exposureFunctionDensity(jump[i]) << std::endl;
+                  //  Rcpp::Rcout << "copFunction(jump[i], jumpInf[i], param, initialTitreValue[i]): " << copFunction(jump[i], jumpInf[i], param, initialTitreValue[i]) << std::endl;
                 }
             }
             
@@ -108,8 +112,10 @@ namespace rjmc_full{
             }  else {
                 logPriorInf = log(1.0 / this->propInferredExpN);
             }
+            double logPriorExp = log(1.0 / this->N);
+    
 
-            return logPrior + logPriorInf + logLikelihood_ab + logLikelihood_time;
+            return logPrior + logPriorExp + logPriorInf + logLikelihood_ab + logLikelihood_time;
         }
         
         // "A handy approximation for the error function and its inverse" by Sergei Winitzki.
@@ -668,11 +674,13 @@ namespace rjmc_full{
                 this->alpha = 0;
             } else {
                 if (this->currJumpType == 0) {
-                    rjadjustmentFactor = log(this->currInferredExpN - this->knownInfsN) - log((this->N - this->currInferredExpN + 1) ) + this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)) + this->copFunction(this->currentJump(this->currJumpIdx), this->currentInf(this->currJumpIdx), this->currentSample,  this->initialTitreTime(this->currJumpIdx));
+                                /// log(this->currInferredExpN - this->knownInfsN)
+                    rjadjustmentFactor = log(this->currInferredExpN) - log((this->N - this->currInferredExpN + 1) ) + this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)) + this->copFunction(this->currentJump(this->currJumpIdx), this->currentInf(this->currJumpIdx), this->currentSample,  this->initialTitreTime(this->currJumpIdx));
                 } else if (this->currJumpType == 1) {
                     rjadjustmentFactor = 0;
                 } else if (this->currJumpType == 2) {
-                    rjadjustmentFactor = log((this->N - this->currInferredExpN)) - log(this->currInferredExpN - this->knownInfsN + 1) - this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx)) - this->copFunction(this->proposalJump(this->currJumpIdx), this->proposalInf(this->currJumpIdx), this->proposalSample,  this->initialTitreTime(this->currJumpIdx)); // dlnorm(proposalJump[currJumpIdx], 3.395, 0.5961)
+                                // log(this->currInferredExpN - this->knownInfsN + 1)
+                    rjadjustmentFactor = log((this->N - this->currInferredExpN)) - log(this->currInferredExpN + 1) - this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx)) - this->copFunction(this->proposalJump(this->currJumpIdx), this->proposalInf(this->currJumpIdx), this->proposalSample,  this->initialTitreTime(this->currJumpIdx)); // dlnorm(proposalJump[currJumpIdx], 3.395, 0.5961)
                 }
                 this->alpha = min(1.0, exp((this->proposedLogPosterior - this->currentLogPosterior + rjadjustmentFactor)));
             }

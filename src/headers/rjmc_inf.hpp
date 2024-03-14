@@ -91,7 +91,10 @@ namespace rjmc_sero{
             double logLikelihood_time = 0; 
             for (int i = 0; i < this->N; i++) {
                 if (jump[i] > -1) {
+                    Rcout << "i: " << i << std::endl;
+                    Rcout << "jump[i]: " << jump[i] << std::endl;
                     logLikelihood_time += exposureFunctionDensity(jump[i]);
+                    Rcout << "logLikelihood_time: " << logLikelihood_time<< std::endl;
                 }
             }
 
