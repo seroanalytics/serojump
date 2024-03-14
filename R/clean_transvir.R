@@ -60,12 +60,12 @@ get_data_titre_model_wave1 <- function() {
         filter(!is.na(titre))
     gambia_pvnt_b0 <- gambia_pvnt_b1 %>% dplyr::select(pid) %>% mutate(time = 0, titre = 0)
     ids <- gambia_pvnt_b1 %>% pull(pid) %>% unique
-    gambia_pvnt <- bind_rows(gambia_pvnt_b0, gambia_pvnt_b1) %>% filter(pid %in% ids) %>% mutate(id = as.numeric(factor(pid)))  %>% arrange(id, time) %>% mutate(titre = titre / 20) %>% 
+    gambia_pvnt <- bind_rows(gambia_pvnt_b0, gambia_pvnt_b1) %>% filter(pid %in% ids) %>% mutate(id = as.numeric(factor(pid)))  %>% arrange(id, time) %>% 
         mutate(titre = case_when(
             titre < 1 ~ 1,
             TRUE ~ titre
         )) %>% mutate(titre = log10(titre))
-
+    log10(20)
     gambia_pvnt <- gambia_pvnt %>% mutate(pid = factor(id), id = as.numeric(factor(pid)))
     gambia_pvnt
 

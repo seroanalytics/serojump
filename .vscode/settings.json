@@ -98,6 +98,11 @@
         "source_location": "cpp",
         "shared_mutex": "cpp",
         "stop_token": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "__verbose_abort": "cpp",
+        "charconv": "cpp",
+        "span": "cpp",
+        "format": "cpp",
+        "__memory": "cpp"
     }
 }

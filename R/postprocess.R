@@ -96,11 +96,11 @@ plot_abkinetics <- function(outputfull) {
 
 
     compare <- bind_rows(
-        post$mcmc %>% combine %>% as.data.frame %>% mutate(c = c_slope) %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
+        post$mcmc %>% combine %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
              mutate(type = "Posterior distribution") %>% filter(param %in% c("a", "b", "c")),
         purrr::map_df(1:n_post,
             ~model_outline$samplePriorDistributions(par_tab)
-        ) %>% rename(c = c_slope) %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%  mutate(type = "Prior distribution")  %>%
+        )  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%  mutate(type = "Prior distribution")  %>%
         filter(param %in% c("a", "b", "c"))
     )
 
@@ -121,11 +121,10 @@ plot_abkinetics <- function(outputfull) {
     post_fit <- post$mcmc %>% combine %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
     a_post <- post_fit[["a"]]
     b_post <- post_fit[["b"]]
-    c_slope_post <- post_fit[["c_slope"]]
+    c_post <- post_fit[["c"]]
 
-    c_post <- c_slope_post #(c_trans_post - exp(- c_slope_post * b_post))
 
-    T <- 150
+    T <- 300
     traj_post <- 1:(n_post * n_chains) %>% purrr::map_df(
         ~data.frame(
             time = 1:T,
@@ -305,7 +304,7 @@ plot_cop_rec <- function(outputfull) {
     fitfull <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
     post <- fitfull$post
 
-    reps <-  post$mcmc %>% combine %>% as.data.frame %>% mutate(c = c_slope) %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
+    reps <-  post$mcmc %>% combine %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
             mutate(type = "Posterior distribution") %>% filter(param %in% c("beta0", "beta1"))
 
     b0_rep <- reps %>% filter(param == "beta0") %>% pull(value)
