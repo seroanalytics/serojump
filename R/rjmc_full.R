@@ -50,13 +50,8 @@ get_output_full <- function(model, data_list, settings, update_ind, par) {
       out_raw[[i]] <- run_rjmc_full(model, data_list, settings, update_ind, par[[i]], i)
     }
   }
-  cat(length(out_raw), "\n")
-  cat("l1: ", length(out_raw[[1]]), "\n")
-  cat("l2: ", length(out_raw[[2]]), "\n")
-  cat("l3: ", length(out_raw[[3]]), "\n")
-  cat("l4: ", length(out_raw[[4]]), "\n")
 
-  cat("lol1", "\n")
+
   for(i in 1:settings[["numberChainRuns"]]) {
     out_post <- out_raw[[i]][["output"]][, 1:settings$numberFittedPar]
     outPTpar[[i]] <- out_raw[[i]][["PTMCpar"]]
@@ -66,9 +61,7 @@ get_output_full <- function(model, data_list, settings, update_ind, par) {
     outPTpost[[i]] <- mcmc(out_post)
     outPTjump[[i]] <- out_raw[[i]][["jump"]]
     outPTinf[[i]] <- out_raw[[i]][["inf"]]
-    cat("lol2", "\n")
     outPTlp[[i]] <- out_raw[[i]][["output"]][, settings$numberFittedPar + 1]
-    cat("lol3", "\n")
     outPTacc[[i]] <- out_raw[[i]][["output"]][, settings$numberFittedPar + 2]
   }
 

@@ -569,7 +569,7 @@ namespace rjmc_full{
                 q_prob << 0, 1, 1;
             } else {
                 if (this->currInferredExpN == this->knownInfsN) {
-                    q_prob << 0, 0.66, 1.0;
+                    q_prob << 0, 0.67, 1.0;
                 } else if (this->currInferredExpN == this->N) {
                     q_prob << 0.33, 1.0, 0;
                 } else {
@@ -675,7 +675,7 @@ namespace rjmc_full{
             } else {
                 if (this->currJumpType == 0) {
                                 /// log(this->currInferredExpN - this->knownInfsN)
-                    rjadjustmentFactor = log(this->currInferredExpN) - log((this->N - this->currInferredExpN + 1) ) + this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)) + this->copFunction(this->currentJump(this->currJumpIdx), this->currentInf(this->currJumpIdx), this->currentSample,  this->initialTitreTime(this->currJumpIdx));
+                    rjadjustmentFactor = log(this->currInferredExpN) - log((this->N - this->currInferredExpN + 1) ) + this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)) + this->copFunction(this->currentJump(this->currJumpIdx), this->currentInf(this->currJumpIdx), this->proposalSample,  this->initialTitreTime(this->currJumpIdx));
                 } else if (this->currJumpType == 1) {
                     rjadjustmentFactor = 0;
                 } else if (this->currJumpType == 2) {
