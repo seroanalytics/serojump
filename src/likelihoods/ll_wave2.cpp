@@ -1,5 +1,14 @@
 #include <Rcpp.h>
+#include <RcppEigen.h>
+#include <Eigen/Core>
+
 using namespace Rcpp;
+#include "../headers/mvn.hpp"
+#include "../headers/rjmc_full.hpp"
+
+// [[Rcpp::depends(RcppEigen)]]
+// [[Rcpp::plugins("cpp14")]]
+
 
 struct DoubleWithString {
     double value;
@@ -63,18 +72,12 @@ double evaluateLogLikelihood_cpp(NumericVector params, NumericVector jump, Numer
     double b_d = params[7];
     double c_d = params[8];
     
-    double wane = params[9];
+    double tau = params[9];
 
-    double sigma_obs = params[10];
+    double wane = params[10];
+    double sigma_obs_not = params[11];
 
     double ll = 0;
-
-//data_t$inf_pd_time %>% length
-//data_t$vax_time %>% length
-//jump_inf$vax_time %>% length
-//data_t$titre_full
-//data_t$times_full
-//data_t$id_full
 
     for (int i = 0; i < N_data; ++i) {
         double titre_val = titre_full[i];
@@ -104,10 +107,10 @@ double evaluateLogLikelihood_cpp(NumericVector params, NumericVector jump, Numer
         std::vector<DoubleWithString> df_order_exp;
 
         // Populate the map with elements from the vectors
-        for (size_t i = 0; i < exposure.size(); ++i) {
+        for (size_t j = 0; j < exposure.size(); ++j) {
             DoubleWithString entry;
-            entry.value = time_exp[i];
-            entry.name = exposure[i];
+            entry.value = time_exp[j];
+            entry.name = exposure[j];
             df_order_exp.push_back(entry);
         }
 
@@ -120,31 +123,36 @@ double evaluateLogLikelihood_cpp(NumericVector params, NumericVector jump, Numer
     //    Rcpp::Rcout << "titre_val: " <<  titre_val << "\t";
 
         double titre_est = initialTitreValue[i_idx];
+        double time_initial = initialTitreTime[i_idx];
+        double titre_est_boost;
+
         if (df_order_exp.size() == 1) {
 
-        }
-        else {
-
+        } else {
+            titre_est -= wane * (df_order_exp[0].value - time_initial);
+            titre_est_boost = fmax(0.0, titre_est);
             for (int j = 0; j < df_order_exp.size() - 1; ++j) {
-
+               // double tau_1;
                 double time_until = df_order_exp[j + 1].value - df_order_exp[j].value;
+
                 if (df_order_exp[j].name == "pre-delta") {
                     if (time_until < 14) {
-                        titre_est += log(exp(a_pd) + exp(c_pd)) * (time_until) / 14;
+                        titre_est += (log(exp(a_pd) + exp(c_pd)) * (time_until) / 14) * fmax(0.0, 1 - tau * titre_est_boost );
                     } else {
-                        titre_est += log(exp(a_pd) * exp(-b_pd/10 * (time_until - 14)) + exp(c_pd));
+                        titre_est += (log(exp(a_pd) * exp(-b_pd/10 * (time_until - 14))) + exp(c_pd)) * fmax(0.0, 1 - tau  * titre_est_boost);
                     }
                 } else if (df_order_exp[j].name == "vax") {
                     if (time_until < 14) {
-                        titre_est += log(exp(a_vax) + exp(c_vax)) * (time_until) / 14;
+                        titre_est += (log(exp(a_vax) + exp(c_vax)) * (time_until) / 14) * fmax(0.0, 1 - tau  * titre_est_boost );
+
                     } else {
-                        titre_est += log(exp(a_vax) * exp(-b_vax/10 * (time_until - 14)) + exp(c_vax));
+                        titre_est += (log(exp(a_vax) * exp(-b_vax/10 * (time_until - 14))) + exp(c_vax)) * fmax(0.0, 1 - tau  * titre_est_boost );
                     }
                 } else if (df_order_exp[j].name == "delta") {
                     if (time_until < 14) {
-                        titre_est += log(exp(a_d) + exp(c_d)) * (time_until) / 14;
+                        titre_est += (log(exp(a_d) + exp(c_d)) * (time_until) / 14) * fmax(0.0, 1 - tau  * titre_est_boost);
                     } else {
-                        titre_est += log(exp(a_d) * exp(-b_d/10 * (time_until - 14)) + exp(c_d));
+                        titre_est += (log(exp(a_d) * exp(-b_d/10 * (time_until - 14))) + exp(c_d)) * fmax(0.0, 1 - tau  * titre_est_boost );
                     }
                 }
             }
@@ -153,13 +161,33 @@ double evaluateLogLikelihood_cpp(NumericVector params, NumericVector jump, Numer
       //  Rcpp::Rcout << "ll: " <<  dnorm_cppl(titre_val, titre_est, sigma_obs) << "\n" << std::endl;
 
         // Check condition and compute the log-likelihood
-        if (titre_val < std::log10(20)) {
-            // Compute the cumulative density function (CDF) at log10(20)
-            ll += log(cauchy_cdf(std::log10(20), titre_est, sigma_obs)); // true for log probability
+        //if ((jump_inf[i_idx] == 1 && jump[i_idx] < time) || (inf_pd_time[i_idx] > -1 && inf_pd_time[i_idx] < time) || 
+        //    (vax_time[i_idx] > -1 && vax_time[i_idx] < time)){
+        //    if (titre_val < std::log10(20)) {
+                // Compute the cumulative density function (CDF) at log10(20)
+       //         ll += log(cauchy_cdf(std::log10(20), titre_est, sigma_obs_inf)); // true for log probability
+       //     } else {
+                // Compute the probability density function (PDF) at titre_val
+       /*         ll += log(cauchy_pdf(titre_val, titre_est, sigma_obs_inf));  // true for log probability
+            }
         } else {
+            if (titre_val < std::log10(20)) {
+                // Compute the cumulative density function (CDF) at log10(20)
+                ll += log(cauchy_cdf(std::log10(20), titre_est, sigma_obs_not)); // true for log probability
+            } else {
+                // Compute the probability density function (PDF) at titre_val
+                ll += log(cauchy_pdf(titre_val, titre_est, sigma_obs_not));  // true for log probability
+            }
+        }*/
+    //if (titre_val < std::log10(40)) {
+      //          // Compute the cumulative density function (CDF) at log10(20)
+        //    ll += log(cauchy_cdf(std::log10(40), titre_est, sigma_obs_not)); // true for log probability
+        //} else {
             // Compute the probability density function (PDF) at titre_val
-            ll += log(cauchy_pdf(titre_val, titre_est, sigma_obs));  // true for log probability
-        }
+        ll += log(cauchy_pdf(titre_val, titre_est, sigma_obs_not));  // true for log probability
+        //}
+        //ll += log(cauchy_pdf(titre_val, titre_est, sigma_obs_inf)); 
+       //  Rcpp::Rcout << "ll: " <<  ll << "\n" << std::endl;
     }
 
     return ll;
