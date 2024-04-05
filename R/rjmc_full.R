@@ -32,6 +32,7 @@ get_output_full <- function(model, data_list, settings, update_ind, par) {
   outPTpost <- vector(mode = "list", length = settings[["numberChainRuns"]])
   outPTjump <- vector(mode = "list", length = settings[["numberChainRuns"]])
   outPTinf <- vector(mode = "list", length = settings[["numberChainRuns"]])
+  outPTtitreexp <- vector(mode = "list", length = settings[["numberChainRuns"]])
   outPTlp <- vector(mode = "list", length = settings[["numberChainRuns"]])
   outPTacc <- vector(mode = "list", length = settings[["numberChainRuns"]])
   outPTpar <- vector(mode = "list", length = settings[["numberChainRuns"]])
@@ -61,6 +62,7 @@ get_output_full <- function(model, data_list, settings, update_ind, par) {
     outPTpost[[i]] <- mcmc(out_post)
     outPTjump[[i]] <- out_raw[[i]][["jump"]]
     outPTinf[[i]] <- out_raw[[i]][["inf"]]
+    outPTtitreexp[[i]] <- out_raw[[i]][["titreexp"]]
     outPTlp[[i]] <- out_raw[[i]][["output"]][, settings$numberFittedPar + 1]
     outPTacc[[i]] <- out_raw[[i]][["output"]][, settings$numberFittedPar + 2]
   }
@@ -79,6 +81,7 @@ get_output_full <- function(model, data_list, settings, update_ind, par) {
     mcmc = as.mcmc.list(outPTpost),
     jump = outPTjump,
     inf = outPTinf,
+    titreexp = outPTtitreexp,
     lpost = outlpv,
     acc = outlaccv,
     outPTpar = outPTpar

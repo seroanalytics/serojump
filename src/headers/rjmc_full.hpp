@@ -15,6 +15,7 @@
 #define EIGEN_DONT_VECTORIZE
 #define EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
 
+
 using namespace Rcpp;
 using namespace std;
 using namespace Eigen;
@@ -31,6 +32,8 @@ using namespace boost::math;
 #define MAX(a,b) ((a) > (b) ? (a) : (b)) // define MAX function for use later
 #endif
 
+typedef std::function<double(double, double, double, NumericVector)> ObsFuncTemplate;
+
 namespace rjmc_full{
     struct RJMC_FULL_D
     {
@@ -46,6 +49,8 @@ namespace rjmc_full{
         MatrixXd posteriorOut;
         MatrixXd posteriorJump;
         MatrixXd posteriorInf;
+
+        MatrixXd posteriorTitreExp;
         MatrixXd currentCovarianceMatrix;
         double currentLogPosterior;
         VectorXd proposalSample;
@@ -55,6 +60,9 @@ namespace rjmc_full{
 
         VectorXd currentInf;
         VectorXd proposalInf;
+
+        VectorXd currentTitreExp;
+        VectorXd proposalTitreExp;
 
         VectorXd historicJump;
 
@@ -76,30 +84,33 @@ namespace rjmc_full{
         std::function<VectorXd(RObject)> samplePriorDistributions;
         std::function<VectorXd(RObject)> initialiseJump;
         std::function<double(VectorXd, VectorXd, RObject)> evaluateLogPrior;
-        std::function<double(VectorXd, VectorXd, VectorXd, MatrixXd, RObject)> evaluateLogLikelihood;
+        std::function<VectorXd(VectorXd, VectorXd, VectorXd, MatrixXd, RObject)> calculateTitreExp;
 
         std::function<double()> exposureFunctionSample;
         std::function<double(double)> exposureFunctionDensity;
         std::function<double(double, double, VectorXd, double)> copFunction;
 
+        // Functions for internal 
+        std::function<double(VectorXd, VectorXd, VectorXd, VectorXd, MatrixXd, RObject)> evaluateLogLikelihood;
+        ObsFuncTemplate observationalModel;
 
         Mvn Mvn_sampler;
 
         double stepSizeRobbinsMonro;
         double evalLogPosterior(const VectorXd& param, const VectorXd& jump, const VectorXd& jumpInf, const MatrixXd& covariance, const RObject& dataList)
         {
+            this->proposalTitreExp = this->calculateTitreExp(param, jump, jumpInf, covariance, dataList);// CALCULATE TITRE AT INFECTION
             double logPrior = this->evaluateLogPrior(param, jump, dataList);
             if (isinf(logPrior))
                 return log(0);
-          
-            double logLikelihood_ab = this->evaluateLogLikelihood(param, jump, jumpInf, covariance, dataList);
+            double logLikelihood_ab = this->evaluateLogLikelihood(param, jump, jumpInf, this->proposalTitreExp, covariance, dataList); // SEXPREC * (?)
             
             double logLikelihood_time = 0; 
             for (int i = 0; i < this->N; i++) {
                 if (jump[i] > -1) {
                    // Rcpp::Rcout << "i: " << i << std::endl;
-                   // Rcpp::Rcout << "jump[i]: " << jump[i] << std::endl;
-                    logLikelihood_time += (exposureFunctionDensity(jump[i]) + copFunction(jump[i], jumpInf[i], param, initialTitreValue[i]));
+                  //  Rcpp::Rcout << "this->proposalTitreExp[i]: " << this->proposalTitreExp[i] << std::endl;
+                    logLikelihood_time += (exposureFunctionDensity(jump[i]) + copFunction(jump[i], jumpInf[i], param, this->proposalTitreExp[i]));
                    // Rcpp::Rcout << "exposureFunctionDensity(jump[i]): " << exposureFunctionDensity(jump[i]) << std::endl;
                   //  Rcpp::Rcout << "copFunction(jump[i], jumpInf[i], param, initialTitreValue[i]): " << copFunction(jump[i], jumpInf[i], param, initialTitreValue[i]) << std::endl;
                 }
@@ -220,6 +231,7 @@ namespace rjmc_full{
             this->posteriorOut = MatrixXd::Zero(this->posteriorSamplesLength, this->numberFittedPar + 2);
             this->posteriorJump = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
             this->posteriorInf = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
+            this->posteriorTitreExp = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
 
             this->currentLogPosterior = 0;
             this->currentSampleMean = VectorXd::Zero(this->numberFittedPar);
@@ -251,8 +263,7 @@ namespace rjmc_full{
             
             // Get initial conditions for the proposal sample
             initialSample = this->samplePriorDistributions(this->dataList);
-            this->currentSample = initialSample;
-            this->currentSampleMean = initialSample;
+
             this->historicJump = VectorXd::Constant(this->N, -1);
 
             // Get initial conditions for the exposure states
@@ -270,19 +281,22 @@ namespace rjmc_full{
                 }*/ 
             }
             this->currentJump = initialJump;
-
             // Get initial conditions for the infection states
             initialInf = initInfFunc(); 
             this->currentInf = initialInf;
 
             // Get initial conditions for the Loglikelihood probabilities
             this->currentCovarianceMatrix = this->nonadaptiveScalar*this->nonadaptiveCovarianceMat;
+            this->currentTitreExp = this->calculateTitreExp(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList);// CALCULATE TITRE AT INFECTION
             initialLogLikelihood = this->evalLogPosterior(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList);
             while(isinf(initialLogLikelihood) || isnan(initialLogLikelihood)){
+                
                 initialSample = this->samplePriorDistributions(this->dataList);
+                this->currentTitreExp = this->calculateTitreExp(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList);// CALCULATE TITRE AT INFECTION
                 initialLogLikelihood = this->evalLogPosterior(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList);
             }
-
+            this->currentSample = initialSample;
+            this->currentSampleMean = initialSample;
             this->currentLogPosterior = initialLogLikelihood;
             
             double alphaMVN = -sqrt(2)*ErfInv(0.234-1);
@@ -334,6 +348,7 @@ namespace rjmc_full{
             this->posteriorOut = MatrixXd::Zero(this->posteriorSamplesLength, this->numberFittedPar+2);
             this->posteriorJump = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
             this->posteriorInf = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
+            this->posteriorTitreExp = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
 
             MatrixXd posteriorOutPrev = PTMCpar["posteriorOut"];
             for (int i = 0; i < (int)PTMCpar["posteriorSamplesLength"]; i++)
@@ -394,7 +409,8 @@ namespace rjmc_full{
             List out = Rcpp::List::create(
                 _["pars"] = this->posteriorOut,
                 _["jump"] = this->posteriorJump,
-                _["inf"] = this->posteriorInf
+                _["inf"] = this->posteriorInf,
+                _["titreexp"] = this->posteriorTitreExp
             );
             return out;
         }
@@ -441,6 +457,7 @@ namespace rjmc_full{
             if (onDebug) Rcpp::Rcout << "Pre: JumpProposalDist" << std::endl;
             JumpProposalDist();
             if (onDebug) Rcpp::Rcout << "Pre: evalLogPosterior" << std::endl;
+            // CALCULATE TITREATINFECTION
             this->proposedLogPosterior = this->evalLogPosterior(this->proposalSample, this->proposalJump, this->proposalInf, this->currentCovarianceMatrix, this->dataList);
             if (onDebug) Rcpp::Rcout << "Pre: evaluateMetropolisRatio" << std::endl;
             evaluateMetropolisRatio();
@@ -675,12 +692,12 @@ namespace rjmc_full{
             } else {
                 if (this->currJumpType == 0) {
                                 /// log(this->currInferredExpN - this->knownInfsN)
-                    rjadjustmentFactor = log(this->currInferredExpN) - log((this->N - this->currInferredExpN + 1) ) + this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)) + this->copFunction(this->currentJump(this->currJumpIdx), this->currentInf(this->currJumpIdx), this->proposalSample,  this->initialTitreTime(this->currJumpIdx));
+                    rjadjustmentFactor = log(this->currInferredExpN) - log((this->N - this->currInferredExpN + 1) ) + this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)) + this->copFunction(this->currentJump(this->currJumpIdx), this->currentInf(this->currJumpIdx), this->currentSample, this->currentTitreExp(this->currJumpIdx));
                 } else if (this->currJumpType == 1) {
                     rjadjustmentFactor = 0;
                 } else if (this->currJumpType == 2) {
                                 // log(this->currInferredExpN - this->knownInfsN + 1)
-                    rjadjustmentFactor = log((this->N - this->currInferredExpN)) - log(this->currInferredExpN + 1) - this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx)) - this->copFunction(this->proposalJump(this->currJumpIdx), this->proposalInf(this->currJumpIdx), this->proposalSample,  this->initialTitreTime(this->currJumpIdx)); // dlnorm(proposalJump[currJumpIdx], 3.395, 0.5961)
+                    rjadjustmentFactor = log((this->N - this->currInferredExpN)) - log(this->currInferredExpN + 1) - this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx)) - this->copFunction(this->proposalJump(this->currJumpIdx), this->proposalInf(this->currJumpIdx), this->proposalSample,  this->proposalTitreExp(this->currJumpIdx)); // dlnorm(proposalJump[currJumpIdx], 3.395, 0.5961)
                 }
                 this->alpha = min(1.0, exp((this->proposedLogPosterior - this->currentLogPosterior + rjadjustmentFactor)));
             }
@@ -695,6 +712,8 @@ namespace rjmc_full{
                 this->currentSample = this->proposalSample;
                 this->currentJump = this->proposalJump;
                 this->currentInf = this->proposalInf;
+                this->currentTitreExp = this->proposalTitreExp;
+
                 this->currentLogPosterior = this->proposedLogPosterior;
                 this->currInferredExpN = this->propInferredExpN;
                 this->currInferredInfN = this->propInferredInfN;
@@ -702,6 +721,8 @@ namespace rjmc_full{
                 this->proposalSample = this->currentSample;
                 this->proposalJump = this->currentJump;
                 this->proposalInf = this->currentInf;
+                this->proposalTitreExp = this->currentTitreExp;
+
                 this->proposedLogPosterior = this->currentLogPosterior;
                 this->propInferredExpN = this->currInferredExpN;
                 this->propInferredInfN = this->currInferredInfN;                
@@ -741,6 +762,7 @@ namespace rjmc_full{
                 for (int j = 0; j < this->lengthJumpVec; j++) {
                     this->posteriorJump(this->counterPosterior, j) = this->currentJump(j);
                     this->posteriorInf(this->counterPosterior, j) = this->currentInf(j);
+                    this->posteriorTitreExp(this->counterPosterior, j) = this->currentTitreExp(j);
                 }
                 this->counterPosterior++;            
             }
@@ -878,10 +900,21 @@ namespace rjmc_full{
         model->evaluateLogPrior = func;
     }
 
-    void init_evaluateLogLikelihood(rjmc_full::RJMC_FULL_D* model, Rcpp::Function evaluateLogLikelihood) {
-        auto func = [evaluateLogLikelihood](VectorXd params, VectorXd jump, VectorXd jumpinf, MatrixXd covariance, RObject dataList) {
+    void init_calculateTitreExp(rjmc_full::RJMC_FULL_D* model, Rcpp::Function calculateTitreExp) {
+        auto func = [calculateTitreExp](VectorXd params, VectorXd jump, VectorXd jumpinf, MatrixXd covariance, RObject dataList) {
             PutRNGstate();
-            auto rData = evaluateLogLikelihood(params, jump, jumpinf, covariance, dataList);
+            auto rData = calculateTitreExp(params, jump, jumpinf, covariance, dataList);
+            GetRNGstate();
+            return Rcpp::as<VectorXd>(rData);
+        };
+        model->calculateTitreExp = func;
+    }
+
+    void init_evaluateLogLikelihood(rjmc_full::RJMC_FULL_D* model, Rcpp::Function evaluateLogLikelihood) {
+        auto func = [evaluateLogLikelihood](VectorXd params, VectorXd jump, VectorXd jumpinf, VectorXd TitreExp, MatrixXd covariance, RObject dataList) { // the function defined in R is called here
+            PutRNGstate();
+            // here it must be converted to a cpp function which can be read into the model
+            auto rData = evaluateLogLikelihood(params, jump, jumpinf, TitreExp, covariance, dataList); // this is the function which must match above
             GetRNGstate();
             return Rcpp::as<double>(rData);
         };
@@ -926,6 +959,16 @@ namespace rjmc_full{
             return Rcpp::as<double>(rData);
         };
         model->copFunction = func;
+    }
+
+    void init_observationalModel(rjmc_full::RJMC_FULL_D* model, Rcpp::Function observationalModel) {
+        auto func = [observationalModel](double ll, double titre_val, double titre_est, NumericVector params) {
+            PutRNGstate();
+            auto rData = observationalModel(ll, titre_val, titre_est, params);
+            GetRNGstate();
+            return Rcpp::as<double>(rData);
+        };
+        model->observationalModel = func;
     }
 };
 // namespace rjmc_full

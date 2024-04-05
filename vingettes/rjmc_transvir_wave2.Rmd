@@ -46,36 +46,56 @@ gambia_pvnt_w2 %>% left_join(gambia_exp_w2) %>% filter(inf_d_time > -1, vax_time
         geom_line(aes(x = time, y = titre, group = pid), alpha = 0.5) + 
         geom_smooth(aes(x = time, y = titre)) + 
         theme_bw()
+
+
+
 # Define parameters, priors and support for ab kinetics model (a, b, c), observational model (sigma) and 
 # the correlate of protection curve (beta0, beta1)
 # Format is [param_name, lower_bound, upper_bound, prior_function (in R), parameter_1 in prior function, parameter_2 in prior function (if needed)]
 # add_par_df adds to the par_tab
 par_tab <- bind_rows(
-    add_par_df("a_vax", 0.0, 1.5, "norm",  1, 0.5), # ab kinetics
+    add_par_df("a_vax", -2, 2, "norm",  0, 1), # ab kinetics
     add_par_df("b_vax", 0, 1, "norm",  0.3, 0.05), # ab kinetics
-    add_par_df("c_vax", -1.0, 4, "unif", -1,  4), # ab kinetics 
-    add_par_df("a_pd", 0.0, 1.5, "norm",  1, 0.5), # ab kinetics
+    add_par_df("c_vax", 0, 4, "unif", 0,  4), # ab kinetics 
+    add_par_df("a_pd", -2, 2, "norm",  0, 1), # ab kinetics
     add_par_df("b_pd", 0, 1, "norm",  0.3, 0.05), # ab kinetics
-    add_par_df("c_pd", -1.0, 4, "unif", -1,  4), # ab kinetics
-    add_par_df("a_d", 0.0, 1.5, "norm",  1, 0.5), # ab kinetics
+    add_par_df("c_pd", 0, 4, "unif", 0,  4), # ab kinetics
+    add_par_df("a_d", -2, 2, "norm",  0, 1), # ab kinetics
     add_par_df("b_d", 0, 1, "norm",  0.3, 0.05), # ab kinetics
-    add_par_df("c_d", 0.5, 4, "unif", 0.5,  4), # ab kinetics
+    add_par_df("c_d", 0, 4, "unif", 0,  4), # ab kinetics
 
     add_par_df("tau", 0, 1, "unif", 0, 1), # titre-dep boosting  
 
     add_par_df("wane", 0.0, 0.1, "unif", 0.0, 0.1), # observational model
-    add_par_df("sigma_obs_not", 0.01, 5, "unif", 0.01, 5), # observational model
+    add_par_df("sigma_obs_not", 0.0001, 4, "unif", 0.0001, 4), # observational model
 
     add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
     add_par_df("beta1", -10, 10, "unif", -10, 10) # cop model (not used here)
 )
 
 
+# Likelihood on the observational model, can be defined as anything [or put in c++]
+calculateTitreExp <- function(params, jump, jump_inf, covariance, datalist) {
+
+    titreExp <- calculateTitreExp_cpp(params, jump, jump_inf, covariance, datalist)
+    # datalist is data into the model which is useful
+    titreExp
+}
+
+observationModel <- function(ll, titreval, titre_est, params) {
+
+    if (titre_val <= log10(40)) {
+        ll <- ll + log(pcauchy(log10(40), titre_est, params["sigma_obs_not"]))
+    } else {
+        ll <- ll + log(dcauchy(titre_val, titre_est, params["sigma_obs_not"]))
+    }
+    ll
+}
 
 # Likelihood on the observational model, can be defined as anything [or put in c++]
-evaluateLogLikelihood <- function(params, jump, jump_inf, covariance, datalist) {
+evaluateLogLikelihood <- function(params, jump, jump_inf, titreinf, covariance, datalist) {
 
-    ll <- evaluateLogLikelihood_cpp(params, jump, jump_inf, covariance, datalist)
+    ll <- evaluateLogLikelihood_cpp(params, jump, jump_inf, titreinf, covariance, datalist)
     # datalist is data into the model which is useful
     ll
 }
@@ -93,7 +113,7 @@ cop_func <- function(jump, jumpinf, params, initialTitreValue) {
 }
 
 # Run reversible jump mcmc
-runsaveRJMCMC <- function(filename, modelname, evaluateLogLikelihood, data_t_raw, par_tab, exp_prior, cop_func) {
+runsaveRJMCMC <- function(filename, modelname, evaluateLogLikelihood, data_t_raw, par_tab, exp_prior, cop_func, calculate_titre_exp_func, observationalModel) {
     
     # Clean the data into a format for the sampler
     # data_titre_model format is [id, time, titre]
@@ -101,12 +121,14 @@ runsaveRJMCMC <- function(filename, modelname, evaluateLogLikelihood, data_t_raw
     gambia_exp_w2_d <- gambia_exp_w2 %>% filter(inf_d_time > -1) 
     data_t <- generate_data_t(gambia_pvnt_w2, dplyr::select(gambia_exp_w2_d, pid, id, inf_time = inf_d_time) )
     data_t$inf_pd_time <- gambia_exp_w2$inf_pd_time #rep(-1, 295) #gambia_exp_w2$inf_pd_time
-    data_t$vax_time <-gambia_exp_w2$vax_time # rep(-1, 295)#rep(-1, 295)gambia_exp_w2$vax_time
-
+    data_t$vax_time <- gambia_exp_w2$vax_time # rep(-1, 295)#rep(-1, 295)gambia_exp_w2$vax_time
 
     # This function creates the list of functions needed for the rjmc_full_func
+    
     model_define <- createModelRJCMCFull(evaluateLogLikelihood, par_tab, cop_func)
     model_define <- addExposurePrior(model_define, data_t, exp_prior, type = "empirical")
+    model_define <- addFunctionTitreExp(model_define, calculate_titre_exp_func)
+    model_define$observationalModel <- observationalModel
 
     # Settings used for the rjmcmc model, still playing around with optimal settings
     settings <-  list(
@@ -128,7 +150,7 @@ runsaveRJMCMC <- function(filename, modelname, evaluateLogLikelihood, data_t_raw
         covarInitVal = 1e-2, # make very small if struggling to sample to beginning
         covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
         covarMaxVal = 1, # decrease if struggling to sample in the middle
-        runParallel = TRUE,
+        runParallel = FALSE,
         lengthJumpVec = data_t$N,
         noGibbsSteps = 1
     )
@@ -142,22 +164,8 @@ runsaveRJMCMC <- function(filename, modelname, evaluateLogLikelihood, data_t_raw
 }
 
 check_priors(exp_prior_w2, gambia_exp_w2)
-runsaveRJMCMC( "test/transvir", "wave2", evaluateLogLikelihood, gambia_pvnt_w2, par_tab, exp_prior_w2, cop_func)
-
-```
-
-# Checks exposure historgram compared to data
-
-```{r}
-
-# Useful function comparison of known infection times and histogram of exposure prior 
-
-
-```
-
-
-```{r}
-
+runsaveRJMCMC( "test/transvir", "wave2", evaluateLogLikelihood, 
+    gambia_pvnt_w2, par_tab, exp_prior_w2, cop_func, calculateTitreExp, observationModel)
 
 ```
 
@@ -168,10 +176,11 @@ postprocessFigs_wave2("test/transvir", "wave2", 4)
 ```
 
 ```{r}
-
-
 filename <- "test/transvir"
 modelname <- "wave2"
+
+fitfull <- readRDS(file = here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
+
 outputfull <- readRDS(file = here::here("outputs", "fits", filename, paste0("pp_", modelname, ".RDS")))
 
 fit_states <- outputfull$fit_states

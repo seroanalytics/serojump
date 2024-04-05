@@ -1,4 +1,44 @@
+
+#include <RcppCommon.h>
+
+
+
 #include <Rcpp.h>
+
+
+/*class FunctionWrapper {
+  public:
+      // Constructor taking a std::function
+      FunctionWrapper(std::function<double(double, double, double, Rcpp::NumericVector)> func_in) : func(func_in) {}
+
+      // Convert FunctionWrapper to Rcpp::Function
+      operator Rcpp::Function() const {
+          // Create an Rcpp::Function object that wraps the std::function
+          return Rcpp::Function([this](double a, double b, double c, Rcpp::NumericVector vec) {
+              // Call the std::function and return the result
+              return func(a, b, c, vec);
+          });
+      }
+
+      // Define the as function to convert from SEXP to FunctionWrapper
+      static FunctionWrapper as(SEXP obj) {
+          // Check if obj is a function
+          if (Rf_isFunction(obj)) {
+              // Convert SEXP to Rcpp::Function
+            auto adapted_func = [obj](double a, double b, double c, Rcpp::NumericVector vec) {
+                return Rcpp::as<double>(func(a, b, c, vec));
+            };
+              return FunctionWrapper(adapted_func);
+          } else {
+              // Throw an error if obj is not a function
+              throw std::invalid_argument("Object is not a function.");
+          }
+      }
+
+  private:
+      std::function<double(double, double, double, Rcpp::NumericVector)> func;
+};*/
+
 #include <RcppEigen.h>
 #include <Eigen/Core>
 
@@ -17,6 +57,7 @@ List run_rjmc(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, boo
   rjmc::RJMC_D RJMC; List output_full;
   MatrixXd output;
   MatrixXd jump;
+
   rjmc::init_samplePriorDistributions(&RJMC, model["samplePriorDistributions"]);
   rjmc::init_evaluateLogPrior(&RJMC, model["evaluateLogPrior"]);
   rjmc::init_evaluateLogLikelihood(&RJMC, model["evaluateLogLikelihood"]);
@@ -45,6 +86,7 @@ List run_rjmc_sero(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings
   rjmc_sero::RJMC_SERO_D RJMC_SERO; List output_full;
   MatrixXd output;
   MatrixXd jump;
+
   rjmc_sero::init_samplePriorDistributions(&RJMC_SERO, model["samplePriorDistributions"]);
   rjmc_sero::init_evaluateLogPrior(&RJMC_SERO, model["evaluateLogPrior"]);
   rjmc_sero::init_initialiseJump(&RJMC_SERO, model["initialiseJump"]);
@@ -77,15 +119,21 @@ List run_rjmc_full(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings
   MatrixXd output;
   MatrixXd jump;
   MatrixXd inf;
+  MatrixXd titreexp;
 
   rjmc_full::init_samplePriorDistributions(&RJMC_FULL, model["samplePriorDistributions"]);
   rjmc_full::init_evaluateLogPrior(&RJMC_FULL, model["evaluateLogPrior"]);
   rjmc_full::init_initialiseJump(&RJMC_FULL, model["initialiseJump"]);
-  rjmc_full::init_evaluateLogLikelihood(&RJMC_FULL, model["evaluateLogLikelihood"]);
+  rjmc_full::init_calculateTitreExp(&RJMC_FULL, model["calculateTitreExp"]);
 
   rjmc_full::init_exposureFunctionSample(&RJMC_FULL, model["exposureFunctionSample"]);
   rjmc_full::init_exposureFunctionDensity(&RJMC_FULL, model["exposureFunctionDensity"]);
   rjmc_full::init_copFunction(&RJMC_FULL, model["copFunction"]);
+
+  // Functions for the likelihood
+  rjmc_full::init_observationalModel(&RJMC_FULL, model["observationalModel"]);
+  rjmc_full::init_evaluateLogLikelihood(&RJMC_FULL, model["evaluateLogLikelihood"]);
+
 
   if (update_ind) {
     RJMC_FULL.updateClass(settings, dataList, RJMCpar);
@@ -99,7 +147,8 @@ List run_rjmc_full(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings
   output = output_full[0];
   jump = output_full[1];
   inf = output_full[2];
+  titreexp = output_full[3];
 
-  return Rcpp::List::create(_["output"] = output, _["jump"] = jump, _["inf"] = inf, _["RJMCpar"] = RJMCpar);
+  return Rcpp::List::create(_["output"] = output, _["jump"] = jump, _["inf"] = inf, _["titreexp"] = titreexp, _["RJMCpar"] = RJMCpar);
 
 }

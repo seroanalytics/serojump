@@ -206,8 +206,8 @@ createModelRJCMCFull <- function(ab_ll, par_tab, cop_func) {
     model_type$evaluateLogLikelihood <- ab_ll 
     model_type$lowerParSupport_fitted <- par_tab$lb
     model_type$upperParSupport_fitted <- par_tab$ub
-
     model_type$namesOfParameters <- par_tab$par_name
+
 
     model_type$samplePriorDistributions = function(datalist) {
         get_sample_non_centered(par_tab)
@@ -279,6 +279,29 @@ addExposurePrior <- function(model_type, data_t, exp_prior, type = NULL) {
         }
     } else {
         cat("'type' argument must be either NULL, 'func' or 'empirical'. \n")
+    }
+    model_type
+}
+
+
+addFunctionTitreExp <- function(model_type, calculate_titre_exp_func = NULL) {
+
+    if (is.null(calculate_titre_exp_func)) {
+        cat("Function to calculate titre exposure not defined. Defaulting to titre value at first bleed for each individual \n")
+        model_type$calculateTitreExp <- function(params, jump, jump_inf, covariance, datalist) {
+            N <- datalist$N
+            titre_exp <- vector(mode = "numeric", length = N)
+            for (i in 1:N) {
+                if (jump[i] == -1) {
+                    titre_exp[i] <- -1
+                } else {
+                    titre_exp[i] <- datalist$initialTitreValue[i]
+                }
+            }
+            titre_exp
+        }
+    } else{
+         model_type$calculateTitreExp <- calculate_titre_exp_func
     }
     model_type
 }

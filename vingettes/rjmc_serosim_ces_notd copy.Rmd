@@ -23,7 +23,7 @@ par_tab <- bind_rows(
 )
 
 # Likelihood on the observational model, can be defined as anything [or put in c++]
-evaluateLogLikelihood <- function(params, jump, jump_inf, covariance, datalist) {
+evaluateLogLikelihood <- function(params, jump, jump_inf, expinf, covariance, datalist) {
     # datalist is data into the model which is useful
     N = datalist$N
     knownInfsVec =  datalist$knownInfsVec        
@@ -119,6 +119,7 @@ runsaveRJMCMC <- function(modelname, modelname_sim, obs_er, prob_known, evaluate
     # This function creates the list of functions needed for the rjmc_full_func
     model_define <- createModelRJCMCFull(evaluateLogLikelihood, par_tab, cop_func)
     model_define <- addExposurePrior(model_define, data_t, exp_prior, type = "func")
+    model_define <- addFunctionTitreExp(model_define)
 
     # Settings used for the rjmcmc model, still playing around with optimal settings
     settings <-  list(
@@ -140,7 +141,7 @@ runsaveRJMCMC <- function(modelname, modelname_sim, obs_er, prob_known, evaluate
         covarInitVal = 1e-2, # make very small if struggling to sample to beginning
         covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
         covarMaxVal = 1, # decrease if struggling to sample in the middle
-        runParallel = TRUE,
+        runParallel = FALSE,
         numberCores = 4,
         lengthJumpVec = data_t$N,
         noGibbsSteps = 5
