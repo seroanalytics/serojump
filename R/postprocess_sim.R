@@ -366,10 +366,6 @@ plot_inf_rec_sim <- function(outputfull) {
         start_titre = data_t$initialTitreValue
     )
 
-
-
-    # b) Infection given exposure 
-
     figB <- left_join(
         sim_states %>% filter(exp_ind_sim == 1) %>% select(id, inf_ind_sim)  %>% mutate(inf_status_data = recode(inf_ind_sim, "1" = "Infected", "0" = "Not infected")),
         fit_states %>% filter(exp_ind == 1) %>% select(id, inf_ind) %>% summarise(inf_post = mean(inf_ind), .by = "id")

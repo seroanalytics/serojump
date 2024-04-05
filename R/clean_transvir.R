@@ -122,13 +122,15 @@ get_data_titre_model_wave2 <- function() {
     ids <- gambia_pvnt_b1 %>% pull(pid)
     gambia_pvnt <- bind_rows(gambia_pvnt_b0, gambia_pvnt_b1) %>% filter(pid %in% ids) %>% mutate(id = as.numeric(factor(pid))) %>%
         arrange(id, time) %>% 
+        mutate(titre = case_when(titre <= 40 ~ 6.3245, TRUE~titre)) %>%
         mutate(titre = case_when(
             titre < 1 ~ 1,
             TRUE ~ titre
-        )) %>% mutate(titre = pmax(log10(titre) - log10(40), 0))
+        )) %>% mutate(titre = pmax(log10(titre), 0))
 
     gambia_pvnt
 }
+
 
 get_exposures_wave2 <- function() {
     odd_people <- c("17-197B", "07-077B", "41-481E", "43-509K", "34-399H")
