@@ -35,10 +35,85 @@ using namespace boost::math;
 typedef std::function<double(double, double, double, NumericVector)> ObsFuncTemplate;
 
 namespace rjmc_full{
+
     struct RJMC_FULL_D
     {
-        RJMC_FULL_D() {}
-        
+        Rcpp::List observationalList, abkineticsModelList, copModelList; // List of models and parameters
+        Rcpp::List evalLoglikelhoodObs, evalabkineticsFunc, evalLoglikelhoodCOP; // List of functions to evaluate likelihoods and kinetics
+        Rcpp::List observationalModel, abkineticsModel, copModel; // List of models and parameters
+
+        StringVector observationalNames, abkineticNames, copNames; // Names of all the models
+        List parsAbKinN, parsCOPN, parsObsN; // Lists of all the parameters names for each model
+
+        RJMC_FULL_D(Rcpp::List observationalModel_in, Rcpp::List abkineticsModel_in, Rcpp::List copModel_in) : observationalList(observationalModel_in), abkineticsModelList(abkineticsModel_in), copModelList(copModel_in) {
+
+            this->observationalNames = observationalList["names"];
+            this->abkineticNames = abkineticsModelList["names"];
+            this->copNames = copModelList["names"];
+
+            this->observationalModel = observationalList["model"];
+            this->abkineticsModel = abkineticsModelList["model"];
+            this->copModel = copModelList["model"];
+
+
+            for (int i = 0; i < this->observationalNames.size(); i++) {
+                List temp1 = this->observationalModel[i];
+                Function temp2 = temp1["logLikelihood"];
+                StringVector temp3 = temp1["pars"];
+                this->evalLoglikelhoodObs[as<string>(this->observationalNames[i])] = temp2;
+                this->parsObsN[as<string>(this->observationalNames[i])] = temp3;
+            }
+            for (int i = 0; i < this->abkineticNames.size(); i++) {
+                List temp1 = this->abkineticsModel[i];
+                Function temp2 = temp1["funcForm"];
+                StringVector temp3 = temp1["pars"];
+                this->evalabkineticsFunc[as<string>(this->abkineticNames[i])] = temp2;
+                this->parsAbKinN[as<string>(this->abkineticNames[i])] = temp3;
+            }
+            for (int i = 0; i < this->copNames.size(); i++) {
+                List temp1 = this->copModel[i];
+                Function temp2 = temp1["logLikelihood"];
+                StringVector temp3 = temp1["pars"];
+                this->evalLoglikelhoodCOP[as<string>(this->copNames[i])] = temp2;
+                this->parsCOPN[as<string>(this->copNames[i])] = temp3;
+            }
+        }
+
+        List currentParsCOP, currentParsObs, currentParsAb;
+        StringVector exposureNames;
+        StringVector fittedParamNames;
+
+        // call each step
+        void updateParams(NumericVector paramsN) {
+            // parsCOPN is a list of the parameter names for the COP model
+            for (int i = 0; i < parsCOPN.size(); ++i) {
+                NumericVector currentParsCOP_i;
+                StringVector parnams = parsCOPN[i];
+                for (int j = 0; j < parnams.size(); ++j) {
+                    currentParsCOP_i.push_back(paramsN[as<string>(parnams[j])]);
+                }
+                this->currentParsCOP[as<string>(this->copNames[i])] = currentParsCOP_i;
+            }
+            for (int i = 0; i < parsObsN.size(); ++i) {
+                NumericVector currentParsObs_i;
+                StringVector parnams = parsObsN[i];
+                for (int j = 0; j < parnams.size(); ++j) {
+                    currentParsObs_i.push_back(paramsN[as<string>(parnams[j])]);
+                }
+                this->currentParsObs[as<string>(this->observationalNames[i])] = currentParsObs_i;
+
+            }
+            for (int i = 0; i < parsAbKinN.size(); ++i) {
+                NumericVector currentParsAb_i;
+                StringVector parnams = parsAbKinN[i];
+                for (int j = 0; j < parnams.size(); ++j) {
+                    currentParsAb_i.push_back(paramsN[as<string>(parnams[j])]);
+                }
+                this->currentParsAb[as<string>(this->abkineticNames[i])] = currentParsAb_i;
+
+            }
+        }
+
         bool conPropIn = true;
         bool disPropIn = false;
 
@@ -46,11 +121,14 @@ namespace rjmc_full{
         double nonadaptiveScalar, adaptiveScalar;
         MatrixXd nonadaptiveCovarianceMat, adaptiveCovarianceMat;
         MatrixXd currentSample, currentSampleMean;
+
+        // Outputs for posterior
         MatrixXd posteriorOut;
         MatrixXd posteriorJump;
         MatrixXd posteriorInf;
-
         MatrixXd posteriorTitreExp;
+        MatrixXd posteriorObsTitre;
+
         MatrixXd currentCovarianceMatrix;
         double currentLogPosterior;
         VectorXd proposalSample;
@@ -63,6 +141,9 @@ namespace rjmc_full{
 
         VectorXd currentTitreExp;
         VectorXd proposalTitreExp;
+
+        VectorXd currentObsTitre;
+        VectorXd proposalObsTitre;
 
         VectorXd historicJump;
 
@@ -84,35 +165,29 @@ namespace rjmc_full{
         std::function<VectorXd(RObject)> samplePriorDistributions;
         std::function<VectorXd(RObject)> initialiseJump;
         std::function<double(VectorXd, VectorXd, RObject)> evaluateLogPrior;
-        std::function<VectorXd(VectorXd, VectorXd, VectorXd, MatrixXd, RObject)> calculateTitreExp;
 
         std::function<double()> exposureFunctionSample;
         std::function<double(double)> exposureFunctionDensity;
-        std::function<double(double, double, VectorXd, double)> copFunction;
 
         // Functions for internal 
-        std::function<double(VectorXd, VectorXd, VectorXd, VectorXd, MatrixXd, RObject)> evaluateLogLikelihood;
-        ObsFuncTemplate observationalModel;
-
         Mvn Mvn_sampler;
 
         double stepSizeRobbinsMonro;
-        double evalLogPosterior(const VectorXd& param, const VectorXd& jump, const VectorXd& jumpInf, const MatrixXd& covariance, const RObject& dataList)
+        double evalLogPosterior(const VectorXd& param, const VectorXd& jump, const VectorXd& jumpInf, const MatrixXd& covariance, const RObject& dataList, bool init = false)
         {
-            this->proposalTitreExp = this->calculateTitreExp(param, jump, jumpInf, covariance, dataList);// CALCULATE TITRE AT INFECTION
             double logPrior = this->evaluateLogPrior(param, jump, dataList);
-            if (isinf(logPrior))
+
+            if (isinf(logPrior)) {
                 return log(0);
-            double logLikelihood_ab = this->evaluateLogLikelihood(param, jump, jumpInf, this->proposalTitreExp, covariance, dataList); // SEXPREC * (?)
-            
+            }
+            // need to be a converstion here as observationalModel is ObsFuncTemplate, but function call is Function
+            double logLikelihood_ab = this->evaluateLogLikelihoodCOP_cpp(param, jump, jumpInf, init);
+            logLikelihood_ab += this->evaluateLogLikelihoodObs_cpp(param, jump, jumpInf, init) ; // this function in here has the form ObsFuncTemplate
+
             double logLikelihood_time = 0; 
             for (int i = 0; i < this->N; i++) {
                 if (jump[i] > -1) {
-                   // Rcpp::Rcout << "i: " << i << std::endl;
-                  //  Rcpp::Rcout << "this->proposalTitreExp[i]: " << this->proposalTitreExp[i] << std::endl;
-                    logLikelihood_time += (exposureFunctionDensity(jump[i]) + copFunction(jump[i], jumpInf[i], param, this->proposalTitreExp[i]));
-                   // Rcpp::Rcout << "exposureFunctionDensity(jump[i]): " << exposureFunctionDensity(jump[i]) << std::endl;
-                  //  Rcpp::Rcout << "copFunction(jump[i], jumpInf[i], param, initialTitreValue[i]): " << copFunction(jump[i], jumpInf[i], param, initialTitreValue[i]) << std::endl;
+                    logLikelihood_time += exposureFunctionDensity(jump[i]);
                 }
             }
             
@@ -146,11 +221,11 @@ namespace rjmc_full{
         }
 
         // Important information from data
-        int N;
+        int N, N_data;
         int knownInfsN;
         VectorXd knownExpVec;
         bool knownExpInd = false;
-        VectorXd knownInfsVec;
+        VectorXd knownInfsVec, knownInfsTimeVec;
         int currInferredInfN;
         int propInferredInfN;
         int currInferredExpN;
@@ -164,19 +239,40 @@ namespace rjmc_full{
         VectorXd initialTitreTime;
         VectorXd initialTitreValue;
         VectorXd endTitreTime;
+        VectorXd titre_full, times_full, id_full;
+
+        StringVector exposurePeriods;
+        string exposureNameInf;
 
         void initialiseClass(List settings, RObject dataList, int i)
         {
             this->dataList = dataList;            
             this->dataListCPP = as<List>(dataList);
 
+            // More data
+            // biomarkers, size
+            // exposure, size
+
+            this->fittedParamNames = this->dataListCPP["par_names"];
+
             // Useful for internal functions
             this->N = this->dataListCPP["N"];
+            this->N_data = this->dataListCPP["N_data"];
+
+            this->titre_full = this->dataListCPP["titre_full"];
+            this->times_full = this->dataListCPP["times_full"];
+            this->id_full = this->dataListCPP["id_full"];
+
+            this->exposurePeriods = this->abkineticsModel["exposurePeriods"];
+            this->exposureNames = this->abkineticsModel["exposureNames"];
+            this->exposureNameInf = as<string>(this->abkineticsModel["exposureNameInf"]);
+
             this->knownExpVec = this->dataListCPP["knownExpVec"];
             if (this->knownExpVec.size() > 1) {
                 this->knownExpInd = true;
             }
             this->knownInfsVec = this->dataListCPP["knownInfsVec"];
+            this->knownInfsTimeVec = this->dataListCPP["knownInfsTimeVec"];
             this->knownInfsN = this->dataListCPP["knownInfsN"];
 
             this->currInferredInfN = this->knownInfsN;
@@ -189,6 +285,7 @@ namespace rjmc_full{
                 this->propInferredExpN = this->knownInfsN;    
             }
 
+            this->N_data = this->dataListCPP["N_data"];
 
             this->initialTitreTime = this->dataListCPP["initialTitreTime"];
             this->endTitreTime = this->dataListCPP["endTitreTime"];
@@ -232,6 +329,7 @@ namespace rjmc_full{
             this->posteriorJump = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
             this->posteriorInf = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
             this->posteriorTitreExp = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
+            this->posteriorObsTitre = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
 
             this->currentLogPosterior = 0;
             this->currentSampleMean = VectorXd::Zero(this->numberFittedPar);
@@ -270,7 +368,7 @@ namespace rjmc_full{
             if (knownExpInd) {
                 initialJump = this->knownExpVec;
             } else {
-                initialJump = this->initialiseJump(this->dataList);
+                initialJump = this->knownInfsTimeVec;
                 /*for (int i = 0; i < this->N; i ++) {
                     if ((initialJump[i] > -1) & (this->knownInfsVec(i) != 1)) {
                         double u = uniformContinuousDist(0, 1);
@@ -284,16 +382,12 @@ namespace rjmc_full{
             // Get initial conditions for the infection states
             initialInf = initInfFunc(); 
             this->currentInf = initialInf;
-
             // Get initial conditions for the Loglikelihood probabilities
             this->currentCovarianceMatrix = this->nonadaptiveScalar*this->nonadaptiveCovarianceMat;
-            this->currentTitreExp = this->calculateTitreExp(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList);// CALCULATE TITRE AT INFECTION
-            initialLogLikelihood = this->evalLogPosterior(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList);
+            initialLogLikelihood = this->evalLogPosterior(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList, true);
             while(isinf(initialLogLikelihood) || isnan(initialLogLikelihood)){
-                
                 initialSample = this->samplePriorDistributions(this->dataList);
-                this->currentTitreExp = this->calculateTitreExp(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList);// CALCULATE TITRE AT INFECTION
-                initialLogLikelihood = this->evalLogPosterior(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList);
+                initialLogLikelihood = this->evalLogPosterior(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList, true);
             }
             this->currentSample = initialSample;
             this->currentSampleMean = initialSample;
@@ -301,6 +395,8 @@ namespace rjmc_full{
             
             double alphaMVN = -sqrt(2)*ErfInv(0.234-1);
             this->stepSizeRobbinsMonro = (1.0-1.0/(double)this->numberFittedPar)*(pow(2*3.141, 0.5)*exp(alphaMVN*alphaMVN*0.5))/(2*alphaMVN) + 1.0/(this->numberFittedPar*0.234*(1-0.234));
+            Rcpp::Rcout << "Initialising chain (finished)" << i << std::endl;
+
         }
 
         VectorXd initInfFunc() {
@@ -349,6 +445,7 @@ namespace rjmc_full{
             this->posteriorJump = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
             this->posteriorInf = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
             this->posteriorTitreExp = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
+            this->posteriorObsTitre = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
 
             MatrixXd posteriorOutPrev = PTMCpar["posteriorOut"];
             for (int i = 0; i < (int)PTMCpar["posteriorSamplesLength"]; i++)
@@ -410,7 +507,8 @@ namespace rjmc_full{
                 _["pars"] = this->posteriorOut,
                 _["jump"] = this->posteriorJump,
                 _["inf"] = this->posteriorInf,
-                _["titreexp"] = this->posteriorTitreExp
+                _["titreexp"] = this->posteriorTitreExp,
+                _["obstitre"] = this->posteriorObsTitre
             );
             return out;
         }
@@ -691,13 +789,21 @@ namespace rjmc_full{
                 this->alpha = 0;
             } else {
                 if (this->currJumpType == 0) {
-                                /// log(this->currInferredExpN - this->knownInfsN)
-                    rjadjustmentFactor = log(this->currInferredExpN) - log((this->N - this->currInferredExpN + 1) ) + this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)) + this->copFunction(this->currentJump(this->currJumpIdx), this->currentInf(this->currJumpIdx), this->currentSample, this->currentTitreExp(this->currJumpIdx));
+                    Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[as<string>(this->copNames[0])];
+                    NumericVector pars = this->currentParsCOP[as<string>(this->copNames[0])];
+
+                    rjadjustmentFactor = log(this->currInferredExpN) - log((this->N - this->currInferredExpN + 1) ) + 
+                        this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)) +
+                        as<double>(evalLoglikelhoodCOP_i(this->currentInf(this->currJumpIdx), this->currentTitreExp(this->currJumpIdx), pars) ); 
                 } else if (this->currJumpType == 1) {
                     rjadjustmentFactor = 0;
                 } else if (this->currJumpType == 2) {
-                                // log(this->currInferredExpN - this->knownInfsN + 1)
-                    rjadjustmentFactor = log((this->N - this->currInferredExpN)) - log(this->currInferredExpN + 1) - this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx)) - this->copFunction(this->proposalJump(this->currJumpIdx), this->proposalInf(this->currJumpIdx), this->proposalSample,  this->proposalTitreExp(this->currJumpIdx)); // dlnorm(proposalJump[currJumpIdx], 3.395, 0.5961)
+                    Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[as<string>(this->copNames[0])];
+                    NumericVector pars = this->currentParsCOP[as<string>(this->copNames[0])];
+
+                    rjadjustmentFactor = log((this->N - this->currInferredExpN)) - log(this->currInferredExpN + 1) - 
+                        this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx)) - 
+                        as<double>(evalLoglikelhoodCOP_i(this->proposalInf(this->currJumpIdx), this->proposalTitreExp(this->currJumpIdx), pars) ); // dlnorm(proposalJump[currJumpIdx], 3.395, 0.5961)
                 }
                 this->alpha = min(1.0, exp((this->proposedLogPosterior - this->currentLogPosterior + rjadjustmentFactor)));
             }
@@ -709,10 +815,12 @@ namespace rjmc_full{
                 if (onDebug) Rcpp::Rcout << "In: ACCEPTED" << std::endl;
                 //Rcpp::Rcout << "ACCEPTED (KINS): " << this->alpha << std::endl;
                 this->isSampleAccepted = true; this->counterAccepted++;
+                
                 this->currentSample = this->proposalSample;
                 this->currentJump = this->proposalJump;
                 this->currentInf = this->proposalInf;
                 this->currentTitreExp = this->proposalTitreExp;
+                this->currentObsTitre = this->proposalObsTitre;
 
                 this->currentLogPosterior = this->proposedLogPosterior;
                 this->currInferredExpN = this->propInferredExpN;
@@ -722,6 +830,7 @@ namespace rjmc_full{
                 this->proposalJump = this->currentJump;
                 this->proposalInf = this->currentInf;
                 this->proposalTitreExp = this->currentTitreExp;
+                this->proposalObsTitre = this->currentObsTitre;
 
                 this->proposedLogPosterior = this->currentLogPosterior;
                 this->propInferredExpN = this->currInferredExpN;
@@ -736,14 +845,19 @@ namespace rjmc_full{
                 this->currentSample = this->proposalSample;
                 this->currentJump = this->proposalJump;
                 this->currentInf = this->proposalInf;
+                this->currentTitreExp = this->proposalTitreExp;
+                this->currentObsTitre = this->proposalObsTitre;
+
                 this->currentLogPosterior = this->proposedLogPosterior;
                 this->currInferredExpN = this->propInferredExpN;
                 this->currInferredInfN = this->propInferredInfN;
-                //this->historicJump(this->gibbsIdx) = this->currentJump(this->gibbsIdx);
             } else {
                 this->proposalSample = this->currentSample;
                 this->proposalJump = this->currentJump;
                 this->proposalInf = this->currentInf;
+                this->proposalTitreExp = this->currentTitreExp;
+                this->proposalObsTitre = this->currentObsTitre;
+
                 this->proposedLogPosterior = this->currentLogPosterior;
                 this->propInferredExpN = this->currInferredExpN;
                 this->propInferredInfN = this->currInferredInfN;     
@@ -759,10 +873,13 @@ namespace rjmc_full{
                 
                 this->posteriorOut(this->counterPosterior, this->numberFittedPar) = this->currentLogPosterior;
                 this->posteriorOut(this->counterPosterior, this->numberFittedPar+1) = (double)this->counterAccepted/(double)this->counterFuncEval;
+
+
                 for (int j = 0; j < this->lengthJumpVec; j++) {
                     this->posteriorJump(this->counterPosterior, j) = this->currentJump(j);
                     this->posteriorInf(this->counterPosterior, j) = this->currentInf(j);
                     this->posteriorTitreExp(this->counterPosterior, j) = this->currentTitreExp(j);
+                    this->posteriorObsTitre(this->counterPosterior, j) = this->currentObsTitre(j);
                 }
                 this->counterPosterior++;            
             }
@@ -878,6 +995,158 @@ namespace rjmc_full{
                 }
             }
         }
+
+        struct DoubleWithString {
+            double value;
+            std::string name;
+
+            DoubleWithString(const std::string& nm, double val) : value(val), name(nm) {}
+
+            // Define a comparison operator to sort by string values
+            bool operator<(const DoubleWithString& other) const {
+                return value < other.value;
+            }
+        };
+
+        std::vector<DoubleWithString> orderExposureEvents(
+                const VectorXd& jump_inf, 
+                const VectorXd& jump, double initialtime, int i_idx, double time) {
+
+                std::vector<DoubleWithString> df_order_exp;
+                        
+                df_order_exp.emplace_back("none", initialtime); // Initial event
+                df_order_exp.emplace_back("bleed", time); // End event
+
+                for (int i = 0; i < this->exposureNames.size(); i++) {
+                    string exposureType = as<string>(this->exposureNames[i]);
+                    List here = this->abkineticsModel[exposureType]; 
+                    bool inferred = here["inferred"];
+                    if (!inferred){
+                        NumericVector knowninf = here["known_inf"];
+                        if (knowninf[i_idx] > -1 && knowninf[i_idx] < time) {
+                            df_order_exp.emplace_back(exposureType, knowninf[i_idx]); // "pre-delta" event
+                        }
+                    } else {
+                        if (jump_inf[i_idx] == 1 && jump[i_idx] < time) {
+                            df_order_exp.emplace_back(exposureType, jump[i_idx]); // "delta" event
+                        }
+                    }
+                }
+                std::sort(df_order_exp.begin(), df_order_exp.end());
+
+                return df_order_exp;
+        }
+
+        NumericVector createNamedParam(const VectorXd& params) {
+            NumericVector paramsName(this->fittedParamNames.size());
+            for (int i = 0; i < this->fittedParamNames.size(); ++i) {
+                paramsName[i] = params[i];
+            }
+            paramsName.attr("names") = this->fittedParamNames;
+            return paramsName;
+        }
+
+        double calTitre(double titre_est, string exposureType_i, double timeSince, NumericVector& paramsN) {
+            
+            Function exposureType = this->evalabkineticsFunc[exposureType_i];
+            NumericVector pars = this->currentParsAb[exposureType_i];
+
+            titre_est = Rcpp::as<double>(exposureType(titre_est, timeSince, pars));
+            return titre_est;
+        }
+
+        double evaluateLogLikelihoodCOP_cpp(VectorXd params, VectorXd jump, VectorXd jumpinf, bool init) {
+
+            NumericVector paramsN = this->createNamedParam(params);
+            updateParams(paramsN);
+            VectorXd titreExp(this->N);
+
+            double titre_est, initialtime, time_until;
+            Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[as<string>(this->copNames[0])];
+            NumericVector pars = this->currentParsCOP[as<string>(this->copNames[0])];
+
+            std::vector<DoubleWithString> df_order_exp; 
+            double ll = 0;
+            for (int i_idx = 0; i_idx < this->N; ++i_idx) {
+                if (jump[i_idx] == -1) {
+                    titreExp[i_idx] = -1;
+                } else {
+                    // Add custom func in here which can be used to input pre-determined pre-exposure titre
+
+                    titre_est = this->initialTitreValue[i_idx];
+                    initialtime = this->initialTitreTime[i_idx];
+
+                    df_order_exp = this->orderExposureEvents(jumpinf, jump, initialtime, i_idx, jump[i_idx]);
+
+                    // MODEL-PREDICTED TITRE AT DELTA
+                    for (int j = 0; j < df_order_exp.size() - 1; ++j) {
+                        double time_until = df_order_exp[j + 1].value - df_order_exp[j].value;
+                        if (df_order_exp[j].name == this->exposureNameInf) {
+                            break;
+                        }
+                        titre_est = this->calTitre(titre_est, df_order_exp[j].name, time_until, paramsN) ;
+                    }
+
+                    titreExp[i_idx] = titre_est;
+
+                    ll += as<double>(evalLoglikelhoodCOP_i(jumpinf[i_idx], titreExp[i_idx], pars ) );
+                }
+            }
+            if (init) {
+                this->currentTitreExp = titreExp;
+            } else {
+                this->proposalTitreExp = titreExp;
+            }
+            return ll;
+        }
+
+
+        double evaluateLogLikelihoodObs_cpp(const VectorXd& params, const VectorXd& jump, const VectorXd& jump_inf, bool init) {
+
+            NumericVector paramsN = this->createNamedParam(params);
+            std::vector<DoubleWithString> df_order_exp; 
+            VectorXd obsTitre(this->N_data);
+
+            double time_until, titre_est, time, initialtime, initialtitre ;
+            double titre_val, sigma;
+            int i_idx;
+            double ll = 0;
+            Function evalLoglikelhoodObs_i = this->evalLoglikelhoodObs[as<string>(this->observationalNames[0])];
+            NumericVector pars = this->currentParsObs[as<string>(this->observationalNames[0])];
+            
+            // For each observation
+            for (int i = 0; i < this->N_data; ++i) {
+                time = this->times_full[i];
+                i_idx = this->id_full[i] - 1;
+
+                initialtime = this->initialTitreTime[i_idx];    
+                initialtitre = this->initialTitreValue[i_idx];
+                titre_est = initialtitre;
+
+                if ((time - initialtime) != 0) {
+                    // Determine order of events 
+                    df_order_exp = this->orderExposureEvents(jump_inf, jump, initialtime, i_idx, time);
+
+                    // MODEL-PREDICTED TITRE
+                    for (int j = 0; j < df_order_exp.size() - 1; ++j) {
+                        time_until = df_order_exp[j + 1].value - df_order_exp[j].value;
+                        titre_est = this->calTitre(titre_est, df_order_exp[j].name, time_until, paramsN);
+                    }
+                }
+                obsTitre[i] = titre_est;
+
+                // OBSERVATIONAL MODEL
+                titre_val = this->titre_full[i];
+
+                ll += as<double>(evalLoglikelhoodObs_i(titre_val, titre_est, pars) );
+            }
+            if (init) {
+                this->currentObsTitre = obsTitre;
+            } else {
+                this->proposalObsTitre = obsTitre;
+            }
+            return ll;
+        }
     };
 
     void init_samplePriorDistributions(rjmc_full::RJMC_FULL_D* model, Rcpp::Function samplePriorDistributions) {
@@ -898,27 +1167,6 @@ namespace rjmc_full{
             return Rcpp::as<double>(rData);
         };
         model->evaluateLogPrior = func;
-    }
-
-    void init_calculateTitreExp(rjmc_full::RJMC_FULL_D* model, Rcpp::Function calculateTitreExp) {
-        auto func = [calculateTitreExp](VectorXd params, VectorXd jump, VectorXd jumpinf, MatrixXd covariance, RObject dataList) {
-            PutRNGstate();
-            auto rData = calculateTitreExp(params, jump, jumpinf, covariance, dataList);
-            GetRNGstate();
-            return Rcpp::as<VectorXd>(rData);
-        };
-        model->calculateTitreExp = func;
-    }
-
-    void init_evaluateLogLikelihood(rjmc_full::RJMC_FULL_D* model, Rcpp::Function evaluateLogLikelihood) {
-        auto func = [evaluateLogLikelihood](VectorXd params, VectorXd jump, VectorXd jumpinf, VectorXd TitreExp, MatrixXd covariance, RObject dataList) { // the function defined in R is called here
-            PutRNGstate();
-            // here it must be converted to a cpp function which can be read into the model
-            auto rData = evaluateLogLikelihood(params, jump, jumpinf, TitreExp, covariance, dataList); // this is the function which must match above
-            GetRNGstate();
-            return Rcpp::as<double>(rData);
-        };
-        model->evaluateLogLikelihood = func;
     }
 
     void init_initialiseJump(rjmc_full::RJMC_FULL_D* model, Rcpp::Function initialiseJump) {
@@ -949,26 +1197,6 @@ namespace rjmc_full{
             return Rcpp::as<double>(rData);
         };
         model->exposureFunctionDensity = func;
-    }
-
-    void init_copFunction(rjmc_full::RJMC_FULL_D* model, Rcpp::Function copFunction) {
-        auto func = [copFunction](double x, double y, VectorXd z, double initial) {
-            PutRNGstate();
-            auto rData = copFunction(x, y, z, initial);
-            GetRNGstate();
-            return Rcpp::as<double>(rData);
-        };
-        model->copFunction = func;
-    }
-
-    void init_observationalModel(rjmc_full::RJMC_FULL_D* model, Rcpp::Function observationalModel) {
-        auto func = [observationalModel](double ll, double titre_val, double titre_est, NumericVector params) {
-            PutRNGstate();
-            auto rData = observationalModel(ll, titre_val, titre_est, params);
-            GetRNGstate();
-            return Rcpp::as<double>(rData);
-        };
-        model->observationalModel = func;
     }
 };
 // namespace rjmc_full

@@ -140,22 +140,27 @@ get_exposures_wave2 <- function() {
 
     gambia_inf_dates <- get_infection_dates()
     gambia_inf_dates_pd <- gambia_inf_dates %>% filter(!is.na(known_pre_delta)) %>% mutate(inf_days = as.numeric(ymd(known_pre_delta) - start_date) + 1) %>%
-        dplyr::select(pid = Participant_ID, inf_days_pd = inf_days)
+        dplyr::select(pid = Participant_ID, time = inf_days) %>% mutate(exposure_type = "predelta")
     gambia_inf_dates_d <- gambia_inf_dates %>% filter(!is.na(known_delta)) %>% mutate(inf_days = as.numeric(ymd(known_delta) - start_date) + 1) %>%
-        dplyr::select(pid = Participant_ID, inf_days_d = inf_days)
+        dplyr::select(pid = Participant_ID, time = inf_days) %>% mutate(exposure_type = "delta")
 
     # Get vaccine dates
     gambia_meta <- read.csv(file = here::here("data", "transvir","full_demog_data.csv") )
-    gambia_meta_short <- gambia_meta %>% dplyr::select(pid = Participant_ID, vax_date) %>% mutate(vax_days = as.numeric(ymd(vax_date) - ymd("2021-03-02")) + 1) 
+    gambia_meta_short <- gambia_meta %>% dplyr::select(pid = Participant_ID, vax_date) %>% mutate(vax_days = as.numeric(ymd(vax_date) - ymd("2021-03-02")) + 1) %>% 
+        select(pid, time = vax_days) %>% mutate(exposure_type = "vax")
 
     data_titre <- get_data_titre_model_wave2()
-    known_exposures <- data_titre %>% left_join(gambia_inf_dates_pd) %>% left_join(gambia_inf_dates_d) %>% left_join(gambia_meta_short) %>%
-        group_by(id) %>% mutate(t = row_number()) %>% ungroup %>% 
-        pivot_wider(names_from = "t", values_from = c("titre", "time")) %>% as.data.frame %>% filter(pid != "34-399H") %>%
-        mutate(inf_pd_time = case_when(inf_days_pd > time_1 & inf_days_pd <= time_2 ~ inf_days_pd, TRUE~-1)) %>% as.data.frame %>% 
-        mutate(inf_d_time = case_when(inf_days_d > time_1 & inf_days_d <= time_2 ~ inf_days_d, TRUE~-1)) %>%
-        mutate(vax_time = case_when(vax_days > time_1 & vax_days <= time_2 ~ vax_days, TRUE~-1)) %>%
-        dplyr::select(pid, id, time_1, time_2, titre_1, titre_2, vax_days, inf_pd_time, inf_d_time, vax_time) 
+
+    known_exposures <- data_titre %>% select(pid, id) %>% unique %>% left_join(bind_rows(gambia_inf_dates_d, gambia_meta_short, gambia_inf_dates_pd) %>% filter(!is.na(time)) ) %>% 
+        filter(!is.na(exposure_type))
+
+    #known_exposures <- data_titre %>% left_join(gambia_inf_dates_pd) %>% left_join(gambia_inf_dates_d) %>% left_join(gambia_meta_short) %>%
+    #    group_by(id) %>% mutate(t = row_number()) %>% ungroup %>% 
+     #   pivot_wider(names_from = "t", values_from = c("titre", "time")) %>% as.data.frame %>% filter(pid != "34-399H") %>%
+     #   mutate(inf_pd_time = case_when(inf_days_pd > time_1 & inf_days_pd <= time_2 ~ inf_days_pd, TRUE~-1)) %>% as.data.frame %>% 
+     #   mutate(inf_d_time = case_when(inf_days_d > time_1 & inf_days_d <= time_2 ~ inf_days_d, TRUE~-1)) %>%
+     #   mutate(vax_time = case_when(vax_days > time_1 & vax_days <= time_2 ~ vax_days, TRUE~-1)) %>%
+     #   dplyr::select(pid, id, time_1, time_2, titre_1, titre_2, vax_days, inf_pd_time, inf_d_time, vax_time) 
         
     known_exposures
 }
