@@ -39,6 +39,18 @@
       std::function<double(double, double, double, Rcpp::NumericVector)> func;
 };*/
 
+
+/*namespace Rcpp {
+    template <>
+    SEXP wrap(const std::function<double(double, double, double, Rcpp::NumericVector)>& func) {
+      Function Func = [func](double a, double b, double c, Rcpp::NumericVector vec) {
+            return func(a, b, c, vec);
+        };
+        return Func;
+    }
+}*/
+
+
 #include <RcppEigen.h>
 #include <Eigen/Core>
 
@@ -115,25 +127,19 @@ List run_rjmc_sero(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings
 // [[Rcpp::export]]
 List run_rjmc_full(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i)
 {
-  rjmc_full::RJMC_FULL_D RJMC_FULL; List output_full;
-  MatrixXd output;
-  MatrixXd jump;
-  MatrixXd inf;
-  MatrixXd titreexp;
+  List observationalModel = model["observationalModel"];
+  List abkineticsModel = model["abkineticsModel"];
+  List copModel = model["copModel"];
 
+  rjmc_full::RJMC_FULL_D RJMC_FULL(observationalModel, abkineticsModel, copModel); 
+  List output_full;
+  MatrixXd output, jump, inf, titreexp, obstitre;
+  // Priors 
   rjmc_full::init_samplePriorDistributions(&RJMC_FULL, model["samplePriorDistributions"]);
   rjmc_full::init_evaluateLogPrior(&RJMC_FULL, model["evaluateLogPrior"]);
   rjmc_full::init_initialiseJump(&RJMC_FULL, model["initialiseJump"]);
-  rjmc_full::init_calculateTitreExp(&RJMC_FULL, model["calculateTitreExp"]);
-
   rjmc_full::init_exposureFunctionSample(&RJMC_FULL, model["exposureFunctionSample"]);
   rjmc_full::init_exposureFunctionDensity(&RJMC_FULL, model["exposureFunctionDensity"]);
-  rjmc_full::init_copFunction(&RJMC_FULL, model["copFunction"]);
-
-  // Functions for the likelihood
-  rjmc_full::init_observationalModel(&RJMC_FULL, model["observationalModel"]);
-  rjmc_full::init_evaluateLogLikelihood(&RJMC_FULL, model["evaluateLogLikelihood"]);
-
 
   if (update_ind) {
     RJMC_FULL.updateClass(settings, dataList, RJMCpar);
@@ -148,7 +154,8 @@ List run_rjmc_full(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings
   jump = output_full[1];
   inf = output_full[2];
   titreexp = output_full[3];
+  obstitre = output_full[4];
 
-  return Rcpp::List::create(_["output"] = output, _["jump"] = jump, _["inf"] = inf, _["titreexp"] = titreexp, _["RJMCpar"] = RJMCpar);
+  return Rcpp::List::create(_["output"] = output, _["jump"] = jump, _["inf"] = inf, _["titreexp"] = titreexp, _["obstitre"] = obstitre, _["RJMCpar"] = RJMCpar);
 
 }

@@ -45,6 +45,7 @@ postprocess_run <- function(filename, modelname, n_chains) {
         filename = filename,
         modelname = modelname,
         fit_states = fit_states,
+        model = fitfull$model,
         n_chains = n_chains,
         n_post = n_post)
 
@@ -214,7 +215,7 @@ plot_exp_times_rec <- function(outputfull) {
         id = as.character(1:N),
         start_titre = data_t$initialTitreValue,
         known_inf = data_t$knownInfsVec,
-        known_date =  data_t$knownInfsDate
+        known_date =  data_t$knownInfsTimeVec
     ) %>% mutate(known_inf = ifelse(known_inf == 0, "Not known", "Known"))
 
     fit_states_exp_prob <- fit_states %>% select(id, exp_ind) %>% summarise(exp_post = mean(exp_ind), .by = "id")
@@ -627,7 +628,7 @@ plot_cop_rec <- function(outputfull) {
     lol %>% ggplot() + 
         stat_lineribbon(aes(x = t, y = vals), fill = "red", alpha = 0.5, .width = c(0.5, 0.95)) + 
         geom_linerange(data = titre_exp_sum_plot, 
-            aes(y = inf_post, xmin = .lower, xmax = .upper, color = inf_post, alpha = prop), size = 1) + 
+            aes(y = inf_post, xmin = .lower, xmax = .upper, alpha = prop), size = 1) + 
         geom_point(data = titre_exp_sum_plot, aes(x = titre_exp, y = inf_post, alpha = prop)) + 
         theme_bw() + 
         ylim(0, 1) +
@@ -689,17 +690,92 @@ postprocessFigs <- function(filename, modelname, n_chains) {
 
 postprocessFigs_wave2 <- function(filename, modelname, n_chains) {
 
-
     postprocess_run( filename, modelname, n_chains)
     outputfull <- readRDS(file = here::here("outputs", "fits", filename, paste0("pp_", modelname, ".RDS")))
 
     plot_trace(outputfull)
-    plot_abkinetics_delta(outputfull)
-    plot_abkinetics_vax(outputfull)
-    plot_abkinetics_pdelta(outputfull)
     plot_inf_rec(outputfull)
     plot_exp_rec(outputfull)
     plot_exp_times_rec(outputfull)
+
+
+    plot_abkinetics_trajectories(outputfull)
+
     plot_cop_rec(outputfull)
     plot_titre_exp(outputfull)
+}
+
+plot_abkinetics_trajectories <- function(outputfull) {
+
+    require(posterior)
+    require(bayesplot)
+    require(ggdist)
+
+    filename <- outputfull$filename
+    modelname <- outputfull$modelname
+
+    n_chains <- outputfull$n_chains
+    n_post <- outputfull$n_post
+
+    chain_samples <- 1:n_chains %>% map(~c(rep(.x, n_post))) %>% unlist
+
+    fitfull <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
+    data_t <- fitfull$data_t
+    N <- data_t$N
+
+    post <- fitfull$post
+    par_tab <- fitfull$par_tab
+    model_outline <- fitfull$model
+    post_fit <- post$mcmc %>% combine %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
+
+    model_outline$abkineticsModel$model[["delta"]]$funcForm
+    ###
+    posteriorsAllExposure <- map_df(model_outline$abkineticsModel$names,
+        function(name1) {
+            pars_extract <- model_outline$abkineticsModel$model[[name1]]$pars
+            functionalForm <- model_outline$abkineticsModel$model[[name1]]$funcForm
+
+            compare <- bind_rows(
+                post$mcmc %>% combine %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
+                    mutate(type = "Posterior distribution") %>% filter(param %in% pars_extract)
+            #  purrr::map_df(1:n_post,
+            #      ~model_outline$samplePriorDistributions(par_tab)
+            #  )  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%  mutate(type = "Prior distribution")  %>%
+            #  filter(param %in% pars_extract)
+            )
+
+            ab_function <- function(T, pars) {
+                1:T %>% map( 
+                    ~functionalForm(0, .x, pars)
+                ) %>% unlist
+            }
+
+            post_par <- data.frame(post_fit[[pars_extract[1]]])
+            if (length(pars_extract) > 1) {
+                for (i in 2:length(pars_extract)) {
+                    post_par <- cbind(post_par, post_fit[[pars_extract[i]]])
+                }   
+            }
+
+            T <- 300
+            traj_post <- 1:(100) %>% purrr::map_df(
+                ~data.frame(
+                    time = 1:T,
+                    value = ab_function(T, as.numeric(post_par[.x, ]))
+                )
+            )
+            lol <- as.numeric(post_par[1, ])
+            ab_function(15, lol)
+            traj_post_summ <- traj_post %>% group_by(time) %>% mean_qi() %>% mutate(exposure_type = name1)
+        }
+    )
+
+    p1 <- posteriorsAllExposure %>%  
+        ggplot() + 
+        geom_ribbon(aes(ymin = .lower, ymax = .upper, x = time, fill = exposure_type), size = 3, alpha = 0.3) + 
+        geom_line(aes(y = value, x = time, color = exposure_type), size = 2) + 
+        theme_bw() + labs(x = expression("Time post-infection/since bleed, s", y = "Titre change, f"[ab])) + 
+        ggtitle("Antibody kinetic trajectories")
+    ggsave(here::here("outputs", "fits", filename, "figs", modelname, "ab_kinetics_trajectories.png"), height = 10, width = 10)
+
 }

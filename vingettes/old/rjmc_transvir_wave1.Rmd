@@ -1,0 +1,327 @@
+
+
+Fitting to the TRANSVIR data prototype
+
+# This is cleaning the TRANSVIR data
+
+```{r}
+
+# Clean data for fitting process
+library(lubridate)
+library(tidyverse)
+library(dplyr)
+library(fitdistrplus)
+
+# Get fitted incidence rates
+odd_people <- c("17-197B", "07-077B", "41-481E", "43-509K")
+
+
+gambia_sero <- read.csv(file = here::here("data","transvir", "David_serol.csv") ) %>% filter(!Participant_ID %in% odd_people)
+
+serostatus_bleed <- gambia_sero %>% dplyr::select(Participant_ID, Visits, posneg_spike)
+
+relabel_ss <- c("Pos" = "1", "Neg" = "0")
+
+df_serostatus <- left_join(
+    left_join(
+        serostatus_bleed %>% filter(Visits == "V1") %>% rename(V1_ss = posneg_spike) %>% mutate(V1_ss = recode(V1_ss, !!!relabel_ss)) %>% dplyr::select(!Visits),
+        serostatus_bleed %>% filter(Visits == "V2") %>% rename(V2_ss = posneg_spike) %>% mutate(V2_ss = recode(V2_ss, !!!relabel_ss)) %>% dplyr::select(!Visits)
+    ),
+    serostatus_bleed %>% filter(Visits == "V3") %>% rename(V3_ss = posneg_spike) %>% mutate(V3_ss = recode(V3_ss, !!!relabel_ss)) %>% dplyr::select(!Visits)
+)
+
+# Get meta data
+gambia_meta <- read.csv(file = here::here("data", "transvir","full_demog_data.csv") )
+gambia_meta_short <- gambia_meta %>% dplyr::select(Participant_ID,age_cat, Sex, vaccinated, vax_date)
+
+
+```
+
+
+```{r}
+
+
+
+#install.packages("devtools")
+#library(devtools)
+devtools::load_all()
+library(rjmc)
+
+sourceCpp("src/likelihoods/ll_wave1.cpp")
+
+
+gambia_pvnt_w1 <- get_data_titre_model_wave1() # This is the data for the titre model
+gambia_exp_w1 <- get_exposures_wave1() # This is the data for the exposure model
+exp_prior <- get_exp_prior_wave1() # This is the empirical prior for the exposure time
+exp_prior %>% mutate(prob = case_when(
+    day > 280 ~ 1e-4,
+    TRUE ~ prob
+))
+# Define parameters, priors and support for ab kinetics model (a, b, c), observational model (sigma) and 
+# the correlate of protection curve (beta0, beta1)
+# Format is [param_name, lower_bound, upper_bound, prior_function (in R), parameter_1 in prior function, parameter_2 in prior function (if needed)]
+# add_par_df adds to the par_tab
+par_tab <- bind_rows( 
+    add_par_df("a", 0.1, 4, "norm",  1.5, 0.5), # ab kinetics    
+    add_par_df("b", 0.1, 1, "norm",  0.3, 0.05), # ab kinetics         
+    add_par_df("c", 1, 4, "unif", 1,  4), # ab kinetics       
+    add_par_df("sigma_obs", 0.01, 5, "exp", 100, NA) # observational model
+    #add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
+    #add_par_df("beta1", -10, 10, "unif", -10, 10) # cop model (not used here)
+)
+
+
+
+# Likelihood on the observational model, can be defined as anything [or put in c++]
+evaluateLogLikelihood <- function(params, jump, jump_inf, titreexp, covariance, datalist) {
+
+    ll <- evaluateLogLikelihood_cpp(params, jump, jump_inf, covariance, datalist)
+
+    ll
+}
+
+# Logistic correlate of protection model, this is added to the likelihood for each exposed person. Can be defined as anything
+cop_func <- function(jump, jumpinf, params, initialTitreValue) {
+    ll <- 0
+    # COP parameters
+    #beta0 <- params[5]
+    #beta1 <- params[6]
+ 
+    p <- 1.0 / (1.0 + exp(- (10 + 0 * initialTitreValue) ) )
+    ll <- jumpinf * log(p) + (1 - jumpinf) * log(1 - p)
+
+    ll
+}
+
+# Run reversible jump mcmc
+runsaveRJMCMC <- function(filename, modelname, evaluateLogLikelihood, data_t_raw, par_tab, exp_prior, cop_func) {
+    
+    # Clean the data into a format for the sampler
+    # data_titre_model format is [id, time, titre]
+    # Generate the data_t format
+    data_t <- generate_data_t(data_t_raw)
+
+    # This function creates the list of functions needed for the rjmc_full_func
+    model_define <- createModelRJCMCFull(evaluateLogLikelihood, par_tab, cop_func)
+    model_define <- addExposurePrior(model_define, data_t, exp_prior, type = "empirical")
+    model_define <- addFunctionTitreExp(model_define)
+
+    # Settings used for the rjmcmc model, still playing around with optimal settings
+    settings <-  list(
+        numberChainRuns = 4,
+        numberCores = 4,
+        iterations = 200000,
+        burninPosterior = 100000,
+        thin = 100,
+        consoleUpdates = 100,
+        numberFittedPar = model_define$namesOfParameters %>% length,
+        onAdaptiveCov = TRUE,
+        updatesAdaptiveCov = 100,
+        burninAdaptiveCov = 1000,
+        onAdaptiveTemp = TRUE,
+        updatesAdaptiveTemp = 10,
+        onDebug = FALSE,
+        lowerParBounds = model_define$lowerParSupport_fitted,
+        upperParBounds = model_define$upperParSupport_fitted,
+        covarInitVal = 1e-2, # make very small if struggling to sample to beginning
+        covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
+        covarMaxVal = 1, # decrease if struggling to sample in the middle
+        runParallel = TRUE,
+        lengthJumpVec = data_t$N,
+        noGibbsSteps = 5
+    )
+
+    post <- rjmc_full_func(model = model_define, data = data_t, settings = settings)
+    fitfull <- list(post = post,  model = model_define, data_t = data_t, par_tab = par_tab, exp_prior = exp_prior)
+
+    dir.create(here::here("outputs", "fits", filename), showWarnings = FALSE)
+    dir.create(here::here("outputs", "fits", filename, "figs"), showWarnings = FALSE)
+
+    saveRDS(fitfull, here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
+}
+
+runsaveRJMCMC( "test/transvir", "wave1", evaluateLogLikelihood, gambia_pvnt_w1, par_tab, exp_prior, cop_func)
+
+```
+
+# Run the post-posterior plotting functions
+
+```{r}
+
+postprocessFigs("test/transvir", "wave1", 4)
+
+
+filename <- "test/transvir"
+modelname <- "wave1"
+outputfull <- readRDS(file = here::here("outputs", "fits", filename, paste0("pp_", modelname, ".RDS")))
+
+fit_states <- outputfull$fit_states
+filename <- outputfull$filename
+modelname <- outputfull$modelname
+
+fitfull <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
+data_t <- fitfull$data_t
+N <- data_t$N
+
+df_data_alt <- data.frame(
+    id = data_t$id_full,
+    time = data_t$times_full,
+    titre = data_t$titre_full
+)
+
+df_data <- data.frame(
+    id = 1:N,
+    start_titre = data_t$initialTitreValue
+)
+
+# a) Infection over whole process
+fit_states_exp_time <- fit_states %>% select(id, exp_ind) %>% 
+    summarise(exp_post = mean(exp_ind), .by = "id")
+ids_inf <- fit_states_exp_time %>% filter(exp_post > 0.6) %>% pull(id)
+
+fit_states_exp_prob <- fit_states %>% select(id, exp_ind, exp_time) %>% 
+    filter(exp_time > -1) %>% group_by(id) %>%
+    summarise(exp_time = mean(exp_time))
+# a) Infection over whole process
+
+
+# Fig A. Compare historigrams
+fit_states_exp_prob %>% left_join(df_data_alt) %>% filter(id %in% ids_inf, time > 0 ) %>% 
+    ggplot() +
+    geom_histogram(aes(x = exp_time, y = ..density..)) +
+    geom_col(data = exp_prior, aes(x = day, y = prob), fill = "red", alpha = 0.5) +
+    theme_bw()
+
+# Fig B. Compare titre at start of study to end
+fit_states_exp_time %>% left_join(df_data_alt) %>% filter(id %in% ids_inf) %>%
+    ggplot() + 
+        geom_point(aes(x = time, y = titre, group = id, fill = exp_post), shape = 21, size = 3, alpha = 0.6) +
+        geom_line(aes(x = time, y = titre, group = id, color = exp_post), shape = 21, size = 0.5, alpha = 0.9) + 
+        theme_bw()
+
+# Fig C. Individual-level plots of exposure times
+exposure_plot <- fit_states %>% filter(exp_ind == 1, inf_ind == 1) %>% select(id, exp_time) %>% group_by(id) %>% mean_qi(exp_time) %>% 
+    filter(id %in% ids_inf)
+
+post <- fitfull$post
+mcmc_mean <- post$mcmc %>% combine %>% as.data.frame %>% 
+    summarise(across(c(a, b, c, sigma_obs, c), mean)) 
+
+ab_function <- function(a, b, c, T) {
+    1:T %>% map( 
+        function(t) {
+            if (t < 14) {
+                titre_init <- 0 +  (log(exp(a) +  exp(c)) * (t) / 14);
+            } else {
+                titre_init <- 0 + (log(exp(a) * exp(-b/10 * ((t) - 14)) + exp(c)));
+            }
+        }
+    ) %>% unlist
+}
+
+exposure_plot_trim <- exposure_plot %>% select(id, exp_time)
+
+traj_exposure <- map_df(1:nrow(exposure_plot_trim),
+    ~data.frame(
+        id = exposure_plot_trim[[.x, 1]],    
+        time = 1:450,
+        titre = c(rep(0, round(exposure_plot_trim[[.x, 2]], 0)), ab_function(mcmc_mean[["a"]], mcmc_mean[["b"]], mcmc_mean[["c"]], 450 - round(exposure_plot_trim[[.x, 2]], 0)))
+    )
+)
+
+exposure_plot %>% 
+    ggplot() + 
+        geom_rect(aes(xmin = .lower, xmax = .upper, ymin = 0, ymax = 3), fill = "red", alpha = 0.4) + 
+        geom_rect(aes(xmin = exp_time - 2, xmax = exp_time + 2, ymin = 0, ymax = 3), fill = "red", alpha = 0.8) + 
+        geom_line(data = traj_exposure, aes(x = time, y = titre, group = id), alpha = 1) +
+        geom_point(dat = fit_states_exp_prob %>% left_join(df_data_alt) %>% filter(id %in% ids_inf), 
+            aes(x = time, y = titre, group = id, fill = exp_post), shape = 21, size = 3, alpha = 0.6) +
+        theme_bw() + 
+        labs(x = "Time of exposure", y = "Number of exposures") + 
+        ggtitle("Posterior distribution of exposure times") + facet_wrap(vars(id))
+
+
+figA <- fit_states_exp_prob %>% left_join(df_data)  %>%
+    ggplot() + 
+        geom_point(aes(x = start_titre, y = exp_post), shape = 21, size = 3, alpha = 0.6) + 
+        theme_bw() + 
+        ylim(0, 1) +
+        labs(x = "Titre at start of study", y = "Posterior probability of exposure", fill = "Exposure and infection status") + 
+        ggtitle("Posterior plots of probability of exposure compared to simulated data") 
+
+no_exp_fit_df <- fit_states %>% select(id, sample, exp_ind) %>% summarise(exp_ind_sum = sum(exp_ind), .by = "sample")
+
+figB <- no_exp_fit_df %>% summarise(n = n()  / 4000, .by = exp_ind_sum) %>%
+    ggplot() + 
+        geom_col(aes(x = exp_ind_sum, y = n), alpha = 0.8) + 
+        theme_bw()  + 
+        labs(y = "Posterior density", x = expression("Estimated number of exposures in epidemic, n"[Z])) + 
+        ggtitle("Recovery of population-level exposure burden")
+
+
+```
+
+
+
+
+```{r}
+
+
+    # datalist is data into the model which is useful
+    N = datalist$N
+    knownInfsVec =  datalist$knownInfsVec        
+    knownInfsN = datalist$knownInfsN
+    knownInfsDate = datalist$knownInfsDate
+    endTitreTime = datalist$endTitreTime
+
+    N_data = datalist$N_data
+    initialTitreValue = datalist$initialTitreValue
+    initialTitreTime = datalist$initialTitreTime
+    titre_full = datalist$titre_full
+    times_full = datalist$times_full
+    id_full = datalist$id_full
+
+    # jump is a vector representing vector E^\tau, the timing of exposure, if equal to -1 means not exposued
+    # jump_inf is a binary vector representing non-infection (0) or infection (1) at time of exposure. 
+    # jump_inf value is irrelevant if E^\tau is -1
+
+    # Get values from the params vector
+    a <- params[1]
+    b <- params[2]
+    c <- params[3]
+    sigma_obs <- params[4]
+
+    # Function to determine the antibody kinectics, A_jt
+    ll <- 0
+    for (i in 1:N_data) {
+        # Find the estimated titre value, A_jt at the time of the titre bleed
+        titre_val <- titre_full[i]
+        time <- times_full[i]
+        i_idx <- id_full[i]
+        titre_init <- initialTitreValue[i_idx]
+        titre_time_init <- initialTitreTime[i_idx]
+
+        if (jump_inf[i_idx] == 0) {
+            titre_est <- titre_init
+        } else if ((jump_inf[i_idx] == 1) & (time < jump[i_idx])) {
+            titre_est <- titre_init
+        } else if ((jump_inf[i_idx] == 1) & (time >= jump[i_idx])){
+            if ((time-jump[i_idx]) < 14) {
+                titre_est <- titre_init + (log(exp(a) +  exp(c)) * (time-jump[i_idx]) / 14);
+            } else {
+                titre_est <- titre_init + (log(exp(a) * exp(-b/10 * ((time-jump[i_idx]) - 14)) + exp(c)));
+            }
+        }
+        ## Observation model for individual i
+        ## titre_val is Y_jt, titre_est is A_ji
+       # if (titre_val == 0) {
+        #    ll <- ll + dnorm(titre_val, titre_est, 0.01, log = TRUE)
+        #} else {
+        if ( titre_val < log10(20)) {
+            ll <- ll + pcauchy(log10(20), titre_est, sigma_obs, log.p = TRUE)
+        } else {
+            ll <- ll + dcauchy(titre_val, titre_est, sigma_obs, log = TRUE)
+        }
+    }
+
+```

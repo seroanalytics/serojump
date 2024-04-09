@@ -61,8 +61,8 @@ namespace rjmc{
         bool isSampleAccepted, isProposalAdaptive;
 
         RObject dataList;
-        double counterFuncEval, counterAccepted, counterPosterior ,counterAdaptive;
-        double counterNonAdaptive;
+        int counterFuncEval, counterAccepted, counterPosterior ,counterAdaptive;
+        int counterNonAdaptive;
         
         double proposedLogPosterior, alpha, covarMaxVal, covarInitVal, covarInitValAdapt;
 
