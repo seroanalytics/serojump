@@ -112,7 +112,8 @@ check_boundaries <- function(x, lb, ub) {
 }
 
 
-generate_data_alt <- function(data_titre_model) {
+generate_data_alt <- function(data_titre_model, biomarkers) {
+    #data_titre_model <- data_sero
     N <- data_titre_model$id %>% unique %>% length  
     N_data <- nrow(data_titre_model)
     titre_true <- data_titre_model$titre
@@ -126,10 +127,14 @@ generate_data_alt <- function(data_titre_model) {
 
     # Make titre and times into lists of vectors for each individual
     titre_list <- list()
+    titre_list_b <- list()
     times_list <- list()
     for (i in 1:N) {
         data_titre_model_i <- data_titre_model %>% filter(id == i)
-        titre_list[[i]] <- data_titre_model_i %>% pull(titre)
+        for (b in 1:length(biomarkers)) {
+            titre_list_b[[b]] <- data_titre_model_i %>% filter(biomarker == biomarkers[b]) %>% pull(titre)
+        }
+        titre_list[[i]] <- titre_list_b
         times_list[[i]] <- data_titre_model_i %>% pull(time)
     }
 

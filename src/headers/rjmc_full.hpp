@@ -306,12 +306,11 @@ namespace rjmc_full{
 
 
          std::vector<DoubleWithString> sortevents(int i_idx, const VectorXd& jump_inf, const VectorXd& jump) {
-            NumericVector titre_full_i = this->titre_list[i_idx];
             NumericVector times_full_i = this->times_list[i_idx];
             std::vector<DoubleWithString> df_order_exp;
 
             // Add all bleed times
-            for (int i = 0; i < titre_full_i.size(); i++) {
+            for (int i = 0; i < times_full_i.size(); i++) {
                 df_order_exp.emplace_back("bleed", times_full_i[i]); // End event
             }
             // Add all exposure events
@@ -335,10 +334,10 @@ namespace rjmc_full{
 
         }
 
-        std::vector<DoubleWithString> calculateTitre(std::vector<DoubleWithString>& orderedEvents, double i_idx)  {
+        std::vector<DoubleWithString> calculateTitre(std::vector<DoubleWithString>& orderedEvents, int bio, double i_idx)  {
             if (onDebug) Rcpp::Rcout << "In: calculateTitre" << std::endl;
 
-            double initTitre = this->initialTitreValue[i_idx];
+            double initTitre = this->initialTitreValue[bio][i_idx];
             double initTime = this->initialTitreTime[i_idx];
             std::vector<DoubleWithString> df_order_titre;
 
@@ -533,6 +532,7 @@ namespace rjmc_full{
                 this->currentEventsFull.push_back(df_order_exp_i);
 
                 if (onDebug) Rcpp::Rcout << "In: Check 7iii: " << i_idx << std::endl;
+
 
                 df_order_titre_i = this->calculateTitre(df_order_exp_i, i_idx);
                 if (onDebug) Rcpp::Rcout << "In: Check 7iv: " << i_idx << std::endl;
@@ -1265,6 +1265,9 @@ namespace rjmc_full{
                     titreExp[i_idx] = -1;
                 } else {
                     // Add custom func in here which can be used to input pre-determined pre-exposure titre
+                    // for biomarkerrs () {
+                    //    std::vector<DoubleWithString> proposalTitreFull_i = this->proposalTitreFull[i_idx][bio];
+                    //}
                     std::vector<DoubleWithString> proposalTitreFull_i = this->proposalTitreFull[i_idx];
 
                     for (int j = 0; j < proposalTitreFull_i.size(); j++) {
@@ -1309,8 +1312,9 @@ namespace rjmc_full{
             int k = 0;
             for (int i_idx = 0; i_idx < this->N; ++i_idx) {
 
-                std::vector<DoubleWithString> proposalTitreFull_i = proposalTitreFull[i_idx];
+                
                 NumericVector titre_val_i = this->titre_list[i_idx];
+                std::vector<DoubleWithString> proposalTitreFull_i = proposalTitreFull[i_idx];
 
                 for (int j = 0; j < titre_val_i.size(); j++) {
 

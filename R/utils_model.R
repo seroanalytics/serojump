@@ -81,7 +81,7 @@ makeModel <- function(...) {
 #' @return A list with the data and the model.
 #' @export
 createSeroJumpModel <- function(data_sero, data_known, modeldefinition) {
- #   data_sero <- data_titre
+    #data_sero <- gambia_pvnt_w2
 #    data_known <- known_exposure
 
     modelSeroJump <- list()
@@ -124,7 +124,7 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition) {
     names(modelSeroJump$abkineticsModel$model) <- names_here
 
 
-    data_t <- generate_data_alt(data_sero)
+    data_t <- generate_data_alt(data_sero, modeldefinition$biomarkers)
     data_t$par_names <- priors[, 1]
 
     know_inf <- list()
