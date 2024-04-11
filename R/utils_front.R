@@ -113,16 +113,25 @@ check_boundaries <- function(x, lb, ub) {
 
 
 generate_data_alt <- function(data_titre_model) {
-
     N <- data_titre_model$id %>% unique %>% length  
     N_data <- nrow(data_titre_model)
     titre_true <- data_titre_model$titre
     times_full <- data_titre_model$time
     id_full <- data_titre_model$id
-    initialTitreValue <- data_titre_model %>% group_by(id) %>% filter(time == min(time)) %>% .[["titre"]]
-    initialTitreTime <- data_titre_model %>% group_by(id) %>% filter(time == min(time)) %>% .[["time"]]
-    endTitreTime <- data_titre_model %>% group_by(id) %>% filter(time == max(time)) %>% .[["time"]]
+
+    initialTitreValue <- data_titre_model %>% group_by(id) %>% filter(time == min(time)) %>% unique %>% .[["titre"]]
+    initialTitreTime <- data_titre_model %>% group_by(id) %>% filter(time == min(time)) %>% unique %>% .[["time"]]
+    endTitreTime <- data_titre_model %>% group_by(id) %>% filter(time == max(time)) %>% unique %>% .[["time"]]
     T <- max(endTitreTime)
+
+    # Make titre and times into lists of vectors for each individual
+    titre_list <- list()
+    times_list <- list()
+    for (i in 1:N) {
+        data_titre_model_i <- data_titre_model %>% filter(id == i)
+        titre_list[[i]] <- data_titre_model_i %>% pull(titre)
+        times_list[[i]] <- data_titre_model_i %>% pull(time)
+    }
 
     data_t <- list(
         N = N,
@@ -133,6 +142,8 @@ generate_data_alt <- function(data_titre_model) {
         endTitreTime = endTitreTime,
         titre_full = titre_true,
         times_full = times_full,
+        titre_list = titre_list,
+        times_list = times_list,
         id_full = id_full,
         knownExpVec = NA
     )

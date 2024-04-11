@@ -26,7 +26,7 @@ To help with this section please consult information in the documentation on how
   
 ```{r}
 # Load data clean in the formet required for the model
-gambia_pvnt_w2 <- get_data_titre_model_wave2() # This is the empirical prior for the exposure time
+gambia_pvnt_w2 <- get_data_titre_model_wave2() %>% mutate(biomarker = "IgG")# This is the empirical prior for the exposure time
 gambia_exp_w2 <- get_exposures_wave2() # This is the empirical prior for the exposure time
 exp_prior_w2 <- get_exp_prior_wave2() # This is the empirical prior for the exposure time
 

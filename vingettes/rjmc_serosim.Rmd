@@ -139,17 +139,17 @@ settings <-  list(
     covarInitVal = 1e-2, # make very small if struggling to sample to beginning
     covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
     covarMaxVal = 1, # decrease if struggling to sample in the middle
-    runParallel = FALSE,
+    runParallel = TRUE,
     noGibbsSteps = 1
 )
 
-modelW2 <- createSeroJumpModel(data_titre_model, data_known, modeldefinition)
 
 runSimulatedRJMCMC <- function(modelW2, settings, modeltype, exptype, obs_er) {
     data_titre_model <- clean_simulated_rjmcmc("cesCOP_notd", obs_er, 0, known_exp = FALSE) %>% mutate(biomarker = "IgG")
 
     filename <- paste0(modeltype, "/", exptype)
     modelname <- paste0("obs_", obs_er)
+    modelW2 <- createSeroJumpModel(data_titre_model, data_known, modeldefinition)
 
     runRJMCMC(modelW2, settings, filename, modelname)
 

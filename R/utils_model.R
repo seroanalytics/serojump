@@ -81,6 +81,9 @@ makeModel <- function(...) {
 #' @return A list with the data and the model.
 #' @export
 createSeroJumpModel <- function(data_sero, data_known, modeldefinition) {
+ #   data_sero <- data_titre
+#    data_known <- known_exposure
+
     modelSeroJump <- list()
 
     # Generate data for model
@@ -126,13 +129,17 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition) {
 
     know_inf <- list()
     for (i in 1:length(modeldefinition$abkineticsModel$model)) {
-        if (is.null(data_known)) {
-            know_inf[[names_here[i]]] <- rep(-1, data_t$N)
-        } else{
-            know_inf[[names_here[i]]] = data_known %>% filter(exposure_type == names_here[i]) %>%
-                complete(id = 1:data_t$N, fill = list(time = -1)) %>% 
-                mutate(start = data_t$initialTitreTime, end = data_t$endTitreTime) %>%
-                mutate(time = case_when(time > start & time < end ~ time, TRUE ~ -1)) %>% pull(time)
+        if (i == 1) {
+            know_inf[[names_here[i]]] <- data_t$initialTitreValue
+        } else {
+            if (is.null(data_known)) {
+                know_inf[[names_here[i]]] <- rep(-1, data_t$N)
+            } else{
+                know_inf[[names_here[i]]] = data_known %>% filter(exposure_type == names_here[i]) %>%
+                    complete(id = 1:data_t$N, fill = list(time = -1)) %>% 
+                    mutate(start = data_t$initialTitreTime, end = data_t$endTitreTime) %>%
+                    mutate(time = case_when(time >= start & time <= end ~ time, TRUE ~ -1)) %>% pull(time)
+            }
         }
         modelSeroJump$abkineticsModel$model[[names_here[i]]]$known_inf <- know_inf[[names_here[i]]]
         if (modelSeroJump$abkineticsModel$model[[names_here[i]]]$inferred) {

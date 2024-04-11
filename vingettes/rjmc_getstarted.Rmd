@@ -1,4 +1,4 @@
-Get started: a very simple working example 
+ RGet started: a very simple working example 
 
 ## Load the packages
 
