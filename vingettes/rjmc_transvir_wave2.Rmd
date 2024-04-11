@@ -93,7 +93,7 @@ To help with this section please consult information in the documentation on how
 
 
 # Define the biomarkers and exposure types in the model
-biomakers <- c("IgG")
+biomarkers <- c("IgG")
 exposureType <- c("delta", "vax", "predelta")
 
 # Define the observational model
@@ -137,7 +137,7 @@ copModel <- list(
 )
 
 modeldefinition <- list(
-    biomarkers = biomakers,
+    biomarkers = biomarkers,
     exposureType = exposureType,
     observationalModel = observationalModel,
     abkineticsModel = abkineticsModel,
