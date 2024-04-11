@@ -54,6 +54,7 @@ get_output_full <- function(model, data_list, settings, update_ind, par) {
   }
 
 
+
   for(i in 1:settings[["numberChainRuns"]]) {
     out_post <- out_raw[[i]][["output"]][, 1:settings$numberFittedPar]
     outPTpar[[i]] <- out_raw[[i]][["PTMCpar"]]
@@ -165,6 +166,9 @@ check_settings_full <- function(settings) {
   if (is.null(settings[["runParallel"]])) {
         settings[["runParallel"]] <- TRUE
     cat("`runParallel` not specified in settings. Default value TRUE. \n")
+  }
+  if (is.null(settings[["profile"]])) {
+        settings[["profile"]] <- FALSE
   }
 
   settings

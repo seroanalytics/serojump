@@ -127,19 +127,26 @@ List run_rjmc_sero(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings
 // [[Rcpp::export]]
 List run_rjmc_full(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i)
 {
+  Rcpp::Rcout << "Start: run_rjmc_full" << std::endl;
+
   List observationalModel = model["observationalModel"];
   List abkineticsModel = model["abkineticsModel"];
   List copModel = model["copModel"];
 
-  rjmc_full::RJMC_FULL_D RJMC_FULL(observationalModel, abkineticsModel, copModel); 
+  Rcpp::Rcout << "Initiate class" << std::endl;
+  rjmc_full::RJMC_FULL_D RJMC_FULL(observationalModel, abkineticsModel, copModel);
+  Rcpp::Rcout << "End: Initiate class" << std::endl;
+
   List output_full;
   MatrixXd output, jump, inf, titreexp, obstitre;
   // Priors 
+  Rcpp::Rcout << "Start: initiate functions" << std::endl;
   rjmc_full::init_samplePriorDistributions(&RJMC_FULL, model["samplePriorDistributions"]);
   rjmc_full::init_evaluateLogPrior(&RJMC_FULL, model["evaluateLogPrior"]);
   rjmc_full::init_initialiseJump(&RJMC_FULL, model["initialiseJump"]);
   rjmc_full::init_exposureFunctionSample(&RJMC_FULL, model["exposureFunctionSample"]);
   rjmc_full::init_exposureFunctionDensity(&RJMC_FULL, model["exposureFunctionDensity"]);
+  Rcpp::Rcout << "End: initiate functions" << std::endl;
 
   if (update_ind) {
     RJMC_FULL.updateClass(settings, dataList, RJMCpar);
