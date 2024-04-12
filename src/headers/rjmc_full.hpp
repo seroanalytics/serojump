@@ -61,6 +61,9 @@ namespace rjmc_full{
         List parsAbKinN, parsCOPN, parsObsN; // Lists of all the parameters names for each model
         std::vector<abKineticsInfo> abinfo;
         std::map<std::string, int> abmap;
+        std::map<std::pair<std::string, std::string>, int> mapOfAbkinetics;
+        int B;
+        std::vector<string> biomarkerAb, exposureAb;
 
         RJMC_FULL_D(Rcpp::List observationalModel_in, Rcpp::List abkineticsModel_in, Rcpp::List copModel_in) : observationalList(observationalModel_in), abkineticsModelList(abkineticsModel_in), copModelList(copModel_in) {
 
@@ -72,7 +75,7 @@ namespace rjmc_full{
             this->abkineticsModel = abkineticsModelList["model"];
             this->copModel = copModelList["model"];
 
-
+            // biomarkers
             for (int i = 0; i < this->observationalNames.size(); i++) {
                 List temp1 = this->observationalModel[i];
                 Function temp2 = temp1["logLikelihood"];
@@ -80,13 +83,21 @@ namespace rjmc_full{
                 this->evalLoglikelhoodObs[as<string>(this->observationalNames[i])] = temp2;
                 this->parsObsN[as<string>(this->observationalNames[i])] = temp3;
             }
+            //biomarkers and exposuretypes
             for (int i = 0; i < this->abkineticNames.size(); i++) {
                 List temp1 = this->abkineticsModel[i];
                 Function temp2 = temp1["funcForm"];
                 StringVector temp3 = temp1["pars"];
+                string temp4 = temp1["biomarker"];
+                string temp5 = temp1["exposureName"];
+                this->biomarkerAb.push_back(temp4);
+                this->exposureAb.push_back(temp5);
+
                 this->evalabkineticsFunc[as<string>(this->abkineticNames[i])] = temp2;
                 this->parsAbKinN[as<string>(this->abkineticNames[i])] = temp3;
+                this->mapOfAbkinetics[std::make_pair(temp4, temp5)] = i;
             }
+            // biomarkers
             for (int i = 0; i < this->copNames.size(); i++) {
                 List temp1 = this->copModel[i];
                 Function temp2 = temp1["logLikelihood"];
@@ -94,6 +105,7 @@ namespace rjmc_full{
                 this->evalLoglikelhoodCOP[as<string>(this->copNames[i])] = temp2;
                 this->parsCOPN[as<string>(this->copNames[i])] = temp3;
             }
+            this->B = this->copNames.size();
         }
 
 
@@ -161,8 +173,8 @@ namespace rjmc_full{
         MatrixXd posteriorOut;
         MatrixXd posteriorJump;
         MatrixXd posteriorInf;
-        MatrixXd posteriorTitreExp;
-        MatrixXd posteriorObsTitre;
+        std::vector<MatrixXd> posteriorTitreExp;
+        std::vector<MatrixXd> posteriorObsTitre;
 
         MatrixXd currentCovarianceMatrix;
         double currentLogPosterior;
@@ -174,11 +186,11 @@ namespace rjmc_full{
         VectorXd currentInf;
         VectorXd proposalInf;
 
-        VectorXd currentTitreExp;
-        VectorXd proposalTitreExp;
+        MatrixXd currentTitreExp;
+        MatrixXd proposalTitreExp;
 
-        VectorXd currentObsTitre;
-        VectorXd proposalObsTitre;
+        MatrixXd currentObsTitre;
+        MatrixXd proposalObsTitre;
 
         VectorXd historicJump;
 
@@ -206,18 +218,18 @@ namespace rjmc_full{
 
         // Functions for internal 
         Mvn Mvn_sampler;
-        vector<vector<DoubleWithString> > currentEventsFull, currentTitreFull;
-        vector<vector<DoubleWithString> > proposalEventsFull, proposalTitreFull;
+        vector<vector<DoubleWithString> >  currentEventsFull, proposalEventsFull;
+        vector<vector<vector<DoubleWithString> > > currentTitreFull, proposalTitreFull;
 
         void updateLists() {
             if (onDebug) Rcpp::Rcout << "In: updateLists" << std::endl;
             int i_idx;
-            //vector<DoubleWithString> df_order_exp_i;
             for (int i = 0; i < this->diff_ind.size(); i++) {
                 i_idx = this->diff_ind[i];
                 std::vector<DoubleWithString> df_order_exp_i = this->sortevents(i_idx, this->proposalJump, this->proposalInf);
                 this->proposalEventsFull[i_idx] = df_order_exp_i;
                 this->proposalTitreFull[i_idx] = this->calculateTitre(df_order_exp_i, i_idx);
+                
             }
             if (onDebug) Rcpp::Rcout << "End: updateLists" << std::endl;
         }
@@ -308,7 +320,6 @@ namespace rjmc_full{
          std::vector<DoubleWithString> sortevents(int i_idx, const VectorXd& jump_inf, const VectorXd& jump) {
             NumericVector times_full_i = this->times_list[i_idx];
             std::vector<DoubleWithString> df_order_exp;
-
             // Add all bleed times
             for (int i = 0; i < times_full_i.size(); i++) {
                 df_order_exp.emplace_back("bleed", times_full_i[i]); // End event
@@ -334,31 +345,44 @@ namespace rjmc_full{
 
         }
 
-        std::vector<DoubleWithString> calculateTitre(std::vector<DoubleWithString>& orderedEvents, int bio, double i_idx)  {
+        std::vector<std::vector<DoubleWithString> > calculateTitre(std::vector<DoubleWithString>& orderedEvents, double i_idx)  {
             if (onDebug) Rcpp::Rcout << "In: calculateTitre" << std::endl;
 
-            double initTitre = this->initialTitreValue[bio][i_idx];
-            double initTime = this->initialTitreTime[i_idx];
-            std::vector<DoubleWithString> df_order_titre;
+            std::vector<std::vector<DoubleWithString> > df_order_titre;
+            std::vector<DoubleWithString> df_order_titre_b;
 
+            double initTime = this->initialTitreValue[i_idx];
+            string bio;
             double time_since, titre_obs;
-            double anchor_titre = initTitre;
             double curr_time = initTime;
             string anchor_func = orderedEvents[0].name;
             double anchor_time = curr_time;
 
-            df_order_titre.emplace_back(anchor_func, anchor_titre);
+            for (int b = 0; b < this->B; b++) {
+                if (onDebug) Rcpp::Rcout << "BB: lol1" << std::endl;
+                bio = this->biomarkerAb[b];
+                df_order_titre_b.clear();
+                double initTitre = this->initialTitreValue(i_idx, b);
+                double anchor_titre = initTitre;
 
-            for (int i = 1; i < orderedEvents.size(); i++) {
-                    time_since = orderedEvents[i].value - anchor_time;
-                    titre_obs = calTitre(anchor_titre, anchor_func, time_since );
-                    df_order_titre.emplace_back(orderedEvents[i].name, titre_obs);
-                if (orderedEvents[i].name != "bleed") {
-                    anchor_titre = titre_obs;
-                    anchor_time = orderedEvents[i].value;
-                    anchor_func = orderedEvents[i].name;
+                df_order_titre_b.emplace_back(anchor_func, anchor_titre);
+
+                for (int i = 1; i < orderedEvents.size(); i++) {
+                        time_since = orderedEvents[i].value - anchor_time;
+                        titre_obs = calTitre(anchor_titre, bio, anchor_func, time_since );
+                        df_order_titre_b.emplace_back(orderedEvents[i].name, titre_obs);
+                    if (onDebug) Rcpp::Rcout << "Out: lol12" << std::endl;
+                    if (orderedEvents[i].name != "bleed") {
+                        if (onDebug) Rcpp::Rcout << "Out: here" << std::endl;
+                        anchor_titre = titre_obs;
+                        anchor_time = orderedEvents[i].value;
+                        anchor_func = orderedEvents[i].name;
+                    }
                 }
+                if (onDebug) Rcpp::Rcout << "Out: lol1" << std::endl;
+                df_order_titre.push_back(df_order_titre_b);
             }
+            if (onDebug) Rcpp::Rcout << "Out: calculateTitre" << std::endl;
             return df_order_titre;
 
         }
@@ -461,8 +485,10 @@ namespace rjmc_full{
             this->posteriorOut = MatrixXd::Zero(this->posteriorSamplesLength, this->numberFittedPar + 2);
             this->posteriorJump = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
             this->posteriorInf = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
-            this->posteriorTitreExp = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
-            this->posteriorObsTitre = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
+          
+     //       this->posteriorTitreExp = Array::Zero(this->posteriorSamplesLength, this->lengthJumpVec, this->B);
+    //  /       this->posteriorObsTitre = Array::Zero((this->posteriorSamplesLength, this->lengthJumpVec, this->B);
+
 
             this->currentLogPosterior = 0;
             this->currentSampleMean = VectorXd::Zero(this->numberFittedPar);
@@ -524,23 +550,22 @@ namespace rjmc_full{
             updateParams(paramsN);
             define_abs();
             // Get initial conditions for the Loglikelihood probabilities
-            std::vector<DoubleWithString> df_order_exp_i, df_order_titre_i;
+            std::vector<DoubleWithString> df_order_exp_i;
+            std::vector<std::vector<DoubleWithString> > df_order_titre_i;
             for (int i_idx = 0; i_idx < this->N; i_idx++) {
 
                 df_order_exp_i = this->sortevents(i_idx, initialJump, initialInf);
                 int l = df_order_exp_i.size();
                 this->currentEventsFull.push_back(df_order_exp_i);
+                this->proposalEventsFull.push_back(df_order_exp_i);
 
                 if (onDebug) Rcpp::Rcout << "In: Check 7iii: " << i_idx << std::endl;
 
-
                 df_order_titre_i = this->calculateTitre(df_order_exp_i, i_idx);
-                if (onDebug) Rcpp::Rcout << "In: Check 7iv: " << i_idx << std::endl;
                 //this->currentTitreFull.insert(this->currentTitreFull.begin() + i_idx, df_order_titre_i);
                 this->currentTitreFull.push_back(df_order_titre_i);
-                if (onDebug) Rcpp::Rcout << "In: Check 7iv: " << i_idx << std::endl;
-                this->proposalEventsFull.push_back(df_order_exp_i);
                 this->proposalTitreFull.push_back(df_order_titre_i);
+            
             }
             this->currentCovarianceMatrix = this->nonadaptiveScalar*this->nonadaptiveCovarianceMat;
             initialLogLikelihood = this->evalLogPosterior(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList, true);
@@ -612,8 +637,8 @@ namespace rjmc_full{
             this->posteriorOut = MatrixXd::Zero(this->posteriorSamplesLength, this->numberFittedPar+2);
             this->posteriorJump = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
             this->posteriorInf = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
-            this->posteriorTitreExp = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
-            this->posteriorObsTitre = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
+       //     this->posteriorTitreExp = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
+        //    this->posteriorObsTitre = MatrixXd::Zero(this->posteriorSamplesLength, this->lengthJumpVec);
 
             MatrixXd posteriorOutPrev = PTMCpar["posteriorOut"];
             for (int i = 0; i < (int)PTMCpar["posteriorSamplesLength"]; i++)
@@ -963,25 +988,32 @@ namespace rjmc_full{
         void evaluateMetropolisRatio()
         {
             double rjadjustmentFactor = 0;
+            double rjadjustmentFactor2 = 0;
             if(std::isnan(this->proposedLogPosterior) || std::isinf(this->proposedLogPosterior)) {
                 this->alpha = 0;
             } else {
                 if (this->currJumpType == 0) {
-                    Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[as<string>(this->copNames[0])];
-                    NumericVector pars = this->currentParsCOP[as<string>(this->copNames[0])];
+                    for (int b = 0; b < this->B; b++) {
+                        string bio = this->biomarkerAb[b];
+                        Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[bio];
+                        NumericVector pars = this->currentParsCOP[bio];
+                        rjadjustmentFactor2 += as<double>(evalLoglikelhoodCOP_i(this->currentInf(this->currJumpIdx), this->currentTitreExp(this->currJumpIdx, b), pars) ); 
+                    }
 
                     rjadjustmentFactor = log(this->currInferredExpN) - log((this->N - this->currInferredExpN + 1) ) + 
-                        this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)) +
-                        as<double>(evalLoglikelhoodCOP_i(this->currentInf(this->currJumpIdx), this->currentTitreExp(this->currJumpIdx), pars) ); 
+                        this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)) + rjadjustmentFactor2;
                 } else if (this->currJumpType == 1) {
                     rjadjustmentFactor = 0;
                 } else if (this->currJumpType == 2) {
-                    Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[as<string>(this->copNames[0])];
-                    NumericVector pars = this->currentParsCOP[as<string>(this->copNames[0])];
+                    for (int b = 0; b < this->B; b++) {
+                        string bio = this->biomarkerAb[b];
+                        Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[bio];
+                        NumericVector pars = this->currentParsCOP[bio];
+                        rjadjustmentFactor2 += as<double>(evalLoglikelhoodCOP_i(this->currentInf(this->currJumpIdx), this->currentTitreExp(this->currJumpIdx, b), pars) ); 
+                    }
 
                     rjadjustmentFactor = log((this->N - this->currInferredExpN)) - log(this->currInferredExpN + 1) - 
-                        this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx)) - 
-                        as<double>(evalLoglikelhoodCOP_i(this->proposalInf(this->currJumpIdx), this->proposalTitreExp(this->currJumpIdx), pars) ); // dlnorm(proposalJump[currJumpIdx], 3.395, 0.5961)
+                        this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx)) - rjadjustmentFactor2; // dlnorm(proposalJump[currJumpIdx], 3.395, 0.5961)
                 }
                 this->alpha = min(1.0, exp((this->proposedLogPosterior - this->currentLogPosterior + rjadjustmentFactor)));
             }
@@ -1013,6 +1045,9 @@ namespace rjmc_full{
                 this->currentTitreExp = this->proposalTitreExp;
                 this->currentObsTitre = this->proposalObsTitre;
 
+                this->currentEventsFull = this->proposalEventsFull;
+                this->currentTitreFull = this->proposalTitreFull;
+
                 this->currentLogPosterior = this->proposedLogPosterior;
                 this->currInferredExpN = this->propInferredExpN;
                 this->currInferredInfN = this->propInferredInfN;
@@ -1022,6 +1057,8 @@ namespace rjmc_full{
                 this->proposalInf = this->currentInf;
                 this->proposalTitreExp = this->currentTitreExp;
                 this->proposalObsTitre = this->currentObsTitre;
+                this->proposalEventsFull = this->currentEventsFull;
+                this->proposalTitreFull = this->currentTitreFull;
 
                 this->proposedLogPosterior = this->currentLogPosterior;
                 this->propInferredExpN = this->currInferredExpN;
@@ -1033,12 +1070,14 @@ namespace rjmc_full{
             if (uniformContinuousDist(0, 1) < this->alpha) {
                 if (onDebug) Rcpp::Rcout << "In: ACCEPTED JUMP" << std::endl;
                 //Rcpp::Rcout << "ACCEPTED (GIBBS): " << this->alpha << std::endl;
+                this->finddifferInf();
                 this->currentSample = this->proposalSample;
                 this->currentJump = this->proposalJump;
                 this->currentInf = this->proposalInf;
                 this->currentTitreExp = this->proposalTitreExp;
                 this->currentObsTitre = this->proposalObsTitre;
-                this->finddifferInf();
+                this->currentEventsFull = this->proposalEventsFull;
+                this->currentTitreFull = this->proposalTitreFull;
 
                 this->currentLogPosterior = this->proposedLogPosterior;
                 this->currInferredExpN = this->propInferredExpN;
@@ -1049,6 +1088,8 @@ namespace rjmc_full{
                 this->proposalInf = this->currentInf;
                 this->proposalTitreExp = this->currentTitreExp;
                 this->proposalObsTitre = this->currentObsTitre;
+                this->proposalEventsFull = this->currentEventsFull;
+                this->proposalTitreFull = this->currentTitreFull;
 
                 this->proposedLogPosterior = this->currentLogPosterior;
                 this->propInferredExpN = this->currInferredExpN;
@@ -1070,9 +1111,10 @@ namespace rjmc_full{
                 for (int j = 0; j < this->lengthJumpVec; j++) {
                     this->posteriorJump(this->counterPosterior, j) = this->currentJump(j);
                     this->posteriorInf(this->counterPosterior, j) = this->currentInf(j);
-                    this->posteriorTitreExp(this->counterPosterior, j) = this->currentTitreExp(j);
-                    this->posteriorObsTitre(this->counterPosterior, j) = this->currentObsTitre(j);
                 }
+                this->posteriorTitreExp.push_back(this->currentTitreExp);
+                this->posteriorObsTitre.push_back(this->currentObsTitre);
+
                 this->counterPosterior++;            
             }
         }
@@ -1228,24 +1270,20 @@ namespace rjmc_full{
         }
 
 
-        double calTitre(double& titre_est, string& exposureType_i, double& timeSince) {
+        double calTitre(double& titre_est, string& biomarker, string& exposureType_i, double& timeSince) {
             if (onDebug) Rcpp::Rcout << "In: calTitre" << std::endl;
-            int abkey = this->abmap[exposureType_i];
+            int abkey = mapOfAbkinetics[{biomarker, exposureType_i}];
             titre_est = Rcpp::as<double>(this->abinfo[abkey].func(titre_est, timeSince, this->abinfo[abkey].params));
+            if (onDebug) Rcpp::Rcout << "Out: calTitre" << std::endl;
             return titre_est;
         }
 
         void define_abs() {
             abinfo.clear();
-            abmap.clear();
             for (int i = 0; i < this->abkineticNames.size(); i++) {
                 Function thisfunc = this->evalabkineticsFunc[as<string>(this->abkineticNames[i])];
                 NumericVector params = this->currentParsAb[as<string>(this->abkineticNames[i])];
                 this->abinfo.emplace_back(as<string>(abkineticNames[i]), thisfunc, params); // Initial event
-            }
-
-            for (int i = 0; i < this->abkineticNames.size(); i++) {
-                this->abmap[as<string>(this->abkineticNames[i])] = i;
             }
         }
 
@@ -1253,31 +1291,36 @@ namespace rjmc_full{
             if (this->profile)  clock.tick("cop_ll");
             if (onDebug) Rcpp::Rcout << "In: evaluateLogLikelihoodCOP_cpp" << std::endl;
 
-            VectorXd titreExp(this->N);
+            MatrixXd titreExp(this->N, this->B);
 
             double titre_est, initialtime, time_until;
-            Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[as<string>(this->copNames[0])];
-            NumericVector pars = this->currentParsCOP[as<string>(this->copNames[0])];
 
             double ll = 0;
             for (int i_idx = 0; i_idx < this->N; ++i_idx) {
+                
                 if (jump[i_idx] == -1) {
-                    titreExp[i_idx] = -1;
-                } else {
-                    // Add custom func in here which can be used to input pre-determined pre-exposure titre
-                    // for biomarkerrs () {
-                    //    std::vector<DoubleWithString> proposalTitreFull_i = this->proposalTitreFull[i_idx][bio];
-                    //}
-                    std::vector<DoubleWithString> proposalTitreFull_i = this->proposalTitreFull[i_idx];
-
-                    for (int j = 0; j < proposalTitreFull_i.size(); j++) {
-                        if(proposalTitreFull_i[j].name == this->exposureNameInf) {
-                            titre_est = proposalTitreFull_i[j].value;
-                        }
+                    for (int bio = 0; bio < this->B; bio++) {
+                        titreExp(i_idx, bio) = -1;
                     }
-                    titreExp[i_idx] = titre_est;
+                } else {
+                    List titre_list_i = this->titre_list[i_idx];
+                    std::vector<std::vector<DoubleWithString> > proposalTitreFull_i = this->proposalTitreFull[i_idx];
+                    for (int bio = 0; bio < this->B; bio++) {
 
-                    ll += as<double>(evalLoglikelhoodCOP_i(jumpinf[i_idx], titreExp[i_idx], pars ) );
+                        Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[as<string>(this->copNames[bio])];
+                        NumericVector pars = this->currentParsCOP[as<string>(this->copNames[bio])];
+
+                        std::vector<DoubleWithString> proposalTitreFull_i_b = proposalTitreFull_i[bio];
+
+                        for (int j = 0; j < proposalTitreFull_i_b.size(); j++) {
+                            if(proposalTitreFull_i_b[j].name == this->exposureNameInf) {
+                                titre_est = proposalTitreFull_i_b[j].value;
+                            }
+                        }
+                        titreExp(i_idx, bio) = titre_est;
+
+                        ll += as<double>(evalLoglikelhoodCOP_i(jumpinf[i_idx], titreExp(i_idx, bio), pars ) );
+                    }
                 }
             }
             if (init) {
@@ -1295,36 +1338,40 @@ namespace rjmc_full{
 
             NumericVector paramsN = this->createNamedParam(params);
             std::vector<DoubleWithString> df_order_exp; 
-            VectorXd obsTitre(this->N_data);
+            MatrixXd obsTitre(this->N_data, this->B);
         
             double time_until, titre_est, time, initialtime, initialtitre ;
             double titre_val, sigma;
             int i_idx;
             double ll = 0;
 
-            Function evalLoglikelhoodObs_i = this->evalLoglikelhoodObs[as<string>(this->observationalNames[0])];
-            NumericVector pars = this->currentParsObs[as<string>(this->observationalNames[0])];
-            
-
             define_abs();
 
             // For each observation
-            int k = 0;
+            int k = 0, k_idx = 0, k_count = 0;
             for (int i_idx = 0; i_idx < this->N; ++i_idx) {
+                List titre_list_i = this->titre_list[i_idx];
+                std::vector<std::vector<DoubleWithString> > proposalTitreFull_i = this->proposalTitreFull[i_idx];
 
-                
-                NumericVector titre_val_i = this->titre_list[i_idx];
-                std::vector<DoubleWithString> proposalTitreFull_i = proposalTitreFull[i_idx];
+                for (int bio = 0; bio < this->B; bio++) {
+                    k_count = 0;
+                    Function evalLoglikelhoodObs_i = this->evalLoglikelhoodObs[as<string>(this->observationalNames[bio])];
+                    NumericVector pars = this->currentParsObs[as<string>(this->observationalNames[bio])];
 
-                for (int j = 0; j < titre_val_i.size(); j++) {
+                    NumericVector titre_val_i_b = titre_list_i[bio];
+                    std::vector<DoubleWithString> proposalTitreFull_i_b = proposalTitreFull_i[bio];
+                    for (int j = 0; j < titre_val_i_b.size(); j++) {
 
-                    if(proposalTitreFull_i[j].name == "bleed") {
-                        titre_est = proposalTitreFull_i[j].value;
-                        obsTitre[k] = titre_est; k++;
-                        titre_val = titre_val_i[j];
-                        ll += as<double>(evalLoglikelhoodObs_i(titre_val, titre_est, pars) );
+                        if(proposalTitreFull_i_b[j].name == "bleed") {
+                            titre_est = proposalTitreFull_i_b[j].value;
+                            obsTitre(k_idx + k_count, bio) = titre_est; k_count++;
+                            titre_val = titre_val_i_b[j];
+                            ll += as<double>(evalLoglikelhoodObs_i(titre_val, titre_est, pars) );
+                        }
                     }
+                    k_idx = k_idx + k_count;
                 }
+ 
             }
             if (init) {
                 this->currentObsTitre = obsTitre;
