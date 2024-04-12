@@ -184,7 +184,6 @@ runRJMCMC <- function(seroModel, settings, filename, modelname) {
     settings$lengthJumpVec <- seroModel$data$N
 
     post <- rjmc_full_func(model = seroModel$model, data = seroModel$data, settings = settings)
-    
     fitfull <- list(post = post,  model = seroModel$model, data_t = seroModel$data)
 
     dir.create(here::here("outputs"), showWarnings = FALSE)

@@ -138,7 +138,8 @@ List run_rjmc_full(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings
   Rcpp::Rcout << "End: Initiate class" << std::endl;
 
   List output_full;
-  MatrixXd output, jump, inf, titreexp, obstitre;
+  MatrixXd output, jump, inf;
+  RObject titreexp, obstitre;
   // Priors 
   Rcpp::Rcout << "Start: initiate functions" << std::endl;
   rjmc_full::init_samplePriorDistributions(&RJMC_FULL, model["samplePriorDistributions"]);
@@ -162,6 +163,8 @@ List run_rjmc_full(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings
   inf = output_full[2];
   titreexp = output_full[3];
   obstitre = output_full[4];
+
+  Rcpp::Rcout << "End: run_rjmc_full" << std::endl;
 
   return Rcpp::List::create(_["output"] = output, _["jump"] = jump, _["inf"] = inf, _["titreexp"] = titreexp, _["obstitre"] = obstitre, _["RJMCpar"] = RJMCpar);
 

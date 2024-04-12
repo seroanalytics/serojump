@@ -163,7 +163,7 @@ settings <-  list(
     covarMaxVal = 1, # decrease if struggling to sample in the middle
     runParallel = TRUE,
     noGibbsSteps = 1,
-    onDebug = FALSE
+    onDebug = TRUE
 )
 
 # Run the model 
@@ -203,11 +203,8 @@ profiletimes
 
 ```
 
-
 ```{r}
 
-
+postprocessFigs_wave2("test/nih_2024", "h3", 4)
 
 ```
-
-`
