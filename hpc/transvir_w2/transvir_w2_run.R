@@ -1,3 +1,6 @@
+library(devtools)
+library(Rcpp)
+#Rcpp::compileAttributes()
 devtools::load_all()
 
 seroModel <- readRDS(here::here("hpc", "transvir_w2", "transvir_w2_model.RData"))
@@ -20,5 +23,5 @@ settings <-  list(
     onDebug = FALSE
 )
 
-runRJMCMC(modelW2, settings, "hpc/transvir", "wave2")
+runRJMCMC(seroModel, settings, "hpc/transvir", "wave2")
 postprocessFigs("hpc/transvir", "wave2", 4)

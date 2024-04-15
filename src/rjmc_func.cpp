@@ -4,7 +4,8 @@
 
 
 #include <Rcpp.h>
-
+// [[Rcpp::depends(BH)]]
+#include <boost/math/common_factor.hpp>
 
 /*class FunctionWrapper {
   public:
