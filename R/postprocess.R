@@ -12,44 +12,85 @@ NULL
 postprocess_run <- function(filename, modelname, n_chains) {
 
     library(ggdist)
-    fitfull <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
+    fitfull <- readRDS(here::here("outputs", "fits", filename, modelname, paste0("fit_", modelname, ".RDS")))
 
     post <- fitfull$post
     data_t <- fitfull$data_t
+    model <- fitfull$model
 
     knowndate <- data_t$knownInfsDate
+    initialTitreValue <- data_t$initialTitreValue
 
     knownid <- which(knowndate != -1)
     N <- data_t$N
-    initialTitreValue <- data_t$initialTitreValue
+    N_data <- data_t$N_data
 
     n_post <- post$mcmc[[1]] %>% nrow
-    post_exp_combine <- post$jump %>% combine
-    post_inf_combine <- post$inf %>% combine
-    post_titreexp_combine <- post$titreexp %>% combine
+    post_exp_combine <- post$jump 
+    post_inf_combine <- post$inf 
 
-    fit_states <- purrr::map_df(1:N, 
-        function(x) {
-            data.frame(
-                id = x,
-                sample = 1:(n_post * n_chains),
-                chain_no = c(rep(1, n_post), rep(2, n_post), rep(3, n_post), rep(4, n_post)),
-                exp_ind = as.numeric(post_exp_combine[, x] > 0),
-                exp_time = post_exp_combine[, x],
-                inf_ind = post_inf_combine[, x],
-                titre_exp = post_titreexp_combine[, x]
+    # Get individual-level exposure and infection data
+    post_infexp <- 1:n_chains %>% map_df(
+        function(i) {
+            1:n_post %>% map_df( 
+                function(j) {
+                    data.frame(
+                        id = 1:N,
+                        sample_c = j,
+                        chain_no = i,
+                        exp_ind = as.numeric(post_exp_combine[[i]][j, ] > 0),
+                        exp_time = post_exp_combine[[i]][j, ],
+                        inf_ind = post_inf_combine[[i]][j, ]
+                    )
+                }
             )
         }
     )
+
+    # Get titre value at exposure
+    post_titreexp <- 1:n_chains %>% map_df(
+        function(i) {
+            1:n_post %>% map_df( 
+                function(j)
+                {
+                    post_titreexp_j <- post$titreexp[[i]][[j]] %>% as.data.frame %>% 
+                        mutate(id = 1:N, sample_c = j, n_chains = i) 
+                    post_titreexp_j
+                }
+            )
+        }
+    )
+    names(post_titreexp) <- c(model$infoModel$biomarkers, "id", "sample_c", "chain_no")
+
+    fit_states <- post_infexp %>% left_join(post_titreexp, by = c("id", "sample_c", "chain_no")) %>% 
+        arrange(id, chain_no, sample_c) %>% group_by(id) %>% mutate(sample = row_number()) %>% ungroup
+
+    # Observation model estimates
+    post_obstitre <- 1:n_chains %>% map_df(
+        function(i) {
+            1:n_post %>% map_df( 
+                function(j)
+                {
+                    post_obstitre_j <- post$obstitre[[i]][[j]] %>% as.data.frame %>% 
+                        mutate(id = 1:N_data, sample_c = j, n_chains = i, time = data_t$times_full, titre = data_t$titre_full) 
+                    post_obstitre_j
+                }
+            )
+        }
+    )
+    names(post_obstitre) <- c(model$infoModel$biomarkers, "id", "sample_c", "chain_no", "time", "titre")
+
+
     postprocess <- list(
         filename = filename,
         modelname = modelname,
         fit_states = fit_states,
+        fit_obs = post_obstitre,
         model = fitfull$model,
         n_chains = n_chains,
         n_post = n_post)
 
-    saveRDS(postprocess, file = here::here("outputs", "fits", filename, paste0("pp_", modelname, ".RDS")))
+    saveRDS(postprocess, file = here::here("outputs", "fits", filename, modelname, paste0("pp_", modelname, ".RDS")))
 
 }
 
@@ -63,7 +104,7 @@ plot_trace <- function(outputfull) {
     filename <- outputfull$filename
     modelname <- outputfull$modelname
 
-    fitfull <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
+    fitfull <- readRDS(here::here("outputs", "fits", filename, modelname, paste0("fit_", modelname, ".RDS")))
     post <- fitfull$post
 
     post$mcmc %>% combine %>% summary
@@ -71,7 +112,7 @@ plot_trace <- function(outputfull) {
     p2 <- post$lpost %>% ggplot() + geom_line(aes(x = sample_no, y = lpost, color = chain_no))
     p1 / p2
 
-    ggsave(here::here("outputs", "fits", filename, "figs", modelname, "trace_plots.png"))
+    ggsave(here::here("outputs", "fits", filename, modelname, "figs", "trace_plots.png"))
 }
 
 
@@ -89,7 +130,7 @@ plot_abkinetics <- function(outputfull) {
 
     chain_samples <- 1:n_chains %>% map(~c(rep(.x, n_post))) %>% unlist
 
-    fitfull <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
+    fitfull <- readRDS(here::here("outputs", "fits", filename, modelname, paste0("fit_", modelname, ".RDS")))
     data_t <- fitfull$data_t
     N <- data_t$N
 
@@ -155,7 +196,7 @@ plot_abkinetics <- function(outputfull) {
     require(patchwork)
 
     p1 / p2 + plot_annotation(title = "Simualtion recovery of the antibody kinetics")
-    ggsave(here::here("outputs", "fits", filename, "figs", modelname, "ab_kinetics_recov.png"), height = 10, width = 10)
+    ggsave(here::here("outputs", "fits", filename, modelname, "figs", "ab_kinetics_recov.png"), height = 10, width = 10)
 
 }
 
@@ -166,7 +207,7 @@ plot_exp_rec <- function(outputfull) {
     filename <- outputfull$filename
     modelname <- outputfull$modelname
 
-    fitfull <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
+    fitfull <- readRDS(here::here("outputs", "fits", filename, modelname, paste0("fit_", modelname, ".RDS")))
     data_t <- fitfull$data_t
     N <- data_t$N
 
@@ -175,6 +216,9 @@ plot_exp_rec <- function(outputfull) {
         start_titre = data_t$initialTitreValue
     )
 
+    n_chains <- outputfull$n_chains
+    n_post <- outputfull$n_post
+    n_length <- n_chains * n_post
     # a) Infection over whole process
     fit_states_exp_prob <- fit_states %>% select(id, exp_ind) %>% summarise(exp_post = mean(exp_ind), .by = "id")
 
@@ -188,7 +232,7 @@ plot_exp_rec <- function(outputfull) {
 
     no_exp_fit_df <- fit_states %>% select(id, sample, exp_ind) %>% summarise(exp_ind_sum = sum(exp_ind), .by = "sample")
 
-    figB <- no_exp_fit_df %>% summarise(n = n()  / 4000, .by = exp_ind_sum) %>%
+    figB <- no_exp_fit_df %>% summarise(n = n()  / n_length, .by = exp_ind_sum) %>%
         ggplot() + 
             geom_col(aes(x = exp_ind_sum, y = n), alpha = 0.8) + 
             theme_bw()  + 
@@ -196,7 +240,7 @@ plot_exp_rec <- function(outputfull) {
             ggtitle("Recovery of population-level exposure burden")
 
     figB + plot_annotation(tag_levels = "A") 
-    ggsave(here::here("outputs", "fits", filename, "figs", modelname, "exposure_recov.png"), height = 10, width = 10)
+    ggsave(here::here("outputs", "fits", filename, modelname, "figs", "exposure_recov.png"), height = 10, width = 10)
 
 }
 
@@ -207,7 +251,7 @@ plot_exp_times_rec <- function(outputfull) {
     filename <- outputfull$filename
     modelname <- outputfull$modelname
 
-    fitfull <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
+    fitfull <- readRDS(here::here("outputs", "fits", filename, modelname, paste0("fit_", modelname, ".RDS")))
     data_t <- fitfull$data_t
     N <- data_t$N
 
@@ -278,7 +322,7 @@ plot_exp_times_rec <- function(outputfull) {
     theme(legend.position = "bottom")
  
     figB / figC + plot_annotation(tag_levels = "A") 
-    ggsave(here::here("outputs", "fits", filename, "figs", modelname, "exposure_time_recov.png"), height = 10, width = 10)
+    ggsave(here::here("outputs", "fits", filename, modelname, "figs", "exposure_time_recov.png"), height = 10, width = 10)
 }
 
 plot_inf_rec <- function(outputfull) {
@@ -287,30 +331,30 @@ plot_inf_rec <- function(outputfull) {
     modelname <- outputfull$modelname
 
 
-    fitfull <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
+    fitfull <- readRDS(here::here("outputs", "fits", filename, modelname, paste0("fit_", modelname, ".RDS")))
     data_t <- fitfull$data_t
     N <- data_t$N
 
-    df_data <- data.frame(
-        id = 1:N,
-        start_titre = data_t$initialTitreValue,
-        known_inf = data_t$knownInfsVec
-    ) %>% mutate(known_inf = ifelse(known_inf == 0, "Not known", "Known"))
+    df_data <- data_t$initialTitreValue %>% as.data.frame %>% mutate( id = 1:N,  known_inf = data_t$knownInfsVec) %>%
+        mutate(known_inf = ifelse(known_inf == 0, "Not known", "Known"))
 
     # b) Infection given exposure 
+    n_chains <- outputfull$n_chains
+    n_post <- outputfull$n_post
+    n_length <- n_chains * n_post
 
     figB <- fit_states %>% filter(exp_ind == 1) %>% select(id, inf_ind) %>% summarise(inf_post = mean(inf_ind), .by = "id") %>%
-            left_join(df_data) %>% 
+            left_join(df_data) %>% pivot_longer(outputfull$model$infoModel$biomarkers, names_to = "biomarker", values_to = "start_titre") %>% 
         ggplot() + 
             geom_count(aes(x = start_titre, y = inf_post, shape = known_inf, color = known_inf), size = 2, alpha = 0.7) + 
             theme_bw() +
             labs(x = expression("Titre at start of study Y"[j]^0),
                 y = expression("Expectation of posterior distribution of infection E[Z"[j]*"]"), shape = "", color = "") + 
-            ggtitle("Recovery of individual-level infection status")
+            ggtitle("Recovery of individual-level infection status") + facet_grid(vars(biomarker))
 
     no_inf_fit_df <- fit_states %>% filter(exp_ind == 1) %>% select(id, sample, inf_ind) %>% summarise(inf_ind_sum = sum(inf_ind), .by = "sample")
 
-    figC <- no_inf_fit_df %>% summarise(n = n()  / 4000, .by = inf_ind_sum) %>%
+    figC <- no_inf_fit_df %>% summarise(n = n()  / n_length, .by = inf_ind_sum) %>%
         ggplot() + 
             geom_col(aes(x = inf_ind_sum, y = n), alpha = 0.8) + 
             theme_bw()  + 
@@ -330,261 +374,7 @@ plot_inf_rec <- function(outputfull) {
        #     ggtitle("Recovery of infection timings")
 
     (figB) / figC + plot_annotation(tag_levels = "A")
-    ggsave(here::here("outputs", "fits", filename, "figs", modelname, "infection_recov.png"), height = 10, width = 10)
-}
-
-plot_abkinetics_delta <- function(outputfull) {
-    require(posterior)
-    require(bayesplot)
-    require(ggdist)
-
-    filename <- outputfull$filename
-    modelname <- outputfull$modelname
-    obs_er <- outputfull$obs_er
-
-    n_chains <- outputfull$n_chains
-    n_post <- outputfull$n_post
-
-    chain_samples <- 1:n_chains %>% map(~c(rep(.x, n_post))) %>% unlist
-
-    fitfull <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
-    data_t <- fitfull$data_t
-    N <- data_t$N
-
-    post <- fitfull$post
-    par_tab <- fitfull$par_tab
-    model_outline <- fitfull$model
-
-
-    compare <- bind_rows(
-        post$mcmc %>% combine %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
-             mutate(type = "Posterior distribution") %>% filter(param %in% c("a_d", "b_d", "c_d")),
-        purrr::map_df(1:n_post,
-            ~model_outline$samplePriorDistributions(par_tab)
-        )  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%  mutate(type = "Prior distribution")  %>%
-        filter(param %in% c("a_d", "b_d", "c_d"))
-    )
-
-
-    ab_function <- function(a, b, c, T) {
-        1:T %>% map( 
-            function(t) {
-                if (t < 14) {
-                    titre_init <- 0 + (log(exp(a) +  exp(c)) * (t) / 14);
-                } else {
-                    titre_init <- 0 + (log(exp(a) * exp(-b/10 * ((t) - 14)) + exp(c)));
-                }
-            }
-        ) %>% unlist
-    }
-
-
-    post_fit <- post$mcmc %>% combine %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
-    a_post <- post_fit[["a_d"]]
-    b_post <- post_fit[["b_d"]]
-    c_post <- post_fit[["c_d"]]
-
-
-    T <- 300
-    traj_post <- 1:(n_post * n_chains) %>% purrr::map_df(
-        ~data.frame(
-            time = 1:T,
-            value = ab_function(a_post[.x], b_post[.x], c_post[.x], T)
-        )
-    )
-    traj_post_summ <- traj_post %>% group_by(time) %>% mean_qi()
-
-    p1 <- compare %>% filter(type %in% c("Posterior distribution", "Prior distribution")) %>% 
-        ggplot() + 
-            geom_density(aes(x = value, fill = type), alpha = 0.5) +
-            scale_fill_manual(values = c("red", "gray")) +
-            facet_wrap(vars(param), scale = "free") + theme_bw() + 
-            labs(x = "Value", y = "Density", fill = "Type") + theme_bw() + 
-            ggtitle("Antibody kinetics parameters")
-    p2 <- traj_post_summ %>%  
-        ggplot() + 
-            geom_hline(yintercept = 0, size = 2, color = "red") +
-        geom_ribbon(aes(ymin = .lower, ymax = .upper, x = time), fill = "red", size = 3, alpha = 0.5) + 
-        geom_line(aes(y = value, x = time, color = "red"), size = 2) + 
-        theme_bw() + labs(x = expression("Time post-infection, s", y = "Titre boost, f"[ab])) + 
-        ggtitle("Antibody trajectories post-infection,") + 
-        scale_colour_manual(name = "Line type", 
-         values =c('black'='black','red'='red'), labels = c('Simualted trajectory','Posterior trajectory'))
-
-    require(patchwork)
-
-    p1 / p2 + plot_annotation(title = "Simualtion recovery of the antibody kinetics for delta")
-    ggsave(here::here("outputs", "fits", filename, "figs", modelname, "ab_kinetics_recov_delta.png"), height = 10, width = 10)
-
-}
-
-plot_abkinetics_vax <- function(outputfull) {
-    require(posterior)
-    require(bayesplot)
-    require(ggdist)
-
-    filename <- outputfull$filename
-    modelname <- outputfull$modelname
-    obs_er <- outputfull$obs_er
-
-    n_chains <- outputfull$n_chains
-    n_post <- outputfull$n_post
-
-    chain_samples <- 1:n_chains %>% map(~c(rep(.x, n_post))) %>% unlist
-
-    fitfull <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
-    data_t <- fitfull$data_t
-    N <- data_t$N
-
-    post <- fitfull$post
-    par_tab <- fitfull$par_tab
-    model_outline <- fitfull$model
-
-
-    compare <- bind_rows(
-        post$mcmc %>% combine %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
-             mutate(type = "Posterior distribution") %>% filter(param %in% c("a_vax", "b_vax", "c_vax")),
-        purrr::map_df(1:n_post,
-            ~model_outline$samplePriorDistributions(par_tab)
-        )  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%  mutate(type = "Prior distribution")  %>%
-        filter(param %in% c("a_vax", "b_vax", "c_vax"))
-    )
-
-
-    ab_function <- function(a, b, c, T) {
-        1:T %>% map( 
-            function(t) {
-                if (t < 14) {
-                    titre_init <- 0 + (log(exp(a) +  exp(c)) * (t) / 14);
-                } else {
-                    titre_init <- 0 + (log(exp(a) * exp(-b/10 * ((t) - 14)) + exp(c)));
-                }
-            }
-        ) %>% unlist
-    }
-
-
-    post_fit <- post$mcmc %>% combine %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
-    a_post <- post_fit[["a_vax"]]
-    b_post <- post_fit[["b_vax"]]
-    c_post <- post_fit[["c_vax"]]
-
-
-    T <- 300
-    traj_post <- 1:(n_post * n_chains) %>% purrr::map_df(
-        ~data.frame(
-            time = 1:T,
-            value = ab_function(a_post[.x], b_post[.x], c_post[.x], T)
-        )
-    )
-    traj_post_summ <- traj_post %>% group_by(time) %>% mean_qi()
-
-    p1 <- compare %>% filter(type %in% c("Posterior distribution", "Prior distribution")) %>% 
-        ggplot() + 
-            geom_density(aes(x = value, fill = type), alpha = 0.5) +
-            scale_fill_manual(values = c("red", "gray")) +
-            facet_wrap(vars(param), scale = "free") + theme_bw() + 
-            labs(x = "Value", y = "Density", fill = "Type") + theme_bw() + 
-            ggtitle("Antibody kinetics parameters")
-    p2 <- traj_post_summ %>%  
-        ggplot() + 
-        geom_ribbon(aes(ymin = .lower, ymax = .upper, x = time), fill = "red", size = 3, alpha = 0.5) + 
-        geom_line(aes(y = value, x = time, color = "red"), size = 2) + 
-        theme_bw() + labs(x = expression("Time post-infection, s", y = "Titre boost, f"[ab])) + 
-        ggtitle("Antibody trajectories post-infection,") + 
-        scale_colour_manual(name = "Line type", 
-         values =c('black'='black','red'='red'), labels = c('Simualted trajectory','Posterior trajectory'))
-
-    require(patchwork)
-
-    p1 / p2 + plot_annotation(title = "Simualtion recovery of the antibody kinetics for vaccination")
-    ggsave(here::here("outputs", "fits", filename, "figs", modelname, "ab_kinetics_recov_vax.png"), height = 10, width = 10)
-
-}
-
-
-plot_abkinetics_pdelta <- function(outputfull) {
-    require(posterior)
-    require(bayesplot)
-    require(ggdist)
-
-    filename <- outputfull$filename
-    modelname <- outputfull$modelname
-    obs_er <- outputfull$obs_er
-
-    n_chains <- outputfull$n_chains
-    n_post <- outputfull$n_post
-
-    chain_samples <- 1:n_chains %>% map(~c(rep(.x, n_post))) %>% unlist
-
-    fitfull <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
-    data_t <- fitfull$data_t
-    N <- data_t$N
-
-    post <- fitfull$post
-    par_tab <- fitfull$par_tab
-    model_outline <- fitfull$model
-
-
-    compare <- bind_rows(
-        post$mcmc %>% combine %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
-             mutate(type = "Posterior distribution") %>% filter(param %in% c("a_pd", "b_pd", "c_pd")),
-        purrr::map_df(1:n_post,
-            ~model_outline$samplePriorDistributions(par_tab)
-        )  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%  mutate(type = "Prior distribution")  %>%
-        filter(param %in% c("a_pd", "b_pd", "c_pd"))
-    )
-
-
-    ab_function <- function(a, b, c, T) {
-        1:T %>% map( 
-            function(t) {
-                if (t < 14) {
-                    titre_init <- 0 + (log(exp(a) +  exp(c)) * (t) / 14);
-                } else {
-                    titre_init <- 0 + (log(exp(a) * exp(-b/10 * ((t) - 14)) + exp(c)));
-                }
-            }
-        ) %>% unlist
-    }
-
-
-    post_fit <- post$mcmc %>% combine %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
-    a_post <- post_fit[["a_pd"]]
-    b_post <- post_fit[["b_pd"]]
-    c_post <- post_fit[["c_pd"]]
-
-
-    T <- 300
-    traj_post <- 1:(n_post * n_chains) %>% purrr::map_df(
-        ~data.frame(
-            time = 1:T,
-            value = ab_function(a_post[.x], b_post[.x], c_post[.x], T)
-        )
-    )
-    traj_post_summ <- traj_post %>% group_by(time) %>% mean_qi()
-
-    p1 <- compare %>% filter(type %in% c("Posterior distribution", "Prior distribution")) %>% 
-        ggplot() + 
-            geom_density(aes(x = value, fill = type), alpha = 0.5) +
-            scale_fill_manual(values = c("red", "gray")) +
-            facet_wrap(vars(param), scale = "free") + theme_bw() + 
-            labs(x = "Value", y = "Density", fill = "Type") + theme_bw() + 
-            ggtitle("Antibody kinetics parameters")
-    p2 <- traj_post_summ %>%  
-        ggplot() + 
-        geom_ribbon(aes(ymin = .lower, ymax = .upper, x = time), fill = "red", size = 3, alpha = 0.5) + 
-        geom_line(aes(y = value, x = time, color = "red"), size = 2) + 
-        theme_bw() + labs(x = expression("Time post-infection, s", y = "Titre boost, f"[ab])) + 
-        ggtitle("Antibody trajectories post-infection,") + 
-        scale_colour_manual(name = "Line type", 
-         values =c('black'='black','red'='red'), labels = c('Simualted trajectory','Posterior trajectory'))
-
-    require(patchwork)
-
-    p1 / p2 + plot_annotation(title = "Simualtion recovery of the antibody kinetics for pre-delta infection")
-    ggsave(here::here("outputs", "fits", filename, "figs", modelname, "ab_kinetics_recov_pdelta.png"), height = 10, width = 10)
-
+    ggsave(here::here("outputs", "fits", filename, modelname, "figs", "infection_recov.png"), height = 10, width = 10)
 }
 
 
@@ -594,47 +384,89 @@ plot_cop_rec <- function(outputfull) {
     filename <- outputfull$filename
     modelname <- outputfull$modelname
 
-    fitfull <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
+    fitfull <- readRDS(here::here("outputs", "fits", filename, modelname, paste0("fit_", modelname, ".RDS")))
     post <- fitfull$post
     data_t <- fitfull$data_t
 
-    reps <-  post$mcmc %>% combine %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
-            mutate(type = "Posterior distribution") %>% filter(param %in% c("beta0", "beta1"))
+    model_outline <- fitfull$model
+    post_fit <- post$mcmc %>% combine %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
 
-    b0_rep <- reps %>% filter(param == "beta0") %>% pull(value)
-    b1_rep <- reps %>% filter(param == "beta1") %>% pull(value)
+    n_chains <- outputfull$n_chains
+    n_post <- outputfull$n_post
+    n_length <- n_chains * n_post
+    posteriorsAllCOP <- map_df(1:length(model_outline$copModel),
+    function(name1) {
+        pars_extract <- model_outline$copModel[[name1]]$pars
+        functionalForm <- model_outline$copModel[[name1]]$funcForm
+        biomarker <- model_outline$copModel[[name1]]$biomarker
 
-    lol <- 1:1000 %>% purrr::map_df(
-        ~data.frame(
-            t = seq(0, 4, 0.1),
-            vals = 1.0 / (1.0 + exp(-(b0_rep[.x] + b1_rep[.x] * seq(0, 4, 0.1))))
+        reps <- post$mcmc %>% combine %>% as.data.frame  %>%
+                pivot_longer(everything(), names_to = "param", values_to = "value") %>%
+                mutate(type = "Posterior distribution") %>% filter(param %in% pars_extract)
+
+        cop_function <- function(T, pars) {
+            T %>% map( 
+                ~functionalForm(1, .x, pars)
+            ) %>% unlist
+        }
+
+        post_par <- data.frame(post_fit[[pars_extract[1]]])
+        if (length(pars_extract) > 1) { 
+            for (i in 2:length(pars_extract)) {
+                post_par <- cbind(post_par, post_fit[[pars_extract[i]]])
+            }   
+        }
+
+        traj_post <- 1:n_length %>% purrr::map_df(
+            ~data.frame(
+                titre = seq(0, 4, 0.1),
+                value = cop_function(seq(0, 4, 0.1), as.numeric(post_par[.x, ]))
+            )
         )
+        traj_post_summ <- traj_post %>% group_by(titre) %>% mean_qi() %>% 
+            mutate(biomarker = biomarker)
+    }
+
     )
+    
 
-    titre_exp_sum <- fit_states %>% filter(titre_exp != -1) %>% group_by(id) %>% mean_qi(titre_exp) %>% arrange(titre_exp)
-    u_ids <- titre_exp_sum$id
+    cop_exp_sum_plot_all <- map_df(1:length(model_outline$copModel), 
+        function(i) {
+        pars_extract <- model_outline$copModel[[i]]$pars
+        functionalForm <- model_outline$copModel[[i]]$funcForm
+        biomarker <- model_outline$copModel[[i]]$biomarker
 
-    df_data <- data.frame(
-        id = 1:data_t$N,
-        start_titre = data_t$initialTitreValue,
-        known_inf = data_t$knownInfsVec
-    ) %>% mutate(known_inf = ifelse(known_inf == 0, "Not known", "Known"))
+        titre_cop_sum <- fit_states %>% filter(!!sym(biomarker) != -1) %>%
+            group_by(id) %>% mean_qi(!!sym(biomarker) ) %>% arrange(!!biomarker) %>%
+            rename(titre_val = !!(biomarker))
+        u_ids <- titre_cop_sum$id
 
-    df_data_post <- fit_states %>% filter(exp_ind == 1) %>% select(id, inf_ind) %>% summarise(inf_post = mean(inf_ind), n = n(), .by = "id") %>%
-            left_join(df_data) %>% mutate(prop = n / 4000)
+        df_data <- data.frame(
+            id = 1:data_t$N,
+            start_titre = data_t$initialTitreValue %>% as.data.frame %>% pull(!!biomarker),
+            known_inf = data_t$knownInfsVec
+        ) %>% mutate(known_inf = ifelse(known_inf == 0, "Not known", "Known"))
 
-    titre_exp_sum_plot <- titre_exp_sum %>% left_join(df_data_post) %>% mutate(id = factor(id, levels = u_ids)) %>% filter(!is.na(n))
+        df_data_post <- fit_states %>% filter(exp_ind == 1) %>% select(id, inf_ind) %>%
+                 summarise(inf_post = mean(inf_ind), n = n(), .by = "id") %>%
+                left_join(df_data) %>% mutate(prop = n / n_length)
 
-    lol %>% ggplot() + 
-        stat_lineribbon(aes(x = t, y = vals), fill = "red", alpha = 0.5, .width = c(0.5, 0.95)) + 
-        geom_linerange(data = titre_exp_sum_plot, 
+        cop_exp_sum_plot <- titre_cop_sum %>% left_join(df_data_post) %>% mutate(id = factor(id, levels = u_ids)) %>%
+            filter(!is.na(n)) %>% mutate(biomarker = !!biomarker)
+
+        })
+
+    posteriorsAllCOP %>% ggplot() + 
+        geom_ribbon(aes(ymin = .lower, ymax = .upper, x = titre),fill = "red",  size = 3, alpha = 0.3) + 
+        geom_line(aes(y = value, x = titre, color = exposure_type), color = "red", size = 2) + 
+        geom_linerange(data = cop_exp_sum_plot_all, 
             aes(y = inf_post, xmin = .lower, xmax = .upper, alpha = prop), size = 1) + 
-        geom_point(data = titre_exp_sum_plot, aes(x = titre_exp, y = inf_post, alpha = prop)) + 
+        geom_point(data = cop_exp_sum_plot_all, aes(x = titre_val, y = inf_post, alpha = prop)) + 
         theme_bw() + 
         ylim(0, 1) +
+        facet_wrap(vars(biomarker)) + 
         labs(x = expression("Titre at exposure"), y = expression("Posterior probability of infection for correlate of protection, f"[cop]*"(Y"[j]^0*", "*theta[cop]*")"), color = "Curve type")
-        
-    ggsave(here::here("outputs", "fits", filename, "figs", modelname, "cop_recov.png"), height = 10, width = 10)
+    ggsave(here::here("outputs", "fits", filename, modelname, "figs", "cop_recov.png"), height = 10, width = 10)
 
 }
 
@@ -644,54 +476,54 @@ plot_titre_exp <- function(outputfull) {
     filename <- outputfull$filename
     modelname <- outputfull$modelname
 
-    fitfull <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
+    fitfull <- readRDS(here::here("outputs", "fits", filename, modelname, paste0("fit_", modelname, ".RDS")))
     post <- fitfull$post
     data_t <- fitfull$data_t
+    n_chains <- outputfull$n_chains
+    n_post <- outputfull$n_post
+    n_length <- n_chains * n_post
 
-    titre_exp_sum <- fit_states %>% filter(titre_exp != -1) %>% group_by(id) %>% mean_qi(titre_exp) %>% arrange(titre_exp)
-    u_ids <- titre_exp_sum$id
+    cop_exp_sum_plot_sum <- map_df(1:length(model_outline$observationalModel), 
+            function(i) {
+            pars_extract <- model_outline$observationalModel[[i]]$pars
+            biomarker <- model_outline$observationalModel[[i]]$biomarker
 
-    df_data <- data.frame(
-        id = 1:data_t$N,
-        start_titre = data_t$initialTitreValue,
-        known_inf = data_t$knownInfsVec
-    ) %>% mutate(known_inf = ifelse(known_inf == 0, "Not known", "Known"))
+            titre_cop_sum <- fit_states %>% filter(!!sym(biomarker) != -1) %>%
+                group_by(id) %>% mean_qi(!!sym(biomarker) ) %>% arrange(!!biomarker) %>%
+                rename(titre_val = !!(biomarker))
 
-    df_data_post <- fit_states %>% filter(exp_ind == 1) %>% select(id, inf_ind) %>% summarise(inf_post = mean(inf_ind), n = n(), .by = "id") %>%
-            left_join(df_data) %>% mutate(prop = n / 4000)
+            u_ids <- titre_cop_sum$id
 
-    titre_exp_sum_plot <- titre_exp_sum %>% left_join(df_data_post) %>% mutate(id = factor(id, levels = u_ids)) %>% filter(!is.na(n))
-      
+            df_data_post <- fit_states %>% filter(exp_ind == 1) %>% select(id, inf_ind) %>%
+                summarise(inf_post = mean(inf_ind), n = n(), .by = "id") %>%
+                mutate(prop = n / n_length)
 
-    p1 <- titre_exp_sum_plot %>% ggplot() +
+            cop_exp_sum_plot <- titre_cop_sum %>%
+                left_join(df_data_post) %>%
+                mutate(id = factor(id, levels = u_ids)) %>% filter(!is.na(n)) %>% 
+                mutate(biomarker = biomarker)
+            cop_exp_sum_plot
+            }
+    )
+
+    p1 <- cop_exp_sum_plot_sum %>% ggplot() +
         geom_linerange(aes(y = id, xmin = .lower, xmax = .upper, color = inf_post, alpha = prop), size = 1) + 
-        geom_point(aes(y = id, x = titre_exp, alpha = prop), size = 1) + 
+        geom_point(aes(y = id, x = titre_val, alpha = prop), size = 1) + 
         labs(y = "ID", x = "Posterior of titre value at exposure", color = "Probability of infection") + 
-        theme_bw() + theme(axis.text.y = element_blank()) 
+        theme_bw() + theme(axis.text.y = element_blank()) + facet_wrap(vars(biomarker))
+
 
     p1 
-    ggsave(here::here("outputs", "fits", filename, "figs", modelname, "titre_exp_recovery.png"), height = 10, width = 10)
+    ggsave(here::here("outputs", "fits", filename, modelname, "figs", "titre_exp_recovery.png"), height = 10, width = 10)
 
 }   
 
-
 postprocessFigs <- function(filename, modelname, n_chains) {
+   # filename <- "test/nih_2024"
+   # modelname <- "h3_profile"
+   # n_chains <- 4
     postprocess_run( filename, modelname, n_chains)
-    outputfull <- readRDS(file = here::here("outputs", "fits", filename, paste0("pp_", modelname, ".RDS")))
-
-    plot_trace(outputfull)
-    plot_abkinetics(outputfull)
-    plot_inf_rec(outputfull)
-    plot_exp_rec(outputfull)
-    plot_exp_times_rec(outputfull)
-    plot_cop_rec(outputfull)
-}
-
-
-postprocessFigs_wave2 <- function(filename, modelname, n_chains) {
-
-    postprocess_run( filename, modelname, n_chains)
-    outputfull <- readRDS(file = here::here("outputs", "fits", filename, paste0("pp_", modelname, ".RDS")))
+    outputfull <- readRDS(file = here::here("outputs", "fits", filename, modelname, paste0("pp_", modelname, ".RDS")))
 
     plot_trace(outputfull)
     plot_inf_rec(outputfull)
@@ -719,7 +551,7 @@ plot_abkinetics_trajectories <- function(outputfull) {
 
     chain_samples <- 1:n_chains %>% map(~c(rep(.x, n_post))) %>% unlist
 
-    fitfull <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
+    fitfull <- readRDS(here::here("outputs", "fits", filename, modelname, paste0("fit_", modelname, ".RDS")))
     data_t <- fitfull$data_t
     N <- data_t$N
 
@@ -728,12 +560,13 @@ plot_abkinetics_trajectories <- function(outputfull) {
     model_outline <- fitfull$model
     post_fit <- post$mcmc %>% combine %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
 
-    model_outline$abkineticsModel$model[["delta"]]$funcForm
     ###
-    posteriorsAllExposure <- map_df(model_outline$abkineticsModel$names,
+    posteriorsAllExposure <- map_df(1:length(model_outline$abkineticsModel),
         function(name1) {
-            pars_extract <- model_outline$abkineticsModel$model[[name1]]$pars
-            functionalForm <- model_outline$abkineticsModel$model[[name1]]$funcForm
+            pars_extract <- model_outline$abkineticsModel[[name1]]$pars
+            functionalForm <- model_outline$abkineticsModel[[name1]]$funcForm
+            biomarker <- model_outline$abkineticsModel[[name1]]$biomarker
+            exposureType <- model_outline$abkineticsModel[[name1]]$exposureType
 
             compare <- bind_rows(
                 post$mcmc %>% combine %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
@@ -764,9 +597,8 @@ plot_abkinetics_trajectories <- function(outputfull) {
                     value = ab_function(T, as.numeric(post_par[.x, ]))
                 )
             )
-            lol <- as.numeric(post_par[1, ])
-            ab_function(15, lol)
-            traj_post_summ <- traj_post %>% group_by(time) %>% mean_qi() %>% mutate(exposure_type = name1)
+            traj_post_summ <- traj_post %>% group_by(time) %>% mean_qi() %>% mutate(exposure_type = exposureType) %>% 
+                mutate(biomarker = biomarker)
         }
     )
 
@@ -775,7 +607,8 @@ plot_abkinetics_trajectories <- function(outputfull) {
         geom_ribbon(aes(ymin = .lower, ymax = .upper, x = time, fill = exposure_type), size = 3, alpha = 0.3) + 
         geom_line(aes(y = value, x = time, color = exposure_type), size = 2) + 
         theme_bw() + labs(x = expression("Time post-infection/since bleed, s", y = "Titre change, f"[ab])) + 
-        ggtitle("Antibody kinetic trajectories")
-    ggsave(here::here("outputs", "fits", filename, "figs", modelname, "ab_kinetics_trajectories.png"), height = 10, width = 10)
+        ggtitle("Antibody kinetic trajectories") +
+        facet_wrap(vars(biomarker))
+    ggsave(here::here("outputs", "fits", filename, modelname, "figs", "ab_kinetics_trajectories.png"), height = 10, width = 10)
 
 }

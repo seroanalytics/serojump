@@ -27,11 +27,10 @@ To help with this section please consult information in the documentation on how
 ```{r}
 
 # Load data clean in the format required for the model
-data_titre <- data.frame(
+data_titre_temp <- data.frame(
     id = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
     time = c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    titre = c(1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4),
-    biomarker = rep("IgG", 10)
+    IgG = c(1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4)
  )
 
 # No known exposure times in this model 
@@ -61,12 +60,20 @@ obsLogLikelihood = function(titre_val, titre_est, pars) {
     ll
 }
 
+# This function calcualtes the probability of infection given exposure
+copFuncForm <- function(inf_status, esttitreExp, params) {
+    beta0 <- params[1]
+    beta1 <- params[2]
+    p <- 1.0 / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+}
+
+
 # This function uses a logistic distribution for the likelihood.
 copLogLikelihood <- function(inf_status, esttitreExp, params) {
     # COP parameters
     beta0 <- params[1]
     beta1 <- params[2]
-    p <- 1.0 / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+    p <- copFuncForm(inf_status, esttitreExp, params)
     ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
     ll
 }
@@ -107,7 +114,8 @@ To help with this section please consult information in the documentation on how
 
 # Define the biomarkers and exposure types in the model
 biomakers <- c("IgG")
-exposureType <- c("delta", "vax", "predelta")
+exposureTypes <- c("none", "delta", "predelta", "vax")
+exposureFitted <- "delta"
 
 # Define the observational model
 observationalModel <- list(
@@ -120,10 +128,10 @@ observationalModel <- list(
 abkineticsModel <- list(
     names = c("none", "delta", "predelta", "vax"),
     model = makeModel(
-            addAbkineticsModel("IgG", "none", FALSE,  c("wane"), noInfSerumKinetics),
-            addAbkineticsModel("IgG", "delta", TRUE, c("a_d", "b_d", "c_d"), infSerumKinetics),
-            addAbkineticsModel("IgG", "predelta", FALSE, c("a_pd", "b_pd", "c_pd"), infSerumKinetics),
-            addAbkineticsModel("IgG", "vax", FALSE, c("a_vax", "b_vax", "c_vax"), infSerumKinetics)
+            addAbkineticsModel("none", "IgG", "none",  c("wane"), noInfSerumKinetics),
+            addAbkineticsModel("delta","IgG", "delta", c("a_d", "b_d", "c_d"), infSerumKinetics),
+            addAbkineticsModel( "predelta","IgG",  "predelta", c("a_pd", "b_pd", "c_pd"), infSerumKinetics),
+            addAbkineticsModel("vax","IgG", "vax", c("a_vax", "b_vax", "c_vax"), infSerumKinetics)
         ),
     prior = bind_rows(
         add_par_df("a_vax", -2, 2, "norm",  0, 1), # ab kinetics
@@ -142,7 +150,7 @@ abkineticsModel <- list(
 # Define the COP model
 copModel <- list( 
         names = c("IgG"),
-        model = makeModel(addCopModel("IgG", "delta", c("beta0", "beta1"), copLogLikelihood)),
+        model = makeModel(addCopModel("IgG", "delta", c("beta0", "beta1"), copFuncForm, copLogLikelihood)),
         prior = bind_rows(
             add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
             add_par_df("beta1", -10, 10, "unif", -10, 10)
@@ -151,7 +159,8 @@ copModel <- list(
 
 modeldefinition <- list(
     biomarkers = biomakers,
-    exposureType = exposureType,
+    exposureTypes = exposureTypes,
+    exposureFitted = exposureFitted,
     observationalModel = observationalModel,
     abkineticsModel = abkineticsModel,
     copModel = copModel,
@@ -159,7 +168,7 @@ modeldefinition <- list(
     exposurePriorType = "empirical"
 )
 
-modelW2 <- createSeroJumpModel(data_titre, data_known_exposures, modeldefinition)
+modelW2 <- createSeroJumpModel(data_titre_temp, data_known_exposures, modeldefinition)
 
 ````
 
@@ -187,6 +196,6 @@ settings <-  list(
 )
 
 # Run the model 
-runRJMCMC(modelW2, settings, "test/transvir", "test")
+runRJMCMC(modelW2, settings, "local/test/startup", "modelA")
 
 ```
