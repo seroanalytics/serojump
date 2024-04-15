@@ -1,12 +1,3 @@
-
-
-Fitting to the TRANSVIR data prototype
-
-# Load the data
-```{r}
-
-#install.packages("devtools")
-#library(devtools)
 devtools::load_all()
 
 library(lubridate)
@@ -14,36 +5,11 @@ library(patchwork)
 library(tidybayes)
 library(ggdist)
 
-```
-
-## Get data in the right format for rjmcmc model
-
-To help with this section please consult information in the documentation on how to layour this data.frame:
-
-* For serological data in observational model see [data_titre](../man/data_titre.Rd).
-* For known exposure times [data_known_exposures](./man/data_known_exposures.Rd).
-* For exposure prior see XXX.
-  
-```{r}
-
 # Load data clean in the formet required for the model
 gambia_pvnt_w2 <- get_data_titre_model_wave2() %>% rename(IgG = titre)# This is the empirical prior for the exposure time
 gambia_exp_w2 <- get_exposures_wave2() # This is the empirical prior for the exposure time
 exp_prior_w2 <- get_exp_prior_wave2() # This is the empirical prior for the exposure time
 
-```
-
-## Define the functions required for the rjmcmc model
-
-To help with this section please consult information in the documentation on how to define these functions:
-
-* For observation functions see [obsLogLikelihood](./man/obsLogLikelihood.Rd).
-* For COP model functions [copLogLikelihood](./man/copLogLikelihood.Rd).
-* For antibody kinetics functions see [abkineticsFunction](./man/abkineticsFunction.Rd).
-
-
-```{r}
-# Define the functions 
 
 obsLogLikelihood = function(titre_val, titre_est, pars) {
     if (titre_val <= log10(40)) {
@@ -86,17 +52,6 @@ infSerumKinetics <- function(titre_est, timeSince, pars) {
     titre_est
 }
 
-```
-
-## Define the models for the rjmcmc model
-
-To help with this section please consult information in the documentation on how to define these lists:
-
-* For observation model see [observationalModel](./man/observationalModel.Rd).
-* For COP model see [copModel](./man/copModel.Rd).
-* For antibody kinetics see [abkineticsModel](./man/abkineticsModel.Rd).
-
-```{r}
 
 
 # Define the biomarkers and exposure types in the model
@@ -155,70 +110,4 @@ modeldefinition <- list(
 )
 
 modelW2 <- createSeroJumpModel(gambia_pvnt_w2, gambia_exp_w2, modeldefinition)
-
-````
-
-```{r}
-
-devtools::load_all()
-
-settings <-  list(
-    numberChainRuns = 4,
-    numberCores = 4,
-    iterations = 100,
-    burninPosterior = 50,
-    thin = 1,
-    consoleUpdates = 10,
-    onAdaptiveCov = TRUE,
-    updatesAdaptiveCov = 10,
-    burninAdaptiveCov = 1000,
-    covarInitVal = 1e-2, # make very small if struggling to sample to beginning
-    covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
-    covarMaxVal = 1, # decrease if struggling toc sample in the middle
-    runParallel = TRUE,
-    noGibbsSteps = 1,
-    onDebug = FALSE,
-    profile = TRUE
-)
-
-runRJMCMC(modelW2, settings, "local/transvir/test", "wave2")
-
-postprocessFigs("local/transvir/test", "wave2", 4)
-
-```
-# Define settings and run the model, (this won't run as made the data up)
-
-```{r eval = FALSE}
-
-# Define the settings
-settings <-  list(
-    numberChainRuns = 4,
-    numberCores = 4,
-    iterations = 200000,
-    burninPosterior = 100000,
-    thin = 100,
-    consoleUpdates = 100,
-    onAdaptiveCov = TRUE,
-    updatesAdaptiveCov = 100,
-    burninAdaptiveCov = 1000,
-    updatesAdaptiveTemp = 10,
-    covarInitVal = 1e-2, # make very small if struggling to sample to beginning
-    covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
-    covarMaxVal = 1, # decrease if struggling to sample in the middle
-    runParallel = TRUE,
-    noGibbsSteps = 1
-)
-
-# Run the model 
-runRJMCMC(modelW2, settings, "test/transvir", "wave2")
-
-
-```
-
-# Plot all of the posterior plots and calcualte posterior data.frame
-
-```{r}
-
-postprocessFigs_wave2("test/transvir", "wave2", 4)
-
-```
+saveRDS(modelW2, file = here::here("hpc", "transvir_w2", "transvir_w2_model.RData"))

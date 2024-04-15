@@ -482,6 +482,7 @@ plot_titre_exp <- function(outputfull) {
     n_chains <- outputfull$n_chains
     n_post <- outputfull$n_post
     n_length <- n_chains * n_post
+    model_outline <- fitfull$model
 
     cop_exp_sum_plot_sum <- map_df(1:length(model_outline$observationalModel), 
             function(i) {
