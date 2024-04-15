@@ -6,7 +6,12 @@
 get_data_titre_nih_2023 <- function() {
     # Read in the titre data and exposure data
     nih_hai_raw <- read.csv(file = here::here("data", "nih_2024", "serology.csv") )
-    nih_hai_raw_24 <- nih_hai_raw %>% filter(year == 2023, subtype == "H3", virus == "A/Darwin/06/2021" ) 
+    nih_hai_raw_24 <- nih_hai_raw %>% filter(year == 2023, subtype == "H3") %>% 
+        select(pid, year, day, vax_inf, subtype, virus, titre) %>%
+         mutate(titre = log2(titre / 5)) %>%
+        pivot_wider(names_from = "virus", values_from = "titre") 
+
+    biomarkers <- names(nih_hai_raw_24)[c(6, 7)]
 
     nih_hai_raw_24 %>% filter(vax_inf == "I")
     nih_bleed_raw <- read.csv(file = here::here("data", "nih_2024", "bleed-dates.csv") )
@@ -18,16 +23,17 @@ get_data_titre_nih_2023 <- function() {
     )
 
     nih_hai_date_24 <- nih_hai_raw_24 %>% left_join(add_dates, by = c("pid", "year", "day", "vax_inf")) %>%
-        select(pid, day, virus, titre, vax_inf, date) %>% filter(!is.na(date))
+        select(1, 3, 4, 8, 6, 7) %>% filter(!is.na(date))
 
     start_date <- nih_hai_date_24$date %>% min
     end_date <- nih_hai_date_24$date %>% max
 
     data_titre <- nih_hai_date_24 %>% mutate(time = as.numeric(date - start_date) + 1) %>% 
-        mutate(titre = log2(titre / 5)) %>% 
         mutate(pid = factor(pid), id = as.numeric(factor(pid))) %>% 
-        select(pid, id, time, titre, biomarker = virus) %>% arrange(id, time) %>% filter(!is.na(titre))
+        select(1, 8, 7, 5, 6) %>% arrange(id, time) %>% filter_all(all_vars(!is.na(.))) %>%
+        summarise(across(all_of(biomarkers), mean), .by = c(pid, id, time)) 
     
+    data_titre %>% group_by(id) %>% filter(time == min(time)) %>% unique %>% as.data.frame %>% group_by(id) %>% mutate(r = row_number()) %>% as.data.frame %>% filter(r == 2)
 
     time_diff_too_small <- data.frame(
         id = 1:(data_titre$id %>% max),

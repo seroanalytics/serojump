@@ -103,6 +103,7 @@
         "charconv": "cpp",
         "span": "cpp",
         "format": "cpp",
-        "__memory": "cpp"
+        "__memory": "cpp",
+        "execution": "cpp"
     }
 }

@@ -116,13 +116,16 @@ generate_data_alt <- function(data_titre_model, biomarkers) {
     #data_titre_model <- data_sero
     N <- data_titre_model$id %>% unique %>% length  
     N_data <- nrow(data_titre_model)
-    titre_true <- data_titre_model$titre
+
+    titre_true <-  data_titre_model %>% select(all_of(biomarkers)) %>% as.matrix
     times_full <- data_titre_model$time
     id_full <- data_titre_model$id
 
-    initialTitreValue <- data_titre_model %>% group_by(id) %>% filter(time == min(time)) %>% unique %>% .[["titre"]]
     initialTitreTime <- data_titre_model %>% group_by(id) %>% filter(time == min(time)) %>% unique %>% .[["time"]]
     endTitreTime <- data_titre_model %>% group_by(id) %>% filter(time == max(time)) %>% unique %>% .[["time"]]
+
+    initialTitreValue <- data_titre_model %>% group_by(id) %>% filter(time == min(time)) %>% unique %>% ungroup %>% select(all_of(biomarkers)) %>% as.matrix
+
     T <- max(endTitreTime)
 
     # Make titre and times into lists of vectors for each individual
@@ -132,7 +135,7 @@ generate_data_alt <- function(data_titre_model, biomarkers) {
     for (i in 1:N) {
         data_titre_model_i <- data_titre_model %>% filter(id == i)
         for (b in 1:length(biomarkers)) {
-            titre_list_b[[b]] <- data_titre_model_i %>% filter(biomarker == biomarkers[b]) %>% pull(titre)
+            titre_list_b[[b]] <- data_titre_model_i %>% pull(!!biomarkers[b])
         }
         titre_list[[i]] <- titre_list_b
         times_list[[i]] <- data_titre_model_i %>% pull(time)

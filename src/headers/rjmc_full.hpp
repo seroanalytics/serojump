@@ -53,61 +53,88 @@ namespace rjmc_full{
             // Define a comparison operator to sort by string values
         };
 
-        Rcpp::List observationalList, abkineticsModelList, copModelList; // List of models and parameters
+        //Rcpp::List observationalList, abkineticsModelList, copModelList; // List of models and parameters
         Rcpp::List evalLoglikelhoodObs, evalabkineticsFunc, evalLoglikelhoodCOP; // List of functions to evaluate likelihoods and kinetics
-        Rcpp::List observationalModel, abkineticsModel, copModel; // List of models and parameters
+        Rcpp::List infoModel, observationalModel, abkineticsModel, copModel; // List of models and parameters
 
-        StringVector observationalNames, abkineticNames, copNames; // Names of all the models
+        //StringVector observationalNames, abkineticNames, copNames; // Names of all the models
         List parsAbKinN, parsCOPN, parsObsN; // Lists of all the parameters names for each model
         std::vector<abKineticsInfo> abinfo;
-        std::map<std::string, int> abmap;
+        std::map<std::string, int> abmap, mapOfObs, mapOfCOP, mapOfExp;
+
         std::map<std::pair<std::string, std::string>, int> mapOfAbkinetics;
+        std::vector<string> biomarkers, exposureType, abID;
+        string exposureFitted;
+        List exposureInfo, knownInf;
         int B;
-        std::vector<string> biomarkerAb, exposureAb;
 
-        RJMC_FULL_D(Rcpp::List observationalModel_in, Rcpp::List abkineticsModel_in, Rcpp::List copModel_in) : observationalList(observationalModel_in), abkineticsModelList(abkineticsModel_in), copModelList(copModel_in) {
+        RJMC_FULL_D(Rcpp::List infoModel_in, Rcpp::List observationalModel_in, Rcpp::List abkineticsModel_in, Rcpp::List copModel_in) : infoModel(infoModel_in), observationalModel(observationalModel_in), abkineticsModel(abkineticsModel_in), copModel(copModel_in) {
 
-            this->observationalNames = observationalList["names"];
-            this->abkineticNames = abkineticsModelList["names"];
-            this->copNames = copModelList["names"];
+          //  this->observationalNames = observationalList["names"];
+          //  this->abkineticNames = abkineticsModelList["names"];
+          //  this->copNames = copModelList["names"];
 
-            this->observationalModel = observationalList["model"];
-            this->abkineticsModel = abkineticsModelList["model"];
-            this->copModel = copModelList["model"];
+          //  this->observationalModel = observationalList["model"];
+          //  this->abkineticsModel = abkineticsModelList["model"];
+          //  this->copModel = copModelList["model"];
+        //    Rcpp::Rcout << "HERE1!" << std::endl;
+            this->biomarkers = as<vector<string> >(this->infoModel["biomarkers"]);
+            this->B = this->biomarkers.size();
+            this->exposureFitted = as<string>(this->infoModel["exposureFitted"]);
+            this->exposureInfo = this->infoModel["exposureInfo"];
+         //   Rcpp::Rcout << "HERE2!" << std::endl;
 
-            // biomarkers
-            for (int i = 0; i < this->observationalNames.size(); i++) {
-                List temp1 = this->observationalModel[i];
-                Function temp2 = temp1["logLikelihood"];
-                StringVector temp3 = temp1["pars"];
-                this->evalLoglikelhoodObs[as<string>(this->observationalNames[i])] = temp2;
-                this->parsObsN[as<string>(this->observationalNames[i])] = temp3;
+            for (int i = 0; i < this->exposureInfo.size(); i++) {
+                List exposureInfo_i = exposureInfo[i];
+          //  Rcpp::Rcout << "HERE2a!" << std::endl;
+                string exposureType_i = exposureInfo_i["exposureType"];
+                this->exposureType.push_back(exposureType_i);
+           //             Rcpp::Rcout << "HERE2b!" << std::endl;
+                NumericVector known_inf_i = exposureInfo_i["known_inf"];
+                //            Rcpp::Rcout << "HERE2c!" << std::endl;
+                this->knownInf[exposureType_i] = known_inf_i;
+               //                     Rcpp::Rcout << "HERE2d!" << std::endl;
+                this->mapOfExp[exposureType_i] = i;
             }
-            //biomarkers and exposuretypes
-            for (int i = 0; i < this->abkineticNames.size(); i++) {
+         //   Rcpp::Rcout << "HERE3!" << std::endl;
+
+            for (int i = 0; i < this->observationalModel.size(); i++) {
+                List temp1 = this->observationalModel[i];
+                string temp2 = temp1["biomarker"];
+                Function temp3 = temp1["logLikelihood"];
+                StringVector temp4 = temp1["pars"];
+                this->mapOfObs[temp2] = i;
+                this->evalLoglikelhoodObs[temp2] = temp3;
+                this->parsObsN[temp2] = temp4;
+            }
+          //  Rcpp::Rcout << "HERE4!" << std::endl;
+
+            for (int i = 0; i < this->copModel.size(); i++) {
+                List temp1 = this->copModel[i];
+                string temp2 = temp1["biomarker"];
+                Function temp3 = temp1["logLikelihood"];
+                StringVector temp4 = temp1["pars"];
+                this->mapOfCOP[temp2] = i;
+                this->evalLoglikelhoodCOP[temp2] = temp3;
+                this->parsCOPN[temp2] = temp4;
+            }
+          //  Rcpp::Rcout << "HERE5!" << std::endl;
+
+            for (int i = 0; i < this->abkineticsModel.size(); i++) {
                 List temp1 = this->abkineticsModel[i];
+                string temp0 = temp1["id"];
+                abID.push_back(temp0);
                 Function temp2 = temp1["funcForm"];
                 StringVector temp3 = temp1["pars"];
                 string temp4 = temp1["biomarker"];
-                string temp5 = temp1["exposureName"];
-                this->biomarkerAb.push_back(temp4);
-                this->exposureAb.push_back(temp5);
-
-                this->evalabkineticsFunc[as<string>(this->abkineticNames[i])] = temp2;
-                this->parsAbKinN[as<string>(this->abkineticNames[i])] = temp3;
+                string temp5 = temp1["exposureType"];
+              //  this->exposureAb.push_back(temp5);
                 this->mapOfAbkinetics[std::make_pair(temp4, temp5)] = i;
-            }
-            // biomarkers
-            for (int i = 0; i < this->copNames.size(); i++) {
-                List temp1 = this->copModel[i];
-                Function temp2 = temp1["logLikelihood"];
-                StringVector temp3 = temp1["pars"];
-                this->evalLoglikelhoodCOP[as<string>(this->copNames[i])] = temp2;
-                this->parsCOPN[as<string>(this->copNames[i])] = temp3;
-            }
-            this->B = this->copNames.size();
-        }
 
+                this->evalabkineticsFunc[temp0] = temp2;
+                this->parsAbKinN[temp0] = temp3;
+            }
+        }
 
         struct DoubleWithString {
             double value;
@@ -133,30 +160,35 @@ namespace rjmc_full{
         // call each step
         void updateParams(NumericVector paramsN) {
             // parsCOPN is a list of the parameter names for the COP model
-            for (int i = 0; i < parsCOPN.size(); ++i) {
+            for (int i = 0; i < this->B; ++i) {
                 NumericVector currentParsCOP_i;
-                StringVector parnams = parsCOPN[i];
+                int i_b = this->mapOfCOP[this->biomarkers[i]];
+                StringVector parnams = parsCOPN[i_b];
                 for (int j = 0; j < parnams.size(); ++j) {
                     currentParsCOP_i.push_back(paramsN[as<string>(parnams[j])]);
                 }
-                this->currentParsCOP[as<string>(this->copNames[i])] = currentParsCOP_i;
+                this->currentParsCOP[this->biomarkers[i]] = currentParsCOP_i;
             }
-            for (int i = 0; i < parsObsN.size(); ++i) {
+            for (int i = 0; i < this->B; ++i) {
                 NumericVector currentParsObs_i;
-                StringVector parnams = parsObsN[i];
+                int i_b = this->mapOfObs[this->biomarkers[i]];
+                StringVector parnams = parsObsN[i_b];
                 for (int j = 0; j < parnams.size(); ++j) {
                     currentParsObs_i.push_back(paramsN[as<string>(parnams[j])]);
                 }
-                this->currentParsObs[as<string>(this->observationalNames[i])] = currentParsObs_i;
+                this->currentParsObs[this->biomarkers[i]] = currentParsObs_i;
 
             }
-            for (int i = 0; i < parsAbKinN.size(); ++i) {
+            for (int i = 0; i < this->abID.size(); ++i) {
                 NumericVector currentParsAb_i;
+                            
+               // int abkey = mapOfAbkinetics[{biomarkerAB[i], exposureTypeAB[i]}];
                 StringVector parnams = parsAbKinN[i];
+
                 for (int j = 0; j < parnams.size(); ++j) {
                     currentParsAb_i.push_back(paramsN[as<string>(parnams[j])]);
                 }
-                this->currentParsAb[as<string>(this->abkineticNames[i])] = currentParsAb_i;
+                this->currentParsAb[this->abID[i]] = currentParsAb_i;
 
             }
         }
@@ -222,7 +254,7 @@ namespace rjmc_full{
         vector<vector<vector<DoubleWithString> > > currentTitreFull, proposalTitreFull;
 
         void updateLists() {
-            if (onDebug) Rcpp::Rcout << "In: updateLists" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: updateLists" << std::endl;
             int i_idx;
             for (int i = 0; i < this->diff_ind.size(); i++) {
                 i_idx = this->diff_ind[i];
@@ -231,14 +263,14 @@ namespace rjmc_full{
                 this->proposalTitreFull[i_idx] = this->calculateTitre(df_order_exp_i, i_idx);
                 
             }
-            if (onDebug) Rcpp::Rcout << "End: updateLists" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "End: updateLists" << std::endl;
         }
 
         double stepSizeRobbinsMonro;
         double evalLogPosterior(const VectorXd& param, const VectorXd& jump, const VectorXd& jumpInf, const MatrixXd& covariance, const RObject& dataList, bool init = false)
         {
 
-            if (onDebug) Rcpp::Rcout << "In: evalLogPosterior" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: evalLogPosterior" << std::endl;
             NumericVector paramsN = this->createNamedParam(param);
             updateParams(paramsN);
             define_abs();
@@ -308,16 +340,17 @@ namespace rjmc_full{
         int gibbsIdx = 0;
         int noGibbsSteps;
         VectorXd initialTitreTime;
-        VectorXd initialTitreValue;
+        MatrixXd initialTitreValue;
         VectorXd endTitreTime;
-        VectorXd titre_full, times_full, id_full;
+        VectorXd times_full, id_full;
+        MatrixXd titre_full;
         List titre_list, times_list;
 
         StringVector exposurePeriods;
         string exposureNameInf;
 
 
-         std::vector<DoubleWithString> sortevents(int i_idx, const VectorXd& jump_inf, const VectorXd& jump) {
+         std::vector<DoubleWithString> sortevents(int i_idx, const VectorXd& jump, const VectorXd& jump_inf) {
             NumericVector times_full_i = this->times_list[i_idx];
             std::vector<DoubleWithString> df_order_exp;
             // Add all bleed times
@@ -325,17 +358,23 @@ namespace rjmc_full{
                 df_order_exp.emplace_back("bleed", times_full_i[i]); // End event
             }
             // Add all exposure events
-            for (int i = 0; i < this->abkineticNames.size(); i++) {
-                List here = this->abkineticsModel[as<string>(this->abkineticNames[i])]; 
-                bool inferred = here["inferred"];
-                if (!inferred){
-                    NumericVector knowninf = here["known_inf"];
-                    if (knowninf[i_idx] > -1) {
-                        df_order_exp.emplace_back(as<string>(this->abkineticNames[i]), knowninf[i_idx]); // "pre-delta" event
+            for (int i = 0; i < this->exposureType.size(); i++) {
+                //List here = this->abkineticsModel[as<string>(this->abkineticNames[i])];
+                string exposureType_i = this->exposureType[i];
+          //      Rcpp::Rcout << "!!exposureType_i!!: " << exposureType_i << std::endl;
+          //     Rcpp::Rcout << "!!this->exposureFitted!!: " << this->exposureFitted << std::endl;
+
+                if (exposureType_i == this->exposureFitted){
+             //       Rcpp::Rcout << "!!jump_inf[i_idx]!!: " << jump_inf[i_idx] << std::endl;
+              //      Rcpp::Rcout << "!!jump[i_idx]!!: " << jump[i_idx] << std::endl;
+                    if (jump_inf[i_idx] == 1) {
+                        df_order_exp.emplace_back(exposureType_i, jump[i_idx]); // "pre-delta" event
                     }
                 } else {
-                    if (jump_inf[i_idx] == 1) {
-                        df_order_exp.emplace_back(as<string>(this->abkineticNames[i]), jump[i_idx]); // "delta" event
+                    NumericVector known_inf_i = this->knownInf[exposureType_i]; 
+                  //  Rcpp::Rcout << "!!known_inf_i[i_idx]!!: " << known_inf_i[i_idx] << std::endl;
+                    if (known_inf_i[i_idx] > -1) {
+                        df_order_exp.emplace_back(exposureType_i, known_inf_i[i_idx]); // "delta" event
                     }
                 }
             }
@@ -345,13 +384,13 @@ namespace rjmc_full{
 
         }
 
-        std::vector<std::vector<DoubleWithString> > calculateTitre(std::vector<DoubleWithString>& orderedEvents, double i_idx)  {
-            if (onDebug) Rcpp::Rcout << "In: calculateTitre" << std::endl;
+        std::vector<std::vector<DoubleWithString> > calculateTitre(std::vector<DoubleWithString>& orderedEvents, int i_idx)  {
+            if (this->onDebug) Rcpp::Rcout << "In: calculateTitre" << std::endl;
 
             std::vector<std::vector<DoubleWithString> > df_order_titre;
             std::vector<DoubleWithString> df_order_titre_b;
 
-            double initTime = this->initialTitreValue[i_idx];
+            double initTime = this->initialTitreTime[i_idx];
             string bio;
             double time_since, titre_obs;
             double curr_time = initTime;
@@ -359,8 +398,10 @@ namespace rjmc_full{
             double anchor_time = curr_time;
 
             for (int b = 0; b < this->B; b++) {
-                if (onDebug) Rcpp::Rcout << "BB: lol1" << std::endl;
-                bio = this->biomarkerAb[b];
+                double anchor_time = curr_time;
+                string anchor_func = orderedEvents[0].name;
+                if (this->onDebug) Rcpp::Rcout << "BB: lol1" << std::endl;
+                bio = this->biomarkers[b];
                 df_order_titre_b.clear();
                 double initTitre = this->initialTitreValue(i_idx, b);
                 double anchor_titre = initTitre;
@@ -371,18 +412,18 @@ namespace rjmc_full{
                         time_since = orderedEvents[i].value - anchor_time;
                         titre_obs = calTitre(anchor_titre, bio, anchor_func, time_since );
                         df_order_titre_b.emplace_back(orderedEvents[i].name, titre_obs);
-                    if (onDebug) Rcpp::Rcout << "Out: lol12" << std::endl;
+                    if (this->onDebug) Rcpp::Rcout << "Out: lol12" << std::endl;
                     if (orderedEvents[i].name != "bleed") {
-                        if (onDebug) Rcpp::Rcout << "Out: here" << std::endl;
+                        if (this->onDebug) Rcpp::Rcout << "Out: here" << std::endl;
                         anchor_titre = titre_obs;
                         anchor_time = orderedEvents[i].value;
                         anchor_func = orderedEvents[i].name;
                     }
                 }
-                if (onDebug) Rcpp::Rcout << "Out: lol1" << std::endl;
+                if (this->onDebug) Rcpp::Rcout << "Out: lol1" << std::endl;
                 df_order_titre.push_back(df_order_titre_b);
             }
-            if (onDebug) Rcpp::Rcout << "Out: calculateTitre" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "Out: calculateTitre" << std::endl;
             return df_order_titre;
 
         }
@@ -390,14 +431,17 @@ namespace rjmc_full{
         void initialiseClass(List settings, RObject dataList, int i)
         {
             Rcpp::Rcout << "In: initialiseClass" << std::endl;
+            this->onDebug = settings["onDebug"];
             Rcpp::Rcout << "In: initialiseClass" << std::endl;
-            if (onDebug) Rcpp::Rcout << "In: initialiseClass" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: initialiseClass" << std::endl;
 
-            if (onDebug) Rcpp::Rcout << "In: Extract data from dataList" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: Extract data from dataList" << std::endl;
 
             this->dataList = dataList;            
             this->dataListCPP = as<List>(dataList);
             this->fittedParamNames = this->dataListCPP["par_names"];
+
+            if (this->onDebug) Rcpp::Rcout << "In: Extract data from dataList1" << std::endl;
 
             // Useful for internal functions
             this->N = this->dataListCPP["N"];
@@ -409,6 +453,7 @@ namespace rjmc_full{
             this->titre_full = this->dataListCPP["titre_full"];
             this->times_full = this->dataListCPP["times_full"];
             this->id_full = this->dataListCPP["id_full"];
+            if (this->onDebug) Rcpp::Rcout << "In: Extract data from dataList2" << std::endl;
 
             this->knownExpVec = this->dataListCPP["knownExpVec"];
             if (this->knownExpVec.size() > 1) {
@@ -417,6 +462,7 @@ namespace rjmc_full{
             this->knownInfsVec = this->dataListCPP["knownInfsVec"];
             this->knownInfsTimeVec = this->dataListCPP["knownInfsTimeVec"];
             this->knownInfsN = this->dataListCPP["knownInfsN"];
+            if (this->onDebug) Rcpp::Rcout << "In: Extract data from dataList3" << std::endl;
 
             this->currInferredInfN = this->knownInfsN;
             this->propInferredInfN = this->knownInfsN;
@@ -428,28 +474,19 @@ namespace rjmc_full{
                 this->propInferredExpN = this->knownInfsN;    
             }
 
-            this->N_data = this->dataListCPP["N_data"];
+            if (this->onDebug) Rcpp::Rcout << "In: Extract data from dataList4" << std::endl;
 
             this->initialTitreTime = this->dataListCPP["initialTitreTime"];
             this->endTitreTime = this->dataListCPP["endTitreTime"];
             this->initialTitreValue = this->dataListCPP["initialTitreValue"];
             
-            if (onDebug) Rcpp::Rcout << "Out: Extract data from dataList" << std::endl;
 
-            if (onDebug) Rcpp::Rcout << "In: Initialise rjmcmc" << std::endl;
-
-
-            this->exposurePeriods = this->abkineticsModel["exposurePeriods"];
-            this->exposureNames = this->abkineticsModel["exposureNames"];
-            this->exposureNameInf = as<string>(this->abkineticsModel["exposureNameInf"]);
-
-            if (onDebug) Rcpp::Rcout << "In: Check 1" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: Check 1" << std::endl;
 
             this->adaptiveGibbsSD = VectorXd::Constant(this->N, 0);
             this->counterAdaptiveGibbs = VectorXd::Zero(this->N);
 
             this->chainNumber = i;
-            if (onDebug) Rcpp::Rcout << "In: Check 2" << std::endl;
 
             this->noGibbsSteps = settings["noGibbsSteps"];
             this->numberFittedPar = settings["numberFittedPar"];
@@ -463,7 +500,7 @@ namespace rjmc_full{
             this->onDebug = settings["onDebug"];
             this->profile = settings["profile"];
             this->lengthJumpVec = settings["lengthJumpVec"];
-            if (onDebug) Rcpp::Rcout << "In: Check 3" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: Check 3" << std::endl;
 
             this->lowerParBounds = settings["lowerParBounds"];
             this->upperParBounds = settings["upperParBounds"];
@@ -479,7 +516,7 @@ namespace rjmc_full{
             this->counterNonAdaptive = 0;
             
             this->iPosterior = 0;
-            if (onDebug) Rcpp::Rcout << "In: Check 4" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: Check 4" << std::endl;
 
             this->posteriorSamplesLength = (this->iterations-this->burninPosterior)/(this->thin);
             this->posteriorOut = MatrixXd::Zero(this->posteriorSamplesLength, this->numberFittedPar + 2);
@@ -502,7 +539,7 @@ namespace rjmc_full{
             this->currentCovarianceMatrix = MatrixXd::Zero(this->numberFittedPar, this->numberFittedPar );
             this->nonadaptiveCovarianceMat = MatrixXd::Zero(this->numberFittedPar, this->numberFittedPar );
             this->adaptiveCovarianceMat = MatrixXd::Zero(this->numberFittedPar ,this->numberFittedPar );
-            if (onDebug) Rcpp::Rcout << "In: Check 5" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: Check 5" << std::endl;
 
             VectorXd initialSample;
             VectorXd initialJump;
@@ -518,7 +555,7 @@ namespace rjmc_full{
             
             this->nonadaptiveScalar = log(0.1*0.1/(double)this->numberFittedPar);
             this->adaptiveScalar = log(2.382*2.382/(double)this->numberFittedPar);
-            if (onDebug) Rcpp::Rcout << "In: Check 6" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: Check 6" << std::endl;
 
             // Get initial conditions for the proposal sample
             initialSample = this->samplePriorDistributions(this->dataList);
@@ -543,7 +580,7 @@ namespace rjmc_full{
             // Get initial conditions for the infection states
             initialInf = initInfFunc(); 
             this->currentInf = initialInf;
-            if (onDebug) Rcpp::Rcout << "In: Check 7" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: Check 7" << std::endl;
 
 
             NumericVector paramsN = this->createNamedParam(initialSample);
@@ -559,7 +596,7 @@ namespace rjmc_full{
                 this->currentEventsFull.push_back(df_order_exp_i);
                 this->proposalEventsFull.push_back(df_order_exp_i);
 
-                if (onDebug) Rcpp::Rcout << "In: Check 7iii: " << i_idx << std::endl;
+                if (this->onDebug) Rcpp::Rcout << "In: Check 7iii: " << i_idx << std::endl;
 
                 df_order_titre_i = this->calculateTitre(df_order_exp_i, i_idx);
                 //this->currentTitreFull.insert(this->currentTitreFull.begin() + i_idx, df_order_titre_i);
@@ -570,13 +607,13 @@ namespace rjmc_full{
             this->currentCovarianceMatrix = this->nonadaptiveScalar*this->nonadaptiveCovarianceMat;
             initialLogLikelihood = this->evalLogPosterior(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList, true);
 
-            if (onDebug) Rcpp::Rcout << "In: Check 8" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: Check 8" << std::endl;
 
             while(isinf(initialLogLikelihood) || isnan(initialLogLikelihood)){
                 initialSample = this->samplePriorDistributions(this->dataList);
                 initialLogLikelihood = this->evalLogPosterior(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList, true);
             }
-            if (onDebug) Rcpp::Rcout << "In: Check 9" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: Check 9" << std::endl;
             this->currentSample = initialSample;
             this->currentSampleMean = initialSample;
             this->currentLogPosterior = initialLogLikelihood;
@@ -588,8 +625,8 @@ namespace rjmc_full{
             double alphaMVN = -sqrt(2)*ErfInv(0.234-1);
             this->stepSizeRobbinsMonro = (1.0-1.0/(double)this->numberFittedPar)*(pow(2*3.141, 0.5)*exp(alphaMVN*alphaMVN*0.5))/(2*alphaMVN) + 1.0/(this->numberFittedPar*0.234*(1-0.234));
 
-            if (onDebug) Rcpp::Rcout << "End: Initialise rjmcmc" << std::endl;
-            if (onDebug) Rcpp::Rcout << "End: initialiseClass" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "End: Initialise rjmcmc" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "End: initialiseClass" << std::endl;
         }
 
         VectorXd initInfFunc() {
@@ -690,11 +727,11 @@ namespace rjmc_full{
         
         List runRJMCC()
         {
-            if (onDebug) Rcpp::Rcout << "Pre: iterations" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "Pre: iterations" << std::endl;
             for (int i = 0; i < this->iterations; i++){
 
                 this->workingIteration = i;
-                if (onDebug) Rcpp::Rcout << "Pre: updateAllChains" << std::endl;
+                if (this->onDebug) Rcpp::Rcout << "Pre: updateAllChains" << std::endl;
                 if (this->profile) clock.tick("Astep");
                 updateAllChains();
                 if (this->profile) clock.tock("Astep");
@@ -714,11 +751,11 @@ namespace rjmc_full{
         
         void updateAllChains()
         {
-            if (onDebug) Rcpp::Rcout << "Pre: updateRJMC" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "Pre: updateRJMC" << std::endl;
             updateRJMC();            
-            if (onDebug) Rcpp::Rcout << "Pre: updateGibbsTiming" << std::endl;
-            if (onDebug) Rcpp::Rcout << "currInferredExpN: " << currInferredExpN << std::endl;
-            if (onDebug) Rcpp::Rcout << "knownInfsN: " << knownInfsN << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "Pre: updateGibbsTiming" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "currInferredExpN: " << currInferredExpN << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "knownInfsN: " << knownInfsN << std::endl;
 
             if ((this->currInferredExpN != this->knownInfsN) & !this->knownExpInd) { 
                 updateGibbsTiming();
@@ -726,19 +763,19 @@ namespace rjmc_full{
 
            this->counterFuncEval++;
 
-            if (onDebug) Rcpp::Rcout << "Pre: updateOutputPosterior" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "Pre: updateOutputPosterior" << std::endl;
             updateOutputPosterior();
-            if (onDebug) Rcpp::Rcout << "Pre: updateProposal" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "Pre: updateProposal" << std::endl;
         
             consoleUpdatefunction();
         }
         
         void updateRJMC() {
-            if (onDebug) Rcpp::Rcout << "Pre: getAcceptanceRate" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "Pre: getAcceptanceRate" << std::endl;
             getAcceptanceRate();
         //    Rcpp::Rcout << "alpha (kin): " << this->alpha << std::endl;
 
-            if (onDebug) Rcpp::Rcout << "Pre: updateSampleAndLogPosterior" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "Pre: updateSampleAndLogPosterior" << std::endl;
             updateSampleAndLogPosterior();
             if(this->conPropIn & (this->currJumpType == 1)) {
                 updateProposal();
@@ -750,20 +787,20 @@ namespace rjmc_full{
         {        
             this->isSampleAccepted = false;
            // Evaluate the ab kinetics parameters and do rjmcmc
-            if (onDebug) Rcpp::Rcout << "Pre: selectProposalDist" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "Pre: selectProposalDist" << std::endl;
             selectProposalDist();
-            if (onDebug) Rcpp::Rcout << "Pre: JumpProposalDist" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "Pre: JumpProposalDist" << std::endl;
             JumpProposalDist();
-            if (onDebug) Rcpp::Rcout << "Pre: evalLogPosterior" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "Pre: evalLogPosterior" << std::endl;
             // CALCULATE TITREATINFECTION
             this->proposedLogPosterior = this->evalLogPosterior(this->proposalSample, this->proposalJump, this->proposalInf, this->currentCovarianceMatrix, this->dataList);
-            if (onDebug) Rcpp::Rcout << "Pre: evaluateMetropolisRatio" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "Pre: evaluateMetropolisRatio" << std::endl;
             evaluateMetropolisRatio();
         }
 
         // Sample an individual who is exposed in current chain
         int sampleExposed() {
-            if (onDebug) Rcpp::Rcout << "In: sampleExposed" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: sampleExposed" << std::endl;
 
             int s = uniformDiscreteDist(0, this->N - 1); 
             while ((this->knownInfsVec(s) == 1) || (this->currentJump(s) == -1) ) {
@@ -783,7 +820,7 @@ namespace rjmc_full{
 
         // Sample an new infection status for an exposed individual
         void proposeInfection(int t) {
-            if (onDebug) Rcpp::Rcout << "In: proposeInfection" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: proposeInfection" << std::endl;
 
             if (this->propInferredInfN == 0) {
                 this->proposalInf(t) = 1;
@@ -796,7 +833,7 @@ namespace rjmc_full{
 
         // Resample the exposure time fo and individual, does not resample the infection rate
         void resampleTime(int t) {
-            if (onDebug) Rcpp::Rcout << "In: resampleTime" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: resampleTime" << std::endl;
             double r = uniformContinuousDist(0, 1);
             double r_inf = uniformContinuousDist(0, 1);
 
@@ -823,7 +860,7 @@ namespace rjmc_full{
 
         // 'birth' process of rjmcmc regime. Samples a new exposure from list unexposed individuals.
         void sampleNewTime(int t) {
-            if (onDebug) Rcpp::Rcout << "In: sampleNewTime" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: sampleNewTime" << std::endl;
 
             double r = uniformContinuousDist(0, 1);
 
@@ -872,15 +909,15 @@ namespace rjmc_full{
         }
 
         void JumpProposalDist() {
-            if (onDebug) Rcpp::Rcout << "Redfine prop = curr" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "Redfine prop = curr" << std::endl;
             this->proposalJump = this->currentJump;
             this->proposalInf = this->currentInf;
 
             double q = uniformContinuousDist(0, 1);
           //  double r;
             VectorXd q_prob(3);
-            if (onDebug) Rcpp::Rcout << "get q_prob" << std::endl;
-            if (onDebug) Rcpp::Rcout << "this->knownInfsN: " << this->knownInfsN << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "get q_prob" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "this->knownInfsN: " << this->knownInfsN << std::endl;
 
 
             if (this->knownExpInd) {
@@ -896,7 +933,7 @@ namespace rjmc_full{
             }
 
             // Substract a value
-            if (onDebug) Rcpp::Rcout << "Find jumping" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "Find jumping" << std::endl;
             if (q < q_prob(0)) {
              //   Rcpp::Rcout << "In deletion" << std::endl;
                 this->currJumpIdx = this->sampleExposed(); // length is n_ - 114
@@ -923,11 +960,11 @@ namespace rjmc_full{
                 this->currJumpType = 2;
                 //this->propInferredExpN = this->currInferredExpN + 1;
             }
-            if (onDebug) Rcpp::Rcout << "END jump sample" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "END jump sample" << std::endl;
         }
 
         void updateGibbsTiming() {
-            if (onDebug) Rcpp::Rcout << "In: updateGibbsTiming" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: updateGibbsTiming" << std::endl;
 
             this->currJumpType = 1;
             for (int i = 0; i < this->noGibbsSteps; i++) { 
@@ -946,7 +983,7 @@ namespace rjmc_full{
         }
         
         void selectProposalDist(bool update = true){
-          //  if (onDebug) Rcpp::Rcout << "Post: selectProposalDist" << std::endl;
+          //  if (this->onDebug) Rcpp::Rcout << "Post: selectProposalDist" << std::endl;
 
             if (this->workingIteration < this->burninAdaptiveCov || uniformContinuousDist(0, 1) < 0.05 || !this->onAdaptiveCov ){
                 generateSampleFromNonAdaptiveProposalDist(update);
@@ -994,7 +1031,7 @@ namespace rjmc_full{
             } else {
                 if (this->currJumpType == 0) {
                     for (int b = 0; b < this->B; b++) {
-                        string bio = this->biomarkerAb[b];
+                        string bio = this->biomarkers[b];
                         Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[bio];
                         NumericVector pars = this->currentParsCOP[bio];
                         rjadjustmentFactor2 += as<double>(evalLoglikelhoodCOP_i(this->currentInf(this->currJumpIdx), this->currentTitreExp(this->currJumpIdx, b), pars) ); 
@@ -1006,7 +1043,7 @@ namespace rjmc_full{
                     rjadjustmentFactor = 0;
                 } else if (this->currJumpType == 2) {
                     for (int b = 0; b < this->B; b++) {
-                        string bio = this->biomarkerAb[b];
+                        string bio = this->biomarkers[b];
                         Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[bio];
                         NumericVector pars = this->currentParsCOP[bio];
                         rjadjustmentFactor2 += as<double>(evalLoglikelhoodCOP_i(this->currentInf(this->currJumpIdx), this->currentTitreExp(this->currJumpIdx, b), pars) ); 
@@ -1034,7 +1071,7 @@ namespace rjmc_full{
         void updateSampleAndLogPosterior()
         {
             if (uniformContinuousDist(0, 1) < this->alpha) {
-                if (onDebug) Rcpp::Rcout << "In: ACCEPTED" << std::endl;
+                if (this->onDebug) Rcpp::Rcout << "In: ACCEPTED" << std::endl;
                 this->finddifferInf();
                 this->isSampleAccepted = true; this->counterAccepted++;
 
@@ -1068,7 +1105,7 @@ namespace rjmc_full{
         void updateJumpHistoric()
         {
             if (uniformContinuousDist(0, 1) < this->alpha) {
-                if (onDebug) Rcpp::Rcout << "In: ACCEPTED JUMP" << std::endl;
+                if (this->onDebug) Rcpp::Rcout << "In: ACCEPTED JUMP" << std::endl;
                 //Rcpp::Rcout << "ACCEPTED (GIBBS): " << this->alpha << std::endl;
                 this->finddifferInf();
                 this->currentSample = this->proposalSample;
@@ -1230,36 +1267,6 @@ namespace rjmc_full{
             }
         }
 
-
-        std::vector<DoubleWithString> orderExposureEvents(
-                const VectorXd& jump_inf, 
-                const VectorXd& jump, double initialtime, int i_idx, double time) {
-
-                std::vector<DoubleWithString> df_order_exp;
-                        
-                df_order_exp.emplace_back("none", initialtime); // Initial event
-                df_order_exp.emplace_back("bleed", time); // End event
-
-                for (int i = 0; i < this->exposureNames.size(); i++) {
-                    List here = this->abkineticsModel[as<string>(this->exposureNames[i])]; 
-                    bool inferred = here["inferred"];
-                    if (!inferred){
-                        NumericVector knowninf = here["known_inf"];
-                        if (knowninf[i_idx] > -1 && knowninf[i_idx] < time) {
-                            df_order_exp.emplace_back(as<string>(this->exposureNames[i]), knowninf[i_idx]); // "pre-delta" event
-                        }
-                    } else {
-                        if (jump_inf[i_idx] == 1 && jump[i_idx] < time) {
-                            df_order_exp.emplace_back(as<string>(this->exposureNames[i]), jump[i_idx]); // "delta" event
-                        }
-                    }
-                }
-                std::sort(df_order_exp.begin(), df_order_exp.end());
-
-                return df_order_exp;
-        }
-
-
         NumericVector createNamedParam(const VectorXd& params) {
             NumericVector paramsName(this->fittedParamNames.size());
             for (int i = 0; i < this->fittedParamNames.size(); ++i) {
@@ -1271,25 +1278,28 @@ namespace rjmc_full{
 
 
         double calTitre(double& titre_est, string& biomarker, string& exposureType_i, double& timeSince) {
-            if (onDebug) Rcpp::Rcout << "In: calTitre" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: calTitre" << std::endl;
             int abkey = mapOfAbkinetics[{biomarker, exposureType_i}];
+        //    Rcpp::Rcout << "biomarker : " << biomarker << " exposureType_i : " << exposureType_i << " timeSince : " << timeSince << std::endl;
+           // Rcpp::Rcout << "titre_est pre: " << titre_est << std::endl;
             titre_est = Rcpp::as<double>(this->abinfo[abkey].func(titre_est, timeSince, this->abinfo[abkey].params));
-            if (onDebug) Rcpp::Rcout << "Out: calTitre" << std::endl;
+         //   Rcpp::Rcout << "titre_est post: " << titre_est << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "Out: calTitre" << std::endl;
             return titre_est;
         }
 
         void define_abs() {
             abinfo.clear();
-            for (int i = 0; i < this->abkineticNames.size(); i++) {
-                Function thisfunc = this->evalabkineticsFunc[as<string>(this->abkineticNames[i])];
-                NumericVector params = this->currentParsAb[as<string>(this->abkineticNames[i])];
-                this->abinfo.emplace_back(as<string>(abkineticNames[i]), thisfunc, params); // Initial event
+            for (int i = 0; i < this->abID.size(); i++) {
+                Function thisfunc = this->evalabkineticsFunc[this->abID[i]];
+                NumericVector params = this->currentParsAb[this->abID[i]];
+                this->abinfo.emplace_back(this->abID[i], thisfunc, params); // Initial event
             }
         }
 
         double evaluateLogLikelihoodCOP_cpp(VectorXd params, VectorXd jump, VectorXd jumpinf, bool init) {
             if (this->profile)  clock.tick("cop_ll");
-            if (onDebug) Rcpp::Rcout << "In: evaluateLogLikelihoodCOP_cpp" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: evaluateLogLikelihoodCOP_cpp" << std::endl;
 
             MatrixXd titreExp(this->N, this->B);
 
@@ -1306,15 +1316,19 @@ namespace rjmc_full{
                     List titre_list_i = this->titre_list[i_idx];
                     std::vector<std::vector<DoubleWithString> > proposalTitreFull_i = this->proposalTitreFull[i_idx];
                     for (int bio = 0; bio < this->B; bio++) {
+                        string biomarker_b = biomarkers[bio];
 
-                        Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[as<string>(this->copNames[bio])];
-                        NumericVector pars = this->currentParsCOP[as<string>(this->copNames[bio])];
+                        Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[biomarker_b];
+                        NumericVector pars = this->currentParsCOP[biomarker_b];
 
                         std::vector<DoubleWithString> proposalTitreFull_i_b = proposalTitreFull_i[bio];
 
                         for (int j = 0; j < proposalTitreFull_i_b.size(); j++) {
-                            if(proposalTitreFull_i_b[j].name == this->exposureNameInf) {
+                            // Add biomarkers here?
+                           // Rcpp::Rcout << "proposalTitreFull_i_b[j].name: " << proposalTitreFull_i_b[j].name << " j: " << j << " biomarker: " << biomarker_b << " idx: " << i_idx << std::endl;
+                            if(proposalTitreFull_i_b[j].name == this->exposureFitted) {
                                 titre_est = proposalTitreFull_i_b[j].value;
+                             //   Rcpp::Rcout << "titre_est: " << titre_est << std::endl;
                             }
                         }
                         titreExp(i_idx, bio) = titre_est;
@@ -1334,7 +1348,7 @@ namespace rjmc_full{
 
         double evaluateLogLikelihoodObs_cpp(const VectorXd& params, const VectorXd& jump, const VectorXd& jump_inf, bool init) {
             if (this->profile) clock.tick("obs_ll");
-            if (onDebug) Rcpp::Rcout << "In: evaluateLogLikelihoodObs_cpp" << std::endl;
+            if (this->onDebug) Rcpp::Rcout << "In: evaluateLogLikelihoodObs_cpp" << std::endl;
 
             NumericVector paramsN = this->createNamedParam(params);
             std::vector<DoubleWithString> df_order_exp; 
@@ -1355,8 +1369,9 @@ namespace rjmc_full{
 
                 for (int bio = 0; bio < this->B; bio++) {
                     k_count = 0;
-                    Function evalLoglikelhoodObs_i = this->evalLoglikelhoodObs[as<string>(this->observationalNames[bio])];
-                    NumericVector pars = this->currentParsObs[as<string>(this->observationalNames[bio])];
+                    string biomarker_b = biomarkers[bio];
+                    Function evalLoglikelhoodObs_i = this->evalLoglikelhoodObs[biomarker_b];
+                    NumericVector pars = this->currentParsObs[biomarker_b];
 
                     NumericVector titre_val_i_b = titre_list_i[bio];
                     std::vector<DoubleWithString> proposalTitreFull_i_b = proposalTitreFull_i[bio];
@@ -1369,9 +1384,8 @@ namespace rjmc_full{
                             ll += as<double>(evalLoglikelhoodObs_i(titre_val, titre_est, pars) );
                         }
                     }
-                    k_idx = k_idx + k_count;
                 }
- 
+                k_idx = k_idx + k_count;        
             }
             if (init) {
                 this->currentObsTitre = obsTitre;

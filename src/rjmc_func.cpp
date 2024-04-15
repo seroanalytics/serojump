@@ -129,12 +129,13 @@ List run_rjmc_full(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings
 {
   Rcpp::Rcout << "Start: run_rjmc_full" << std::endl;
 
+  List exposureInfo = model["infoModel"];
   List observationalModel = model["observationalModel"];
   List abkineticsModel = model["abkineticsModel"];
   List copModel = model["copModel"];
 
   Rcpp::Rcout << "Initiate class" << std::endl;
-  rjmc_full::RJMC_FULL_D RJMC_FULL(observationalModel, abkineticsModel, copModel);
+  rjmc_full::RJMC_FULL_D RJMC_FULL(exposureInfo, observationalModel, abkineticsModel, copModel);
   Rcpp::Rcout << "End: Initiate class" << std::endl;
 
   List output_full;
