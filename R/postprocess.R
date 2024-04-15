@@ -388,10 +388,15 @@ plot_cop_rec <- function(outputfull) {
     post <- fitfull$post
     data_t <- fitfull$data_t
 
+        n_chains <- outputfull$n_chains
+    n_post <- outputfull$n_post
+    n_length <- n_chains * n_post
+    chain_samples <- 1:n_chains %>% map(~c(rep(.x, n_post))) %>% unlist
+
     model_outline <- fitfull$model
     post_fit <- post$mcmc %>% combine %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
 
-    n_chains <- outputfull$n_chains
+
     n_post <- outputfull$n_post
     n_length <- n_chains * n_post
     posteriorsAllCOP <- map_df(1:length(model_outline$copModel),
