@@ -31,6 +31,9 @@ copFuncForm <- function(inf_status, esttitreExp, params) {
 
 copLogLikelihood <- function(inf_status, esttitreExp, params) {
     # COP parameters
+    beta0 <- params[1]
+    beta1 <- params[2]
+    p <- 1.0 / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
     p <- copFuncForm(inf_status, esttitreExp, params)
     ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
     ll

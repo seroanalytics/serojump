@@ -1,0 +1,184 @@
+Loading required package: usethis
+ℹ Loading rjmc
+Exports from /home/lshdh2/github/rjmcmc_methods/src/rjmc_func.cpp:
+   List run_rjmc(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i)
+   List run_rjmc_sero(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i)
+   List run_rjmc_full(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i)
+
+/home/lshdh2/github/rjmcmc_methods/src/RcppExports.cpp updated.
+/home/lshdh2/github/rjmcmc_methods/R/RcppExports.R updated.
+ℹ Re-compiling rjmc (debug build)
+── R CMD INSTALL ───────────────────────────────────────────────────────────────
+* installing *source* package ‘rjmc’ ...
+** using staged installation
+** libs
+using C++ compiler: ‘x86_64-conda-linux-gnu-c++ (conda-forge gcc 13.2.0-5) 13.2.0’
+using C++11
+x86_64-conda-linux-gnu-c++ -std=gnu++11 -I"/home/lshdh2/miniconda3/envs/R/lib/R/include" -DNDEBUG  -I'/home/lshdh2/miniconda3/envs/R/lib/R/library/Rcpp/include' -I'/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include' -I'/home/lshdh2/miniconda3/envs/R/lib/R/library/BH/include' -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/lshdh2/miniconda3/envs/R/include -I/home/lshdh2/miniconda3/envs/R/include -Wl,-rpath-link,/home/lshdh2/miniconda3/envs/R/lib    -fpic  -fvisibility-inlines-hidden  -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/lshdh2/miniconda3/envs/R/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/r-base-split_1709218169200/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/home/lshdh2/miniconda3/envs/R=/usr/local/src/conda-prefix  -UNDEBUG -Wall -pedantic -g -O0 -c RcppExports.cpp -o RcppExports.o
+In file included from /home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/Core:205,
+                 from /home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/Dense:1,
+                 from /home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/RcppEigenForward.h:28,
+                 from /home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/RcppEigen.h:25,
+                 from RcppExports.cpp:4:
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/SSE/PacketMath.h:46:40: warning: ignoring attributes on template argument '__m128i' [-Wignored-attributes]
+   46 | typedef eigen_packet_wrapper<__m128i, 0> Packet4i;
+      |                                        ^
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/SSE/PacketMath.h:47:40: warning: ignoring attributes on template argument '__m128i' [-Wignored-attributes]
+   47 | typedef eigen_packet_wrapper<__m128i, 1> Packet16b;
+      |                                        ^
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/SSE/PacketMath.h:49:39: warning: ignoring attributes on template argument '__m128' [-Wignored-attributes]
+   49 | template<> struct is_arithmetic<__m128>  { enum { value = true }; };
+      |                                       ^
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/SSE/PacketMath.h:50:40: warning: ignoring attributes on template argument '__m128i' [-Wignored-attributes]
+   50 | template<> struct is_arithmetic<__m128i> { enum { value = true }; };
+      |                                        ^
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/SSE/PacketMath.h:51:40: warning: ignoring attributes on template argument '__m128d' [-Wignored-attributes]
+   51 | template<> struct is_arithmetic<__m128d> { enum { value = true }; };
+      |                                        ^
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/SSE/PacketMath.h:222:43: warning: ignoring attributes on template argument 'Eigen::internal::Packet4f' {aka '__m128'} [-Wignored-attributes]
+  222 | template<> struct unpacket_traits<Packet4f> {
+      |                                           ^
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/SSE/PacketMath.h:228:43: warning: ignoring attributes on template argument 'Eigen::internal::Packet2d' {aka '__m128d'} [-Wignored-attributes]
+  228 | template<> struct unpacket_traits<Packet2d> {
+      |                                           ^
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/SSE/PacketMath.h:1124:34: warning: ignoring attributes on template argument 'Eigen::internal::Packet4f' {aka '__m128'} [-Wignored-attributes]
+ 1124 | ptranspose(PacketBlock<Packet4f,4>& kernel) {
+      |                                  ^
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/SSE/PacketMath.h:1129:34: warning: ignoring attributes on template argument 'Eigen::internal::Packet2d' {aka '__m128d'} [-Wignored-attributes]
+ 1129 | ptranspose(PacketBlock<Packet2d,2>& kernel) {
+      |                                  ^
+In file included from /home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/Core:174:
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/Default/ConjHelper.h:16:60: warning: ignoring attributes on template argument 'Eigen::internal::Packet4f' {aka '__m128'} [-Wignored-attributes]
+   16 |   struct conj_helper<PACKET_REAL, PACKET_CPLX, false, false> {          \
+      |                                                            ^
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/SSE/Complex.h:173:1: note: in expansion of macro 'EIGEN_MAKE_CONJ_HELPER_CPLX_REAL'
+  173 | EIGEN_MAKE_CONJ_HELPER_CPLX_REAL(Packet2cf,Packet4f)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/Default/ConjHelper.h:29:60: warning: ignoring attributes on template argument 'Eigen::internal::Packet4f' {aka '__m128'} [-Wignored-attributes]
+   29 |   struct conj_helper<PACKET_CPLX, PACKET_REAL, false, false> {          \
+      |                                                            ^
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/SSE/Complex.h:173:1: note: in expansion of macro 'EIGEN_MAKE_CONJ_HELPER_CPLX_REAL'
+  173 | EIGEN_MAKE_CONJ_HELPER_CPLX_REAL(Packet2cf,Packet4f)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/Default/ConjHelper.h:16:60: warning: ignoring attributes on template argument 'Eigen::internal::Packet2d' {aka '__m128d'} [-Wignored-attributes]
+   16 |   struct conj_helper<PACKET_REAL, PACKET_CPLX, false, false> {          \
+      |                                                            ^
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/SSE/Complex.h:298:1: note: in expansion of macro 'EIGEN_MAKE_CONJ_HELPER_CPLX_REAL'
+  298 | EIGEN_MAKE_CONJ_HELPER_CPLX_REAL(Packet1cd,Packet2d)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/Default/ConjHelper.h:29:60: warning: ignoring attributes on template argument 'Eigen::internal::Packet2d' {aka '__m128d'} [-Wignored-attributes]
+   29 |   struct conj_helper<PACKET_CPLX, PACKET_REAL, false, false> {          \
+      |                                                            ^
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/arch/SSE/Complex.h:298:1: note: in expansion of macro 'EIGEN_MAKE_CONJ_HELPER_CPLX_REAL'
+  298 | EIGEN_MAKE_CONJ_HELPER_CPLX_REAL(Packet1cd,Packet2d)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/Core:165:
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/util/XprHelper.h: In instantiation of 'struct Eigen::internal::find_best_packet<float, 4>':
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/Matrix.h:22:57:   required from 'struct Eigen::internal::traits<Eigen::Matrix<float, 4, 1> >'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Geometry/Quaternion.h:266:49:   required from 'struct Eigen::internal::traits<Eigen::Quaternion<float> >'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Geometry/arch/Geometry_SIMD.h:24:46:   required from here
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/util/XprHelper.h:190:44: warning: ignoring attributes on template argument 'Eigen::internal::packet_traits<float>::type' {aka '__m128'} [-Wignored-attributes]
+  190 |          bool Stop = Size==Dynamic || (Size%unpacket_traits<PacketType>::size)==0 || is_same<PacketType,typename unpacket_traits<PacketType>::half>::value>
+      |                                       ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/util/XprHelper.h:190:83: warning: ignoring attributes on template argument 'Eigen::internal::packet_traits<float>::type' {aka '__m128'} [-Wignored-attributes]
+  190 |          bool Stop = Size==Dynamic || (Size%unpacket_traits<PacketType>::size)==0 || is_same<PacketType,typename unpacket_traits<PacketType>::half>::value>
+      |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/util/XprHelper.h:190:83: warning: ignoring attributes on template argument 'Eigen::internal::packet_traits<float>::type' {aka '__m128'} [-Wignored-attributes]
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/util/XprHelper.h:190:83: warning: ignoring attributes on template argument 'Eigen::internal::unpacket_traits<__vector(4) float>::half' {aka '__m128'} [-Wignored-attributes]
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/util/XprHelper.h:208:88: warning: ignoring attributes on template argument 'Eigen::internal::packet_traits<float>::type' {aka '__m128'} [-Wignored-attributes]
+  208 |   typedef typename find_best_packet_helper<Size,typename packet_traits<T>::type>::type type;
+      |                                                                                        ^~~~
+In file included from /home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/Core:271:
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/DenseCoeffsBase.h: In instantiation of 'class Eigen::DenseCoeffsBase<Eigen::Matrix<float, 4, 1>, 0>':
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/DenseCoeffsBase.h:302:7:   required from 'class Eigen::DenseCoeffsBase<Eigen::Matrix<float, 4, 1>, 1>'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/DenseCoeffsBase.h:555:7:   required from 'class Eigen::DenseCoeffsBase<Eigen::Matrix<float, 4, 1>, 3>'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/DenseBase.h:41:34:   required from 'class Eigen::DenseBase<Eigen::Matrix<float, 4, 1> >'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/MatrixBase.h:48:34:   required from 'class Eigen::MatrixBase<Eigen::Matrix<float, 4, 1> >'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/PlainObjectBase.h:98:7:   required from 'class Eigen::PlainObjectBase<Eigen::Matrix<float, 4, 1> >'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/Matrix.h:178:7:   required from 'class Eigen::Matrix<float, 4, 1>'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Geometry/Quaternion.h:46:50:   required from 'class Eigen::QuaternionBase<Eigen::Quaternion<float> >'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Geometry/Quaternion.h:273:7:   required from 'class Eigen::Quaternion<float>'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Geometry/arch/Geometry_SIMD.h:27:3:   required from here
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/DenseCoeffsBase.h:56:30: warning: ignoring attributes on template argument 'Eigen::internal::packet_traits<float>::type' {aka '__m128'} [-Wignored-attributes]
+   56 |                      >::type PacketReturnType;
+      |                              ^~~~~~~~~~~~~~~~
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/util/XprHelper.h: In instantiation of 'struct Eigen::internal::find_best_packet<double, 4>':
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/Matrix.h:22:57:   required from 'struct Eigen::internal::traits<Eigen::Matrix<double, 4, 1> >'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Geometry/Quaternion.h:266:49:   required from 'struct Eigen::internal::traits<Eigen::Quaternion<double> >'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Geometry/arch/Geometry_SIMD.h:98:47:   required from here
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/util/XprHelper.h:190:44: warning: ignoring attributes on template argument 'Eigen::internal::packet_traits<double>::type' {aka '__m128d'} [-Wignored-attributes]
+  190 |          bool Stop = Size==Dynamic || (Size%unpacket_traits<PacketType>::size)==0 || is_same<PacketType,typename unpacket_traits<PacketType>::half>::value>
+      |                                       ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/util/XprHelper.h:190:83: warning: ignoring attributes on template argument 'Eigen::internal::packet_traits<double>::type' {aka '__m128d'} [-Wignored-attributes]
+  190 |          bool Stop = Size==Dynamic || (Size%unpacket_traits<PacketType>::size)==0 || is_same<PacketType,typename unpacket_traits<PacketType>::half>::value>
+      |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/util/XprHelper.h:190:83: warning: ignoring attributes on template argument 'Eigen::internal::packet_traits<double>::type' {aka '__m128d'} [-Wignored-attributes]
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/util/XprHelper.h:190:83: warning: ignoring attributes on template argument 'Eigen::internal::unpacket_traits<__vector(2) double>::half' {aka '__m128d'} [-Wignored-attributes]
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/util/XprHelper.h:208:88: warning: ignoring attributes on template argument 'Eigen::internal::packet_traits<double>::type' {aka '__m128d'} [-Wignored-attributes]
+  208 |   typedef typename find_best_packet_helper<Size,typename packet_traits<T>::type>::type type;
+      |                                                                                        ^~~~
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/DenseCoeffsBase.h: In instantiation of 'class Eigen::DenseCoeffsBase<Eigen::Matrix<double, 4, 1>, 0>':
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/DenseCoeffsBase.h:302:7:   required from 'class Eigen::DenseCoeffsBase<Eigen::Matrix<double, 4, 1>, 1>'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/DenseCoeffsBase.h:555:7:   required from 'class Eigen::DenseCoeffsBase<Eigen::Matrix<double, 4, 1>, 3>'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/DenseBase.h:41:34:   required from 'class Eigen::DenseBase<Eigen::Matrix<double, 4, 1> >'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/MatrixBase.h:48:34:   required from 'class Eigen::MatrixBase<Eigen::Matrix<double, 4, 1> >'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/PlainObjectBase.h:98:7:   required from 'class Eigen::PlainObjectBase<Eigen::Matrix<double, 4, 1> >'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/Matrix.h:178:7:   required from 'class Eigen::Matrix<double, 4, 1>'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Geometry/Quaternion.h:46:50:   required from 'class Eigen::QuaternionBase<Eigen::Quaternion<double> >'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Geometry/Quaternion.h:273:7:   required from 'class Eigen::Quaternion<double>'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Geometry/arch/Geometry_SIMD.h:102:3:   required from here
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/Core/DenseCoeffsBase.h:56:30: warning: ignoring attributes on template argument 'Eigen::internal::packet_traits<double>::type' {aka '__m128d'} [-Wignored-attributes]
+   56 |                      >::type PacketReturnType;
+      |                              ^~~~~~~~~~~~~~~~
+In file included from /home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/SparseCore:37,
+                 from /home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/Sparse:26,
+                 from /home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/RcppEigenForward.h:29:
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/SparseCore/SparseMatrixBase.h: In instantiation of 'class Eigen::SparseMatrixBase<Eigen::SparseMatrix<double, 0, int> >':
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/SparseCore/SparseCompressedBase.h:36:7:   required from 'class Eigen::SparseCompressedBase<Eigen::SparseMatrix<double, 0, int> >'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/SparseCore/SparseMatrix.h:96:7:   required from 'class Eigen::SparseMatrix<double, 0, int>'
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/unsupported/Eigen/src/IterativeSolvers/ConstrainedConjGrad.h:61:25:   required from here
+/home/lshdh2/miniconda3/envs/R/lib/R/library/RcppEigen/include/Eigen/src/SparseCore/SparseMatrixBase.h:47:30: warning: ignoring attributes on template argument 'Eigen::internal::packet_traits<double>::type' {aka '__m128d'} [-Wignored-attributes]
+   47 |                      >::type PacketReturnType;
+      |                              ^~~~~~~~~~~~~~~~
+x86_64-conda-linux-gnu-c++ -std=gnu++11 -shared -L/home/lshdh2/miniconda3/envs/R/lib/R/lib -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,--allow-shlib-undefined -Wl,-rpath,/home/lshdh2/miniconda3/envs/R/lib -Wl,-rpath-link,/home/lshdh2/miniconda3/envs/R/lib -L/home/lshdh2/miniconda3/envs/R/lib -o rjmc.so RcppExports.o rjmc_func.o -L/home/lshdh2/miniconda3/envs/R/lib/R/lib -lR
+rjmc_func.o: file not recognized: file format not recognized
+collect2: error: ld returned 1 exit status
+make: *** [/home/lshdh2/miniconda3/envs/R/lib/R/share/make/shlib.mk:10: rjmc.so] Error 1
+ERROR: compilation failed for package ‘rjmc’
+* removing ‘/tmp/Rtmp80537r/devtools_install_3c4d497f8c6f94/rjmc’
+Error in `(function (command = NULL, args = character(), error_on_status = TRUE, …`:
+! System command 'R' failed
+---
+Exit status: 1
+stdout & stderr: <printed>
+---
+Backtrace:
+ 1. devtools::load_all()
+ 2. pkgload::load_all(path = path, reset = reset, recompile = recompile, …
+ 3. pkgbuild::compile_dll(path, quiet = quiet)
+ 4. pkgbuild:::withr_with_makevars(compiler_flags(debug), { …
+ 5. pkgbuild:::withr_with_envvar(c(R_MAKEVARS_USER = makevars_file), { …
+ 6. base::force(code)
+ 7. base::force(code)
+ 8. pkgbuild:::withr_with_envvar(c(DEBUG = "true"), build())
+ 9. base::force(code)
+10. pkgbuild::build()
+11. pkgbuild:::install_min(path, dest = install_dir, components = "libs", args = if (need…
+12. pkgbuild::rcmd_build_tools("INSTALL", c(path, paste("--library=", dest, …
+13. pkgbuild::with_build_tools({ …
+14. base::withCallingHandlers(callr::rcmd_safe(..., env = env, spinner = FALSE, …
+15. callr::rcmd_safe(..., env = env, spinner = FALSE, show = FALSE, …
+16. callr:::run_r(options)
+17. base::with(options, with_envvar(env, do.call(processx::run, c(list(bin, …
+18. base::with.default(options, with_envvar(env, do.call(processx::run, …
+19. base::eval(substitute(expr), data, enclos = parent.frame())
+20. base::eval(substitute(expr), data, enclos = parent.frame())
+21. callr:::with_envvar(env, do.call(processx::run, c(list(bin, args = real_cmdargs, …
+22. base::force(code)
+23. base::do.call(processx::run, c(list(bin, args = real_cmdargs, stdout_line_callba…
+24. (function (command = NULL, args = character(), error_on_status = TRUE, …
+25. base::throw(new_process_error(res, call = sys.call(), echo = echo, …
+26. | base::signalCondition(cond)
+27. (function (e) …
+28. asNamespace("callr")$err$throw(e)
+Execution halted
