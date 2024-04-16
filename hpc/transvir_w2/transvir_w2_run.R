@@ -1,4 +1,7 @@
+Sys.setenv(R_LIBS = "~/miniconda3/envs/R/lib/R/library")
+
 library(devtools)
+
 library(Rcpp)
 #Rcpp::compileAttributes()
 devtools::load_all()
