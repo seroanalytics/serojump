@@ -573,7 +573,7 @@ plot_abkinetics_trajectories <- function(outputfull) {
             functionalForm <- model_outline$abkineticsModel[[name1]]$funcForm
             biomarker <- model_outline$abkineticsModel[[name1]]$biomarker
             exposureType <- model_outline$abkineticsModel[[name1]]$exposureType
-
+            cat(pars_extract)
             compare <- bind_rows(
                 post$mcmc %>% combine %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
                     mutate(type = "Posterior distribution") %>% filter(param %in% pars_extract)
