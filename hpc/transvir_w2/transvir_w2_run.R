@@ -25,6 +25,7 @@ settings <-  list(
     noGibbsSteps = 1,
     onDebug = FALSE
 )
+Rcpp::compileAttributes()
 
 runRJMCMC(seroModel, settings, "hpc/transvir", "wave2")
 postprocessFigs("hpc/transvir", "wave2", 4)
