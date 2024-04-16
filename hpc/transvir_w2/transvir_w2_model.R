@@ -91,7 +91,7 @@ abkineticsModel <- list(
 # Define the COP model
 copModel <- list( 
         names = c("sVNT"),
-        model = makeModel(addCopModel("sVNT", "delta", c("beta0", "beta1"), copFuncForm,  copLogLikelihood)),
+        model = makeModel(addCopModel("sVNT", "delta", c("beta0", "beta1"), copFuncForm, copLogLikelihood)),
         prior = bind_rows(
             add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
             add_par_df("beta1", -10, 10, "unif", -10, 10)
