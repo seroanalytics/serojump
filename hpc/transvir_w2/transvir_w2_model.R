@@ -6,7 +6,7 @@ library(tidybayes)
 library(ggdist)
 
 # Load data clean in the formet required for the model
-gambia_pvnt_w2 <- get_data_titre_model_wave2() %>% rename(IgG = titre)# This is the empirical prior for the exposure time
+gambia_pvnt_w2 <- get_data_titre_model_wave2() %>% rename(sVNT = titre)# This is the empirical prior for the exposure time
 gambia_exp_w2 <- get_exposures_wave2() # This is the empirical prior for the exposure time
 exp_prior_w2 <- get_exp_prior_wave2() # This is the empirical prior for the exposure time
 
@@ -37,7 +37,7 @@ copLogLikelihood <- function(inf_status, esttitreExp, params) {
 
 noInfSerumKinetics <- function(titre_est, timeSince, pars) {
     titre_est <- titre_est - pars[1] * (timeSince)
-    titre_est
+    titre_est <- max(0, titre_est)
 }
 
 infSerumKinetics <- function(titre_est, timeSince, pars) {
@@ -49,30 +49,30 @@ infSerumKinetics <- function(titre_est, timeSince, pars) {
     } else {
         titre_est <- titre_est + log(exp(a) * exp(-b/10 * (timeSince - 14)) + exp(c));
     }
-    titre_est
+    titre_est <- max(0, titre_est)
 }
 
 
 
 # Define the biomarkers and exposure types in the model
-biomarkers <- c("IgG")
+biomarkers <- c("sVNT")
 exposureTypes <- c("none", "delta", "vax", "predelta")
 exposureFitted <- "delta"
 
 # Define the observational model
 observationalModel <- list(
-    names = c("IgG"),
-    model = makeModel(addObservationalModel("IgG", c("sigma"), obsLogLikelihood)),
+    names = c("sVNT"),
+    model = makeModel(addObservationalModel("sVNT", c("sigma"), obsLogLikelihood)),
     prior = add_par_df("sigma", 0.0001, 4, "unif", 0.0001, 4) # observational model,
 )
 
 # Define the antibody kinetics model
 abkineticsModel <- list(
     model = makeModel(
-            addAbkineticsModel("none", "IgG", "none",  c("wane"), noInfSerumKinetics),
-            addAbkineticsModel("delta", "IgG", "delta", c("a_d", "b_d", "c_d"), infSerumKinetics),
-            addAbkineticsModel("vax", "IgG", "vax", c("a_vax", "b_vax", "c_vax"), infSerumKinetics),
-            addAbkineticsModel("predelta", "IgG", "predelta", c("a_pd", "b_pd", "c_pd"), infSerumKinetics)
+            addAbkineticsModel("none", "sVNT", "none",  c("wane"), noInfSerumKinetics),
+            addAbkineticsModel("delta", "sVNT", "delta", c("a_d", "b_d", "c_d"), infSerumKinetics),
+            addAbkineticsModel("vax", "sVNT", "vax", c("a_vax", "b_vax", "c_vax"), infSerumKinetics),
+            addAbkineticsModel("predelta", "sVNT", "predelta", c("a_pd", "b_pd", "c_pd"), infSerumKinetics)
         ),
     prior = bind_rows(
         add_par_df("a_vax", -2, 2, "norm",  0, 1), # ab kinetics
@@ -90,8 +90,8 @@ abkineticsModel <- list(
 
 # Define the COP model
 copModel <- list( 
-        names = c("IgG"),
-        model = makeModel(addCopModel("IgG", "delta", c("beta0", "beta1"), copFuncForm,  copLogLikelihood)),
+        names = c("sVNT"),
+        model = makeModel(addCopModel("sVNT", "delta", c("beta0", "beta1"), copFuncForm,  copLogLikelihood)),
         prior = bind_rows(
             add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
             add_par_df("beta1", -10, 10, "unif", -10, 10)

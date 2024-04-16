@@ -12,9 +12,6 @@
 #include <random>
 #include <math.h>
 
-//[[Rcpp::depends(RcppClock)]]
-#include <RcppClock.h>
-
 #define EIGEN_DONT_VECTORIZE
 #define EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
 
@@ -38,8 +35,6 @@ using namespace boost::math;
 
 
 namespace rjmc_full{
-    Rcpp::Clock clock;
-
 
 
     struct RJMC_FULL_D
@@ -69,34 +64,20 @@ namespace rjmc_full{
         int B;
 
         RJMC_FULL_D(Rcpp::List infoModel_in, Rcpp::List observationalModel_in, Rcpp::List abkineticsModel_in, Rcpp::List copModel_in) : infoModel(infoModel_in), observationalModel(observationalModel_in), abkineticsModel(abkineticsModel_in), copModel(copModel_in) {
-
-          //  this->observationalNames = observationalList["names"];
-          //  this->abkineticNames = abkineticsModelList["names"];
-          //  this->copNames = copModelList["names"];
-
-          //  this->observationalModel = observationalList["model"];
-          //  this->abkineticsModel = abkineticsModelList["model"];
-          //  this->copModel = copModelList["model"];
-        //    Rcpp::Rcout << "HERE1!" << std::endl;
+        
             this->biomarkers = as<vector<string> >(this->infoModel["biomarkers"]);
             this->B = this->biomarkers.size();
             this->exposureFitted = as<string>(this->infoModel["exposureFitted"]);
             this->exposureInfo = this->infoModel["exposureInfo"];
-         //   Rcpp::Rcout << "HERE2!" << std::endl;
 
             for (int i = 0; i < this->exposureInfo.size(); i++) {
                 List exposureInfo_i = exposureInfo[i];
-          //  Rcpp::Rcout << "HERE2a!" << std::endl;
                 string exposureType_i = exposureInfo_i["exposureType"];
                 this->exposureType.push_back(exposureType_i);
-           //             Rcpp::Rcout << "HERE2b!" << std::endl;
                 NumericVector known_inf_i = exposureInfo_i["known_inf"];
-                //            Rcpp::Rcout << "HERE2c!" << std::endl;
                 this->knownInf[exposureType_i] = known_inf_i;
-               //                     Rcpp::Rcout << "HERE2d!" << std::endl;
                 this->mapOfExp[exposureType_i] = i;
             }
-         //   Rcpp::Rcout << "HERE3!" << std::endl;
 
             for (int i = 0; i < this->observationalModel.size(); i++) {
                 List temp1 = this->observationalModel[i];
@@ -732,9 +713,9 @@ namespace rjmc_full{
 
                 this->workingIteration = i;
                 if (this->onDebug) Rcpp::Rcout << "Pre: updateAllChains" << std::endl;
-                if (this->profile) clock.tick("Astep");
+               // if (this->profile) 
                 updateAllChains();
-                if (this->profile) clock.tock("Astep");
+               // if (this->profile) 
             }
 
             List out = Rcpp::List::create(
@@ -744,7 +725,6 @@ namespace rjmc_full{
                 _["titreexp"] = this->posteriorTitreExp,
                 _["obstitre"] = this->posteriorObsTitre
             );
-            clock.stop("profiletimes");
 
             return out;
         }
@@ -1298,7 +1278,7 @@ namespace rjmc_full{
         }
 
         double evaluateLogLikelihoodCOP_cpp(VectorXd params, VectorXd jump, VectorXd jumpinf, bool init) {
-            if (this->profile)  clock.tick("cop_ll");
+         //  if (this->profile) 
             if (this->onDebug) Rcpp::Rcout << "In: evaluateLogLikelihoodCOP_cpp" << std::endl;
 
             MatrixXd titreExp(this->N, this->B);
@@ -1342,12 +1322,12 @@ namespace rjmc_full{
             } else {
                 this->proposalTitreExp = titreExp;
             }
-            if (this->profile) clock.tock("cop_ll");
+         //   if (this->profile) 
             return ll;
         }
 
         double evaluateLogLikelihoodObs_cpp(const VectorXd& params, const VectorXd& jump, const VectorXd& jump_inf, bool init) {
-            if (this->profile) clock.tick("obs_ll");
+         //   if (this->profile) 
             if (this->onDebug) Rcpp::Rcout << "In: evaluateLogLikelihoodObs_cpp" << std::endl;
 
             NumericVector paramsN = this->createNamedParam(params);
@@ -1392,7 +1372,7 @@ namespace rjmc_full{
             } else {
                 this->proposalObsTitre = obsTitre;
             }
-            if (this->profile) clock.tock("obs_ll");
+       //     if (this->profile) 
             return ll;
         }
     };
