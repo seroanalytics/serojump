@@ -1,5 +1,3 @@
-Sys.setenv(R_LIBS = "~/miniconda3/envs/R/lib/R/library")
-
 library(devtools)
 
 library(Rcpp)

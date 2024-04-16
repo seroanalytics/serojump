@@ -1,4 +1,6 @@
+# On HPC
 git commit-date (commits date of hpc run)
 git commit-date-push (commits date of hpc run and pushes hpc to origin)
 
+# On local machine
 git_commit_push_main "Your custom commit message"
