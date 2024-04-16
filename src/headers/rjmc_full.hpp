@@ -1026,7 +1026,7 @@ namespace rjmc_full{
                         string bio = this->biomarkers[b];
                         Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[bio];
                         NumericVector pars = this->currentParsCOP[bio];
-                        rjadjustmentFactor2 += as<double>(evalLoglikelhoodCOP_i(this->currentInf(this->currJumpIdx), this->currentTitreExp(this->currJumpIdx, b), pars) ); 
+                        rjadjustmentFactor2 += as<double>(evalLoglikelhoodCOP_i(this->proposalInf(this->currJumpIdx), this->proposalTitreExp(this->currJumpIdx, b), pars) ); 
                     }
 
                     rjadjustmentFactor = log((this->N - this->currInferredExpN)) - log(this->currInferredExpN + 1) - 
