@@ -1262,7 +1262,7 @@ namespace rjmc_full{
         double calTitre(double& titre_est, string& biomarker, string& exposureType_i, double& timeSince) {
             if (this->onDebug) Rcpp::Rcout << "In: calTitre" << std::endl;
             int abkey = mapOfAbkinetics[{biomarker, exposureType_i}];
-            string abID_i this->abID[abkeyD] ;
+            string abID_i = this->abID[abkey] ;
         //    Rcpp::Rcout << "biomarker : " << biomarker << " exposureType_i : " << exposureType_i << " timeSince : " << timeSince << std::endl;
           //  Rcpp::Rcout << "titre_est pre: " << titre_est << std::endl;
           //  Rcpp::Rcout << "abkey: " << abkey << std::endl;
@@ -1277,7 +1277,7 @@ namespace rjmc_full{
         }
 
         void define_abs() {
-            abinfo.clear();
+            this->abinfo.clear();
             for (int i = 0; i < this->abID.size(); i++) {
                 Function thisfunc = this->evalabkineticsFunc[this->abID[i]];
                 NumericVector params = this->currentParsAb[this->abID[i]];
