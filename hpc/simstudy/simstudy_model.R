@@ -102,12 +102,38 @@ modeldefinition <- list(
 
 sim_data_vec <- c("cesCOP_notd", "cesNoCOP_notd")
 obs_vec <- c("0.1", "0.3", "0.5")
-model_list <- vector(mode = "list", length = 6)
+model_list <- vector(mode = "list", length = 12)
 i <- 1
+
+
+#known exposure
+for (sim_data in sim_data_vec) {
+    for (obs_er in obs_vec) {
+        data_titre_model <- clean_simulated_rjmcmc(sim_data, obs_er, 0) %>% rename(IgG = titre)
+        modelname <- paste0("obs_", obs_er)
+
+        modeli <- readRDS(here::here("outputs", "sim_data", sim_data, "inputs.RDS"))
+         known_exp <- modeli$simpar$exp %>% as.data.frame %>% 
+            mutate(i = 1:modeli$simpar$N) %>% pivot_longer(!i, names_to = "t", values_to = "exp") %>% mutate(t = as.numeric(substr(t, 2, 4))) %>% 
+            filter(exp == 1) %>% complete(i = 1:modeli$simpar$N, fill = list(t = -1, exp = -1)) %>% pull(t)
+
+        model_list[[i]] <- list(
+            filename = paste0("hpc/simstudy/", sim_data, "/KnownExp"),
+            modelname = modelname,
+            model = createSeroJumpModel(data_titre_model, data_known, modeldefinition, known_exp)
+        )
+        i <- i + 1
+    }
+}
+
+# unknown exposure
 for (sim_data in sim_data_vec) {
     for (obs_er in obs_vec) {
         data_titre_model <- clean_simulated_rjmcmc(sim_data, obs_er, 0, known_exp = FALSE) %>% rename(IgG = titre)
         modelname <- paste0("obs_", obs_er)
+
+
+
         model_list[[i]] <- list(
             filename = paste0("hpc/simstudy/", sim_data, "/InferExp"),
             modelname = modelname,

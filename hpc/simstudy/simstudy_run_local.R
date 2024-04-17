@@ -29,5 +29,5 @@ settings <-  list(
     onDebug = FALSE
 )
 
-runRJMCMC(seroModel_full[i]$model, settings, seroModel_full[i]$filename, seroModel_full[i]$modelname)
-postprocessFigs(seroModel_full[i]$filename, seroModel_full[i]$modelname, 4)
+runRJMCMC(seroModel_full[[i]]$model, settings, seroModel_full[[i]]$filename, seroModel_full[[i]]$modelname)
+postprocessFigs(seroModel_full[[i]]$filename, seroModel_full[[i]]$modelname, 4)

@@ -208,7 +208,7 @@ check_priors <- function(modeldefinition) {
 #' @param modeldefinition The model definition.
 #' @return A list with the data and the model.
 #' @export
-createSeroJumpModel <- function(data_sero, data_known, modeldefinition) {
+createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_exp = NULL) {
     cat("OUTLINE OF INPUTTED MODEL\n")
     check_inputs(data_sero, data_known, modeldefinition)
     check_priors(modeldefinition)
@@ -245,7 +245,7 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition) {
    # id_ab <- modeldefinition$abkineticsModel$model %>% map(~.x$id) %>% unlist
    # names(modelSeroJump$abkineticsModel) <- id_ab
 
-    data_t <- generate_data_alt(data_sero, modeldefinition$biomarkers)
+    data_t <- generate_data_alt(data_sero, modeldefinition$biomarkers, known_exp)
     data_t$par_names <- priors[, 1]
 
     # Add known infections to the model
