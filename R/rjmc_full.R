@@ -6,6 +6,7 @@
 #' @import dplyr
 #' @import foreach
 #' @import doParallel
+#' @import stringr
 #' @importFrom magrittr %>% %<>%
 NULL
 
