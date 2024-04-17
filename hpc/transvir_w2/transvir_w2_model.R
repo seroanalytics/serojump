@@ -75,16 +75,16 @@ abkineticsModel <- list(
             addAbkineticsModel("predelta", "sVNT", "predelta", c("a_pd", "b_pd", "c_pd"), infSerumKinetics)
         ),
     prior = bind_rows(
-        add_par_df("a_vax", -2, 2, "norm",  0, 1), # ab kinetics
+        add_par_df("a_vax", -6, 6, "norm",  0, 2), # ab kinetics
         add_par_df("b_vax", 0, 1, "norm",  0.3, 0.05), # ab kinetics
         add_par_df("c_vax", 0, 4, "unif", 0,  4), # ab kinetics 
-        add_par_df("a_pd", -2, 2, "norm",  0, 1), # ab kinetics
+        add_par_df("a_pd", -6, 6, "norm",  0, 2), # ab kinetics
         add_par_df("b_pd", 0, 1, "norm",  0.3, 0.05), # ab kinetics
         add_par_df("c_pd", 0, 4, "unif", 0,  4), # ab kinetics
-        add_par_df("a_d", -2, 2, "norm",  0, 1), # ab kinetics
+        add_par_df("a_d", -6, 6, "norm",  0, 2), # ab kinetics
         add_par_df("b_d", 0, 1, "norm",  0.3, 0.05), # ab kinetics
         add_par_df("c_d", 0, 4, "unif", 0,  4), # ab kinetics
-        add_par_df("wane", 0.0, 0.1, "unif", 0.0, 0.1) # observational model
+        add_par_df("wane", 0.0, 0.01, "unif", 0.0, 0.01) # observational model
     )
 )
 

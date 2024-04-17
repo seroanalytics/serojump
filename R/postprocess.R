@@ -72,14 +72,15 @@ postprocess_run <- function(filename, modelname, n_chains) {
                 function(j)
                 {
                     post_obstitre_j <- post$obstitre[[i]][[j]] %>% as.data.frame %>% 
-                        mutate(id = 1:N_data, sample_c = j, n_chains = i, time = data_t$times_full, titre = data_t$titre_full) 
+                        mutate(id = data_t$id_full, row = 1:N_data, sample_c = j, n_chains = i, time = data_t$times_full) 
+                    post_obstitre_j <- bind_cols(post_obstitre_j, as.data.frame(data_t$titre_full))
                     post_obstitre_j
                 }
             )
         }
     )
-    names(post_obstitre) <- c(model$infoModel$biomarkers, "id", "sample_c", "chain_no", "time", "titre")
-
+    names(post_obstitre) <- c(model$infoModel$biomarkers, "id", "row_id", "sample_c", "chain_no", "time", paste(model$infoModel$biomarkers, "_data", sep = "")) 
+ 
 
     postprocess <- list(
         filename = filename,
@@ -524,12 +525,43 @@ plot_titre_exp <- function(outputfull) {
 
 }   
 
+plot_titre_obs <- function(outputfull) {
+    filename <- outputfull$filename
+    modelname <- outputfull$modelname
+
+    fitfull <- readRDS(here::here("outputs", "fits", filename, modelname, paste0("fit_", modelname, ".RDS")))
+    model_outline <- fitfull$model
+
+    biomarkers <- model_outline$infoModel$biomarkers
+    data_plot <- outputfull$fit_obs %>% select(!c(biomarkers, sample_c, chain_no) ) %>% unique %>% 
+        pivot_longer(paste0(biomarkers, "_data"), names_to = "biomarker", values_to = "titre") %>%
+        mutate(biomarker = stringr::str_remove(biomarker, "_data"))
+
+    
+    model_plot <- outputfull$fit_obs %>% select(!paste0(biomarkers, "_data")) %>% 
+        pivot_longer(biomarkers, names_to = "biomarker", values_to = "titre") %>%
+        group_by(row_id, time, biomarker) %>% mean_qi(titre)
+
+    model_plot %>% 
+        ggplot() + geom_point(aes(x = row_id, y = titre)) +
+            geom_linerange(aes(x = row_id, ymin = .lower, ymax = .upper)) +
+            geom_point(data = data_plot, aes(row_id, titre), color = "red") + facet_wrap(vars(biomarker))
+    ggsave(here::here("outputs", "fits", filename, modelname, "figs", "titre_obs.png"), height = 10, width = 10)
+
+}
+
 postprocessFigs <- function(filename, modelname, n_chains) {
    # filename <- "test/nih_2024"
    # modelname <- "h3_profile"
    # n_chains <- 4
+   filename <- "hpc/nih_2024"
+   modelname <- "h3"
+   n_chains <- 4
     postprocess_run( filename, modelname, n_chains)
-    outputfull <- readRDS(file = here::here("outputs", "fits", filename, modelname, paste0("pp_", modelname, ".RDS")))
+    outputfull  <- readRDS(file = here::here("outputs", "fits", filename, modelname, paste0("pp_", modelname, ".RDS")))
+
+    plot_titre_obs(outputfull)
+
 
     plot_trace(outputfull)
     plot_inf_rec(outputfull)
@@ -541,6 +573,7 @@ postprocessFigs <- function(filename, modelname, n_chains) {
 
     plot_cop_rec(outputfull)
     plot_titre_exp(outputfull)
+
 }
 
 plot_abkinetics_trajectories <- function(outputfull) {

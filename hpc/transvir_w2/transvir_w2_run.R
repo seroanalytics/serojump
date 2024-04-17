@@ -6,12 +6,16 @@ devtools::load_all()
 
 seroModel <- readRDS(here::here("hpc", "transvir_w2", "transvir_w2_model.RData"))
 
+## check entriee
+#seroModel$data$times_list # id, t
+#seroModel$data$titre_list #id, bio, t
+
 settings <-  list(
     numberChainRuns = 4,
     numberCores = 4,
     iterations = 500000,
     burninPosterior = 250000,
-    thin = 1000,
+    thin = 10,
     consoleUpdates = 100,
     onAdaptiveCov = TRUE,
     updatesAdaptiveCov = 10,

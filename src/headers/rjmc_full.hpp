@@ -346,7 +346,7 @@ namespace rjmc_full{
                 if (exposureType_i == this->exposureFitted){
              //       Rcpp::Rcout << "!!jump_inf[i_idx]!!: " << jump_inf[i_idx] << std::endl;
               //      Rcpp::Rcout << "!!jump[i_idx]!!: " << jump[i_idx] << std::endl;
-                    if (jump_inf[i_idx] == 1) {
+                    if (jump_inf[i_idx] == 1 & jump[i_idx] > -1) {
                         df_order_exp.emplace_back(exposureType_i, jump[i_idx]); // "pre-delta" event
                     }
                 } else {
@@ -373,12 +373,18 @@ namespace rjmc_full{
             string bio;
             double time_since, titre_obs;
             double curr_time = initTime;
-            string anchor_func = orderedEvents[0].name;
-            double anchor_time = curr_time;
+          //  Rcpp::Rcout << "Ordered times for i_idx: " << i_idx << std::endl;
+          //  for (int i = 0; i < orderedEvents.size(); i++) {
+          //      Rcpp::Rcout << "orderedEvents[i].name: " << orderedEvents[i].name << "orderedEvents[i].value: " << orderedEvents[i].value << std::endl;
+          //  }
 
             for (int b = 0; b < this->B; b++) {
-                double anchor_time = curr_time;
+                double curr_time = initTime;
+                double anchor_time = initTime;
                 string anchor_func = orderedEvents[0].name;
+            //    Rcpp::Rcout << "initial anchor: " << anchor_func << std::endl;
+            //    Rcpp::Rcout << "initial anchor anchor_time: " << anchor_time << std::endl;
+
                 if (this->onDebug) Rcpp::Rcout << "BB: lol1" << std::endl;
                 bio = this->biomarkers[b];
                 df_order_titre_b.clear();
@@ -399,6 +405,11 @@ namespace rjmc_full{
                         anchor_func = orderedEvents[i].name;
                     }
                 }
+              //  Rcpp::Rcout << "Calcuated titre for i_idx: " << i_idx << std::endl;
+              //  for (int i = 0; i < df_order_titre_b.size(); i++) {
+              //      Rcpp::Rcout << "df_order_titre_b[i].name: " << df_order_titre_b[i].name << "df_order_titre_b[i].value: " << df_order_titre_b[i].value << std::endl;
+             //   }
+
                 if (this->onDebug) Rcpp::Rcout << "Out: lol1" << std::endl;
                 df_order_titre.push_back(df_order_titre_b);
             }
@@ -572,6 +583,7 @@ namespace rjmc_full{
 
                 df_order_exp_i = this->sortevents(i_idx, initialJump, initialInf);
                 int l = df_order_exp_i.size();
+                Rcpp::Rcout << "i_idx: " << i_idx << ". l: " << l << std::endl;
                 this->currentEventsFull.push_back(df_order_exp_i);
                 this->proposalEventsFull.push_back(df_order_exp_i);
 
@@ -581,8 +593,8 @@ namespace rjmc_full{
                 //this->currentTitreFull.insert(this->currentTitreFull.begin() + i_idx, df_order_titre_i);
                 this->currentTitreFull.push_back(df_order_titre_i);
                 this->proposalTitreFull.push_back(df_order_titre_i);
-            
             }
+
             this->currentCovarianceMatrix = this->nonadaptiveScalar*this->nonadaptiveCovarianceMat;
             initialLogLikelihood = this->evalLogPosterior(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList, true);
 
@@ -1360,18 +1372,27 @@ namespace rjmc_full{
                     Function evalLoglikelhoodObs_i = this->evalLoglikelhoodObs[biomarker_b];
                     NumericVector pars = this->currentParsObs[biomarker_b];
 
-                    NumericVector titre_val_i_b = titre_list_i[bio];
+                    NumericVector titre_val_i_b = titre_list_i[bio]; 
+                    int j_data = 0;
                     std::vector<DoubleWithString> proposalTitreFull_i_b = proposalTitreFull_i[bio];
-                    for (int j = 0; j < titre_val_i_b.size(); j++) {
+                    for (int j = 0; j < proposalTitreFull_i_b.size(); j++) {
 
                         if(proposalTitreFull_i_b[j].name == "bleed") {
                             titre_est = proposalTitreFull_i_b[j].value;
-                            obsTitre(k_idx + k_count, bio) = titre_est; k_count++;
-                            titre_val = titre_val_i_b[j];
+                          //  Rcpp::Rcout << "i_idx : " << i_idx << endl;
+                          //  Rcpp::Rcout << "k_idx + k_count : " << k_idx + k_count << endl;
+                         //   Rcpp::Rcout << "bio : " << bio << endl;
+                         //   Rcpp::Rcout << "titre_est : " << titre_est << endl;
+                            obsTitre(k_idx + k_count, bio) = titre_est; 
+                            k_count++;
+                            titre_val = titre_val_i_b[j_data];
+                            j_data ++;
+                        //    Rcpp::Rcout << "titre_val : " << titre_val << endl;
                             ll += as<double>(evalLoglikelhoodObs_i(titre_val, titre_est, pars) );
                         }
                     }
                 }
+              //  Rcpp::Rcout << "k_idx : " << k_idx << std::endl;
                 k_idx = k_idx + k_count;        
             }
             if (init) {

@@ -9,7 +9,7 @@ settings <-  list(
     numberChainRuns = 4,
     numberCores = 4,
     iterations = 100000,
-    burninPosterior =250000,
+    burninPosterior = 50000,
     thin = 100,
     consoleUpdates = 100,
     onAdaptiveCov = TRUE,
