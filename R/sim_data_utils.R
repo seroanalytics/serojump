@@ -364,7 +364,7 @@ draw_parameters_random_fx_biomarker_dep <- function(i, t, x, demography, biomark
 
 
 
-clean_simulated_rjmcmc <- function(modelname_sim, obs_er, prob_known, known_exp = FALSE) {
+clean_simulated_rjmcmc_alt <- function(modelname_sim, obs_er, prob_known, known_exp = FALSE) {
 
     modeli <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
     res <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", obs_er, ".rds")))

@@ -112,7 +112,7 @@ check_boundaries <- function(x, lb, ub) {
 }
 
 
-generate_data_alt <- function(data_titre_model, biomarkers) {
+generate_data_alt <- function(data_titre_model, biomarkers, known_exp = NULL) {
     #data_titre_model <- data_sero
     N <- data_titre_model$id %>% unique %>% length  
     N_data <- nrow(data_titre_model)
@@ -141,6 +141,13 @@ generate_data_alt <- function(data_titre_model, biomarkers) {
         times_list[[i]] <- data_titre_model_i %>% pull(time)
     }
 
+    # this is just for the simulated data
+    if (!is.null(known_exp)) {
+        knownExpVec <- known_exp
+    } else {
+        knownExpVec <- NA
+    }
+
     data_t <- list(
         N = N,
         T = T,
@@ -153,7 +160,7 @@ generate_data_alt <- function(data_titre_model, biomarkers) {
         titre_list = titre_list,
         times_list = times_list,
         id_full = id_full,
-        knownExpVec = NA
+        knownExpVec = knownExpVec
     )
     data_t
 }

@@ -171,6 +171,27 @@ runSimulatedRJMCMC(modeldefinition, settings, "local/sim_study/cesNoCOP_notd/Inf
 ```
 
 
+```{r}
+
+modeldefinition, settings, "local/sim_study/cesCOP_notd/InferExp", "cesCOP_notd", "0.1"
+sim_data <- "cesCOP_notd"
+obs_er <-  "0.1"
+
+runSimulatedRJMCMC <- function(modeldefinition, settings, filename, sim_data, obs_er) {
+    data_titre_model <- clean_simulated_rjmcmc(sim_data, obs_er, 0, known_exp = TRUE) %>% rename(IgG = titre)
+    modeli <- readRDS(here::here("outputs", "sim_data", sim_data, "inputs.RDS"))
+    known_exp <- modeli$simpar$exp %>% as.data.frame %>% 
+        mutate(i = 1:modeli$simpar$N) %>% pivot_longer(!i, names_to = "t", values_to = "exp") %>% mutate(t = as.numeric(substr(t, 2, 4))) %>% 
+        filter(exp == 1) %>% complete(i = 1:modeli$simpar$N, fill = list(t = -1, exp = -1)) %>% pull(t)
+    modelname <- paste0("obs_", obs_er)
+    model_sim <- createSeroJumpModel(data_titre_model, data_known, modeldefinition, known_exp = known_exp)
+
+    runRJMCMC(model_sim, settings, filename, modelname)
+}
+
+```
+
+
 # Run all scenarios (CES) for rj-mcmc methods paper
 
 
