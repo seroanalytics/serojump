@@ -8,9 +8,9 @@ seroModel <- readRDS(here::here("hpc", "nih_2024", "nih_2024_model.RData"))
 settings <-  list(
     numberChainRuns = 4,
     numberCores = 4,
-    iterations = 100000,
-    burninPosterior = 50000,
-    thin = 100,
+    iterations = 5000,
+    burninPosterior = 2500,
+    thin = 10,
     consoleUpdates = 100,
     onAdaptiveCov = TRUE,
     updatesAdaptiveCov = 10,
@@ -19,7 +19,7 @@ settings <-  list(
     covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
     covarMaxVal = 1, # decrease if struggling toc sample in the middle
     runParallel = TRUE,
-    noGibbsSteps = 5,
+    noGibbsSteps = 1,
     onDebug = FALSE
 )
 

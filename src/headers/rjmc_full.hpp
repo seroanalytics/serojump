@@ -234,14 +234,14 @@ namespace rjmc_full{
         vector<vector<vector<DoubleWithString> > > currentTitreFull, proposalTitreFull;
 
         void updateLists() {
+            std::vector<DoubleWithString> df_order_exp_i;
+
             if (this->onDebug) Rcpp::Rcout << "In: updateLists" << std::endl;
             int i_idx;
             for (int i = 0; i < this->diff_ind.size(); i++) {
                 i_idx = this->diff_ind[i];
-                std::vector<DoubleWithString> df_order_exp_i = this->sortevents(i_idx, this->proposalJump, this->proposalInf);
+                df_order_exp_i = this->sortevents(i_idx, this->proposalJump, this->proposalInf);
                 this->proposalEventsFull[i_idx] = df_order_exp_i;
-                this->proposalTitreFull[i_idx] = this->calculateTitre(df_order_exp_i, i_idx);
-                
             }
             if (this->onDebug) Rcpp::Rcout << "End: updateLists" << std::endl;
         }
@@ -249,11 +249,7 @@ namespace rjmc_full{
         double stepSizeRobbinsMonro;
         double evalLogPosterior(const VectorXd& param, const VectorXd& jump, const VectorXd& jumpInf, const MatrixXd& covariance, const RObject& dataList, bool init = false)
         {
-
             if (this->onDebug) Rcpp::Rcout << "In: evalLogPosterior" << std::endl;
-            NumericVector paramsN = this->createNamedParam(param);
-            this->updateParams(paramsN);
-            this->define_abs();
           //  this->finddifferInf();
           //  this->updateLists();
 
@@ -361,6 +357,14 @@ namespace rjmc_full{
             std::sort(df_order_exp.begin(), df_order_exp.end());
             return df_order_exp;
 
+        }
+
+        void recalculateTitreAll() {
+            std::vector<DoubleWithString> df_order_exp_i;
+            for (int i_idx = 0; i_idx < this->N; i_idx++) {
+                df_order_exp_i = proposalEventsFull[i_idx];
+                this->proposalTitreFull[i_idx] = this->calculateTitre(df_order_exp_i, i_idx);
+            }
         }
 
         std::vector<std::vector<DoubleWithString> > calculateTitre(std::vector<DoubleWithString>& orderedEvents, int i_idx)  {
@@ -596,12 +600,19 @@ namespace rjmc_full{
             }
 
             this->currentCovarianceMatrix = this->nonadaptiveScalar*this->nonadaptiveCovarianceMat;
+            paramsN = this->createNamedParam(initialSample);
+            this->updateParams(paramsN);
+            this->define_abs();
             initialLogLikelihood = this->evalLogPosterior(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList, true);
 
             if (this->onDebug) Rcpp::Rcout << "In: Check 8" << std::endl;
 
             while(isinf(initialLogLikelihood) || isnan(initialLogLikelihood)){
                 initialSample = this->samplePriorDistributions(this->dataList);
+                paramsN = this->createNamedParam(initialSample);
+                this->updateParams(paramsN);
+                this->define_abs();
+                this->recalculateTitreAll();
                 initialLogLikelihood = this->evalLogPosterior(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList, true);
             }
             if (this->onDebug) Rcpp::Rcout << "In: Check 9" << std::endl;
@@ -770,8 +781,7 @@ namespace rjmc_full{
             if(this->conPropIn & (this->currJumpType == 1)) {
                 updateProposal();
             }
-        }
-    
+        }    
 
         void getAcceptanceRate()
         {        
@@ -782,9 +792,14 @@ namespace rjmc_full{
             if (this->onDebug) Rcpp::Rcout << "Pre: JumpProposalDist" << std::endl;
             JumpProposalDist();
             if (this->onDebug) Rcpp::Rcout << "Pre: evalLogPosterior" << std::endl;
+
             // CALCULATE TITREATINFECTION
             this->finddifferInf();
             this->updateLists();
+            NumericVector paramsN = this->createNamedParam(this->proposalSample);
+            this->updateParams(paramsN);
+            this->define_abs();
+            this->recalculateTitreAll();
             this->proposedLogPosterior = this->evalLogPosterior(this->proposalSample, this->proposalJump, this->proposalInf, this->currentCovarianceMatrix, this->dataList);
             if (this->onDebug) Rcpp::Rcout << "Pre: evaluateMetropolisRatio" << std::endl;
             evaluateMetropolisRatio();
@@ -959,21 +974,26 @@ namespace rjmc_full{
             if (this->onDebug) Rcpp::Rcout << "In: updateGibbsTiming" << std::endl;
 
             this->currJumpType = 1;
-            for (int i = 0; i < this->noGibbsSteps; i++) { 
+         
                 this->proposalJump = this->currentJump;
 
-                this->gibbsIdx = this->sampleExposed(); // stuck here
-                resampleTime(this->gibbsIdx);
-
+                for (int i = 0; i < this->noGibbsSteps; i++) { 
+                    this->gibbsIdx = this->sampleExposed(); // stuck here
+                    resampleTime(this->gibbsIdx);
+                }
                 selectProposalDist(false);
                 this->finddifferInf();
                 this->updateLists();
+                NumericVector paramsN = this->createNamedParam(this->proposalSample);
+                this->updateParams(paramsN);
+                this->define_abs();
+                this->recalculateTitreAll();
                 this->proposedLogPosterior = this->evalLogPosterior(this->proposalSample, this->proposalJump, this->proposalInf, this->currentCovarianceMatrix, this->dataList);
 
                 evaluateMetropolisRatio();
                 updateJumpHistoric();
                 updateProposalGibbs();
-            }
+           
         }
         
         void selectProposalDist(bool update = true){
@@ -1269,6 +1289,8 @@ namespace rjmc_full{
             paramsName.attr("names") = this->fittedParamNames;
             return paramsName;
         }
+
+
 
 
         double calTitre(double& titre_est, string& biomarker, string& exposureType_i, double& timeSince) {
