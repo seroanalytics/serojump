@@ -797,9 +797,11 @@ namespace rjmc_full{
             this->finddifferInf();
             this->updateLists();
             NumericVector paramsN = this->createNamedParam(this->proposalSample);
+
             this->updateParams(paramsN);
             this->define_abs();
             this->recalculateTitreAll();
+            
             this->proposedLogPosterior = this->evalLogPosterior(this->proposalSample, this->proposalJump, this->proposalInf, this->currentCovarianceMatrix, this->dataList);
             if (this->onDebug) Rcpp::Rcout << "Pre: evaluateMetropolisRatio" << std::endl;
             evaluateMetropolisRatio();
@@ -1291,9 +1293,7 @@ namespace rjmc_full{
         }
 
 
-
-
-        double calTitre(double& titre_est, string& biomarker, string& exposureType_i, double& timeSince) {
+        double calTitre(double titre_est, string biomarker, string exposureType_i, double timeSince) {
             if (this->onDebug) Rcpp::Rcout << "In: calTitre" << std::endl;
             int abkey = mapOfAbkinetics[{biomarker, exposureType_i}];
             string abID_i = this->abID[abkey] ;
