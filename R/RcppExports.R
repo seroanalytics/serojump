@@ -2,14 +2,14 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 run_rjmc <- function(model, dataList, settings, update_ind, RJMCpar, i) {
-    .Call('_rjmc_run_rjmc', PACKAGE = 'rjmc', model, dataList, settings, update_ind, RJMCpar, i)
+    .Call('_serojump_run_rjmc', PACKAGE = 'serojump', model, dataList, settings, update_ind, RJMCpar, i)
 }
 
 run_rjmc_sero <- function(model, dataList, settings, update_ind, RJMCpar, i) {
-    .Call('_rjmc_run_rjmc_sero', PACKAGE = 'rjmc', model, dataList, settings, update_ind, RJMCpar, i)
+    .Call('_serojump_run_rjmc_sero', PACKAGE = 'serojump', model, dataList, settings, update_ind, RJMCpar, i)
 }
 
 run_rjmc_full <- function(model, dataList, settings, update_ind, RJMCpar, i) {
-    .Call('_rjmc_run_rjmc_full', PACKAGE = 'rjmc', model, dataList, settings, update_ind, RJMCpar, i)
+    .Call('_serojump_run_rjmc_full', PACKAGE = 'serojump', model, dataList, settings, update_ind, RJMCpar, i)
 }
 
