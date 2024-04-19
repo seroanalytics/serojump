@@ -83,16 +83,16 @@ abkineticsModel <- list(
             addAbkineticsModel("h3_2023_e", "A/Darwin/09/2021e", "h3_2023", c("a_v_e", "b_v_e", "c_v_e"), infSerumKinetics)
         ),
     prior = bind_rows(
-        add_par_df("a_vax", -2, 2, "norm",  0, 1), # ab kinetics
+        add_par_df("a_vax", -6, 6, "norm",  0, 2), # ab kinetics
         add_par_df("b_vax", 0, 1, "norm",  0.3, 0.05), # ab kinetics
         add_par_df("c_vax", 0, 4, "unif", 0,  4), # ab kinetics 
-        add_par_df("a_v", -2, 2, "norm",  0, 1), # ab kinetics
+        add_par_df("a_v", -6, 6, "norm",  0, 2), # ab kinetics
         add_par_df("b_v", 0, 1, "norm",  0.3, 0.05), # ab kinetics
         add_par_df("c_v", 0, 4, "unif", 0,  4), # ab kinetics
-        add_par_df("a_vax_e", -2, 2, "norm",  0, 1), # ab kinetics
+        add_par_df("a_vax_e", -6, 6, "norm",  0, 2), # ab kinetics
         add_par_df("b_vax_e", 0, 1, "norm",  0.3, 0.05), # ab kinetics
         add_par_df("c_vax_e", 0, 4, "unif", 0,  4), # ab kinetics 
-        add_par_df("a_v_e", -2, 2, "norm",  0, 1), # ab kinetics
+        add_par_df("a_v_e", -6, 6, "norm",  0, 1), # ab kinetics
         add_par_df("b_v_e", 0, 1, "norm",  0.3, 0.05), # ab kinetics
         add_par_df("c_v_e", 0, 4, "unif", 0,  4) # ab kinetics
     )

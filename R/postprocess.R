@@ -558,9 +558,9 @@ postprocessFigs <- function(filename, modelname, n_chains) {
   # filename <- "hpc/nih_2024"
   # modelname <- "h3"
   # n_chains <- 4
-    filename <- "hpc/simstudy/cesCOP_notd/KnownExp"
-    modelname <- "obs_0.1"
-    n_chains <- 4
+   # filename <- "hpc/simstudy/cesCOP_notd/KnownExp"
+  #  modelname <- "obs_0.1"
+  #  n_chains <- 4
     postprocess_run( filename, modelname, n_chains)
     outputfull  <- readRDS(file = here::here("outputs", "fits", filename, modelname, paste0("pp_", modelname, ".RDS")))
 
