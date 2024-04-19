@@ -26,3 +26,4 @@ settings <-  list(
 
 runRJMCMC(seroModel, settings, "hpc/nih_2024", "h3")
 postprocessFigs("hpc/nih_2024", "h3", 4)
+
