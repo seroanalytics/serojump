@@ -13,7 +13,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 // run_rjmc
 List run_rjmc(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i);
-RcppExport SEXP _rjmc_run_rjmc(SEXP modelSEXP, SEXP dataListSEXP, SEXP settingsSEXP, SEXP update_indSEXP, SEXP RJMCparSEXP, SEXP iSEXP) {
+RcppExport SEXP _serojump_run_rjmc(SEXP modelSEXP, SEXP dataListSEXP, SEXP settingsSEXP, SEXP update_indSEXP, SEXP RJMCparSEXP, SEXP iSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -29,7 +29,7 @@ END_RCPP
 }
 // run_rjmc_sero
 List run_rjmc_sero(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i);
-RcppExport SEXP _rjmc_run_rjmc_sero(SEXP modelSEXP, SEXP dataListSEXP, SEXP settingsSEXP, SEXP update_indSEXP, SEXP RJMCparSEXP, SEXP iSEXP) {
+RcppExport SEXP _serojump_run_rjmc_sero(SEXP modelSEXP, SEXP dataListSEXP, SEXP settingsSEXP, SEXP update_indSEXP, SEXP RJMCparSEXP, SEXP iSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -45,7 +45,7 @@ END_RCPP
 }
 // run_rjmc_full
 List run_rjmc_full(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i);
-RcppExport SEXP _rjmc_run_rjmc_full(SEXP modelSEXP, SEXP dataListSEXP, SEXP settingsSEXP, SEXP update_indSEXP, SEXP RJMCparSEXP, SEXP iSEXP) {
+RcppExport SEXP _serojump_run_rjmc_full(SEXP modelSEXP, SEXP dataListSEXP, SEXP settingsSEXP, SEXP update_indSEXP, SEXP RJMCparSEXP, SEXP iSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -61,13 +61,13 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rjmc_run_rjmc", (DL_FUNC) &_rjmc_run_rjmc, 6},
-    {"_rjmc_run_rjmc_sero", (DL_FUNC) &_rjmc_run_rjmc_sero, 6},
-    {"_rjmc_run_rjmc_full", (DL_FUNC) &_rjmc_run_rjmc_full, 6},
+    {"_serojump_run_rjmc", (DL_FUNC) &_serojump_run_rjmc, 6},
+    {"_serojump_run_rjmc_sero", (DL_FUNC) &_serojump_run_rjmc_sero, 6},
+    {"_serojump_run_rjmc_full", (DL_FUNC) &_serojump_run_rjmc_full, 6},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_rjmc(DllInfo *dll) {
+RcppExport void R_init_serojump(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }
