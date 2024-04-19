@@ -15,7 +15,7 @@ settings <-  list(
     numberCores = 4,
     iterations = 500000,
     burninPosterior = 250000,
-    thin = 10,
+    thin = 1000,
     consoleUpdates = 100,
     onAdaptiveCov = TRUE,
     updatesAdaptiveCov = 10,
