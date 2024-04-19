@@ -334,20 +334,14 @@ namespace rjmc_full{
             }
             // Add all exposure events
             for (int i = 0; i < this->exposureType.size(); i++) {
-                //List here = this->abkineticsModel[as<string>(this->abkineticNames[i])];
                 string exposureType_i = this->exposureType[i];
-          //      Rcpp::Rcout << "!!exposureType_i!!: " << exposureType_i << std::endl;
-          //     Rcpp::Rcout << "!!this->exposureFitted!!: " << this->exposureFitted << std::endl;
 
                 if (exposureType_i == this->exposureFitted){
-             //       Rcpp::Rcout << "!!jump_inf[i_idx]!!: " << jump_inf[i_idx] << std::endl;
-              //      Rcpp::Rcout << "!!jump[i_idx]!!: " << jump[i_idx] << std::endl;
-                    if (jump_inf[i_idx] == 1 & jump[i_idx] > -1) {
+                    if (jump[i_idx] > -1) {
                         df_order_exp.emplace_back(exposureType_i, jump[i_idx]); // "pre-delta" event
                     }
                 } else {
                     NumericVector known_inf_i = this->knownInf[exposureType_i]; 
-                  //  Rcpp::Rcout << "!!known_inf_i[i_idx]!!: " << known_inf_i[i_idx] << std::endl;
                     if (known_inf_i[i_idx] > -1) {
                         df_order_exp.emplace_back(exposureType_i, known_inf_i[i_idx]); // "delta" event
                     }
@@ -359,15 +353,15 @@ namespace rjmc_full{
 
         }
 
-        void recalculateTitreAll() {
+        void recalculateTitreAll(VectorXd jump_inf) {
             std::vector<DoubleWithString> df_order_exp_i;
             for (int i_idx = 0; i_idx < this->N; i_idx++) {
                 df_order_exp_i = proposalEventsFull[i_idx];
-                this->proposalTitreFull[i_idx] = this->calculateTitre(df_order_exp_i, i_idx);
+                this->proposalTitreFull[i_idx] = this->calculateTitre(df_order_exp_i, i_idx, jump_inf);
             }
         }
 
-        std::vector<std::vector<DoubleWithString> > calculateTitre(std::vector<DoubleWithString>& orderedEvents, int i_idx)  {
+        std::vector<std::vector<DoubleWithString> > calculateTitre(std::vector<DoubleWithString>& orderedEvents, int i_idx, VectorXd jump_inf)  {
             if (this->onDebug) Rcpp::Rcout << "In: calculateTitre" << std::endl;
 
             std::vector<std::vector<DoubleWithString> > df_order_titre;
@@ -386,8 +380,6 @@ namespace rjmc_full{
                 double curr_time = initTime;
                 double anchor_time = initTime;
                 string anchor_func = orderedEvents[0].name;
-            //    Rcpp::Rcout << "initial anchor: " << anchor_func << std::endl;
-            //    Rcpp::Rcout << "initial anchor anchor_time: " << anchor_time << std::endl;
 
                 if (this->onDebug) Rcpp::Rcout << "BB: lol1" << std::endl;
                 bio = this->biomarkers[b];
@@ -403,17 +395,22 @@ namespace rjmc_full{
                         df_order_titre_b.emplace_back(orderedEvents[i].name, titre_obs);
                     if (this->onDebug) Rcpp::Rcout << "Out: lol12" << std::endl;
                     if (orderedEvents[i].name != "bleed") {
-                        if (this->onDebug) Rcpp::Rcout << "Out: here" << std::endl;
-                        anchor_titre = titre_obs;
-                        anchor_time = orderedEvents[i].value;
-                        anchor_func = orderedEvents[i].name;
+                        if (orderedEvents[i].name == this->exposureFitted){
+                            if (jump_inf[i_idx] == 1) {
+                                anchor_titre = titre_obs;
+                                anchor_time = orderedEvents[i].value;
+                                anchor_func = orderedEvents[i].name;    
+                            }
+                        } else {
+                            NumericVector known_inf_i = this->knownInf[orderedEvents[i].name]; 
+                            if (known_inf_i[i_idx] > -1) {
+                                anchor_titre = titre_obs;
+                                anchor_time = orderedEvents[i].value;
+                                anchor_func = orderedEvents[i].name;  
+                            }
+                        }
                     }
                 }
-              //  Rcpp::Rcout << "Calcuated titre for i_idx: " << i_idx << std::endl;
-              //  for (int i = 0; i < df_order_titre_b.size(); i++) {
-              //      Rcpp::Rcout << "df_order_titre_b[i].name: " << df_order_titre_b[i].name << "df_order_titre_b[i].value: " << df_order_titre_b[i].value << std::endl;
-             //   }
-
                 if (this->onDebug) Rcpp::Rcout << "Out: lol1" << std::endl;
                 df_order_titre.push_back(df_order_titre_b);
             }
@@ -593,7 +590,7 @@ namespace rjmc_full{
 
                 if (this->onDebug) Rcpp::Rcout << "In: Check 7iii: " << i_idx << std::endl;
 
-                df_order_titre_i = this->calculateTitre(df_order_exp_i, i_idx);
+                df_order_titre_i = this->calculateTitre(df_order_exp_i, i_idx, this->currentInf);
                 //this->currentTitreFull.insert(this->currentTitreFull.begin() + i_idx, df_order_titre_i);
                 this->currentTitreFull.push_back(df_order_titre_i);
                 this->proposalTitreFull.push_back(df_order_titre_i);
@@ -612,7 +609,7 @@ namespace rjmc_full{
                 paramsN = this->createNamedParam(initialSample);
                 this->updateParams(paramsN);
                 this->define_abs();
-                this->recalculateTitreAll();
+                this->recalculateTitreAll(this->currentInf);
                 initialLogLikelihood = this->evalLogPosterior(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList, true);
             }
             if (this->onDebug) Rcpp::Rcout << "In: Check 9" << std::endl;
@@ -800,7 +797,7 @@ namespace rjmc_full{
 
             this->updateParams(paramsN);
             this->define_abs();
-            this->recalculateTitreAll();
+            this->recalculateTitreAll(this->proposalInf);
             
             this->proposedLogPosterior = this->evalLogPosterior(this->proposalSample, this->proposalJump, this->proposalInf, this->currentCovarianceMatrix, this->dataList);
             if (this->onDebug) Rcpp::Rcout << "Pre: evaluateMetropolisRatio" << std::endl;
@@ -989,7 +986,7 @@ namespace rjmc_full{
                 NumericVector paramsN = this->createNamedParam(this->proposalSample);
                 this->updateParams(paramsN);
                 this->define_abs();
-                this->recalculateTitreAll();
+                this->recalculateTitreAll(this->proposalInf);
                 this->proposedLogPosterior = this->evalLogPosterior(this->proposalSample, this->proposalJump, this->proposalInf, this->currentCovarianceMatrix, this->dataList);
 
                 evaluateMetropolisRatio();

@@ -402,6 +402,7 @@ plot_cop_rec <- function(outputfull) {
     n_length <- n_chains * n_post
     posteriorsAllCOP <- map_df(1:length(model_outline$copModel),
     function(name1) {
+        name1 <- 1
         pars_extract <- model_outline$copModel[[name1]]$pars
         functionalForm <- model_outline$copModel[[name1]]$funcForm
         biomarker <- model_outline$copModel[[name1]]$biomarker
@@ -557,6 +558,9 @@ postprocessFigs <- function(filename, modelname, n_chains) {
   # filename <- "hpc/nih_2024"
   # modelname <- "h3"
   # n_chains <- 4
+    filename <- "hpc/simstudy/cesCOP_notd/KnownExp"
+    modelname <- "obs_0.1"
+    n_chains <- 4
     postprocess_run( filename, modelname, n_chains)
     outputfull  <- readRDS(file = here::here("outputs", "fits", filename, modelname, paste0("pp_", modelname, ".RDS")))
 
