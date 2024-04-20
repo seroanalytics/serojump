@@ -6,7 +6,7 @@
 #SBATCH --ntasks-per-node=4       # Number of tasks per node (cores per task)
 #SBATCH --cpus-per-task=1         # Number of CPU cores per task
 #SBATCH --mem=8G              # Request 8 GB of RAM
-#SBATCH --time=12:00:00       # Set runtime to 12 hours
+#SBATCH --time=24:00:00       # Set runtime to 12 hours
 #SBATCH --output=simstudy_%A_%a_%j.log 
 #SBATCH --array=1-12
 
