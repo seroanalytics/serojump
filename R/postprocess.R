@@ -265,7 +265,7 @@ plot_exp_times_rec <- function(outputfull) {
 
     fit_states_exp_prob <- fit_states %>% select(id, exp_ind) %>% summarise(exp_post = mean(exp_ind), .by = "id")
 
-    dataplt <- fit_states %>% filter(exp_ind == 1) %>% select(id, exp_time) %>% group_by(id) %>% mean_qi(exp_time) %>% left_join(fit_states_exp_prob)
+    dataplt <- fit_states %>% filter(exp_ind == 1, inf_ind == 1) %>% select(id, exp_time) %>% group_by(id) %>% mean_qi(exp_time) %>% left_join(fit_states_exp_prob)
 
     pid_order1 <- dataplt %>% arrange(exp_time) %>% pull(id)
 
@@ -402,7 +402,6 @@ plot_cop_rec <- function(outputfull) {
     n_length <- n_chains * n_post
     posteriorsAllCOP <- map_df(1:length(model_outline$copModel),
     function(name1) {
-        name1 <- 1
         pars_extract <- model_outline$copModel[[name1]]$pars
         functionalForm <- model_outline$copModel[[name1]]$funcForm
         biomarker <- model_outline$copModel[[name1]]$biomarker

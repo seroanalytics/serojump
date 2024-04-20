@@ -15,8 +15,8 @@ seroModel_full <- readRDS(here::here("hpc", "simstudy", "simstudy_model.RData"))
 settings <-  list(
     numberChainRuns = 4,
     numberCores = 4,
-    iterations = 500000,
-    burninPosterior = 250000,
+    iterations = 1000000,
+    burninPosterior = 500000,
     thin = 1000,
     consoleUpdates = 100,
     onAdaptiveCov = TRUE,
