@@ -1,0 +1,307 @@
+[33mcommit b22711ea0087489875bbb94950f8a9a5ecc67bdc[m[33m ([m[1;36mHEAD -> [m[1;32mhpc[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/hpc[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Fri Apr 19 19:20:50 2024 +0100
+
+    Added lfs for nih_2023
+
+[33mcommit 14a001dda0392c9e31ec31e7e975ac5fc6c882d8[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Fri Apr 19 18:29:13 2024 +0100
+
+    few errors
+
+[33mcommit 6bc90574f4cbb2de6b7268c51d41cc555bd0826e[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Fri Apr 19 10:25:10 2024 +0100
+
+    new repo name
+
+[33mcommit 0783663fb19f75c625267d358079fd8e5ad51ced[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Fri Apr 19 10:04:01 2024 +0100
+
+    Fixed issue with exp/inf in timings
+
+[33mcommit 3c41290a0d350fbe59ad9c1f24f538d0664e4189[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Thu Apr 18 12:57:21 2024 +0100
+
+    Had issue with extra & in caltitre
+
+[33mcommit 7f767cb1f00409b9cd2ae715792b0815da14c4ad[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Wed Apr 17 19:02:47 2024 +0100
+
+    fixed another error in resampling titre cals
+
+[33mcommit 966aba619aea46c26d5ace5a10ea093151a31b27[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Wed Apr 17 14:48:32 2024 +0100
+
+    Added known exposure simstudy
+
+[33mcommit 3321e5c65a44b20f7b1546d59527e2d03604088c[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Wed Apr 17 13:45:42 2024 +0100
+
+    Added simstudy with exp
+
+[33mcommit f32f46a549944653f1c94816057e9f2ecf4b7dd0[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Wed Apr 17 10:56:22 2024 +0100
+
+    fixed internal issue
+
+[33mcommit ad55dfbc58294b15872957666134de80c51610be[m
+Author: David  Hodgson <lshdh2@loginhpc.localdomain>
+Date:   Wed Apr 17 06:41:22 2024 +0100
+
+    ran on Wed Apr 17 06:41:22 BST 2024
+
+[33mcommit 8116cb82f511fef05207cf5706fe1b404e869c2b[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Tue Apr 16 19:19:55 2024 +0100
+
+    fixed error
+
+[33mcommit fce9e122d36a559d91c8ab3075ce2b7be8520304[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Tue Apr 16 18:26:39 2024 +0100
+
+    Corrected error in sampling
+
+[33mcommit e25f3136f2ed9536f032e04479e1bc166ce91359[m
+Author: David  Hodgson <lshdh2@loginhpc.localdomain>
+Date:   Tue Apr 16 13:34:31 2024 +0100
+
+    ran on Tue Apr 16 13:34:31 BST 2024
+
+[33mcommit b9d86be875ac3aa6120c6010306e66643d7fe119[m
+Merge: 50af7e9 50faf3d
+Author: David  Hodgson <lshdh2@loginhpc.localdomain>
+Date:   Tue Apr 16 12:59:23 2024 +0100
+
+    Merge branch 'main' of https://github.com/dchodge/rjmcmc_methods into hpc
+
+[33mcommit 50faf3de53f56605f6e2e2abb64c68fc40531706[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Tue Apr 16 12:57:40 2024 +0100
+
+    Error in adjustment
+
+[33mcommit 50af7e9da6c7082b392322e6c24d62f5a2c9a3d1[m
+Merge: 8fd366f c3a1cbb
+Author: David  Hodgson <lshdh2@loginhpc.localdomain>
+Date:   Tue Apr 16 11:22:41 2024 +0100
+
+    Merge branch 'main' of https://github.com/dchodge/rjmcmc_methods into hpc
+    Just fixing an error
+
+[33mcommit c3a1cbb046d8b50505c9b7ddd5386f05938bad9a[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Tue Apr 16 11:22:29 2024 +0100
+
+    reworked models
+
+[33mcommit 8fd366f96aec0592870583a0004736b9de32bd49[m
+Merge: 566433e 9610e39
+Author: David  Hodgson <lshdh2@loginhpc.localdomain>
+Date:   Tue Apr 16 11:21:05 2024 +0100
+
+    merged
+
+[33mcommit 9610e39c5aa3b8cccf8d277c31cbba07135aab86[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Tue Apr 16 11:16:52 2024 +0100
+
+    change nih
+
+[33mcommit 566433ed1499efeb6d0a9ef65a5a4d8ebbef27ee[m
+Author: David  Hodgson <lshdh2@loginhpc.localdomain>
+Date:   Tue Apr 16 11:15:38 2024 +0100
+
+    pratice
+
+[33mcommit a9b6912131a0bf07cb328c24b344c0970444448d[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Tue Apr 16 09:31:57 2024 +0100
+
+    added in nih_2024 for hpc
+
+[33mcommit 87a62900d11125fb7b409388115f6e148642e6aa[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Tue Apr 16 09:31:42 2024 +0100
+
+    added in nih_2024 for hpc
+
+[33mcommit ff9dabca674040f6cd7edcf7fbb6664f0da70642[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Tue Apr 16 09:11:44 2024 +0100
+
+    testing git alias
+
+[33mcommit 26f84bd5b47fc386319dbd6ada9d016a4a7cb2e3[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Tue Apr 16 08:56:24 2024 +0100
+
+    info
+
+[33mcommit 4d4dbc3bd2c54637f5bd2fe8ce02f5eb411d4338[m
+Author: David  Hodgson <lshdh2@loginhpc.localdomain>
+Date:   Tue Apr 16 08:44:36 2024 +0100
+
+    ran on Tue Apr 16 08:44:35 BST 2024
+
+[33mcommit a420bf7f90c9884653585094b677592dee274186[m
+Author: David  Hodgson <lshdh2@loginhpc.localdomain>
+Date:   Mon Apr 15 19:24:54 2024 +0100
+
+    Working hpc transvir
+
+[33mcommit f13152eda5ec14b4c1cacbb1a41fb033be0b71fa[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Mon Apr 15 17:02:49 2024 +0100
+
+    Template for hpc
+
+[33mcommit 3c57e9438e188eded87e07214b3817c0f81e8443[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Mon Apr 15 16:37:48 2024 +0100
+
+    testing
+
+[33mcommit a17c7507d157050ddfa3306308b92bf8001993a0[m
+Author: dchodge <david_hodgson1991@hotmail.co.uk>
+Date:   Mon Apr 15 16:30:07 2024 +0100
+
+    working types for all models
+
+[33mcommit aff38a6c6c2de9a6c7d9e2a91b8540b3ae809baa[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Fri Apr 12 11:00:06 2024 +0100
+
+    Working versoin with multiple biomarkers
+
+[33mcommit 7b8d6a1fb5805eed47532a5e6dc6958e931ef9a0[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Thu Apr 11 14:07:39 2024 +0100
+
+    temp
+
+[33mcommit 3796e77dff173251c997299ff3e42528f00a5202[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Thu Apr 11 13:22:58 2024 +0100
+
+    Improved efficiency in ordering event
+
+[33mcommit 6c75ade29bf4209eb229f7299e484146c2a5f1fa[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Tue Apr 9 15:59:27 2024 +0100
+
+    Remodelling user inferface
+
+[33mcommit 29024a10465b8ba0510ad0bb152006c6241f4591[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Fri Apr 5 09:03:22 2024 +0100
+
+    Added exposure at infection posteriors
+
+[33mcommit 19a9d1fe001d955a7611bb7b4a6dd1679e9ce120[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Thu Mar 28 11:39:29 2024 +0000
+
+    Update on 280324
+
+[33mcommit cbfe060c0da47960652d13bdabb3a5f61e250733[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Thu Mar 14 14:57:30 2024 +0000
+
+    Updated wave1 + wave2 inferences for TRANSVIR
+
+[33mcommit b30977fcdb28bc4607716ccd69daff0ddaf15017[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Thu Mar 7 14:56:02 2024 +0000
+
+    Added different exposures, started wave 1 and wave 2 of TRANSVIR data
+
+[33mcommit 3e9a99c9dff90aa362b49ba3e75ef60e95244caa[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Tue Mar 5 16:14:08 2024 +0000
+
+    Fixed few compiler issues for Tim, added in TRANSVIR data code
+
+[33mcommit 45d6d51be99a67bb8c2fcf75771565a155660072[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Wed Feb 21 09:40:10 2024 +0000
+
+    Cleaned up vignette, added in .Rmd for crick
+    
+    small change
+
+[33mcommit d0e25f8fa9d4ce9293ea12fa9b0da6720311a789[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Tue Feb 13 10:39:05 2024 +0000
+
+    Added methods v0.1
+
+[33mcommit 6595792bd237fc6d3a4805964a22a093d731c18b[m
+Merge: effc2e4 1d6f71a
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Tue Feb 13 10:33:55 2024 +0000
+
+    Merge remote-tracking branch 'origin/main'
+    Initial merge for origin
+
+[33mcommit 1d6f71a550be62d49588c9838cb486534da55594[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Tue Feb 13 10:22:11 2024 +0000
+
+    Initial commit
+
+[33mcommit effc2e4b08ed1bc830a7e5ac21609d2069f8afb7[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Tue Feb 13 10:19:29 2024 +0000
+
+    Finished code for v0.2
+
+[33mcommit 46bc3cceb4c8117060c8606a971fa88d9296b420[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Thu Jan 25 11:29:57 2024 +0000
+
+    Rearrrange methods section
+
+[33mcommit 189bc39d3b8636a2f7bbad386073e67087c0bf2a[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Thu Jan 25 10:34:56 2024 +0000
+
+    Update binary files in methods and outputs folders and redo VSCode setup
+
+[33mcommit 249dfffce2aa8cea72f138f9a9624c021361033f[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Wed Jan 24 09:32:53 2024 +0000
+
+    Added extra_figs.R
+
+[33mcommit a86d9b8a9316cb2d683a76b6e3a84cee505f1f27[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Fri Jan 12 17:24:02 2024 +0000
+
+    Updated methods end of 120124
+
+[33mcommit 1bc4e9eb40b5ef8f803c38da3ed61908ba883499[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Fri Jan 12 13:04:13 2024 +0000
+
+    ces simulations complete
+
+[33mcommit 21c0959a8a38945bd8cf0cb826cee943129e7de3[m
+Author: David Hodgson <david_hodgson1991@hotmail.co.uk>
+Date:   Thu Nov 23 13:39:57 2023 +0000
+
+    Working rjmc with two examples
+
+[33mcommit 2c5733a0f726725d8bf02092bb9147095be968e3[m
+Author: David Hodgson <davidhodgson@macd0049.lshtm.ac.uk>
+Date:   Wed Nov 15 08:22:37 2023 +0000
+
+    Initial working rjmcmc
