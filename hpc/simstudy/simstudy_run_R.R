@@ -5,7 +5,7 @@ library(Rcpp)
 devtools::load_all()
 
 i <- Sys.getenv("SLURM_ARRAY_TASK_ID")
-
+i <- as.integer(i)
 seroModel_full <- readRDS(here::here("hpc", "simstudy", "simstudy_model.RData"))
 
 ## check entriee
