@@ -3,7 +3,9 @@ library(devtools)
 library(Rcpp)
 devtools::load_all()
 
-seroModel <- readRDS(here::here("hpc", "nih_2024", "nih_2024_model.RData"))
+c("h1", "h3")
+seroModel_full <- readRDS(here::here("hpc", "nih_2024", "nih_2024_model.RData"))
+seroModel <- seroModel_full[[1]]
 
 settings <-  list(
     numberChainRuns = 4,

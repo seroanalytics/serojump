@@ -2,8 +2,15 @@ library(devtools)
 
 library(Rcpp)
 devtools::load_all()
+i <- Sys.getenv("SLURM_ARRAY_TASK_ID")
+i <- as.integer(i)
 
-seroModel <- readRDS(here::here("hpc", "nih_2024", "nih_2024_model.RData"))
+seroModel_full <- readRDS(here::here("hpc", "nih_2024", "nih_2024_model.RData"))
+
+output_file <- c("h1", "h3")[i]
+
+
+seroModel <- seroModel_full[[i]]
 
 settings <-  list(
     numberChainRuns = 4,
@@ -24,5 +31,5 @@ settings <-  list(
 )
 
 
-runRJMCMC(seroModel, settings, "hpc/nih_2024", "h3")
-postprocessFigs("hpc/nih_2024", "h3", 4)
+runRJMCMC(seroModel, settings, "hpc/nih_2024", output_file)
+postprocessFigs("hpc/nih_2024", output_file, 4)

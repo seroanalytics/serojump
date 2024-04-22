@@ -28,5 +28,6 @@ settings <-  list(
     onDebug = FALSE
 )
 
-#runRJMCMC(seroModel, settings, "hpc/transvir", "wave2")
+
+runRJMCMC(seroModel, settings, "hpc/transvir", "wave2")
 postprocessFigs("hpc/transvir", "wave2", 4)

@@ -13,8 +13,8 @@ seroModel <- readRDS(here::here("hpc", "transvir_w2", "transvir_w2_model.RData")
 settings <-  list(
     numberChainRuns = 4,
     numberCores = 4,
-    iterations = 500000,
-    burninPosterior = 250000,
+    iterations = 400000,
+    burninPosterior = 200000,
     thin = 1000,
     consoleUpdates = 100,
     onAdaptiveCov = TRUE,

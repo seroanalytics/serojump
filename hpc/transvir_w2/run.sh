@@ -5,7 +5,7 @@
 #SBATCH --mail-user=david.hodgson@lshtm.ac.uk 
 #SBATCH --ntasks=4
 #SBATCH --mem=8G              # Request 8 GB of RAM
-#SBATCH --time=24:00:00       # Set runtime to 12 hours
+#SBATCH --time=48:00:00       # Set runtime to 12 hours
 #SBATCH --output=transvir_w2_%j.log 
 
 # Load any necessary modules
