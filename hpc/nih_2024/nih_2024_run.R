@@ -8,8 +8,8 @@ seroModel <- readRDS(here::here("hpc", "nih_2024", "nih_2024_model.RData"))
 settings <-  list(
     numberChainRuns = 4,
     numberCores = 4,
-    iterations = 200000,
-    burninPosterior = 100000,
+    iterations = 400000,
+    burninPosterior = 200000,
     thin = 1000,
     consoleUpdates = 100,
     onAdaptiveCov = TRUE,
