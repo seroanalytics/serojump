@@ -27,11 +27,17 @@ To help with this section please consult information in the documentation on how
   
 ```{r}
 
+# 41-483J
+# 43-512H
+gambia_pvnt_w1 <- get_data_titre_model_wave1() %>% rename(IgG = titre)# This is the empirical prior for the exposure time
+
+
 # Load data clean in the formet required for the model
 gambia_pvnt_w2 <- get_data_titre_model_wave2() %>% rename(IgG = titre)# This is the empirical prior for the exposure time
 gambia_exp_w2 <- get_exposures_wave2() # This is the empirical prior for the exposure time
 exp_prior_w2 <- get_exp_prior_wave2() # This is the empirical prior for the exposure time
 
+gambia_pvnt_w2 %>% left_join(gambia_exp_w2 %>% rename(exp_time = time))
 ```
 
 ## Define the functions required for the rjmcmc model
