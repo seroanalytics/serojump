@@ -127,6 +127,7 @@ for (sim_data in sim_data_vec) {
 }
 
 # unknown exposure
+# # 7–12
 for (sim_data in sim_data_vec) {
     for (obs_er in obs_vec) {
         data_titre_model <- clean_simulated_rjmcmc(sim_data, obs_er, 0, known_exp = FALSE) %>% rename(IgG = titre)
