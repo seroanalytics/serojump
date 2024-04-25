@@ -24,10 +24,9 @@ settings <-  list(
     covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
     covarMaxVal = 1, # decrease if struggling toc sample in the middle
     runParallel = TRUE,
-    noGibbsSteps = 1,
+    noGibbsSteps = 10,
     onDebug = FALSE
 )
-
 
 runRJMCMC(seroModel, settings, "hpc/transvir", "wave2")
 postprocessFigs("hpc/transvir", "wave2", 4)

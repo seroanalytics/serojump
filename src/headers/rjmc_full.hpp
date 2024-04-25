@@ -33,6 +33,52 @@ using namespace boost::math;
 #endif
 
 
+double dirichlet_pdf(const VectorXd& x, const VectorXd& alpha) {
+    // Check if the sizes of x and alpha match
+    if (x.size() != alpha.size()) {
+        std::cerr << "Error: Size mismatch between x and alpha.\n";
+        return 0.0; // Return 0 as an error code
+    }
+
+    double sum_alpha = 0.0;
+    double sum_log_gamma_alpha = 0.0;
+    double sum_log_x_alpha = 0.0;
+
+    for (size_t i = 0; i < x.size(); ++i) {
+        sum_alpha += alpha[i];
+        sum_log_gamma_alpha += boost::math::lgamma(alpha[i]);
+        sum_log_x_alpha += (alpha[i] - 1) * std::log(x[i]);
+    }
+
+    double log_pdf = sum_log_gamma_alpha - boost::math::lgamma(sum_alpha);
+    log_pdf += sum_log_x_alpha;
+
+    return log_pdf;
+}
+
+unsigned long long binomialCoefficient(int n, int k) {
+    if (k == 0 || k == n) return 1;
+    unsigned long long result = 1;
+    for (int i = 1; i <= k; ++i) {
+        result *= n - (k - i);
+        result /= i;
+    }
+    return result;
+}
+
+// Function to calculate the Beta-Binomial PMF
+double betaBinomialPMF(int k, int n, double alpha, double beta) {
+    return binomialCoefficient(n, k) * tgamma(alpha + beta) / (tgamma(alpha) * tgamma(beta)) * 
+           tgamma(k + alpha) * tgamma(n - k + beta) / tgamma(n + alpha + beta);
+}
+
+double logFactorial(int n) {
+    double result = 0.0;
+    for (int i = 1; i <= n; ++i) {
+        result += log(i);
+    }
+    return result;
+}
 
 namespace rjmc_full{
 
@@ -135,12 +181,12 @@ namespace rjmc_full{
             }
         };
 
-        List currentParsCOP, currentParsObs, currentParsAb;
+        List currentParsCOP, proposalParsCOP, currentParsObs, currentParsAb;
         StringVector exposureNames;
         StringVector fittedParamNames;
 
         // call each step
-        void updateParams(NumericVector paramsN) {
+        void updateParams_init(NumericVector paramsN) {
             // parsCOPN is a list of the parameter names for the COP model
             for (int i = 0; i < this->B; ++i) {
                 NumericVector currentParsCOP_i;
@@ -150,6 +196,7 @@ namespace rjmc_full{
                     currentParsCOP_i.push_back(paramsN[as<string>(parnams[j])]);
                 }
                 this->currentParsCOP[this->biomarkers[i]] = currentParsCOP_i;
+                this->proposalParsCOP[this->biomarkers[i]] = currentParsCOP_i;
             }
             for (int i = 0; i < this->B; ++i) {
                 NumericVector currentParsObs_i;
@@ -159,7 +206,38 @@ namespace rjmc_full{
                     currentParsObs_i.push_back(paramsN[as<string>(parnams[j])]);
                 }
                 this->currentParsObs[this->biomarkers[i]] = currentParsObs_i;
+            }
+            for (int i = 0; i < this->abID.size(); ++i) {
+                NumericVector currentParsAb_i;    
+               // int abkey = mapOfAbkinetics[{biomarkerAB[i], exposureTypeAB[i]}];
+                StringVector parnams = parsAbKinN[i];
 
+                for (int j = 0; j < parnams.size(); ++j) {
+                    currentParsAb_i.push_back(paramsN[as<string>(parnams[j])]);
+                }
+                this->currentParsAb[this->abID[i]] = currentParsAb_i;
+            }
+        }
+
+         void updateParams(NumericVector paramsN) {
+            // parsCOPN is a list of the parameter names for the COP model
+            for (int i = 0; i < this->B; ++i) {
+                NumericVector currentParsCOP_i;
+                int i_b = this->mapOfCOP[this->biomarkers[i]];
+                StringVector parnams = parsCOPN[i_b];
+                for (int j = 0; j < parnams.size(); ++j) {
+                    currentParsCOP_i.push_back(paramsN[as<string>(parnams[j])]);
+                }
+                this->proposalParsCOP[this->biomarkers[i]] = currentParsCOP_i;
+            }
+            for (int i = 0; i < this->B; ++i) {
+                NumericVector currentParsObs_i;
+                int i_b = this->mapOfObs[this->biomarkers[i]];
+                StringVector parnams = parsObsN[i_b];
+                for (int j = 0; j < parnams.size(); ++j) {
+                    currentParsObs_i.push_back(paramsN[as<string>(parnams[j])]);
+                }
+                this->currentParsObs[this->biomarkers[i]] = currentParsObs_i;
             }
             for (int i = 0; i < this->abID.size(); ++i) {
                 NumericVector currentParsAb_i;    
@@ -265,21 +343,89 @@ namespace rjmc_full{
             double logLikelihood_time = 0; 
             for (int i = 0; i < this->N; i++) {
                 if (jump[i] > -1) {
-                    logLikelihood_time += exposureFunctionDensity(jump[i]);
+                    logLikelihood_time += this->exposureFunctionDensity(jump[i]);
                 }
             }
             
             // Prior distribution on number of infected persons given number of exposed people, this is the evlaution of a betabinomial(E, 1, 1) distribution 
-            double logPriorInf;
-            if (this->propInferredExpN == 0) {
-                logPriorInf = -1000;
-            }  else {
-                logPriorInf = log(1.0 / this->propInferredExpN);
-            }
-            double logPriorExp = log(1.0 / this->N);
-    
+            double long logPriorInf;
+            double long logPriorExp;
+            double long logPriorExpInf;
 
-            return logPrior + logPriorExp + logPriorInf + logLikelihood_ab + logLikelihood_time;
+            double long M_adj, k_adj, k2_adj, i_adj, N_adj;
+            VectorXd x_vec(3);
+            VectorXd alpha_vec(3);
+            alpha_vec << 5, 5, 1;
+            if (init) {
+                if (this->currInferredExpN < 1) {
+                    logPriorInf = -1e10;
+                    logPriorExp = -1e10;
+                    logPriorExpInf = -1e10;
+                }  else {
+                    // exposure priors
+                    M_adj = this->N - this->currInferredInfN;
+                    k_adj = this->currInferredExpN - this->currInferredInfN;      
+                    // infection priors
+                    k2_adj = this->currInferredExpN - this->knownInfsN;
+                    i_adj = this->currInferredInfN - this->knownInfsN;
+                    N_adj = this->N - this->knownInfsN;
+                   /* Rcpp::Rcout << "M_adj : " << M_adj << std::endl;
+                    Rcpp::Rcout << "k_adj : " << k_adj << std::endl;
+                    Rcpp::Rcout << "k2_adj : " << k2_adj << std::endl;
+                    Rcpp::Rcout << "i_adj : " << i_adj << std::endl;*/
+                   // x_vec << (this->N - this->currInferredExpN) / static_cast<double>(this->N),  this->currInferredExpN / static_cast<double>(this->N);
+                   x_vec << (M_adj - k_adj) / N_adj, k_adj / N_adj, i_adj / N_adj;
+                    /*Rcpp::Rcout << "alpha_vec1: " << alpha_vec[0] << std::endl;
+                    Rcpp::Rcout << "alpha_vec2: " << alpha_vec[1] << std::endl;
+
+                    Rcpp::Rcout << "x_vec1: " << x_vec[0] << std::endl;
+                    Rcpp::Rcout << "x_vec2: " << x_vec[1] << std::endl;
+
+                    Rcpp::Rcout << "dirichlet_pdf(x_vec, alpha_vec): " << dirichlet_pdf(x_vec, alpha_vec) << std::endl;*/
+                    logPriorExpInf = dirichlet_pdf(x_vec, alpha_vec) + logFactorial(i_adj) + logFactorial(k_adj) + logFactorial(M_adj - k_adj) - logFactorial(N_adj );
+                    //logPriorExpInf = dirichlet_pdf(x_vec, alpha_vec) + logFactorial(k_adj) + logFactorial(M_adj - k_adj) - logFactorial(M_adj );
+                }
+            } else {
+                if (this->propInferredExpN < 1) {
+                    logPriorInf = -1e10;
+                    logPriorExp = -1e10;
+                    logPriorExpInf = -1e10;
+                }  else {
+                    // exposure priors
+                    M_adj = this->N - this->propInferredInfN;
+                    k_adj = this->propInferredExpN - this->propInferredInfN;
+                        // infection priors
+                    k2_adj = this->propInferredExpN - this->knownInfsN;
+                    i_adj = this->propInferredInfN - this->knownInfsN;
+                    N_adj = this->N - this->knownInfsN;
+                 /*   Rcpp::Rcout << "M_adj : " << M_adj << std::endl;
+                    Rcpp::Rcout << "k_adj : " << k_adj << std::endl;
+                    Rcpp::Rcout << "k2_adj : " << k2_adj << std::endl;
+                    Rcpp::Rcout << "i_adj : " << i_adj << std::endl;*/
+                    //x_vec << (this->N - this->propInferredExpN) / static_cast<double>(this->N),  this->propInferredExpN / static_cast<double>(this->N);
+                    x_vec << (M_adj - k_adj) / N_adj, k_adj / N_adj, i_adj / N_adj;
+
+
+                    /*Rcpp::Rcout << "alpha_vec1: " << alpha_vec[0] << std::endl;
+                    Rcpp::Rcout << "alpha_vec2: " << alpha_vec[1] << std::endl;
+
+                    Rcpp::Rcout << "x_vec1: " << x_vec[0] << std::endl;
+                    Rcpp::Rcout << "x_vec2: " << x_vec[1] << std::endl;
+ 
+                    Rcpp::Rcout << "dirichlet_pdf(x_vec, alpha_vec): " << dirichlet_pdf(x_vec, alpha_vec) << std::endl;*/
+                   // logPriorExpInf = dirichlet_pdf(x_vec, alpha_vec) + logFactorial(k_adj) + logFactorial(M_adj - k_adj) - logFactorial(M_adj);
+                    logPriorExpInf = dirichlet_pdf(x_vec, alpha_vec) + logFactorial(i_adj) + logFactorial(k_adj) + logFactorial(M_adj - k_adj) - logFactorial(N_adj );
+                }
+            }
+            if (isinf(logPriorExpInf) || isnan(logPriorExpInf)) {
+                return log(0);
+            }
+            /*Rcpp::Rcout << "logPrior : " << logPrior << std::endl;
+            Rcpp::Rcout << "logPrlogPriorExpInfior : " << logPriorExpInf << std::endl;
+            Rcpp::Rcout << "logLikelihood_ab : " << logLikelihood_ab << std::endl;
+            Rcpp::Rcout << "logLikelihood_time : " << logLikelihood_time << std::endl;*/
+
+            return logPrior + logPriorExpInf + logLikelihood_ab + logLikelihood_time;
         }
         
         // "A handy approximation for the error function and its inverse" by Sergei Winitzki.
@@ -317,6 +463,7 @@ namespace rjmc_full{
         VectorXd initialTitreTime;
         MatrixXd initialTitreValue;
         VectorXd endTitreTime;
+        MatrixXd endTitreValue;
         VectorXd times_full, id_full;
         MatrixXd titre_full;
         List titre_list, times_list;
@@ -470,7 +617,7 @@ namespace rjmc_full{
             this->initialTitreTime = this->dataListCPP["initialTitreTime"];
             this->endTitreTime = this->dataListCPP["endTitreTime"];
             this->initialTitreValue = this->dataListCPP["initialTitreValue"];
-            
+            this->endTitreValue = this->dataListCPP["endTitreValue"];
 
             if (this->onDebug) Rcpp::Rcout << "In: Check 1" << std::endl;
 
@@ -557,25 +704,45 @@ namespace rjmc_full{
             if (knownExpInd) {
                 initialJump = this->knownExpVec;
             } else {
+                if (this->onDebug) Rcpp::Rcout << "In: Check 7i" << std::endl;
+                // this gets all the known infections
                 initialJump = this->knownInfsTimeVec;
-                /*for (int i = 0; i < this->N; i ++) {
-                    if ((initialJump[i] > -1) & (this->knownInfsVec(i) != 1)) {
+            }
+            initialInf = this->knownInfsVec;
+
+            if (this->onDebug) Rcpp::Rcout << "In: Check 7ii" << std::endl;
+            for (int i = 0; i < this->N; i++) {
+                if ((this->knownInfsVec(i) == 0)) {
+                    Rcpp::Rcout << "initialTitreValue(i, 0): " << this->initialTitreValue(i, 0) << std::endl;
+                    Rcpp::Rcout << "endTitreValue(i, 0): " << this->endTitreValue(i, 0) << std::endl;
+
+                    if (this->initialTitreValue(i, 0) - this->endTitreValue(i, 0) < 0) {
+                        initialJump(i) = this->exposureFunctionSample();
+                        Rcpp::Rcout << "initialJump(i): implied exposure/infection" << initialJump(i) << std::endl;
+                        initialInf(i) = 1;
+                    } else {
                         double u = uniformContinuousDist(0, 1);
-                        if (u > 0.5) {
-                            initialJump[i] = this->exposureFunctionSample();
+                        if (u < 0.5) {
+                            Rcpp::Rcout << "initialJump(i): randomly added exposure (not infection)" << initialJump << std::endl;
+                            initialJump(i) = this->exposureFunctionSample();
+                            initialInf(i) = 0;
+                        } else {
+                            initialJump(i) = -1;
+                            initialInf(i) = 0;
                         }
                     }
-                }*/ 
+                }
             }
+
             this->currentJump = initialJump;
-            // Get initial conditions for the infection states
-            initialInf = initInfFunc(); 
             this->currentInf = initialInf;
+            // Get initial conditions for the infection states
+            //initialInf = initInfFunc(); 
             if (this->onDebug) Rcpp::Rcout << "In: Check 7" << std::endl;
 
 
             NumericVector paramsN = this->createNamedParam(initialSample);
-            this->updateParams(paramsN);
+            this->updateParams_init(paramsN);
             this->define_abs();
             // Get initial conditions for the Loglikelihood probabilities
             std::vector<DoubleWithString> df_order_exp_i;
@@ -584,11 +751,8 @@ namespace rjmc_full{
 
                 df_order_exp_i = this->sortevents(i_idx, initialJump, initialInf);
                 int l = df_order_exp_i.size();
-                Rcpp::Rcout << "i_idx: " << i_idx << ". l: " << l << std::endl;
                 this->currentEventsFull.push_back(df_order_exp_i);
                 this->proposalEventsFull.push_back(df_order_exp_i);
-
-                if (this->onDebug) Rcpp::Rcout << "In: Check 7iii: " << i_idx << std::endl;
 
                 df_order_titre_i = this->calculateTitre(df_order_exp_i, i_idx, this->currentInf);
                 //this->currentTitreFull.insert(this->currentTitreFull.begin() + i_idx, df_order_titre_i);
@@ -596,18 +760,22 @@ namespace rjmc_full{
                 this->proposalTitreFull.push_back(df_order_titre_i);
             }
 
+            bookKeepingSizeInit();
+
             this->currentCovarianceMatrix = this->nonadaptiveScalar*this->nonadaptiveCovarianceMat;
             paramsN = this->createNamedParam(initialSample);
-            this->updateParams(paramsN);
+            this->updateParams_init(paramsN);
             this->define_abs();
             initialLogLikelihood = this->evalLogPosterior(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList, true);
 
             if (this->onDebug) Rcpp::Rcout << "In: Check 8" << std::endl;
 
             while(isinf(initialLogLikelihood) || isnan(initialLogLikelihood)){
+                if (this->onDebug) Rcpp::Rcout << "In: STUCK 8" << std::endl;
+
                 initialSample = this->samplePriorDistributions(this->dataList);
                 paramsN = this->createNamedParam(initialSample);
-                this->updateParams(paramsN);
+                this->updateParams_init(paramsN);
                 this->define_abs();
                 this->recalculateTitreAll(this->currentInf);
                 initialLogLikelihood = this->evalLogPosterior(initialSample, initialJump, initialInf, this->currentCovarianceMatrix, this->dataList, true);
@@ -617,6 +785,7 @@ namespace rjmc_full{
             this->currentSampleMean = initialSample;
             this->currentLogPosterior = initialLogLikelihood;
 
+            bookKeepingSizeInit();
             ///this->proposalEventsFull = this->currentEventsFull;
             //this->proposalTitreFull = this->currentTitreFull;
 
@@ -828,8 +997,10 @@ namespace rjmc_full{
         void proposeInfection(int t) {
             if (this->onDebug) Rcpp::Rcout << "In: proposeInfection" << std::endl;
 
-            if (this->propInferredInfN == 0) {
+            if (this->currInferredInfN <= 1) {
                 this->proposalInf(t) = 1;
+            } else if (this->currInferredInfN >= (this->currInferredExpN - 1)) {
+                this->proposalInf(t) = 0;
             } else {
                 boost::random::bernoulli_distribution<> l(0.5); 
                 this->proposalInf(t) = l(rng);
@@ -887,6 +1058,21 @@ namespace rjmc_full{
             bookKeepingSize();
         }
 
+        void bookKeepingSizeInit() {
+            int count_exp = 0;
+            int count_inf = 0;
+            for (int i = 0; i < this->N; i++) {
+                if (this->currentJump[i] > -1) {
+                    count_exp++;
+                    if (this->currentInf[i] == 1) {
+                        count_inf++;
+                    }
+                }
+            }            
+            this->currInferredExpN = count_exp;
+            this->currInferredInfN = count_inf;
+        }
+
         void bookKeepingSize() {
             int count_exp = 0;
             int count_inf = 0;
@@ -929,9 +1115,9 @@ namespace rjmc_full{
             if (this->knownExpInd) {
                 q_prob << 0, 1, 1;
             } else {
-                if (this->currInferredExpN == this->knownInfsN) {
+                if (this->currInferredExpN == this->knownInfsN + 1) {
                     q_prob << 0, 0.67, 1.0;
-                } else if (this->currInferredExpN == this->N) {
+                } else if (this->currInferredExpN == this->N ) {
                     q_prob << 0.33, 1.0, 0;
                 } else {
                     q_prob << 0.33, 0.67, 1.0;
@@ -980,6 +1166,9 @@ namespace rjmc_full{
                     this->gibbsIdx = this->sampleExposed(); // stuck here
                     resampleTime(this->gibbsIdx);
                 }
+                //resample_inf()
+
+
                 selectProposalDist(false);
                 this->finddifferInf();
                 this->updateLists();
@@ -1043,27 +1232,35 @@ namespace rjmc_full{
                 this->alpha = 0;
             } else {
                 if (this->currJumpType == 0) {
+                    // in DEATH want to evaluate current state to the proposed parameters
                     for (int b = 0; b < this->B; b++) {
                         string bio = this->biomarkers[b];
                         Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[bio];
-                        NumericVector pars = this->currentParsCOP[bio];
+                        NumericVector pars = this->proposalParsCOP[bio];
                         rjadjustmentFactor2 += as<double>(evalLoglikelhoodCOP_i(this->currentInf(this->currJumpIdx), this->currentTitreExp(this->currJumpIdx, b), pars) ); 
                     }
+                    double N_adj = this->N - this->knownInfsN;
+                    double curr_adj = this->currInferredExpN - this->knownInfsN;
 
-                    rjadjustmentFactor = log(this->currInferredExpN) - log((this->N - this->currInferredExpN + 1) ) + 
-                        this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)) + rjadjustmentFactor2;
+                    rjadjustmentFactor = log(curr_adj) - log((N_adj - curr_adj + 1) ) + 
+                        this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)) +
+                        rjadjustmentFactor2;
                 } else if (this->currJumpType == 1) {
                     rjadjustmentFactor = 0;
                 } else if (this->currJumpType == 2) {
+                    // in birth want to evaluate the Proposed jump state given the current parameters
                     for (int b = 0; b < this->B; b++) {
                         string bio = this->biomarkers[b];
                         Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[bio];
                         NumericVector pars = this->currentParsCOP[bio];
                         rjadjustmentFactor2 += as<double>(evalLoglikelhoodCOP_i(this->proposalInf(this->currJumpIdx), this->proposalTitreExp(this->currJumpIdx, b), pars) ); 
                     }
+                    double N_adj = this->N - this->knownInfsN;
+                    double curr_adj = this->currInferredExpN - this->knownInfsN;// - this->knownInfsN;
 
-                    rjadjustmentFactor = log((this->N - this->currInferredExpN)) - log(this->currInferredExpN + 1) - 
-                        this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx)) - rjadjustmentFactor2; // dlnorm(proposalJump[currJumpIdx], 3.395, 0.5961)
+                    rjadjustmentFactor = log((this->N - curr_adj)) - log(curr_adj + 1) - 
+                        this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx)) - 
+                        rjadjustmentFactor2; 
                 }
                 this->alpha = min(1.0, exp((this->proposedLogPosterior - this->currentLogPosterior + rjadjustmentFactor)));
             }
@@ -1132,6 +1329,7 @@ namespace rjmc_full{
                 this->currentLogPosterior = this->proposedLogPosterior;
                 this->currInferredExpN = this->propInferredExpN;
                 this->currInferredInfN = this->propInferredInfN;
+                this->currentParsCOP = this->proposalParsCOP;
             } else {
                 this->proposalSample = this->currentSample;
                 this->proposalJump = this->currentJump;
@@ -1140,6 +1338,7 @@ namespace rjmc_full{
                 this->proposalObsTitre = this->currentObsTitre;
                 this->proposalEventsFull = this->currentEventsFull;
                 this->proposalTitreFull = this->currentTitreFull;
+                this->proposalParsCOP = this->currentParsCOP;
 
                 this->proposedLogPosterior = this->currentLogPosterior;
                 this->propInferredExpN = this->currInferredExpN;
@@ -1337,7 +1536,7 @@ namespace rjmc_full{
                         string biomarker_b = biomarkers[bio];
 
                         Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[biomarker_b];
-                        NumericVector pars = this->currentParsCOP[biomarker_b];
+                        NumericVector pars = this->proposalParsCOP[biomarker_b];
 
                         std::vector<DoubleWithString> proposalTitreFull_i_b = proposalTitreFull_i[bio];
 

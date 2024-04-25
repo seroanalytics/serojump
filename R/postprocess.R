@@ -38,7 +38,7 @@ postprocess_run <- function(filename, modelname, n_chains) {
                         id = 1:N,
                         sample_c = j,
                         chain_no = i,
-                        exp_ind = as.numeric(post_exp_combine[[i]][j, ] > 0),
+                        exp_ind = as.numeric(post_exp_combine[[i]][j, ] > -1),
                         exp_time = post_exp_combine[[i]][j, ],
                         inf_ind = post_inf_combine[[i]][j, ]
                     )
@@ -233,6 +233,8 @@ plot_exp_rec <- function(outputfull) {
 
     no_exp_fit_df <- fit_states %>% select(id, sample, exp_ind) %>% summarise(exp_ind_sum = sum(exp_ind), .by = "sample")
 
+    fit_states %>% filter(sample == 2948) %>% as.data.frame
+
     figB <- no_exp_fit_df %>% summarise(n = n()  / n_length, .by = exp_ind_sum) %>%
         ggplot() + 
             geom_col(aes(x = exp_ind_sum, y = n), alpha = 0.8) + 
@@ -244,7 +246,6 @@ plot_exp_rec <- function(outputfull) {
     ggsave(here::here("outputs", "fits", filename, modelname, "figs", "exposure_recov.png"), height = 10, width = 10)
 
 }
-
 
 plot_exp_times_rec <- function(outputfull) {
 
@@ -326,7 +327,7 @@ plot_exp_times_rec <- function(outputfull) {
     ggsave(here::here("outputs", "fits", filename, modelname, "figs", "exposure_time_recov.png"), height = 10, width = 10)
 }
 
-plot_inf_rec <- function(outputfull) {
+plot_inf_rec <- function(outputfull, scale_ab = NULL) {
     fit_states <- outputfull$fit_states
     filename <- outputfull$filename
     modelname <- outputfull$modelname
@@ -352,6 +353,10 @@ plot_inf_rec <- function(outputfull) {
             labs(x = expression("Titre at start of study Y"[j]^0),
                 y = expression("Expectation of posterior distribution of infection E[Z"[j]*"]"), shape = "", color = "") + 
             ggtitle("Recovery of individual-level infection status") + facet_grid(vars(biomarker))
+
+    if (!is.null(scale_ab)) {
+        figB <- figB + scale_x_continuous(breaks = scale_ab %>% as.numeric, labels = scale_ab %>% names)
+    }
 
     no_inf_fit_df <- fit_states %>% filter(exp_ind == 1) %>% select(id, sample, inf_ind) %>% summarise(inf_ind_sum = sum(inf_ind), .by = "sample")
 
@@ -379,7 +384,7 @@ plot_inf_rec <- function(outputfull) {
 }
 
 
-plot_cop_rec <- function(outputfull) {
+plot_cop_rec <- function(outputfull, scale_ab = NULL) {
 
     fit_states <- outputfull$fit_states
     filename <- outputfull$filename
@@ -423,10 +428,18 @@ plot_cop_rec <- function(outputfull) {
             }   
         }
 
+        if (is.null(scale_ab)) {
+            lmin <- 0
+            lmax <- 4
+        } else {
+            lmin <- min(scale_ab)
+            lmax <- max(scale_ab)
+        }
+
         traj_post <- 1:n_length %>% purrr::map_df(
             ~data.frame(
-                titre = seq(0, 4, 0.1),
-                value = cop_function(seq(0, 4, 0.1), as.numeric(post_par[.x, ]))
+                titre = seq(lmin, lmax, length.out = 50),
+                value = cop_function(seq(lmin, lmax, length.out = 50), as.numeric(post_par[.x, ]))
             )
         )
         traj_post_summ <- traj_post %>% group_by(titre) %>% mean_qi() %>% 
@@ -462,7 +475,7 @@ plot_cop_rec <- function(outputfull) {
 
         })
 
-    posteriorsAllCOP %>% ggplot() + 
+    figA <- posteriorsAllCOP %>% ggplot() + 
         geom_ribbon(aes(ymin = .lower, ymax = .upper, x = titre),fill = "red",  size = 3, alpha = 0.3) + 
         geom_line(aes(y = value, x = titre, color = exposure_type), color = "red", size = 2) + 
         geom_linerange(data = cop_exp_sum_plot_all, 
@@ -472,12 +485,17 @@ plot_cop_rec <- function(outputfull) {
         ylim(0, 1) +
         facet_wrap(vars(biomarker)) + 
         labs(x = expression("Titre at exposure"), y = expression("Posterior probability of infection for correlate of protection, f"[cop]*"(Y"[j]^0*", "*theta[cop]*")"), color = "Curve type")
+
+    if (!is.null(scale_ab)) {
+        figA <- figA + scale_x_continuous(breaks = scale_ab %>% as.numeric, labels = scale_ab %>% names)
+    }
+
     ggsave(here::here("outputs", "fits", filename, modelname, "figs", "cop_recov.png"), height = 10, width = 10)
 
 }
 
 
-plot_titre_exp <- function(outputfull) {
+plot_titre_exp <- function(outputfull, scale_ab = NULL) {
     fit_states <- outputfull$fit_states
     filename <- outputfull$filename
     modelname <- outputfull$modelname
@@ -518,14 +536,16 @@ plot_titre_exp <- function(outputfull) {
         geom_point(aes(y = id, x = titre_val, alpha = prop), size = 1) + 
         labs(y = "ID", x = "Posterior of titre value at exposure", color = "Probability of infection") + 
         theme_bw() + theme(axis.text.y = element_blank()) + facet_wrap(vars(biomarker))
-
+    if (!is.null(scale_ab)) {
+        p1 <- p1 + scale_x_continuous(breaks = scale_ab %>% as.numeric, labels = scale_ab %>% names)
+    }
 
     p1 
     ggsave(here::here("outputs", "fits", filename, modelname, "figs", "titre_exp_recovery.png"), height = 10, width = 10)
 
 }   
 
-plot_titre_obs <- function(outputfull) {
+plot_titre_obs <- function(outputfull, scale_ab = NULL) {
     filename <- outputfull$filename
     modelname <- outputfull$modelname
 
@@ -542,40 +562,45 @@ plot_titre_obs <- function(outputfull) {
         pivot_longer(biomarkers, names_to = "biomarker", values_to = "titre") %>%
         group_by(row_id, time, biomarker) %>% mean_qi(titre)
 
-    model_plot %>% 
+    p1 <- model_plot %>% 
         ggplot() + geom_point(aes(x = row_id, y = titre)) +
             geom_linerange(aes(x = row_id, ymin = .lower, ymax = .upper)) +
-            geom_point(data = data_plot, aes(row_id, titre), color = "red") + facet_wrap(vars(biomarker))
+            geom_point(data = data_plot, aes(row_id, titre), color = "red") + facet_wrap(vars(biomarker)) 
+    if (!is.null(scale_ab)) {
+        p1 <- p1 + scale_y_continuous(breaks = scale_ab %>% as.numeric, labels = scale_ab %>% names)
+    }
     ggsave(here::here("outputs", "fits", filename, modelname, "figs", "titre_obs.png"), height = 10, width = 10)
 
 }
 
-postprocessFigs <- function(filename, modelname, n_chains) {
+
+postprocessFigs <- function(filename, modelname, n_chains, scale_ab = NULL) {
    # filename <- "test/nih_2024"
    # modelname <- "h3_profile"
    # n_chains <- 4
-  # filename <- "hpc/nih_2024"
+   #filename <- "hpc/nih_2024"
   # modelname <- "h3"
   # n_chains <- 4
    # filename <- "hpc/simstudy/cesCOP_notd/KnownExp"
   #  modelname <- "obs_0.1"
   #  n_chains <- 4
+
     postprocess_run( filename, modelname, n_chains)
     outputfull  <- readRDS(file = here::here("outputs", "fits", filename, modelname, paste0("pp_", modelname, ".RDS")))
 
-    plot_titre_obs(outputfull)
+    plot_titre_obs(outputfull, scale_ab)
 
 
     plot_trace(outputfull)
-    plot_inf_rec(outputfull)
+    plot_inf_rec(outputfull, scale_ab)
     plot_exp_rec(outputfull)
     plot_exp_times_rec(outputfull)
 
 
     plot_abkinetics_trajectories(outputfull)
 
-    plot_cop_rec(outputfull)
-    plot_titre_exp(outputfull)
+    plot_cop_rec(outputfull, scale_ab)
+    plot_titre_exp(outputfull, scale_ab)
 
 }
 
