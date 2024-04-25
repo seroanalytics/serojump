@@ -22,7 +22,7 @@ settings <-  list(
     covarMaxVal = 1, # decrease if struggling toc sample in the middle
     runParallel = TRUE,
     noGibbsSteps = 1,
-    onDebug = TRUE
+    onDebug = FALSE
 )
 
 
@@ -31,6 +31,6 @@ names_ab <- 2^c(0:10) * 5
 names_ab[1] <- "<10"
 names(ab_values) <- names_ab
 
-runRJMCMC(seroModel, settings, "hpc/nih_2024", "h3")
-postprocessFigs("hpc/nih_2024", "h3", 4, ab_values)
+runRJMCMC(seroModel, settings, "hpc/nih_2024", "h1")
+postprocessFigs("hpc/nih_2024", "h1", 4, ab_values)
 

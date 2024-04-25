@@ -89,7 +89,7 @@ get_data_titre_nih_2023_h1 <- function() {
          mutate(titre = log2(titre / 5)) %>%
         pivot_wider(names_from = "virus", values_from = "titre") 
 
-    biomarkers_h1 <- names(nih_hai_raw_24)[c(6, 7)]
+    biomarkers_h1 <- names(nih_hai_raw_24_h1)[c(6, 7)]
 
     nih_hai_raw_24_h1 %>% filter(vax_inf == "I")
     nih_bleed_raw <- read.csv(file = here::here("data", "nih_2024", "bleed-dates.csv") )
