@@ -1,34 +1,3 @@
-library(devtools)
-
-library(Rcpp)
-#Rcpp::compileAttributes()
-devtools::load_all()
-
-i <- Sys.getenv("SLURM_ARRAY_TASK_ID")
-i <- as.integer(i)
-seroModel_full <- readRDS(here::here("hpc", "simstudy", "simstudy_model.RData"))
-
-## check entriee
-#seroModel$data$times_list # id, t
-#seroModel$data$titre_list #id, bio, t
-
-settings <-  list(
-    numberChainRuns = 4,
-    numberCores = 4,
-    iterations = 1000000,
-    burninPosterior = 500000,
-    thin = 1000,
-    consoleUpdates = 100,
-    onAdaptiveCov = TRUE,
-    updatesAdaptiveCov = 10,
-    burninAdaptiveCov = 1000,
-    covarInitVal = 1e-2, # make very small if struggling to sample to beginning
-    covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
-    covarMaxVal = 1, # decrease if struggling toc sample in the middle
-    runParallel = TRUE,
-    noGibbsSteps = 1,
-    onDebug = FALSE
-)
-
-runRJMCMC(seroModel_full[[i]]$model, settings, seroModel_full[[i]]$filename, seroModel_full[[i]]$modelname)
-postprocessFigs(seroModel_full[[i]]$filename, seroModel_full[[i]]$modelname, 4)
+version https://git-lfs.github.com/spec/v1
+oid sha256:e37a9209fd0ef67221a57b9e544eeb3345847110211bd4d5f24112a42fe45a94
+size 1056
