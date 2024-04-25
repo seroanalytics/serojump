@@ -255,6 +255,7 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
     id_exp <- modeldefinition$exposureTypes
 
     modelSeroJump$infoModel$exposureInfo <- list()
+    cat("lol1")
 
     know_inf <- list()
     for (i in 1:length(modeldefinition$exposureTypes)) {
@@ -279,17 +280,16 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
         if (exposureType == modeldefinition$exposureFitted) {
             data_t$knownInfsTimeVec = know_inf
             data_t$knownInfsVec = as.numeric(know_inf > -1)
-            data_t$knownInfsN = sum(know_inf > -1)
+            data_t$knownInfsN = length(know_inf[know_inf > -1])
         }
     }
 
+    modelSeroJump <- addExposurePrior(modelSeroJump, data_t, modeldefinition$exposurePrior, type = modeldefinition$exposurePriorType)
+    cat("lol2")
     modelSeroJump$initialiseJump <- function(datalist) {
-        init_exposure <- data_t$knownInfsTimeVec
-        init_exposure
     }
     
     # Add help with exposure prior
-    modelSeroJump <- addExposurePrior(modelSeroJump, data_t, modeldefinition$exposurePrior, type = modeldefinition$exposurePriorType)
 
     list(
         data = data_t,

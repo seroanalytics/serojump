@@ -3,7 +3,7 @@ library(devtools)
 library(Rcpp)
 #Rcpp::compileAttributes()
 devtools::load_all()
-i <- 1
+i <- 7
 
 seroModel_full <- readRDS(here::here("hpc", "simstudy", "simstudy_model.RData"))
 
@@ -25,7 +25,7 @@ settings <-  list(
     covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
     covarMaxVal = 1, # decrease if struggling toc sample in the middle
     runParallel = TRUE,
-    noGibbsSteps = 1,
+    noGibbsSteps = 5,
     onDebug = FALSE
 )
 

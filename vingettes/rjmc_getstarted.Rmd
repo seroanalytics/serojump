@@ -7,11 +7,13 @@
 #install.packages("devtools")
 #library(devtools)
 devtools::load_all()
-library(rjmc)
 library(lubridate)
 library(patchwork)
 library(tidybayes)
 library(ggdist)
+
+## KNOWN INFECTIONS
+## KNOWN EXPSOURES
 
 ```
 
@@ -27,16 +29,28 @@ To help with this section please consult information in the documentation on how
 ```{r}
 
 # Load data clean in the format required for the model
-data_titre_temp <- data.frame(
-    id = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
-    time = c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-    IgG = c(1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4)
+data_titre_null <- data.frame(
+    id = c(1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10),
+    time = c(0, 30, 0, 30, 0, 30, 0, 30, 0, 30, 0, 30, 0, 30, 0, 30, 0, 30, 0, 30),
+    IgG = c(0, 2, 0, 2, rep(3, 16))
+   #IgG = c(0, 2, 0, 2, 0, 2, 0, 2, 0, 2, rep(3, 10))
  )
 
 # No known exposure times in this model 
-data_known_exposures <- NULL
+data_known_null <- data.frame(
+    id = c(1, 2, 3, 4, 5),
+    time = c(15, 15, 15, 15, 15),
+    exposure_type = c("delta")
+)
 
-exp_prior_w2 <- get_exp_prior_wave2() # This is the empirical prior for the exposure time
+data_known_null <- NULL
+
+exp_prior_null <- data.frame(
+    day = 1:30,
+    prob = 1/30
+)# This is the empirical prior for the exposure time
+
+known_exp <- NULL #rep(15, 10)
 
 ```
 
@@ -52,11 +66,8 @@ To help with this section please consult information in the documentation on how
 
 # This function uses a cauchy distribution for the likelihood of the titre values with a LOD a titre value ofg log10(40)
 obsLogLikelihood = function(titre_val, titre_est, pars) {
-    if (titre_val <= log10(40)) {
-        ll <- pcauchy(log10(40), titre_est, pars[1], log.p = TRUE)
-    } else {
-        ll <- dcauchy(titre_val, titre_est, pars[1], log = TRUE)
-    }
+
+    ll <- dnorm(titre_val, titre_est, pars[1], log = TRUE)
     ll
 }
 
@@ -82,19 +93,19 @@ copLogLikelihood <- function(inf_status, esttitreExp, params) {
 noInfSerumKinetics <- function(titre_est, timeSince, pars) {
     titre_est <- titre_est - pars[1] * (timeSince)
     titre_est <- max(0, titre_est)
+  #  titre_est <- 3
     titre_est
 }
 
 # This function uses describes the antibody kinetics model after infection
 infSerumKinetics <- function(titre_est, timeSince, pars) {
     a <- pars[1] 
-    b <- pars[2] 
-    c <- pars[3]
     if (timeSince < 14) {
-        titre_est <- titre_est + log(exp(a) + exp(c)) * (timeSince) / 14;
+        titre_est <- titre_est + a;
     } else {
-        titre_est <- titre_est + log(exp(a) * exp(-b/10 * (timeSince - 14)) + exp(c));
+        titre_est <- titre_est + a;
     }
+    #titre_est <- 3
     titre_est
 }
 
@@ -114,7 +125,7 @@ To help with this section please consult information in the documentation on how
 
 # Define the biomarkers and exposure types in the model
 biomakers <- c("IgG")
-exposureTypes <- c("none", "delta", "predelta", "vax")
+exposureTypes <- c("none", "delta")
 exposureFitted <- "delta"
 
 # Define the observational model
@@ -126,24 +137,14 @@ observationalModel <- list(
 
 # Define the antibody kinetics model
 abkineticsModel <- list(
-    names = c("none", "delta", "predelta", "vax"),
+    names = c("none", "delta"),
     model = makeModel(
             addAbkineticsModel("none", "IgG", "none",  c("wane"), noInfSerumKinetics),
-            addAbkineticsModel("delta","IgG", "delta", c("a_d", "b_d", "c_d"), infSerumKinetics),
-            addAbkineticsModel( "predelta","IgG",  "predelta", c("a_pd", "b_pd", "c_pd"), infSerumKinetics),
-            addAbkineticsModel("vax","IgG", "vax", c("a_vax", "b_vax", "c_vax"), infSerumKinetics)
+            addAbkineticsModel("delta","IgG", "delta", c("a_d"), infSerumKinetics)
         ),
     prior = bind_rows(
-        add_par_df("a_vax", -2, 2, "norm",  0, 1), # ab kinetics
-        add_par_df("b_vax", 0, 1, "norm",  0.3, 0.05), # ab kinetics
-        add_par_df("c_vax", 0, 4, "unif", 0,  4), # ab kinetics 
-        add_par_df("a_pd", -2, 2, "norm",  0, 1), # ab kinetics
-        add_par_df("b_pd", 0, 1, "norm",  0.3, 0.05), # ab kinetics
-        add_par_df("c_pd", 0, 4, "unif", 0,  4), # ab kinetics
-        add_par_df("a_d", -2, 2, "norm",  0, 1), # ab kinetics
-        add_par_df("b_d", 0, 1, "norm",  0.3, 0.05), # ab kinetics
-        add_par_df("c_d", 0, 4, "unif", 0,  4), # ab kinetics
-        add_par_df("wane", 0.0, 0.1, "unif", 0.0, 0.1) # observational model
+        add_par_df("a_d", -4, 4, "norm",  1, 1), # ab kinetics
+        add_par_df("wane", 0.0, 0.1, "unif",  0, 1) # ab kinetics
     )
 )
 
@@ -164,11 +165,11 @@ modeldefinition <- list(
     observationalModel = observationalModel,
     abkineticsModel = abkineticsModel,
     copModel = copModel,
-    exposurePrior = exp_prior_w2,
+    exposurePrior = exp_prior_null,
     exposurePriorType = "empirical"
 )
 
-modelW2 <- createSeroJumpModel(data_titre_temp, data_known_exposures, modeldefinition)
+modelNull <- createSeroJumpModel(data_titre_null, data_known_null, modeldefinition, known_exp)
 
 ````
 
@@ -176,26 +177,67 @@ modelW2 <- createSeroJumpModel(data_titre_temp, data_known_exposures, modeldefin
 
 ```{r eval = FALSE}
 
+# load all
+devtools::load_all()
+
 # Define the settings
 settings <-  list(
     numberChainRuns = 4,
     numberCores = 4,
-    iterations = 200000,
-    burninPosterior = 100000,
-    thin = 100,
+    iterations = 20000,
+    burninPosterior = 10000,
+    thin = 10,
     consoleUpdates = 100,
     onAdaptiveCov = TRUE,
-    updatesAdaptiveCov = 100,
+    updatesAdaptiveCov = 10,
     burninAdaptiveCov = 1000,
     updatesAdaptiveTemp = 10,
     covarInitVal = 1e-2, # make very small if struggling to sample to beginning
     covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
     covarMaxVal = 1, # decrease if struggling to sample in the middle
-    runParallel = FALSE,
-    noGibbsSteps = 1
+    runParallel = TRUE,
+    noGibbsSteps = 1,
+    onDebug = FALSE
 )
 
 # Run the model 
-runRJMCMC(modelW2, settings, "local/test/startup", "modelA")
+runRJMCMC(modelNull, settings, "local/null", "modelA")
+postprocessFigs("local/null", "modelA", 4)
+
+
+```
+
+
+```{r}
+
+p <- 0.5
+
+tot_inf <- vector()
+
+for (i in 1:1000) {
+    p <- runif(1, 0, 1)
+    tot_inf[i] <- rbernoulli(100, p) %>% as.numeric %>% sum 
+}
+
+library(VGAM)
+
+# Define parameters
+n <- 10  # Number of trials
+k <- 3   # Number of successes
+alpha <- 2  # Shape parameter of the Beta distribution
+beta <- 2   # Shape parameter of the Beta distribution
+
+# Calculate the PMF of the Beta-Binomial distribution
+dbeta(seq(0, 1, 0.1), 1/200, 1/200)
+pmf <- dbetabinom.ab(0:200, 200, 1/200, 1/200) %>% log
+
+n <- 14
+k <- 10
+choose(n, k) * beta(k + 1, n - k + 1)
+
+
+betabinom
+
+tot_inf %>% hist
 
 ```

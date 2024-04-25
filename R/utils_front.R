@@ -125,6 +125,7 @@ generate_data_alt <- function(data_titre_model, biomarkers, known_exp = NULL) {
     endTitreTime <- data_titre_model %>% group_by(id) %>% filter(time == max(time)) %>% unique %>% .[["time"]]
 
     initialTitreValue <- data_titre_model %>% group_by(id) %>% filter(time == min(time)) %>% unique %>% ungroup %>% select(all_of(biomarkers)) %>% as.matrix
+    endTitreValue <- data_titre_model %>% group_by(id) %>% filter(time == max(time)) %>% unique %>% ungroup %>% select(all_of(biomarkers)) %>% as.matrix
 
     T <- max(endTitreTime)
 
@@ -147,7 +148,7 @@ generate_data_alt <- function(data_titre_model, biomarkers, known_exp = NULL) {
     } else {
         knownExpVec <- NA
     }
-
+    cat(endTitreValue)
     data_t <- list(
         N = N,
         T = T,
@@ -155,6 +156,7 @@ generate_data_alt <- function(data_titre_model, biomarkers, known_exp = NULL) {
         initialTitreValue = initialTitreValue,
         initialTitreTime = initialTitreTime,
         endTitreTime = endTitreTime,
+        endTitreValue = endTitreValue,
         titre_full = titre_true,
         times_full = times_full,
         titre_list = titre_list,
@@ -183,6 +185,7 @@ generate_data_t <- function(data_titre_model, data_inf_model = NULL, known_exp =
     initialTitreValue <- data_titre_model %>% group_by(id) %>% filter(time == min(time)) %>% .[["titre"]]
     initialTitreTime <- data_titre_model %>% group_by(id) %>% filter(time == min(time)) %>% .[["time"]]
     endTitreTime <- data_titre_model %>% group_by(id) %>% filter(time == max(time)) %>% .[["time"]]
+    endTitreValue <- data_titre_model %>% group_by(id) %>% filter(time == max(time)) %>% .[["titre"]]
 
     # Determine known infections
     data_inf_model_temp <- data.frame(id = 1:N, known = 0, inf_time = -1)
@@ -229,6 +232,7 @@ generate_data_t <- function(data_titre_model, data_inf_model = NULL, known_exp =
         T = max(endTitreTime),
         N_data = N_data,
         initialTitreValue = initialTitreValue,
+        endTitreValue = endTitreValue,
         initialTitreTime = initialTitreTime,
         endTitreTime = endTitreTime,
         titre_full = titre_true,
