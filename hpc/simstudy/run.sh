@@ -8,7 +8,7 @@
 #SBATCH --mem=8G              # Request 8 GB of RAM
 #SBATCH --time=24:00:00       # Set runtime to 12 hours
 #SBATCH --output=simstudy_%A_%a_%j.log 
-#SBATCH --array=10-11
+#SBATCH --array=1-12
 
 # Load any necessary modules
 #module load R/4.1.2 

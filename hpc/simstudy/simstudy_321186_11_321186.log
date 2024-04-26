@@ -1,849 +1,0 @@
-/var/spool/slurmd/job321186/slurm_script: line 18: activate: No such file or directory
-Loading required package: usethis
-ℹ Loading serojump
-Warning messages:
-1: replacing previous import ‘foreach::when’ by ‘purrr::when’ when loading ‘serojump’ 
-2: replacing previous import ‘foreach::accumulate’ by ‘purrr::accumulate’ when loading ‘serojump’ 
-3: Objects listed as exports, but not present in namespace:
-• copModel
-• data_known_exposures
-• data_titre 
-`onAdaptiveTemp` not specified in settings.  Default value TRUE. 
-`updatesAdaptiveTemp` not specified in settings.  Default value 10. 
-Start: run_rjmc_full
-Initiate class
-abID: 
-abID: 
-End: Initiate class
-Start: initiate functions
-End: initiate functions
-In: initialiseClass
-In: initialiseClass
-i_idx: 0. l: 6
-i_idx: 1. l: 6
-i_idx: 2. l: 6
-i_idx: 3. l: 6
-i_idx: 4. l: 6
-i_idx: 5. l: 6
-i_idx: 6. l: 6
-i_idx: 7. l: 6
-i_idx: 8. l: 6
-i_idx: 9. l: 6
-i_idx: 10. l: 6
-i_idx: 11. l: 6
-i_idx: 12. l: 6
-i_idx: 13. l: 6
-i_idx: 14. l: 6
-i_idx: 15. l: 6
-i_idx: 16. l: 6
-i_idx: 17. l: 6
-i_idx: 18. l: 6
-i_idx: 19. l: 6
-i_idx: 20. l: 6
-i_idx: 21. l: 6
-i_idx: 22. l: 6
-i_idx: 23. l: 6
-i_idx: 24. l: 6
-i_idx: 25. l: 6
-i_idx: 26. l: 6
-i_idx: 27. l: 6
-i_idx: 28. l: 6
-i_idx: 29. l: 6
-i_idx: 30. l: 6
-i_idx: 31. l: 6
-i_idx: 32. l: 6
-i_idx: 33. l: 6
-i_idx: 34. l: 6
-i_idx: 35. l: 6
-i_idx: 36. l: 6
-i_idx: 37. l: 6
-i_idx: 38. l: 6
-i_idx: 39. l: 6
-i_idx: 40. l: 6
-i_idx: 41. l: 6
-i_idx: 42. l: 6
-i_idx: 43. l: 6
-i_idx: 44. l: 6
-i_idx: 45. l: 6
-i_idx: 46. l: 6
-i_idx: 47. l: 6
-i_idx: 48. l: 6
-i_idx: 49. l: 6
-i_idx: 50. l: 6
-i_idx: 51. l: 6
-i_idx: 52. l: 6
-i_idx: 53. l: 6
-i_idx: 54. l: 6
-i_idx: 55. l: 6
-i_idx: 56. l: 6
-i_idx: 57. l: 6
-i_idx: 58. l: 6
-i_idx: 59. l: 6
-i_idx: 60. l: 6
-i_idx: 61. l: 6
-i_idx: 62. l: 6
-i_idx: 63. l: 6
-i_idx: 64. l: 6
-i_idx: 65. l: 6
-i_idx: 66. l: 6
-i_idx: 67. l: 6
-i_idx: 68. l: 6
-i_idx: 69. l: 6
-i_idx: 70. l: 6
-i_idx: 71. l: 6
-i_idx: 72. l: 6
-i_idx: 73. l: 6
-i_idx: 74. l: 6
-i_idx: 75. l: 6
-i_idx: 76. l: 6
-i_idx: 77. l: 6
-i_idx: 78. l: 6
-i_idx: 79. l: 6
-i_idx: 80. l: 6
-i_idx: 81. l: 6
-i_idx: 82. l: 6
-i_idx: 83. l: 6
-i_idx: 84. l: 6
-i_idx: 85. l: 6
-i_idx: 86. l: 6
-i_idx: 87. l: 6
-i_idx: 88. l: 6
-i_idx: 89. l: 6
-i_idx: 90. l: 6
-i_idx: 91. l: 6
-i_idx: 92. l: 6
-i_idx: 93. l: 6
-i_idx: 94. l: 6
-i_idx: 95. l: 6
-i_idx: 96. l: 6
-i_idx: 97. l: 6
-i_idx: 98. l: 6
-i_idx: 99. l: 6
-i_idx: 100. l: 6
-i_idx: 101. l: 6
-i_idx: 102. l: 6
-i_idx: 103. l: 6
-i_idx: 104. l: 6
-i_idx: 105. l: 6
-i_idx: 106. l: 6
-i_idx: 107. l: 6
-i_idx: 108. l: 6
-i_idx: 109. l: 6
-i_idx: 110. l: 6
-i_idx: 111. l: 6
-i_idx: 112. l: 6
-i_idx: 113. l: 6
-i_idx: 114. l: 6
-i_idx: 115. l: 6
-i_idx: 116. l: 6
-i_idx: 117. l: 6
-i_idx: 118. l: 6
-i_idx: 119. l: 6
-i_idx: 120. l: 6
-i_idx: 121. l: 6
-i_idx: 122. l: 6
-i_idx: 123. l: 6
-i_idx: 124. l: 6
-i_idx: 125. l: 6
-i_idx: 126. l: 6
-i_idx: 127. l: 6
-i_idx: 128. l: 6
-i_idx: 129. l: 6
-i_idx: 130. l: 6
-i_idx: 131. l: 6
-i_idx: 132. l: 6
-i_idx: 133. l: 6
-i_idx: 134. l: 6
-i_idx: 135. l: 6
-i_idx: 136. l: 6
-i_idx: 137. l: 6
-i_idx: 138. l: 6
-i_idx: 139. l: 6
-i_idx: 140. l: 6
-i_idx: 141. l: 6
-i_idx: 142. l: 6
-i_idx: 143. l: 6
-i_idx: 144. l: 6
-i_idx: 145. l: 6
-i_idx: 146. l: 6
-i_idx: 147. l: 6
-i_idx: 148. l: 6
-i_idx: 149. l: 6
-i_idx: 150. l: 6
-i_idx: 151. l: 6
-i_idx: 152. l: 6
-i_idx: 153. l: 6
-i_idx: 154. l: 6
-i_idx: 155. l: 6
-i_idx: 156. l: 6
-i_idx: 157. l: 6
-i_idx: 158. l: 6
-i_idx: 159. l: 6
-i_idx: 160. l: 6
-i_idx: 161. l: 6
-i_idx: 162. l: 6
-i_idx: 163. l: 6
-i_idx: 164. l: 6
-i_idx: 165. l: 6
-i_idx: 166. l: 6
-i_idx: 167. l: 6
-i_idx: 168. l: 6
-i_idx: 169. l: 6
-i_idx: 170. l: 6
-i_idx: 171. l: 6
-i_idx: 172. l: 6
-i_idx: 173. l: 6
-i_idx: 174. l: 6
-i_idx: 175. l: 6
-i_idx: 176. l: 6
-i_idx: 177. l: 6
-i_idx: 178. l: 6
-i_idx: 179. l: 6
-Start: run_rjmc_full
-Initiate class
-abID: 
-abID: 
-End: Initiate class
-Start: initiate functions
-End: initiate functions
-In: initialiseClass
-In: initialiseClass
-Start: run_rjmc_full
-Initiate class
-abID: 
-abID: 
-End: Initiate class
-Start: initiate functions
-End: initiate functions
-In: initialiseClass
-In: initialiseClass
-i_idx: 0. l: 6
-i_idx: 1. l: 6
-i_idx: 2. l: 6
-i_idx: 3. l: 6
-i_idx: 4. l: 6
-i_idx: 5. l: 6
-i_idx: 6. l: 6
-i_idx: 7. l: 6
-i_idx: 8. l: 6
-i_idx: 9. l: 6
-i_idx: 10. l: 6
-i_idx: 11. l: 6
-i_idx: 12. l: 6
-i_idx: 13. l: 6
-i_idx: 14. l: 6
-i_idx: 15. l: 6
-i_idx: 16. l: 6
-i_idx: 17. l: 6
-i_idx: 18. l: 6
-i_idx: 19. l: 6
-i_idx: 20. l: 6
-i_idx: 21. l: 6
-i_idx: 22. l: 6
-i_idx: 23. l: 6
-i_idx: 24. l: 6
-i_idx: 25. l: 6
-i_idx: 26. l: 6
-i_idx: 27. l: 6
-i_idx: 28. l: 6
-i_idx: 29. l: 6
-i_idx: 30. l: 6
-i_idx: 31. l: 6
-i_idx: 32. l: 6
-i_idx: 33. l: 6
-i_idx: 34. l: 6
-i_idx: 35. l: 6
-i_idx: 36. l: 6
-i_idx: 37. l: 6
-i_idx: 38. l: 6
-i_idx: 39. l: 6
-i_idx: 40. l: 6
-i_idx: 41. l: 6
-i_idx: 42. l: 6
-i_idx: 43. l: 6
-i_idx: 44. l: 6
-i_idx: 45. l: 6
-i_idx: 46. l: 6
-i_idx: 47. l: 6
-i_idx: 48. l: 6
-i_idx: 49. l: 6i_idx: 
-0. l: 6
-i_idx: 50. l: 6
-i_idx: 51. l: 6
-i_idx: i_idx: 521. l: . l: 66
-
-i_idx: 53. l: 6
-i_idx: 2i_idx: . l: 546. l: 
-6
-i_idx: i_idx: 355. l: . l: 66
-
-i_idx: 56. l: 6
-i_idx: 4. l: 6
-i_idx: 57. l: 6
-i_idx: 58. l: 6
-i_idx: 5. l: 6
-i_idx: i_idx: 596. l: . l: 66
-
-i_idx: 60. l: 6
-i_idx: 7. l: i_idx: 661
-. l: 6
-i_idx: i_idx: 628. l: . l: 66
-
-i_idx: 63. l: 6
-i_idx: 9. l: 6
-i_idx: 64. l: 6
-i_idx: 10. l: 6
-i_idx: 11. l: 6
-i_idx: 12. l: 6
-i_idx: 65. l: 6
-i_idx: 66. l: 6
-i_idx: 13. l: 6
-i_idx: 14. l: 6
-i_idx: 67. l: 6
-i_idx: 68. l: 6
-i_idx: 15. l: 6
-i_idx: 69. l: 6
-i_idx: 16. l: 6
-i_idx: 70. l: 6
-i_idx: i_idx: 1771. l: . l: 66
-
-i_idx: 72. l: 6
-i_idx: 18. l: 6
-i_idx: 73. l: i_idx: 619
-. l: 6
-i_idx: i_idx: 7420. l: . l: 66
-
-i_idx: 21. l: 6
-i_idx: 75. l: 6
-i_idx: 22. l: 6
-i_idx: 76. l: 6
-i_idx: i_idx: 7723. l: . l: 66
-
-i_idx: 78. l: 6
-i_idx: 24. l: 6
-i_idx: 79. l: 6
-i_idx: 25. l: 6
-i_idx: 80. l: 6
-i_idx: 26. l: 6
-i_idx: 81. l: 6
-i_idx: 82. l: 6
-i_idx: 27. l: 6
-i_idx: 28. l: i_idx: 683
-. l: 6
-i_idx: 84. l: 6
-i_idx: 29. l: 6
-i_idx: 85. l: 6
-i_idx: 30. l: 6
-i_idx: 86. l: 6
-i_idx: 31. l: 6
-i_idx: 87. l: 6
-i_idx: 88. l: i_idx: 632
-. l: 6
-i_idx: 89. l: 6
-i_idx: 90. l: 6i_idx: 
-33. l: 6
-i_idx: 34. l: 6
-i_idx: 91. l: 6
-i_idx: 92. l: 6
-i_idx: 35. l: 6
-i_idx: 93. l: 6
-i_idx: 36. l: 6
-i_idx: 94. l: 6
-i_idx: 37. l: 6
-i_idx: 95. l: 6
-i_idx: 38. l: 6
-i_idx: 96. l: 6
-i_idx: i_idx: 9739. l: . l: 66
-
-i_idx: i_idx: 9840. l: . l: 66
-
-i_idx: 41. l: 6
-i_idx: 99. l: 6
-i_idx: i_idx: 42100. l: . l: 66
-
-i_idx: 101. l: 6
-i_idx: i_idx: 43102. l: . l: 66
-
-i_idx: 44. l: 6
-i_idx: 103. l: 6
-i_idx: 104. l: 6
-i_idx: 45. l: 6
-i_idx: 46. l: 6
-i_idx: 105. l: 6
-i_idx: 106. l: 6
-i_idx: 47. l: 6
-i_idx: i_idx: 48107. l: . l: 66
-
-i_idx: 108. l: 6
-i_idx: 49. l: 6
-i_idx: i_idx: 50109. l: . l: 66
-
-i_idx: 110. l: 6
-i_idx: 51. l: 6
-i_idx: 111. l: 6
-i_idx: 52. l: 6
-i_idx: 112. l: 6
-i_idx: 53. l: i_idx: 6113
-. l: 6
-i_idx: i_idx: 54114. l: . l: 66
-
-i_idx: 115. l: 6
-i_idx: 55. l: 6
-i_idx: 116. l: 6
-i_idx: 56. l: 6
-i_idx: 117. l: 6
-i_idx: 57. l: 6
-i_idx: 118. l: 6
-i_idx: 58. l: 6
-i_idx: 119. l: 6
-i_idx: 59. l: 6
-i_idx: 120. l: 6
-i_idx: 60. l: 6
-i_idx: 121. l: 6
-i_idx: i_idx: 61122. l: . l: 66
-
-i_idx: 62. l: 6
-i_idx: 123. l: 6
-i_idx: i_idx: 63124. l: . l: 66
-
-i_idx: 64. l: 6
-i_idx: 125. l: 6
-i_idx: 126. l: 6
-i_idx: i_idx: 12765. l: . l: 66
-
-i_idx: i_idx: 66128. l: . l: 66
-
-i_idx: 67. l: 6
-i_idx: 68. l: 6
-i_idx: 129. l: 6
-i_idx: 130. l: 6
-i_idx: 69. l: 6
-i_idx: 70. l: 6
-i_idx: 131. l: 6
-i_idx: i_idx: 71. l: 1806. l: 
-6
-i_idx: 72. l: i_idx: 6181
-. l: 6
-i_idx: 182. l: 6
-i_idx: 73. l: 6
-i_idx: 74. l: i_idx: 6183
-. l: 6
-i_idx: 184. l: 6
-i_idx: 185. l: 6
-i_idx: 75. l: 6
-i_idx: 186. l: 6
-i_idx: 76. l: 6
-i_idx: 187. l: 6
-i_idx: 77. l: 6
-i_idx: 188. l: 6
-i_idx: 78. l: 6
-i_idx: 189. l: 6
-i_idx: 79. l: 6
-i_idx: 190. l: 6
-i_idx: 80. l: 6
-i_idx: 191. l: 6
-i_idx: 81. l: 6
-i_idx: 192. l: 6i_idx: 
-82. l: 6
-i_idx: 193. l: 6
-i_idx: 83. l: 6
-i_idx: 194. l: 6
-i_idx: 84. l: 6
-i_idx: 195i_idx: . l: 856. l: 
-6
-i_idx: 86. l: 6
-i_idx: 196. l: 6
-i_idx: 197. l: 6
-i_idx: 87. l: 6
-i_idx: i_idx: 19888. l: . l: 66
-
-i_idx: 89. l: i_idx: 6199
-. l: 6
-i_idx: 90. l: 6
-i_idx: 91. l: 6
-i_idx: 92. l: 6
-i_idx: 93. l: 6
-i_idx: 94. l: 6
-i_idx: 95. l: 6
-i_idx: 96. l: 6
-i_idx: 97. l: 6
-i_idx: 98. l: 6
-i_idx: 99. l: 6
-i_idx: 100. l: 6
-i_idx: 101. l: 6
-i_idx: 102. l: 6
-i_idx: 103. l: 6
-i_idx: 104. l: 6
-i_idx: 105. l: 6
-i_idx: 106. l: 6
-i_idx: 107. l: 6
-i_idx: 108. l: 6
-i_idx: 109. l: 6
-i_idx: 110. l: 6
-i_idx: 111. l: 6
-i_idx: 112. l: 6
-i_idx: 113. l: 6
-i_idx: 114. l: 6
-i_idx: 115. l: 6
-i_idx: 116. l: 6
-i_idx: 117. l: 6
-i_idx: 118. l: 6
-i_idx: 119. l: 6
-i_idx: 120. l: 6
-i_idx: 121. l: 6
-i_idx: 122. l: 6
-i_idx: 123. l: 6
-i_idx: 124. l: 6
-i_idx: 125. l: 6
-i_idx: 126. l: 6
-i_idx: 127. l: 6
-i_idx: 128. l: 6
-i_idx: 129. l: 6
-i_idx: 130. l: 6
-i_idx: 131. l: 6
-i_idx: 132. l: 6
-i_idx: 133. l: 6
-i_idx: 134. l: 6
-i_idx: 135. l: 6
-i_idx: 136. l: 6
-i_idx: 137. l: 6
-i_idx: 138. l: 6
-i_idx: 139. l: 6
-i_idx: 140. l: 6
-i_idx: 141. l: 6
-i_idx: 142. l: 6
-i_idx: 143. l: 6
-i_idx: 144. l: 6
-i_idx: 145. l: 6
-i_idx: 146. l: 6
-i_idx: 147. l: 6
-i_idx: 148. l: 6
-i_idx: 149. l: 6
-i_idx: 150. l: 6
-i_idx: 151. l: 6
-i_idx: 152. l: 6
-i_idx: 153. l: 6
-i_idx: 154. l: 6
-i_idx: 155. l: 6
-i_idx: 156. l: 6
-i_idx: 157. l: 6
-i_idx: 158. l: 6
-i_idx: 159. l: 6
-i_idx: 160. l: 6
-i_idx: 161. l: 6
-i_idx: 162. l: 6
-i_idx: 163. l: 6
-i_idx: 164. l: 6
-i_idx: 165. l: 6
-i_idx: 166. l: 6
-i_idx: 167. l: 6
-i_idx: 168. l: 6
-i_idx: 169. l: 6
-i_idx: 170. l: 6
-i_idx: 171. l: 6
-i_idx: 172. l: 6
-i_idx: 173. l: 6
-i_idx: 174. l: 6
-i_idx: 175. l: 6
-i_idx: 176. l: 6
-i_idx: 177. l: 6
-i_idx: 178. l: 6
-i_idx: 179. l: 6
-i_idx: 180. l: 6
-i_idx: 181. l: 6
-i_idx: 182. l: 6
-i_idx: 183. l: 6
-Start: run_rjmc_fulli_idx: 184. l: 6
-i_idx: 185. l: 6
-
-i_idx: 186. l: 6
-i_idx: 187. l: 6
-i_idx: 188. l: 6
-i_idx: 189. l: 6
-Initiate class
-i_idx: 190. l: 6
-i_idx: 191. l: 6
-i_idx: 192. l: 6
-i_idx: 193. l: 6
-i_idx: 194. l: 6
-i_idx: 195. l: 6
-i_idx: 196. l: 6
-i_idx: 197. l: 6
-i_idx: 198. l: 6
-i_idx: 199. l: 6
-abID: 
-abID: 
-End: Initiate class
-Start: initiate functions
-End: initiate functions
-In: initialiseClass
-In: initialiseClass
-i_idx: 132. l: 6
-i_idx: 133. l: 6
-i_idx: 134. l: 6
-i_idx: 135. l: 6
-i_idx: 136. l: 6
-i_idx: 137. l: 6
-i_idx: 138. l: 6
-i_idx: 139. l: 6
-i_idx: 140. l: 6
-i_idx: 141. l: 6
-i_idx: 142. l: 6
-i_idx: 143. l: 6
-i_idx: 144. l: 6
-i_idx: 145. l: 6
-i_idx: 146. l: 6
-i_idx: 147. l: 6
-i_idx: 148. l: 6
-i_idx: 149. l: 6
-i_idx: 150. l: 6
-i_idx: 151. l: 6
-i_idx: 152. l: 6
-i_idx: 153. l: 6
-i_idx: 154. l: 6
-i_idx: 155. l: 6
-i_idx: 156. l: 6
-i_idx: 157. l: 6
-i_idx: 158. l: 6
-i_idx: 159. l: 6
-i_idx: 160. l: 6
-i_idx: 161. l: 6
-i_idx: 162. l: 6
-i_idx: 163. l: 6
-i_idx: 164. l: 6
-i_idx: 165. l: 6
-i_idx: 166. l: 6
-i_idx: 167. l: 6
-i_idx: 168. l: 6
-i_idx: 169. l: 6
-i_idx: 170. l: 6
-i_idx: 171. l: 6
-i_idx: 172. l: 6
-i_idx: 173. l: 6
-i_idx: 174. l: 6
-i_idx: 175. l: 6
-i_idx: 176. l: 6
-i_idx: 177. l: 6
-i_idx: 178. l: 6
-i_idx: 179. l: 6
-i_idx: 180. l: 6
-i_idx: 181. l: 6
-i_idx: 182. l: 6
-i_idx: 183. l: 6
-i_idx: 184. l: 6
-i_idx: 185. l: 6
-i_idx: 186. l: 6
-i_idx: 187. l: 6
-i_idx: 188. l: 6
-i_idx: 189. l: 6
-i_idx: 190. l: 6
-i_idx: 191. l: 6
-i_idx: 192. l: 6
-i_idx: 193. l: 6
-i_idx: 194. l: 6
-i_idx: 195. l: 6
-i_idx: 196. l: 6
-i_idx: 197. l: 6
-i_idx: 198. l: 6
-i_idx: 199. l: 6
-i_idx: 0. l: 6
-i_idx: 1. l: 6
-i_idx: 2. l: 6
-i_idx: 3. l: 6
-i_idx: 4. l: 6
-i_idx: 5. l: 6
-i_idx: 6. l: 6
-i_idx: 7. l: 6
-i_idx: 8. l: 6
-i_idx: 9. l: 6
-i_idx: 10. l: 6
-i_idx: 11. l: 6
-i_idx: 12. l: 6
-i_idx: 13. l: 6
-i_idx: 14. l: 6
-i_idx: 15. l: 6
-i_idx: 16. l: 6
-i_idx: 17. l: 6
-i_idx: 18. l: 6
-i_idx: 19. l: 6
-i_idx: 20. l: 6
-i_idx: 21. l: 6
-i_idx: 22. l: 6
-i_idx: 23. l: 6
-i_idx: 24. l: 6
-i_idx: 25. l: 6
-i_idx: 26. l: 6
-i_idx: 27. l: 6
-i_idx: 28. l: 6
-i_idx: 29. l: 6
-i_idx: 30. l: 6
-i_idx: 31. l: 6
-i_idx: 32. l: 6
-i_idx: 33. l: 6
-i_idx: 34. l: 6
-i_idx: 35. l: 6
-i_idx: 36. l: 6
-i_idx: 37. l: 6
-i_idx: 38. l: 6
-i_idx: 39. l: 6
-i_idx: 40. l: 6
-i_idx: 41. l: 6
-i_idx: 42. l: 6
-i_idx: 43. l: 6
-i_idx: 44. l: 6
-i_idx: 45. l: 6
-i_idx: 46. l: 6
-i_idx: 47. l: 6
-i_idx: 48. l: 6
-i_idx: 49. l: 6
-i_idx: 50. l: 6
-i_idx: 51. l: 6
-i_idx: 52. l: 6
-i_idx: 53. l: 6
-i_idx: 54. l: 6
-i_idx: 55. l: 6
-i_idx: 56. l: 6
-i_idx: 57. l: 6
-i_idx: 58. l: 6
-i_idx: 59. l: 6
-i_idx: 60. l: 6
-i_idx: 61. l: 6
-i_idx: 62. l: 6
-i_idx: 63. l: 6
-i_idx: 64. l: 6
-i_idx: 65. l: 6
-i_idx: 66. l: 6
-i_idx: 67. l: 6
-i_idx: 68. l: 6
-i_idx: 69. l: 6
-i_idx: 70. l: 6
-i_idx: 71. l: 6
-i_idx: 72. l: 6
-i_idx: 73. l: 6
-i_idx: 74. l: 6
-i_idx: 75. l: 6
-i_idx: 76. l: 6
-i_idx: 77. l: 6
-i_idx: 78. l: 6
-i_idx: 79. l: 6
-i_idx: 80. l: 6
-i_idx: 81. l: 6
-i_idx: 82. l: 6
-i_idx: 83. l: 6
-i_idx: 84. l: 6
-i_idx: 85. l: 6
-i_idx: 86. l: 6
-i_idx: 87. l: 6
-i_idx: 88. l: 6
-i_idx: 89. l: 6
-i_idx: 90. l: 6
-i_idx: 91. l: 6
-i_idx: 92. l: 6
-i_idx: 93. l: 6
-i_idx: 94. l: 6
-i_idx: 95. l: 6
-i_idx: 96. l: 6
-i_idx: 97. l: 6
-i_idx: 98. l: 6
-i_idx: 99. l: 6
-i_idx: 100. l: 6
-i_idx: 101. l: 6
-i_idx: 102. l: 6
-i_idx: 103. l: 6
-i_idx: 104. l: 6
-i_idx: 105. l: 6
-i_idx: 106. l: 6
-i_idx: 107. l: 6
-i_idx: 108. l: 6
-i_idx: 109. l: 6
-i_idx: 110. l: 6
-i_idx: 111. l: 6
-i_idx: 112. l: 6
-i_idx: 113. l: 6
-i_idx: 114. l: 6
-i_idx: 115. l: 6
-i_idx: 116. l: 6
-i_idx: 117. l: 6
-i_idx: 118. l: 6
-i_idx: 119. l: 6
-i_idx: 120. l: 6
-i_idx: 121. l: 6
-i_idx: 122. l: 6
-i_idx: 123. l: 6
-i_idx: 124. l: 6
-i_idx: 125. l: 6
-i_idx: 126. l: 6
-i_idx: 127. l: 6
-i_idx: 128. l: 6
-i_idx: 129. l: 6
-i_idx: 130. l: 6
-i_idx: 131. l: 6
-i_idx: 132. l: 6
-i_idx: 133. l: 6
-i_idx: 134. l: 6
-i_idx: 135. l: 6
-i_idx: 136. l: 6
-i_idx: 137. l: 6
-i_idx: 138. l: 6
-i_idx: 139. l: 6
-i_idx: 140. l: 6
-i_idx: 141. l: 6
-i_idx: 142. l: 6
-i_idx: 143. l: 6
-i_idx: 144. l: 6
-i_idx: 145. l: 6
-i_idx: 146. l: 6
-i_idx: 147. l: 6
-i_idx: 148. l: 6
-i_idx: 149. l: 6
-i_idx: 150. l: 6
-i_idx: 151. l: 6
-i_idx: 152. l: 6
-i_idx: 153. l: 6
-i_idx: 154. l: 6
-i_idx: 155. l: 6
-i_idx: 156. l: 6
-i_idx: 157. l: 6
-i_idx: 158. l: 6
-i_idx: 159. l: 6
-Running MCMC-PT iteration number: i_idx: 1600. l:  of 61000000
-. Chain number 4. Current logpost: i_idx: 161. l: -2731.046. No exp/inf: 
-0/0 .          i_idx: 162. l: 6
-i_idx: 163. l: 6
-i_idx: 164. l: 6
-i_idx: 165. l: 6
-i_idx: 166. l: 6
-i_idx: 167. l: 6
-i_idx: 168. l: 6
-i_idx: 169. l: 6
-i_idx: 170. l: 6
-i_idx: 171. l: 6
-i_idx: 172. l: 6
-i_idx: 173. l: 6
-i_idx: 174. l: 6
-i_idx: 175. l: 6
-i_idx: 176. l: 6
-i_idx: 177. l: 6
-i_idx: 178. l: 6
-i_idx: 179. l: 6
-i_idx: 180. l: 6
-i_idx: 181. l: 6
-i_idx: 182. l: 6
-i_idx: 183. l: 6
-i_idx: 184. l: 6
-i_idx: 185. l: 6
-i_idx: 186. l: 6
-i_idx: 187. l: 6
-i_idx: 188. l: 6
-i_idx: 189. l: 6
-i_idx: 190. l: 6
-i_idx: 191. l: 6
-i_idx: 192. l: 6
-i_idx: 193. l: 6
-i_idx: 194. l: 6
-i_idx: 195. l: 6
-i_idx: 196. l: 6
-i_idx: 197. l: 6
-i_idx: 198. l: 6
-i_idx: 199. l: 6
-Running MCMC-PT iteration number: 0 of 1000000. Chain number 1. Current logpost: -2020.37. No exp/inf: 0/0 .          Running MCMC-PT iteration number: 0 of 1000000. Chain number 2. Current logpost: -2906.13. No exp/inf: 0/0 .          Running MCMC-PT iteration number: 0 of 1000000. Chain number 3. Current logpost: -3040.42. No exp/inf: 0/0 .          Running MCMC-PT iteration number: 100 of 1000000. Chain number 1. Current logpost: -1053.42. No exp/inf: 15/9 .          Running MCMC-PT iteration number: 100 of 1000000. Chain number 4. Current logpost: -996.072. No exp/inf: 11/5 .          Running MCMC-PT iteration number: 100 of 1000000. Chain number 3. Current logpost: -1058.35. No exp/inf: 16/5 .          Running MCMC-PT iteration number: 100 of 1000000. Chain number 2. Current logpost: -997.773. No exp/inf: 10/2 .          Running MCMC-PT iteration number: 200 of 1000000. Chain number 4. Current logpost: -959.806. No exp/inf: 17/7 .          Running MCMC-PT iteration number: 200 of 1000000. Chain number 3. Current logpost: -995.575. No exp/inf: 18/3 .          Running MCMC-PT iteration number: 200 of 1000000. Chain number 1. Current logpost: -1033.05. No exp/inf: 24/17 .          Running MCMC-PT iteration number: 200 of 1000000. Chain number 2. Current logpost: -988.253. No exp/inf: 22/5 .          Running MCMC-PT iteration number: 300 of 1000000. Chain number 4. Current logpost: -903.509. No exp/inf: 26/15 .          Running MCMC-PT iteration number: 300 of 1000000. Chain number 3. Current logpost: -995.584. No exp/inf: 25/8 .          Running MCMC-PT iteration number: 300 of 1000000. Chain number 1. Current logpost: -1023.49. No exp/inf: 35/25 .          Running MCMC-PT iteration number: 300 of 1000000. Chain number 2. Current logpost: -929.19. No exp/inf: 30/11 .          Running MCMC-PT iteration number: 400 of 1000000. Chain number 4. Current logpost: -876.251. No exp/inf: 36/17 .          Running MCMC-PT iteration number: 400 of 1000000. Chain number 3. Current logpost: -963.431. No exp/inf: 30/10 .          Running MCMC-PT iteration number: 400 of 1000000. Chain number 1. Current logpost: -1009.92. No exp/inf: 42/29 .          Running MCMC-PT iteration number: 400 of 1000000. Chain number 2. Current logpost: -929.148. No exp/inf: 39/14 .          Running MCMC-PT iteration number: 500 of 1000000. Chain number 4. Current logpost: -836.992. No exp/inf: 40/20 .          Running MCMC-PT iteration number: 500 of 1000000. Chain number 3. Current logpost: -975.237. No exp/inf: 40/13 .          Running MCMC-PT iteration number: 500 of 1000000. Chain number 1. Current logpost: -994.008. No exp/inf: 52/34 .          Running MCMC-PT iteration number: 500 of 1000000. Chain number 2. Current logpost: -909.346. No exp/inf: 57/18 .          Running MCMC-PT iteration number: 600 of 1000000. Chain number 4. Current logpost: -784.501. No exp/inf: 46/26 .          Running MCMC-PT iteration number: 600 of 1000000. Chain number 3. Current logpost: -979.133. No exp/inf: 44/15 .          Running MCMC-PT iteration number: 600 of 1000000. Chain number 1. Current logpost: -988.703. No exp/inf: 57/38 .          Running MCMC-PT iteration number: 600 of 1000000. Chain number 2. Current logpost: -897.025. No exp/inf: 59/21 .          Running MCMC-PT iteration number: 700 of 1000000. Chain number 4. Current logpost: -748.521. No exp/inf: 57/31 .          Running MCMC-PT iteration number: 700 of 1000000. Chain number 3. Current logpost: -962.644. No exp/inf: 54/20 .          Running MCMC-PT iteration number: 700 of 1000000. Chain number 1. Current logpost: -960.709. No exp/inf: 67/42 .          Running MCMC-PT iteration number: 700 of 1000000. Chain number 2. Current logpost: -855.741. No exp/inf: 69/30 .          Running MCMC-PT iteration number: 800 of 1000000. Chain number 4. Current logpost: -751.573. No exp/inf: 65/32 .          Running MCMC-PT iteration number: 800 of 1000000. Chain number 3. Current logpost: -943.801. No exp/inf: 56/20 .          Running MCMC-PT iteration number: 800 of 1000000. Chain number 1. Current logpost: -933.802. No exp/inf: 70/44 .          Running MCMC-PT iteration number: 800 of 1000000. Chain number 2. Current logpost: -832.654. No exp/inf: 71/32 .          Running MCMC-PT iteration number: 900 of 1000000. Chain number 4. Current logpost: -737.358. No exp/inf: 73/34 .          Running MCMC-PT iteration number: 900 of 1000000. Chain number 3. Current logpost: -932.367. No exp/inf: 62/20 .          Running MCMC-PT iteration number: 900 of 1000000. Chain number 1. Current logpost: -887.518. No exp/inf: 72/48 .          Running MCMC-PT iteration number: 900 of 1000000. Chain number 2. Current logpost: -813.383. No exp/inf: 74/32 .          Running MCMC-PT iteration number: 1000 of 1000000. Chain number 4. Current logpost: -701.424. No exp/inf: 81/39 .          Running MCMC-PT iteration number: 1000 of 1000000. Chain number 3. Current logpost: -880.678. No exp/inf: 73/25 .          Running MCMC-PT iteration number: 1000 of 1000000. Chain number 1. Current logpost: -832.188. No exp/inf: 71/46 .          Running MCMC-PT iteration number: 1000 of 1000000. Chain number 2. Current logpost: -800.59. No exp/inf: 78/35 .          Running MCMC-PT iteration number: 1100 of 1000000. Chain number 4. Current logpost: -687.618. No exp/inf: 80/39 .          Running MCMC-PT iteration number: 1100 of 1000000. Chain number 3. Current logpost: -854.397. No exp/inf: 76/28 .          Running MCMC-PT iteration number: 1100 of 1000000. Chain number 1. Current logpost: -819.691. No exp/inf: 67/44 .          Running MCMC-PT iteration number: 1100 of 1000000. Chain number 2. Current logpost: -783.858. No exp/inf: 80/37 .          Running MCMC-PT iteration number: 1200 of 1000000. Chain number 4. Current logpost: -643.873. No exp/inf: 84/45 .          Running MCMC-PT iteration number: 1200 of 1000000. Chain number 3. Current logpost: -779.682. No exp/inf: 83/35 .          Running MCMC-PT iteration number: 1200 of 1000000. Chain number 1. Current logpost: -776.223. No exp/inf: 76/45 .          Running MCMC-PT iteration number: 1200 of 1000000. Chain number 2. Current logpost: -766.713. No exp/inf: 86/40 .          Running MCMC-PT iteration number: 1300 of 1000000. Chain number 3. Current logpost: -753.992. No exp/inf: 90/38 .          Running MCMC-PT iteration number: 1300 of 1000000. Chain number 4. Current logpost: -631.651. No exp/inf: 86/46 .          Running MCMC-PT iteration number: 1300 of 1000000. Chain number 1. Current logpost: -766.3. No exp/inf: 82/44 .          Running MCMC-PT iteration number: 1300 of 1000000. Chain number 2. Current logpost: -688.81. No exp/inf: 93/47 .          Running MCMC-PT iteration number: 1400 of 1000000. Chain number 3. Current logpost: -706.449. No exp/inf: 98/44 .          Running MCMC-PT iteration number: 1400 of 1000000. Chain number 4. Current logpost: -636.763. No exp/inf: 93/47 .          Running MCMC-PT iteration number: 1400 of 1000000. Chain number 2. Current logpost: -642.817. No exp/inf: 93/50 .          Running MCMC-PT iteration number: 1400 of 1000000. Chain number 1. Current logpost: -754.451. No exp/inf: 88/44 .          Running MCMC-PT iteration number: 1500 of 1000000. Chain number 3. Current logpost: -676.347. No exp/inf: 93/45 .          Running MCMC-PT iteration number: 1500 of 1000000. Chain number 2. Current logpost: -615.198. No exp/inf: 93/52 .          Running MCMC-PT iteration number: 1500 of 1000000. Chain number 4. Current logpost: -620.304. No exp/inf: 101/49 .          Running MCMC-PT iteration number: 1500 of 1000000. Chain number 1. Current logpost: -715.785. No exp/inf: 98/47 .          Running MCMC-PT iteration number: 1600 of 1000000. Chain number 3. Current logpost: -639.698. No exp/inf: 98/48 .          Running MCMC-PT iteration number: 1600 of 1000000. Chain number 2. Current logpost: -610.103. No exp/inf: 99/53 .          Running MCMC-PT iteration number: 1700 of 1000000. Chain number 3. Current logpost: -591.931. No exp/inf: 100/53 .          Running MCMC-PT iteration number: 1600 of 1000000. Chain number 4. Current logpost: -620.649. No exp/inf: 108/50 .          Running MCMC-PT iteration number: 1600 of 1000000. Chain number 1. Current logpost: -697.387. No exp/inf: 103/48 .          Running MCMC-PT iteration number: 1700 of 1000000. Chain number 2. Current logpost: -602.472. No exp/inf: 97/53 .          Running MCMC-PT iteration number: 1800 of 1000000. Chain number 3. Current logpost: -583.013. No exp/inf: 103/53 .          Running MCMC-PT iteration number: 1800 of 1000000. Chain number 2. Current logpost: -578.241. No exp/inf: 110/56 .          Running MCMC-PT iteration number: 1700 of 1000000. Chain number 4. Current logpost: -603.631. No exp/inf: 112/53 .          Running MCMC-PT iteration number: 1700 of 1000000. Chain number 1. Current logpost: -663.577. No exp/inf: 104/53 .          Running MCMC-PT iteration number: 1900 of 1000000. Chain number 3. Current logpost: -587.797. No exp/inf: 108/54 .          Running MCMC-PT iteration number: 1900 of 1000000. Chain number 2. Current logpost: -554.115. No exp/inf: 111/58 .          Running MCMC-PT iteration number: 1800 of 1000000. Chain number 4. Current logpost: -581.012. No exp/inf: 115/55 .          Running MCMC-PT iteration number: 1800 of 1000000. Chain number 1. Current logpost: -664.276. No exp/inf: 108/54 .          Running MCMC-PT iteration number: 2000 of 1000000. Chain number 2. Current logpost: -551.74. No exp/inf: 117/57 .          Running MCMC-PT iteration number: 2000 of 1000000. Chain number 3. Current logpost: -585.278. No exp/inf: 108/55 .          Running MCMC-PT iteration number: 1900 of 1000000. Chain number 1. Current logpost: -645.399. No exp/inf: 106/55 .          Running MCMC-PT iteration number: 1900 of 1000000. Chain number 4. Current logpost: -561.924. No exp/inf: 113/57 .          Running MCMC-PT iteration number: 2100 of 1000000. Chain number 2. Current logpost: -472.667. No exp/inf: 123/59 .          Running MCMC-PT iteration number: 2100 of 1000000. Chain number 3. Current logpost: -569.202. No exp/inf: 111/55 .          Running MCMC-PT iteration number: 2200 of 1000000. Chain number 2. Current logpost: -470.446. No exp/inf: 120/60 .          Running MCMC-PT iteration number: 2000 of 1000000. Chain number 4. Current logpost: -553.886. No exp/inf: 107/57 .          Running MCMC-PT iteration number: 2000 of 1000000. Chain number 1. Current logpost: -633.574. No exp/inf: 104/57 .          Running MCMC-PT iteration number: 2200 of 1000000. Chain number 3. Current logpost: -566.717. No exp/inf: 112/56 .          Running MCMC-PT iteration number: 2300 of 1000000. Chain number 2. Current logpost: -474.104. No exp/inf: 121/59 .          Running MCMC-PT iteration number: 2100 of 1000000. Chain number 4. Current logpost: -530.994. No exp/inf: 114/58 .          Running MCMC-PT iteration number: 2100 of 1000000. Chain number 1. Current logpost: -629.905. No exp/inf: 100/57 .          Running MCMC-PT iteration number: 2300 of 1000000. Chain number 3. Current logpost: -523.172. No exp/inf: 107/58 .          Running MCMC-PT iteration number: 2400 of 1000000. Chain number 2. Current logpost: -462.579. No exp/inf: 126/60 .          Running MCMC-PT iteration number: 2200 of 1000000. Chain number 1. Current logpost: -629.804. No exp/inf: 101/57 .          Running MCMC-PT iteration number: 2200 of 1000000. Chain number 4. Current logpost: -526.125. No exp/inf: 117/58 .          Running MCMC-PT iteration number: 2400 of 1000000. Chain number 3. Current logpost: -530.027. No exp/inf: 112/58 .          Running MCMC-PT iteration number: 2500 of 1000000. Chain number 2. Current logpost: -441.784. No exp/inf: 119/61 .          Running MCMC-PT iteration number: 2300 of 1000000. Chain number 1. Current logpost: -618.626. No exp/inf: 99/57 .          Running MCMC-PT iteration number: 2300 of 1000000. Chain number 4. Current logpost: -472.02. No exp/inf: 114/58 .          Running MCMC-PT iteration number: 2500 of 1000000. Chain number 3. Current logpost: -527.719. No exp/inf: 119/59 .          Running MCMC-PT iteration number: 2600 of 1000000. Chain number 2. Current logpost: -436.239. No exp/inf: 113/61 .          Running MCMC-PT iteration number: 2600 of 1000000. Chain number 3. Current logpost: -528.739. No exp/inf: 120/59 .          Running MCMC-PT iteration number: 2400 of 1000000. Chain number 1. Current logpost: -579.756. No exp/inf: 100/60 .          Running MCMC-PT iteration number: 2400 of 1000000. Chain number 4. Current logpost: -472.98. No exp/inf: 121/59 .          Running MCMC-PT iteration number: 2700 of 1000000. Chain number 2. Current logpost: -424.354. No exp/inf: 116/62 .          Running MCMC-PT iteration number: 2700 of 1000000. Chain number 3. Current logpost: -519.247. No exp/inf: 123/58 .          Running MCMC-PT iteration number: 2500 of 1000000. Chain number 1. Current logpost: -564.484. No exp/inf: 104/61 .          Running MCMC-PT iteration number: 2800 of 1000000. Chain number 2. Current logpost: -426.718. No exp/inf: 119/63 .          Running MCMC-PT iteration number: 2500 of 1000000. Chain number 4. Current logpost: -466.315. No exp/inf: 115/59 .          Running MCMC-PT iteration number: 2800 of 1000000. Chain number 3. Current logpost: -518.922. No exp/inf: 118/58 .          Running MCMC-PT iteration number: 2900 of 1000000. Chain number 2. Current logpost: -407.972. No exp/inf: 115/62 .          Running MCMC-PT iteration number: 2600 of 1000000. Chain number 1. Current logpost: -556.745. No exp/inf: 107/61 .          Running MCMC-PT iteration number: 2600 of 1000000. Chain number 4. Current logpost: -462.967. No exp/inf: 113/59 .          Running MCMC-PT iteration number: 2900 of 1000000. Chain number 3. Current logpost: -472.579. No exp/inf: 113/60 .          Running MCMC-PT iteration number: 3000 of 1000000. Chain number 2. Current logpost: -405.609. No exp/inf: 119/62 .          Running MCMC-PT iteration number: 2700 of 1000000. Chain number 1. Current logpost: -564.808. No exp/inf: 109/59 .          Running MCMC-PT iteration number: 3000 of 1000000. Chain number 3. Current logpost: -474.451. No exp/inf: 116/59 .          Running MCMC-PT iteration number: 2700 of 1000000. Chain number 4. Current logpost: -453.228. No exp/inf: 123/60 .          Running MCMC-PT iteration number: 3100 of 1000000. Chain number 2. Current logpost: -407.759. No exp/inf: 119/62 .          Running MCMC-PT iteration number: 2800 of 1000000. Chain number 1. Current logpost: -559.55. No exp/inf: 106/59 .          Running MCMC-PT iteration number: 3100 of 1000000. Chain number 3. Current logpost: -473.979. No exp/inf: 122/59 .          Running MCMC-PT iteration number: 2800 of 1000000. Chain number 4. Current logpost: -434.847. No exp/inf: 115/61 .          Running MCMC-PT iteration number: 3200 of 1000000. Chain number 2. Current logpost: -395.35. No exp/inf: 123/62 .          slurmstepd-c22: error: *** JOB 321186 ON c22 CANCELLED AT 2024-04-22T18:24:22 ***
