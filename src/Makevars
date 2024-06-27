@@ -1,3 +1,8 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7102f753b7fd5637e30bd90b26677cf33cfb40d2b87ba7474e4f7a612273dcb4
-size 281
+## With Rcpp 0.11.0 and later, we no longer need to set PKG_LIBS as there is
+## no user-facing library. The include path to headers is already set by R.
+#PKG_LIBS = 
+PKG_CXXFLAGS += -Wno-unknown-pragmas -Wno-language-extension-token 
+
+## MUST USE CXX14
+CXX_STD = CXX14
+CXX14 = g++

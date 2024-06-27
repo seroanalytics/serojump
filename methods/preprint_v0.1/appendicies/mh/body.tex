@@ -1,3 +1,128 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4f4427f6f77656cbe394ca2f704bc06344c0d3b4b163001605ad2a0bf419770f
-size 8269
+
+
+\section{Additional methods}
+\subsection{Metropolis-Hasting algorithm}
+\label{sec:mh1}
+\subsubsection{Overview}
+\paragraph{} The Metropolis-Hastings. (MH) algorithm is a widely used method for generating samples from a target probability distribution. It falls under the broader category of Markov Chain Monte Carlo (MCMC) methods and is particularly useful when direct sampling from the desired distribution is challenging or impossible such as the likelihood described above. A Markov chain-based approach that iteratively generates a sequence of samples, which eventually converge to the desired distribution. 
+
+\paragraph{}Say we wish to sample from an intractable probability distribttion $P(x)$. The idea of the MH is to define a Markov chain so that the stationary distribution of the Markov chain is $P(x)$. That is, the resulting Markov chain from MH generates a sequence of values, denoted $\{x_1, x_2, \dots,  x_n\}$, such that as $n \rightarrow \infty$ we can guarantee that $x_i \sim P(x)$. To do this, we uniquely define the Markov chain by it's transition probabilities from $x$ to $x'$, $F(x', x)$, that must satisfy the detailed balance condition:
+
+\begin{equation}
+\label{eq:db}
+F(x' \mid x)P(x)=  F(x\mid x')P(x')
+\end{equation}
+
+\paragraph{}This condition ensures that the i) probability density for the next step of the Markov chain is the same as the current density and that ii) this probability density is equal to the posterior.  To construct a transition probability which satisfies this condition, we split $P$ into a proposal distribution $q(x' | x)$ and an acceptance probability $\alpha(x, x')$:
+
+\begin{equation}
+F(x' \mid x) = q(x' | x)\alpha(x, x')
+\end{equation}
+
+A common choice for $\alpha(x, x')$, which satisfies the detailed balance condition, is the acceptance ratio given by 
+
+\begin{equation}
+\label{eq:alpha}
+        \alpha(x, x') = \min\left(1, \frac{P(x')}{P(x)} \cdot \frac{Q(x \mid x')}{Q(x' \mid x)}\right)
+ \end{equation}
+
+With this, the user has a choice over the proposal distribution $Q$, which can be tailored to optimise the general algorithm given in \textbf{Algorithm~\ref{alg:metropolis_hastings}}.
+
+\begin{algorithm}[H]
+\caption{Generic Metropolis-Hastings Algorithm}
+\label{alg:metropolis_hastings}
+\begin{algorithmic}[1]
+    \State Initialise the chain with an initial state $\theta^{(0)}$
+    \For{$i = 1$ to $N$}
+        \State Generate a candidate state $\theta'$ from the proposal distribution: $\theta' \sim Q(\cdot | \theta^{(i)})$
+        \State Compute the acceptance ratio:
+        \[
+        \alpha(\theta^{(i)}, \theta') = \min\left(1, \frac{P(\theta')}{P(\theta^{(i)})} \cdot \frac{Q(\theta^{(i)} \mid \theta')}{Q(\theta' \mid \theta^{(i)})}\right)
+        \]
+        \State Sample $u \sim \mathcal{U}(0, 1)$
+        \If{$u \leq \alpha$}
+            \State Accept the candidate state: $\theta^{(i+1)} \leftarrow \theta'$
+        \Else
+            \State Reject the candidate state: $\theta^{(i+1)} \leftarrow \theta^{(i)}$
+        \EndIf
+    \EndFor
+\end{algorithmic}
+\end{algorithm}
+
+
+
+\subsection{Reversible-Jump MCMC algorithm}
+\label{sec:mh2}
+
+\paragraph{}Let $\{k \in \mathcal{K}\}$ denote a collection models and  $\theta_k$ be the parameter space of model $k$. We wish to build a Markov chain Monte Carlo algorithm to sample from the stationary distribution: 
+
+
+\begin{equation}
+P(\theta_k, k | Y) \propto p(k)p(\theta_k|k)p(Y | \theta_k, k)
+\end{equation}
+
+
+where $p(k)$ is the prior probability that model $k$ is chosen, $p(\theta_k|k)$ is the prior distribution for parameters $\theta_k$ in model $k$, and $p(Y| k, \theta_k) $ is the likelihood for the observed data for model $k$. However, as the dimensions of vector $\theta_k$ change as we switch between models with different dimensions, there is no way straightforward way to define $Q$ and $\alpha$ such that the detailed balance condition (\textbf{Equation~\ref{eq:db}}) is met. That is, the posterior density for the proposal state cannot be the same as the current density as the dimensions have changed. Therefore, the sampler would not converge to a single posterior distribution. 
+
+\paragraph{}The RJ-MCMC proposes a solution to this issue \cite{Green1995-kh}. The idea is to augment both the current state and the proposed state with sampled parameters, define a bijection between these two augmented spaces, and then redefine the acceptance ratio, $\alpha$, such that the detailed balance condition holds.  Let $x = (k, \theta_k)$ denote the model number $k$ and $\theta_k$ the parameters associated with model $k$ ($\theta_k \in \mathbb{R}^{d_k}$) then define the proposed state as $x' = (k', \theta_{k'})$, with $\theta_k \in \mathbb{R}^{d_{k'}}$. We write the proposal $Q(x' | x)$, the probability of moving to state $x'$ from state $x$ in the form
+
+\begin{equation}
+ Q(x'| x) = Q\left((k', \theta_{k'}) | (k, \theta_k) \right) = q_X(  \theta_{k'} |  \theta_k, k', k) \cdot q_k(k' | k)
+\end{equation}
+
+where $q_k(k' | k)$ is  the probability of selecting model $k'$ from model $k$ and $q_X$ the probability of sampling $\theta_{k'}$ given current parameters $\theta_k$ and with known  $k$, and known proposed model $k'$. The challenge with $q_X$ is that we must adjust for the change in dimensions of the parameter space of $\theta_{k'}$ compared to $\theta_k$ (i.e $d_k \neq d_{k'}$). To do this, we sample auxiliary variables to match the dimensions and define a bijection between the augmented spaces. Thus if $d_k \neq d_{k'}$, we generate a random variables of length $s$, $\mathbf{u} = (u_1, \dots, u_s) \sim q_1(\mathbf{u})$ and one of length $s'$, $\mathbf{u'} = (u'_1, \dots, u'_s) \sim q_2(\mathbf{u}')$ such that $d_{k'} + s'= d_k + s$. We then define a bijection, $T$
+
+\begin{equation}
+\label{eq:T}
+(\theta_{k'}, \mathbf{u'}) = T(\theta_k, \mathbf{u}) 
+\end{equation}
+
+to ensure the reversibility of the proposal distribution. 
+
+\paragraph{}For the detailed balance condition to hold, Green\cite{Green1995-kh} shows that we can obtain the desired properties with a proposal distribution
+
+$$Q(x | x') = q_k(k|k') q_X(\theta_{k'} | \theta_k, k, k') = q_k(k|k')q_2(\textbf{u}')\left|\frac{\partial(\theta_{k'}, \textbf{u'})}{\partial(\theta_k, u)} \right|$$ 
+$$Q(x' | x) = q_k(k'|k) q_X(\theta_k | \theta_{k'}, k, k') = q_k(k'|k)q_1(\textbf{u})$$ 
+
+where $\left|\frac{\partial(\theta_{k'}, \textbf{u}')}{\partial(\theta_k, u)} \right|$ is the jacobian of the transformation $T$. Then, choosing an acceptance ratio given 
+ 
+ \begin{equation}
+ \label{eq:alpharj}
+  \alpha\left(x, x'\right) = \min\left(1, \frac{P(x)q_k(k | k')q_2(\textbf{u}') }{P(x')q_k(k' | k)q_1(\textbf{u}) }\cdot\left|\frac{\partial(\theta_{k'}, \textbf{u'})}{\partial(\theta_k, \mathbf{u})} \right|\right)
+ \end{equation}
+
+
+ensures the stationary distribution chain samples:
+
+\begin{equation}
+P(\theta_k, k | Y) \propto p(k)p(\theta_k|k)p(Y | \theta_k, k)
+\end{equation}
+
+A general form of the RJ-MCMC then follows \textbf{Algorithm~\ref{alg:rjmcmc_A}}.
+
+\begin{algorithm}[H]
+\caption{Reversible-Jump MCMC Algorithm}
+\label{alg:rjmcmc_A}
+\begin{algorithmic}[1]
+    \State Chose a model $k$
+    \State Initialize the chain with an initial state $\theta^{(0)}_{k}$
+    \For{$i = 1$ to $N$}
+         \State Sample model $k' \sim q(\cdot | k^{(i)})$
+         \State Sample $\mathbf{u} \sim q_2(\textbf{u})$
+	\State Set $(\theta_{k'}, \mathbf{u'}) = T(\theta_k^{(i)}, \mathbf{u})$
+        \State Compute the acceptance ratio:
+        \[
+        \alpha \left((k^{(i)}, \theta_k^{(i)}), (k', \theta_{k'})) \right) = \min\left(1, \frac{P\left(k', \theta_{k'} | \mathbf{Y}\right)q(k^{(i)}|k')q_{2}(\mathbf{u}')}{P\left(k^{(i)}, \theta^{(i)}_{k} | \mathbf{Y}\right)q(k' | k^{(i)})q_{1}(\textbf{u})} \cdot \left| \frac{\partial(\theta_{k'}, \textbf{u}')}{\partial(\theta_k^{(i)}, \textbf{u})}\right| \right)
+        \]
+        \State Generate a uniform random number $u$ from the interval $[0, 1]$
+        \If{$u \leq \alpha$}
+            \State Accept the candidate state: $k^{(i + 1)} \leftarrow k'$ and  $\theta^{(i+1)} \leftarrow \theta_{k'}$
+        \Else
+            \State Reject the candidate state:$k^{(i + 1)} \leftarrow k^{(i)}$ and  $\theta^{(i+1)} \leftarrow \theta^{(i)}$
+        \EndIf
+    \EndFor
+\end{algorithmic}
+\end{algorithm}
+
+
+

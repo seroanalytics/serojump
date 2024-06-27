@@ -1,3 +1,417 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:244082cef58f7aa080767e4daa2d9ee10da1b54470fc60ee112f4bf904aa54fb
-size 13045
+ RGet started: a very simple working example 
+
+## Load the packages
+
+```{r}
+
+#install.packages("devtools")
+#library(devtools)
+devtools::load_all()
+library(lubridate)
+library(patchwork)
+library(tidybayes)
+library(ggdist)
+
+source(here::here("R", "prior_pred.R"))
+
+```
+
+## Get data in the right format for rjmcmc model
+
+
+To help with this section please consult information in the documentation on how to layour this data.frame:
+
+* For serological data in observational model see [data_titre](../man/data_titre.Rd).
+* For known exposure times [data_known_exposures](./man/data_known_exposures.Rd).
+* For exposure prior see XXX.
+
+```{r}
+
+model <- create_model(0.5, 0.5, 4)
+
+# Load data clean in the format required for the model
+# Define the settings
+settings <-  list(
+    numberChainRuns = 2,
+    numberCores = 2,
+    iterations = 40000,
+    burninPosterior = 20000,
+    thin = 100,
+    consoleUpdates = 1,
+    onAdaptiveCov = TRUE,
+    updatesAdaptiveCov = 100,
+    burninAdaptiveCov = 1000,
+    updatesAdaptiveTemp = 10,
+    covarInitVal = 1e-6, # make very small if struggling to sample to beginning
+    covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
+    covarMaxVal = 1, # decrease if struggling to sample in the middle
+    runParallel = TRUE,
+    onDebug = FALSE,
+    noGibbsSteps = 1,
+    numberFittedPar = 3,
+    lowerParBounds = model$lowerParSupport_fitted,
+    upperParBounds = model$upperParSupport_fitted
+)
+
+model_null <- model
+model_null$evaluateLogLikelihood <- function(params, jump, datalist) {0}
+
+```
+
+
+## Simulated data
+
+```{r}
+
+devtools::load_all()
+data_name <- "cesCOP_notd"
+uncert <- "0.1"
+
+data_titre_model <- clean_simulated_rjmcmc(data_name, uncert, 0, known_exp = FALSE) %>% rename(IgG = titre)
+xstart <- data_titre_model %>% group_by(id) %>% filter(time == min(time)) %>% pull(IgG)
+xend <- data_titre_model %>% group_by(id) %>% filter(time == max(time)) %>% pull(IgG)
+y <- as.numeric((xstart - xend) < 0)
+data_NIH <- create_data(xstart, y, sum(y))
+data_NIH$obs_y %>% sum
+## 0.4
+max_t <- 4
+exp_prior <- 2
+
+model_null <- create_model(exp_prior, 0.5, max_t)
+model <- create_model(exp_prior, 0, max_t)
+
+#library(furrr)Yes
+model_null$evaluateLogLikelihood <- function(params, jump, datalist) {0}
+settings$lowerParBounds = model$lowerParSupport_fitted
+settings$upperParBounds = model$upperParSupport_fitted
+
+data_name <- paste0(data_name, "_", uncert)
+model_name <- paste0("base_", exp_prior)
+dir.create(here::here("outputs", "prior_pred", data_name))
+
+outputs <- rjmc_func_pp(model_null, data_NIH, settings)
+saveRDS(outputs, here::here("outputs", "prior_pred", data_name, paste0(model_name, "_null.RDS")))
+plot_outputs(outputs, data_NIH, paste0(data_name, "/", model_name), "null", 2)
+
+outputs <- rjmc_func_pp(model, data_NIH, settings)
+saveRDS(outputs, here::here("outputs", "prior_pred", data_name ,paste0(model_name, "_cop.RDS")))
+plot_outputs(outputs, data_NIH, paste0(data_name, "/", model_name), "cop", 2)
+
+```
+
+# Thinking about simplexes
+```{r}
+
+biomarker <- c("a", "b")
+values <- vector(length = length(biomarker))
+for (i in 1:(length(biomarker) - 1)) {
+    values[i] <- runif(1, 0, 1)
+}
+values[length(biomarker)] <- length(values) - 1 - (values[1])
+values / (sum(values))
+
+
+values[1] <- runif(1, 0, 1)
+values[2] <- runif(1, 0, 1)
+values[3] <- 2 - (values[2] + values[1])
+
+values / (sum(values))
+
+```
+
+
+## NIH data H1N1
+
+```{r}
+
+#install.packages("devtools")
+#library(devtools)
+devtools::load_all()
+library(lubridate)
+library(patchwork)
+library(tidybayes)
+library(ggdist)
+
+source(here::here("R", "prior_pred.R"))
+
+df_sero_all <- read.csv(here::here("data", "nih_240517", "titres_all.csv"))
+
+df_titre <- df_sero_all %>% filter(year == 2023) %>% filter(virus %in% 
+    c("A/Sydney/5/2021", "A/Darwin/06/2021","A/Sydney/5/2021e", "A/Darwin/09/2021e" ), vax_inf == "V", day == 14, 
+    Vaccinated == "yes") %>% select(pid, day, virus, titre) %>% mutate(titre = log2(titre/5))
+
+df_pcr <- df_sero_all %>% filter(year == 2023) %>%
+    filter(virus %in% c("A/Sydney/5/2021"), vax_inf == "I", infected == "H1N1pdm09") %>% select(pid) %>%
+    mutate(inf_type = "pcr") # need to filter by ids_no_sero_key
+
+df_sero <- left_join(
+    df_sero_all %>% filter(year == 2023) %>% filter(virus == "A/Sydney/5/2021", vax_inf == "V", day == 14) %>%
+        select(pid, titre_14 = titre),
+    df_sero_all %>% filter(year == 2023) %>% filter(virus == "A/Sydney/5/2021", vax_inf == "V", day == 220) %>%
+        select(pid, titre_220 = titre)
+) %>% mutate(titre_diff = log2(titre_220 / 5) - log2(titre_14 / 5)) %>% filter(titre_diff > 1) %>% select(pid)  %>%
+    mutate(inf_type = "sero") # need to filter by ids_no_sero_key
+
+df_inf <- bind_rows(df_pcr, df_sero %>% filter(!pid %in% df_pcr$pid ))
+df_inf <- df_pcr
+#df_titre %>% pivot_wider(names_from = "virus", values_from = "titre") %>% 
+   # ggplot() + geom_count(aes(`A/Sydney/5/2021`, `A/Darwin/06/2021`))
+
+exp_prior_vec <- c(0.5, 0.6, 0.7)
+data_NIH_2023_H1 <- create_data(df_titre, df_inf)
+
+data_name <-  "NIH_2023_H1"
+titre_ind <- c(0:8)
+names(titre_ind) <- c("<10", "10", "20", "40", "80", "160", "320", "640", "1080")
+
+virus_color <- c("A/Sydney/5/2021" = "#f48153",  "A/Darwin/06/2021" = "#83d3d4",
+    "A/Sydney/5/2021e" = "#910b07",  "A/Darwin/09/2021e" = "#2d8183"
+)
+
+plot_helper <- list(
+    titre_convert = titre_ind,
+    virus_color = virus_color
+)
+
+map(exp_prior_vec,
+    function(exp_prior) {
+        # Run all models requi
+        model_exp <- create_model(exp_prior, data_NIH_2023_H1) #
+        run_model(model_exp, data_NIH_2023_H1, "NIH_2023_H1")
+
+        # plot outputs, only really care about full model s
+        model_exp <- create_model(exp_prior, data_NIH_2023_H1) 
+        model_name <- paste0("base_", exp_prior)
+
+        outputs <- readRDS(here::here("outputs", "prior_pred", data_name, paste0(model_name, "_", "cop", ".RDS")))
+     #   outputs$lpost %>%
+      #      ggplot() + 
+      #          geom_line(aes(sample_no, lpost, color = chain_no))
+
+        library(bayesplot)
+        require(posterior)
+       # mcmc_trace(outputs$mcmc)
+
+
+        #df_lol <- map_df(1:400,
+         #   ~data.frame(
+          #      sample = .x,
+           #     biomarker = data_NIH_2023_H1$obs_x %>% colnames,
+            #    p = outputs$jump[[1]][[.x]][1, 1103:1106]
+            #)
+        #)
+        #df_lol %>% ggplot() + geom_line(aes(sample, y = p, color = biomarker))
+
+        plot_outputs(outputs, model_exp[[2]], data_NIH_2023_H1 , paste0(data_name, "/", model_name), "cop", 2, plot_helper)
+    }
+)
+
+sample_simplex <- function(dimensions, num_samples) {
+  samples <- matrix(runif(dimensions * num_samples), nrow = num_samples, ncol = dimensions)  # Generate random points
+  samples <- sweep(samples, 1, rowSums(samples), FUN = "/")  # Normalize to sum up to 1
+  return(samples)
+}
+
+# Example usage
+num_samples <- 10
+dimensions <- 3
+samples <- sample_simplex(dimensions, num_samples)
+print(samples)
+
+```
+
+
+## NIH data H3N2
+
+```{r}
+
+
+devtools::load_all()
+
+df_sero_all <- read.csv(here::here("data", "nih_240517", "titres_all.csv"))
+
+
+df_titre <- df_sero_all %>% filter(year == 2023) %>% filter(virus %in% 
+    c("A/Sydney/5/2021", "A/Darwin/06/2021","A/Sydney/5/2021e", "A/Darwin/09/2021e" ), vax_inf == "V", day == 0, 
+    Vaccinated == "yes") %>% select(pid, day, virus, titre) %>% mutate(titre = log2(titre/5))
+
+df_pcr <- df_sero_all %>% filter(year == 2023) %>%
+    filter(virus == "A/Darwin/06/2021", vax_inf == "I", infected == "H3") %>% select(pid) %>%
+    mutate(inf_type = "pcr") # need to filter by ids_no_sero_key
+
+df_sero <- left_join(
+    df_sero_all %>% filter(year == 2023) %>% filter(virus == "A/Darwin/06/2021", vax_inf == "V", day == 14) %>%
+        select(pid, titre_14 = titre),
+    df_sero_all %>% filter(year == 2023) %>% filter(virus == "A/Darwin/06/2021", vax_inf == "V", day == 220) %>%
+        select(pid, titre_220 = titre)
+) %>% mutate(titre_diff = log2(titre_220 / 5) - log2(titre_14 / 5)) %>% filter(titre_diff > 1) %>% select(pid)  %>%
+    mutate(inf_type = "sero") # need to filter by ids_no_sero_key
+
+df_inf <- bind_rows(df_pcr, df_sero %>% filter(!pid %in% df_pcr$pid ))
+
+exp_prior_vec <- c(0.5, 0.6, 0.7)
+data_NIH_2023_H3 <- create_data(df_titre, df_inf)
+data_name <-  "NIH_2023_H3"
+titre_ind <- c(0:8)
+
+virus_color <- c("A/Sydney/5/2021" = "#f48153",  "A/Darwin/06/2021" = "#83d3d4",
+    "A/Sydney/5/2021e" = "#910b07",  "A/Darwin/09/2021e" = "#2d8183"
+)
+
+plot_helper <- list(
+    titre_convert = titre_ind,
+    virus_color = virus_color
+)
+exp_prior <- 0.7
+map(exp_prior_vec,
+    function(exp_prior) {
+        # Run all models required
+        model_exp <- create_model(exp_prior, data_NIH_2023_H3) #
+        run_model(model_exp, data_NIH_2023_H3, "NIH_2023_H3")
+
+        # plot outputs, only really care about full model s
+        model_exp <- create_model(exp_prior, data_NIH_2023_H3) 
+        model_name <- paste0("base_", exp_prior)
+
+        outputs <- readRDS(here::here("outputs", "prior_pred", data_name, paste0(model_name, "_", "cop", ".RDS")))
+        outputs$lpost %>%
+            ggplot() + 
+                geom_line(aes(sample_no, lpost, color = chain_no))
+
+        library(bayesplot)
+        require(posterior)
+        mcmc_trace(outputs$mcmc)
+
+
+        df_lol <- map_df(1:400,
+            ~data.frame(
+                sample = .x,
+                biomarker = data_NIH_2023_H3$obs_x %>% colnames,
+                p = outputs$jump[[2]][[.x]][1, 1103:1106]
+            )
+        )
+        df_lol %>% ggplot() + geom_line(aes(sample, y = p, color = biomarker))
+        plot_outputs(outputs, model_exp[[2]], data_NIH_2023_H3 , paste0(data_name, "/", model_name), "cop", 2, plot_helper)
+    }
+)
+
+
+```
+
+```{r}
+
+
+
+
+
+
+
+ids_no_sero <- df_sero_all %>% filter(year == 2023) %>% filter(virus == "A/Darwin/06/2021", vax_inf == "V", day == 0) 
+
+ids_no_sero_key_id <- ids_no_sero %>% pull(pid)
+ids_no_sero_key <- ids_no_sero %>% select(pid) %>% mutate(id = 1:nrow(.))
+N_ind <- ids_no_sero %>% nrow
+x_vals <- ids_no_sero %>% 
+  pull(titre) %>% `/`(., 5) %>% log2
+
+N_known <- df_sero_all %>% filter(year == 2023, pid %in% ids_no_sero_key_id) %>%
+    filter(virus == "A/Darwin/06/2021", vax_inf == "I", infected == "H3") %>% nrow
+N_ids <- df_sero_all %>% filter(year == 2023, pid %in% ids_no_sero_key_id) %>%
+    filter(virus == "A/Darwin/06/2021", vax_inf == "I", infected == "H3") %>% pull(pid)
+ids_inf <- left_join(data.frame(pid = N_ids), ids_no_sero_key) %>% pull(id)
+
+sero_pos_id <- left_join(
+    df_sero_all %>% filter(year == 2023, pid %in% ids_no_sero_key_id) %>% filter(virus == "A/Darwin/06/2021", vax_inf == "V", day == 14) %>%
+        select(pid, titre_14 = titre),
+    df_sero_all %>% filter(year == 2023, pid %in% ids_no_sero_key_id) %>% filter(virus == "A/Darwin/06/2021", vax_inf == "V", day == 220) %>%
+        select(pid, titre_220 = titre)
+) %>% mutate(titre_diff = log2(titre_220 / 5) - log2(titre_14 / 5)) %>% filter(titre_diff > 1) %>% pull(pid)
+ids_sero <- left_join(data.frame(pid = sero_pos_id), ids_no_sero_key) %>% pull(id)
+
+y_I_NIH_known <- rep(0, N_ind)
+y_I_NIH_known[unique(c(ids_inf, ids_sero))] <- 1
+data_NIH <- create_data(x_vals, y_I_NIH_known, unique(c(ids_inf, ids_sero)) %>% length)
+
+max_t <- max(x_vals)
+exp_prior <- 2
+
+
+
+
+
+exp_prior_vec <- c(0.5, 0.6, 0.7)
+data_NIH_2023_H3 <- create_data(df_titre, df_inf)
+data_name <-  "NIH_2023_H3"
+titre_ind <- c(0:8)
+names(titre_ind) <- c("<10", "10", "20", "40", "80", "160", "320", "640", "1080")
+plot_helper <- list(
+    titre_convert = titre_ind
+)
+
+map(exp_prior_vec,
+    function(exp_prior) {
+        exp_prior <- 0.7
+        # Run all models requi
+        model_exp <- create_model(exp_prior, data_NIH_2023_H3) #
+       # run_model(model_exp, "NIH_2023_H1")
+
+        # plot outputs, only really care about full model s
+        model_exp <- create_model(exp_prior, data_NIH_2023_H3) 
+        model_name <- paste0("base_", exp_prior)
+
+        outputs <- readRDS(here::here("outputs", "prior_pred", data_name, paste0(model_name, "_", "cop", ".RDS")))
+        plot_outputs(outputs, model_exp[[2]], data_NIH_2023_H3 , paste0(data_name, "/", model_name), "cop", 2, plot_helper)
+    }
+)
+
+
+```
+
+## TRANSVIR data
+
+```{r}
+
+
+```
+ 
+
+
+ ```{r}
+
+library(binom)
+
+calculate_eff <- function(X_v, N_v, X_u, N_u) {
+    conf_level <- 0.95  # Confidence level
+
+    # Calculate VE
+    RR <- (X_v / N_v) / (X_u / N_u)
+
+    # https://www.medrxiv.org/content/10.1101/2020.12.16.20248359v1.full.pdf
+    CI <-  c(1 - RR * exp(1.96*sqrt(1/X_v + 1/X_u )), 1 - RR * exp(-1.96*sqrt(1/X_v + 1/X_u )))
+
+
+    # Print results
+    cat("Vaccine Effectiveness:", round((1 - RR) * 100, 1), " (95% CI ", round(CI * 100, 1))
+}
+
+# Efficacy 2022 for H3N2, all
+calculate_eff(34, 1140, 3, 35)
+# Efficacy 2022 for H3N2, 1–2 prior
+calculate_eff(3, 126, 2, 11)
+# Efficacy 2022 for H3N2, 3+ prior
+calculate_eff(31, 990, 0, 9)
+
+
+# Efficacy 2023 for H1N1, all
+calculate_eff(15, 1104, 1, 22)
+
+# Efficacy 2023 for H3N2, all
+calculate_eff(5, 1104, 1, 22)
+
+# Efficacy 2023 for A(unsubtyped), all
+calculate_eff(10, 1104, 3, 22)
+
+# Efficacy 2023 for B(unsubtyped), all
+
+
+```

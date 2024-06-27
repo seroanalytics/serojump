@@ -1,3 +1,262 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7d03daca03c02bc768c4c7c4ea4ae5857fee549efbb86b22495cf3f2cd2b6185
-size 9014
+
+
+Fitting to the simulated data
+
+# Load libraries
+
+```{r}
+
+#install.packages("devtools")
+#library(devtools)
+devtools::load_all()
+library(rjmc)
+library(lubridate)
+library(patchwork)
+library(tidybayes)
+library(ggdist)
+
+```
+
+## Get data in the right format for rjmcmc model
+
+```{r}
+# Load data clean in the formet required for the model
+data_known <- NULL # This is the empirical prior for the exposure time
+exp_prior <- data.frame(
+    lb = "1", # lower bound
+    ub = "120", # upper bound
+    func = "unif", # functional form
+    par1 = "1", # parameter 1 of functional form
+    par2 = "120" # parameter 2 of functional form
+) # This is the empirical prior for the exposure time
+
+```
+
+## Define the functions required for the rjmcmc model
+
+```{r}
+
+obsLogLikelihood = function(titre_val, titre_est, pars) {
+    ll <- dnorm(titre_val, titre_est, pars[1], log = TRUE)
+}
+
+copFuncForm <- function(inf_status, esttitreExp, params) {
+    beta0 <- params[1]
+    beta1 <- params[2]
+    p <- 1.0 / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+}
+
+copLogLikelihood <- function(inf_status, esttitreExp, pars) {
+    # COP parameters
+    beta0 <- pars[1]
+    beta1 <- pars[2]
+    p <- 1.0 / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+    ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
+    ll
+}
+
+noInfSerumKinetics <- function(titre_est, timeSince, pars) {
+    titre_est
+}
+
+infSerumKinetics <- function(titre_est, timeSince, pars) {
+    a <- pars[1] 
+    b <- pars[2] 
+    c <- pars[3]
+    if (timeSince < 14) {
+        titre_est <- titre_est + log(exp(a) + exp(c)) * (timeSince) / 14;
+    } else {
+        titre_est <- titre_est + log(exp(a) * exp(-b/10 * (timeSince - 14)) + exp(c));
+    }
+    titre_est
+}
+
+
+```
+
+## Define the models for the rjmcmc model
+
+```{r}
+
+
+# Define the biomarkers and exposure types in the model
+biomakers <- c("IgG")
+exposureTypes <- c("none", "delta")
+exposureFitted <- c("delta")
+
+# Define the observational model
+observationalModel <- list(
+    names = c("IgG"),
+    model = makeModel(addObservationalModel("IgG", c("sigma"), obsLogLikelihood)),
+    prior = add_par_df("sigma", 0.0001, 4, "unif", 0.0001, 4) # observational model,
+)
+
+# Define the antibody kinetics model
+abkineticsModel <- list(
+    model = makeModel(
+            addAbkineticsModel("none", "IgG", "none", c("a"), noInfSerumKinetics),
+            addAbkineticsModel("delta", "IgG", "delta", c("a", "b", "c"), infSerumKinetics)
+        ),
+    prior = bind_rows(
+        add_par_df("a", -2, 2, "norm",  0, 1), # ab kinetics
+        add_par_df("b", 0, 1, "norm",  0.3, 0.05), # ab kinetics
+        add_par_df("c", 0, 4, "unif", 0,  4), # ab kinetics
+    )
+)
+
+# Define the COP model
+copModel <- list( 
+        names = c("IgG"),
+        model = makeModel(addCopModel("IgG", "delta", c("beta0", "beta1"), copFuncForm, copLogLikelihood)),
+        prior = bind_rows(
+            add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("beta1", -10, 10, "unif", -10, 10)
+        ) # cop model (not used here),
+)
+
+modeldefinition <- list(
+    biomarkers = biomakers,
+    exposureTypes = exposureTypes,
+    exposureFitted = exposureFitted,
+    observationalModel = observationalModel,
+    abkineticsModel = abkineticsModel,
+    copModel = copModel,
+    exposurePrior = exp_prior,
+    exposurePriorType = "func"
+)
+
+```
+
+# Define settings and run the model, (this won't run as made the data up)
+
+```{r eval = FALSE}
+
+# Define the settings
+settings <-  list(
+    numberChainRuns = 4,
+    numberCores = 4,
+    iterations = 200,
+    burninPosterior = 100,
+    thin = 1,
+    consoleUpdates = 100,
+    onAdaptiveCov = TRUE,
+    updatesAdaptiveCov = 100,
+    burninAdaptiveCov = 1000,
+    updatesAdaptiveTemp = 10,
+    covarInitVal = 1e-2, # make very small if struggling to sample to beginning
+    covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
+    covarMaxVal = 1, # decrease if struggling to sample in the middle
+    runParallel = TRUE,
+    noGibbsSteps = 1
+)
+# NOT THIS ONE
+runSimulatedRJMCMC <- function(modeldefinition, settings, filename, sim_data, obs_er) {
+    # Gets the simulated data from serosim package
+    data_titre_model <- clean_simulated_rjmcmc(sim_data, obs_er, 0, known_exp = FALSE) %>% rename(IgG = titre)
+
+    # obs_er is the observation error
+    modelname <- paste0("obs_", obs_er)
+    # Create the model
+    model_sim <- createSeroJumpModel(data_titre_model, data_known, modeldefinition)
+    runRJMCMC(model_sim, settings, filename, modelname)
+}
+
+runSimulatedRJMCMC(modeldefinition, settings, "local/sim_study/cesCOP_notd/InferExp", "cesCOP_notd", "0.1")
+runSimulatedRJMCMC(modeldefinition,settings, "local/sim_study/cesCOP_notd/InferExp", "cesCOP_notd", "0.3")
+runSimulatedRJMCMC(modeldefinition,settings, "local/sim_study/cesCOP_notd/InferExp", "cesCOP_notd", "0.5")
+
+runSimulatedRJMCMC(modeldefinition, settings, "local/sim_study/cesNoCOP_notd/InferExp", "cesCOP_notd", "0.1")
+runSimulatedRJMCMC(modeldefinition, settings, "local/sim_study/cesNoCOP_notd/InferExp", "cesCOP_notd", "0.3")
+runSimulatedRJMCMC(modeldefinition, settings, "local/sim_study/cesNoCOP_notd/InferExp", "cesCOP_notd", "0.5")
+
+
+```
+
+
+```{r}
+
+modeldefinition, settings, "local/sim_study/cesCOP_notd/InferExp", "cesCOP_notd", "0.1"
+sim_data <- "cesCOP_notd"
+obs_er <-  "0.1"
+
+runSimulatedRJMCMC <- function(modeldefinition, settings, filename, sim_data, obs_er) {
+    data_titre_model <- clean_simulated_rjmcmc(sim_data, obs_er, 0, known_exp = TRUE) %>% rename(IgG = titre)
+    modeli <- readRDS(here::here("outputs", "sim_data", sim_data, "inputs.RDS"))
+    known_exp <- modeli$simpar$exp %>% as.data.frame %>% 
+        mutate(i = 1:modeli$simpar$N) %>% pivot_longer(!i, names_to = "t", values_to = "exp") %>% mutate(t = as.numeric(substr(t, 2, 4))) %>% 
+        filter(exp == 1) %>% complete(i = 1:modeli$simpar$N, fill = list(t = -1, exp = -1)) %>% pull(t)
+    modelname <- paste0("obs_", obs_er)
+    model_sim <- createSeroJumpModel(data_titre_model, data_known, modeldefinition, known_exp = known_exp)
+
+    runRJMCMC(model_sim, settings, filename, modelname)
+}
+
+```
+
+
+# Run all scenarios (CES) for rj-mcmc methods paper
+
+
+```{r}
+
+# Run on the exposure inferred cycle
+runsaveRJMCMC( "inferExp", "cesCOP_notd", "0.1", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
+runsaveRJMCMC( "inferExp", "cesCOP_notd", "0.3", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
+runsaveRJMCMC( "inferExp", "cesCOP_notd", "0.5", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
+
+postprocessFigs_sim("inferExp", "cesCOP_notd", "0.1", 4)
+postprocessFigs_sim("inferExp", "cesCOP_notd", "0.3", 4)
+postprocessFigs_sim("inferExp", "cesCOP_notd", "0.5", 4)
+
+runsaveRJMCMC( "inferExp", "cesNoCOP_notd", "0.1", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
+runsaveRJMCMC( "inferExp", "cesNoCOP_notd", "0.3", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
+runsaveRJMCMC( "inferExp", "cesNoCOP_notd", "0.5", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func)
+
+postprocessFigs_sim("inferExp", "cesNoCOP_notd", "0.1", 4)
+postprocessFigs_sim("inferExp", "cesNoCOP_notd", "0.3", 4)
+postprocessFigs_sim("inferExp", "cesNoCOP_notd", "0.5", 4)
+
+# Run on the exposure known cycle
+runsaveRJMCMC( "knownExp", "cesCOP_notd", "0.1", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
+runsaveRJMCMC( "knownExp", "cesCOP_notd", "0.3", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
+runsaveRJMCMC( "knownExp", "cesCOP_notd", "0.5", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
+
+postprocessFigs_sim("knownExp", "cesCOP_notd", "0.1", 4)
+postprocessFigs_sim("knownExp", "cesCOP_notd", "0.3", 4)
+postprocessFigs_sim("knownExp", "cesCOP_notd", "0.5", 4)
+
+
+runsaveRJMCMC( "knownExp", "cesNoCOP_notd", "0.1", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
+runsaveRJMCMC( "knownExp", "cesNoCOP_notd", "0.3", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
+runsaveRJMCMC( "knownExp", "cesNoCOP_notd", "0.5", 0, evaluateLogLikelihood, par_tab, exp_prior, cop_func, TRUE)
+
+postprocessFigs_sim("knownExp", "cesNoCOP_notd", "0.1", 4)
+postprocessFigs_sim("knownExp", "cesNoCOP_notd", "0.3", 4)
+postprocessFigs_sim("knownExp", "cesNoCOP_notd", "0.5", 4)
+
+
+````
+
+
+
+# Rerun figures only
+
+```{r}
+
+postprocessFigs_sim("inferExp", "cesCOP_notd", "0.1", 4)
+postprocessFigs_sim("inferExp", "cesCOP_notd", "0.3", 4)
+postprocessFigs_sim("inferExp", "cesCOP_notd", "0.5", 4)
+
+postprocessFigs_sim("inferExp", "cesNoCOP_notd", "0.1", 4)
+postprocessFigs_sim("inferExp", "cesNoCOP_notd", "0.3", 4)
+postprocessFigs_sim("inferExp", "cesNoCOP_notd", "0.5", 4)
+
+postprocessFigs_sim("knownExp", "cesCOP_notd", "0.1", 4)
+postprocessFigs_sim("knownExp", "cesCOP_notd", "0.3", 4)
+postprocessFigs_sim("knownExp", "cesCOP_notd", "0.5", 4)
+
+postprocessFigs_sim("knownExp", "cesNoCOP_notd", "0.1", 4)
+postprocessFigs_sim("knownExp", "cesNoCOP_notd", "0.3", 4)
+postprocessFigs_sim("knownExp", "cesNoCOP_notd", "0.5", 4)
+
+```

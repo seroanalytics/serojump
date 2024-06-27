@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:526325c27ddfd3ce160344bda7cc70a6ae398fb39cf5925cab8145cbf482da4a
-size 796
+\begin{thebibliography}{1}
+
+\bibitem{Menezes2023-ti}
+Arthur Menezes, Saki Takahashi, Isobel Routledge, C~Jessica~E Metcalf, Andrea~L
+  Graham, and James~A Hay.
+\newblock serosim: An {R} package for simulating serological data arising from
+  vaccination, epidemiological and antibody kinetics processes.
+\newblock {\em PLoS Comput. Biol.}, 19(8):e1011384, August 2023.
+
+\bibitem{Srivastava2023-of}
+Komal Srivastava, Juan~Manuel Carre{\~n}o, Charles Gleason, Brian Monahan,
+  Gagandeep Singh, Anass Abbad, Johnstone Tcheou, Ariel Raskin, Giulio Kleiner,
+  Harm van Bakel, Emilia~Mia Sordillo, {PARIS Study Group}, Florian Krammer,
+  and Viviana Simon.
+\newblock Kinetics and durability of humoral responses to {SARS-CoV-2}
+  infection and vaccination.
+\newblock August 2023.
+
+\end{thebibliography}
