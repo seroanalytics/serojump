@@ -1,32 +1,3 @@
-library(devtools)
-
-library(Rcpp)
-#Rcpp::compileAttributes()
-devtools::load_all()
-
-seroModel <- readRDS(here::here("hpc", "transvir_w2", "transvir_w2_model.RData"))
-
-## check entriee
-#seroModel$data$times_list # id, t
-#seroModel$data$titre_list #id, bio, t
-
-settings <-  list(
-    numberChainRuns = 4,
-    numberCores = 4,
-    iterations = 5000,
-    burninPosterior = 2500,
-    thin = 10,
-    consoleUpdates = 100,
-    onAdaptiveCov = TRUE,
-    updatesAdaptiveCov = 10,
-    burninAdaptiveCov = 1000,
-    covarInitVal = 1e-2, # make very small if struggling to sample to beginning
-    covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
-    covarMaxVal = 1, # decrease if struggling toc sample in the middle
-    runParallel = TRUE,
-    noGibbsSteps = 10,
-    onDebug = FALSE
-)
-
-runRJMCMC(seroModel, settings, "hpc/transvir", "wave2")
-postprocessFigs("hpc/transvir", "wave2", 4)
+version https://git-lfs.github.com/spec/v1
+oid sha256:d39b7423c365e3bce70c013e9375824f5bbb97e07a6bad4fefc7c2c45286615e
+size 905

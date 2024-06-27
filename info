@@ -1,6 +1,3 @@
-# On HPC
-git commit-date (commits date of hpc run)
-git commit-date-push (commits date of hpc run and pushes hpc to origin)
-
-# On local machine
-git_commit_push_main "Your custom commit message"
+version https://git-lfs.github.com/spec/v1
+oid sha256:2a6c725a76fb0e0639fee016f05d4690d1d00ee46b9bb4b74fae2e5c62f3734e
+size 193
