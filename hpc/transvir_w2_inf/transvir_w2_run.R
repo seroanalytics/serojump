@@ -1,3 +1,33 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7c36a33c833515fbd2c7f9174e77ea02d8ae4468834732a60cfb2afd68fddb20
-size 1053
+library(devtools)
+library(Rcpp)
+
+devtools::load_all()
+i <- Sys.getenv("SLURM_ARRAY_TASK_ID")
+i <- as.integer(i)
+
+seroW2_full <- readRDS(here::here("hpc", "transvir_w2_inf", "transvir_w2_model.RData"))
+prior_names <- c("p1", "p2", "p3")
+## check entriee
+#seroModel$data$times_list # id, t
+#seroModel$data$titre_list #id, bio, t
+
+settings <-  list(
+    numberChainRuns = 4,
+    numberCores = 4,
+    iterations = 400000,
+    burninPosterior = 200000,
+    thin = 1000,
+    consoleUpdates = 100,
+    onAdaptiveCov = TRUE,
+    updatesAdaptiveCov = 10,
+    burninAdaptiveCov = 1000,
+    covarInitVal = 1e-2, # make very small if struggling to sample to beginning
+    covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
+    covarMaxVal = 1, # decrease if struggling toc sample in the middle
+    runParallel = TRUE,
+    noGibbsSteps = 1,
+    onDebug = FALSE
+)
+
+runInfRJMCMC(seroW2_full[[i]], settings, paste0("hpc/transvir_w2_inf/", prior_names[i]), "w2")
+postprocessFigsInf(paste0("hpc/transvir_w2_inf/",  prior_names[i]), "w2", 4)

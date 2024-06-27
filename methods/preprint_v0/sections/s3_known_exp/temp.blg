@@ -1,3 +1,46 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:204c1eb39986b4b5ab431cf73459237094df6091d46d3a93bddddfb34a2af4ab
-size 866
+This is BibTeX, Version 0.99d (TeX Live 2023)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: temp.aux
+The style file: unsrt.bst
+Database file #1: refs.bib
+You've used 4 entries,
+            1791 wiz_defined-function locations,
+            479 strings with 4290 characters,
+and the built_in function-call counts, 1061 in all, are:
+= -- 92
+> -- 52
+< -- 0
++ -- 19
+- -- 15
+* -- 95
+:= -- 178
+add.period$ -- 12
+call.type$ -- 4
+change.case$ -- 4
+chr.to.int$ -- 0
+cite$ -- 4
+duplicate$ -- 36
+empty$ -- 97
+format.name$ -- 15
+if$ -- 220
+int.to.chr$ -- 0
+int.to.str$ -- 4
+missing$ -- 4
+newline$ -- 23
+num.names$ -- 4
+pop$ -- 4
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 13
+stack$ -- 0
+substring$ -- 99
+swap$ -- 4
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 11
+width$ -- 5
+write$ -- 46

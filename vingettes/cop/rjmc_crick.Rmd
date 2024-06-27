@@ -1,3 +1,178 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4252b043540ce1c591a1d31529d958e570b2bca254f45135d0ab7f72cd7b116e
-size 5704
+Fitting to the CRICK data
+
+# Load the data
+```{r}
+
+#install.packages("devtools")
+#library(devtools)
+devtools::load_all()
+
+library(lubridate)
+library(patchwork)
+library(tidybayes)
+library(ggdist)
+
+```
+
+## Get data in the right format for rjmcmc model
+
+To help with this section please consult information in the documentation on how to layour this data.frame:
+
+* For serological data in observational model see [data_titre](../man/data_titre.Rd).
+* For known exposure times [data_known_exposures](./man/data_known_exposures.Rd).
+* For exposure prior see XXX.
+  
+```{r}
+# Load data clean in the formet required for the model
+# THESE FUNCTIONS NEED TO CHANGE TO LOAD IN THE CRICK DATA
+gambia_pvnt_w2 <- get_data_titre_model_wave2() %>% mutate(biomarker = "neut_delta") # This is the empirical prior for the exposure time
+gambia_exp_w2 <- get_exposures_wave2() # This is the empirical prior for the exposure time
+exp_prior_w2 <- get_exp_prior_wave2() # PLEASE CHANGE, This is an example of the emprical prior need
+
+```
+
+## Define the functions required for the rjmcmc model
+
+To help with this section please consult information in the documentation on how to define these functions:
+
+* For observation functions see [obsLogLikelihood](./man/obsLogLikelihood.Rd).
+* For COP model functions [copLogLikelihood](./man/copLogLikelihood.Rd).
+* For antibody kinetics functions see [abkineticsFunction](./man/abkineticsFunction.Rd).
+
+
+```{r}
+# Define the functions 
+
+obsLogLikelihood = function(ll, titre_val, titre_est, pars) {
+    LOD <- # add limited of detection here
+    if (titre_val <= LOD) {
+        ll <- ll + pcauchy(LOD, titre_est, pars[1], log.p = TRUE)
+    } else {
+        ll <- ll + dcauchy(titre_val, titre_est, pars[1], log = TRUE)
+    }
+    ll
+}
+
+# Logistic function for COP
+copLogLikelihood <- function(ll, inf_status, esttitreExp, params) {
+    beta0 <- params[1]
+    beta1 <- params[2]
+    p <- 1.0 / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+    ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
+    ll
+}
+
+# Waning if no infection
+noInfSerumKinetics <- function(titre_est, timeSince, pars) {
+    titre_est <- titre_est - pars[1] * (timeSince)
+    titre_est
+}
+
+# Kinetics post infection
+infSerumKinetics <- function(titre_est, timeSince, pars) {
+    a <- pars[1] 
+    b <- pars[2] 
+    c <- pars[3]
+    if (timeSince < 14) {
+        titre_est <- titre_est + log(exp(a) + exp(c)) * (timeSince) / 14;
+    } else {
+        titre_est <- titre_est + log(exp(a) * exp(-b/10 * (timeSince - 14)) + exp(c));
+    }
+    titre_est
+}
+
+```
+
+## Define the models for the rjmcmc model
+
+To help with this section please consult information in the documentation on how to define these lists:
+
+* For observation model see [observationalModel](./man/observationalModel.Rd).
+* For COP model see [copModel](./man/copModel.Rd).
+* For antibody kinetics see [abkineticsModel](./man/abkineticsModel.Rd).
+
+```{r}
+
+
+# Define the biomarkers and exposure types in the model
+biomakers <- c("neut_delta")
+exposureType <- c("delta", "vax")
+
+# Define the observational model
+observationalModel <- list(
+    names = c("neut_delta"),
+    model = makeModel(addObservationalModel("neut_delta", c("sigma"), obsLogLikelihood)),
+    prior = add_par_df("sigma", 0.0001, 4, "unif", 0.0001, 4) # observational model,
+)
+
+# Define the antibody kinetics model
+abkineticsModel <- list(
+    names = c("none", "delta", "vax"),
+    model = makeModel(
+            addAbkineticsModel("neut_delta", "none", FALSE,  c("wane"), noInfSerumKinetics),
+            addAbkineticsModel("neut_delta", "delta", TRUE, c("a_d", "b_d", "c_d"), infSerumKinetics),
+            addAbkineticsModel("neut_delta", "vax", FALSE, c("a_vax", "b_vax", "c_vax"), infSerumKinetics)
+        ),
+    prior = bind_rows(
+        add_par_df("a_vax", -2, 2, "norm",  0, 1), # ab kinetics
+        add_par_df("b_vax", 0, 1, "norm",  0.3, 0.05), # ab kinetics
+        add_par_df("c_vax", 0, 4, "unif", 0,  4), # ab kinetics 
+        add_par_df("a_d", -2, 2, "norm",  0, 1), # ab kinetics
+        add_par_df("b_d", 0, 1, "norm",  0.3, 0.05), # ab kinetics
+        add_par_df("c_d", 0, 4, "unif", 0,  4), # ab kinetics
+        add_par_df("wane", 0.0, 0.1, "unif", 0.0, 0.1) # observational model
+    )
+)
+
+# Define the COP model
+copModel <- list( 
+        names = c("IgG"),
+        model = makeModel(addCopModel("neut_delta", "delta", c("beta0", "beta1"), copLogLikelihood)),
+        prior = bind_rows(
+            add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("beta1", -10, 10, "unif", -10, 10)
+        )
+)
+
+modeldefinition <- list(
+    biomarkers = biomakers,
+    exposureType = exposureType,
+    observationalModel = observationalModel,
+    abkineticsModel = abkineticsModel,
+    copModel = copModel,
+    exposurePrior = exp_prior_w2,
+    exposurePriorType = "empirical"
+)
+
+modelW2 <- createSeroJumpModel(gambia_pvnt_w2, gambia_exp_w2, modeldefinition)
+
+````
+
+# Define settings and run the model, (this won't run as made the data up)
+
+```{r eval = FALSE}
+
+# Define the settings
+settings <-  list(
+    numberChainRuns = 4,
+    numberCores = 4,
+    iterations = 200000,
+    burninPosterior = 100000,
+    thin = 100,
+    consoleUpdates = 100,
+    onAdaptiveCov = TRUE,
+    updatesAdaptiveCov = 100,
+    burninAdaptiveCov = 1000,
+    updatesAdaptiveTemp = 10,
+    covarInitVal = 1e-2, # make very small if struggling to sample to beginning
+    covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
+    covarMaxVal = 1, # decrease if struggling to sample in the middle
+    runParallel = FALSE,
+    noGibbsSteps = 1
+)
+
+# Run the model 
+runRJMCMC(modelW2, settings, "test/crick", "delta_wave")
+
+
+```
