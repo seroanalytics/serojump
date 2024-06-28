@@ -119,7 +119,7 @@ plot_abkineticsInf <- function(outputfull, fitfull, fig_folder) {
 
 
     compare <- bind_rows(
-        post$mcmc %>% combine %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
+        post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
              mutate(type = "Posterior distribution") %>% filter(param %in% c("a", "b", "c")),
         purrr::map_df(1:n_post,
             ~model_outline$samplePriorDistributions(par_tab)
@@ -141,7 +141,7 @@ plot_abkineticsInf <- function(outputfull, fitfull, fig_folder) {
     }
 
 
-    post_fit <- post$mcmc %>% combine %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
+    post_fit <- post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
     a_post <- post_fit[["a"]]
     b_post <- post_fit[["b"]]
     c_post <- post_fit[["c"]]
@@ -268,7 +268,7 @@ plot_exp_times_recInf <- function(outputfull, fitfull, fig_folder) {
     hist_data <- datasets %>%
         map(~ hist(., breaks = break_vec, plot = FALSE)) %>%
         map(~ {
-            data_frame(
+            data.frame(
             count = .$counts,
             bin = .$mids
             )
@@ -283,7 +283,7 @@ plot_exp_times_recInf <- function(outputfull, fitfull, fig_folder) {
         mutate(id = as.numeric(id))
 # Plotting
     figC <- df_data_t %>% ggplot() +
-      geom_histogram(aes(x = time, y = ..count.., fill = "gray40"), size = 2, alpha = 0.5, color = "black") + 
+      geom_histogram(aes(x = time, y = after_stat(count), fill = "gray40"), size = 2, alpha = 0.5, color = "black") + 
     #geom_line(data = bind_rows(hist_data), aes(x = bin, y = count), alpha = 0.1, color = "blue") +
     geom_line(data = data.frame(bin = hist_data[[1]]$bin, count = mean_counts), aes(x = bin, y = count), color = "red", size = 1.5) +
     geom_ribbon(data = data.frame(bin = hist_data[[1]]$bin, 
@@ -358,7 +358,7 @@ plot_cop_recInf <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
     chain_samples <- 1:n_chains %>% map(~c(rep(.x, n_post))) %>% unlist
 
     model_outline <- fitfull$model
-    post_fit <- post$mcmc %>% combine %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
+    post_fit <- post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
 
 
     n_post <- outputfull$n_post
@@ -392,7 +392,7 @@ plot_cop_recInf <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
 
     figA <- cop_exp_sum_plot_all %>% 
         ggplot() + 
-         geom_smooth(aes(x = titre_val, y = inf_post)) +
+        # geom_smooth(aes(x = titre_val, y = inf_post)) +
         geom_linerange(data = cop_exp_sum_plot_all, 
             aes(y = prop, xmin = .lower, xmax = .upper, alpha = prop), size = 1) + 
         geom_point(data = cop_exp_sum_plot_all, aes(x = titre_val, y = prop, alpha = prop)) + 
@@ -507,10 +507,11 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
    #filename <-  "local/nih_2024_inf/test"
   # modelname <- "h3"
   # n_chains <- 4
-    #filename <- "local/nih_2024_inf/prior2"
-    #modelname <- "h3"
-    #n_chain <- 4
+    filename <- "local/nih_2024_inf/prior2"
+    modelname <- "h3"
+    n_chain <- 4
 
+    dir.create(here::here("outputs", "fits", filename,  "figs", modelname), recursive = TRUE, showWarnings = FALSE)
     fitfull_pp <- readRDS(here::here("outputs", "fits", filename, paste0("fit_prior_", modelname, ".RDS")))
     fitfull <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
 
@@ -579,7 +580,7 @@ plot_abkinetics_trajectoriesInf <- function(outputfull, fitfull, fig_folder) {
     post <- fitfull$post
     par_tab <- fitfull$par_tab
     model_outline <- fitfull$model
-    post_fit <- post$mcmc %>% combine %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
+    post_fit <- post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
 
     ###
     posteriorsAllExposure <- map_df(1:length(model_outline$abkineticsModel),
@@ -590,7 +591,7 @@ plot_abkinetics_trajectoriesInf <- function(outputfull, fitfull, fig_folder) {
             exposureType <- model_outline$abkineticsModel[[name1]]$exposureType
             cat(pars_extract)
             compare <- bind_rows(
-                post$mcmc %>% combine %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
+                post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
                     mutate(type = "Posterior distribution") %>% filter(param %in% pars_extract)
             #  purrr::map_df(1:n_post,
             #      ~model_outline$samplePriorDistributions(par_tab)

@@ -54,7 +54,7 @@ public:
             for (int i_idx = 0; i_idx < parent->N; i_idx++) {
 
                 df_order_exp_i = this->sortevents(i_idx, parent->currentJump);
-                int l = df_order_exp_i.size();
+              //  int l = df_order_exp_i.size();
                 parent->proposalEventsFull.push_back(df_order_exp_i);
 
                 //df_order_titre_i = this->recalculateTitre_i(df_order_exp_i, i_idx);

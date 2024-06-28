@@ -1,131 +1,99 @@
 
-#include <RcppCommon.h>
-
-
-
-#include <Rcpp.h>
-// [[Rcpp::depends(BH)]]
-
-/*class FunctionWrapper {
-  public:
-      // Constructor taking a std::function
-      FunctionWrapper(std::function<double(double, double, double, Rcpp::NumericVector)> func_in) : func(func_in) {}
-
-      // Convert FunctionWrapper to Rcpp::Function
-      operator Rcpp::Function() const {
-          // Create an Rcpp::Function object that wraps the std::function
-          return Rcpp::Function([this](double a, double b, double c, Rcpp::NumericVector vec) {
-              // Call the std::function and return the result
-              return func(a, b, c, vec);
-          });
-      }
-
-      // Define the as function to convert from SEXP to FunctionWrapper
-      static FunctionWrapper as(SEXP obj) {
-          // Check if obj is a function
-          if (Rf_isFunction(obj)) {
-              // Convert SEXP to Rcpp::Function
-            auto adapted_func = [obj](double a, double b, double c, Rcpp::NumericVector vec) {
-                return Rcpp::as<double>(func(a, b, c, vec));
-            };
-              return FunctionWrapper(adapted_func);
-          } else {
-              // Throw an error if obj is not a function
-              throw std::invalid_argument("Object is not a function.");
-          }
-      }
-
-  private:
-      std::function<double(double, double, double, Rcpp::NumericVector)> func;
-};*/
-
-
-/*namespace Rcpp {
-    template <>
-    SEXP wrap(const std::function<double(double, double, double, Rcpp::NumericVector)>& func) {
-      Function Func = [func](double a, double b, double c, Rcpp::NumericVector vec) {
-            return func(a, b, c, vec);
-        };
-        return Func;
-    }
-}*/
-
-
-#include <RcppEigen.h>
-#include <Eigen/Core>
-
-#include "./headers/mvn.hpp"
-#include "./headers/rjmc.hpp"
 #include "./headers/rjmc_inf.hpp"
-#include "./headers/rjmc_full.hpp"
-
-// [[Rcpp::depends(RcppEigen)]]
-// [[Rcpp::plugins("cpp14")]]
+//#include "./headers/rjmc_full.hpp"
+//#include "./headers/rjmc_pp.hpp"
 
 
-// [[Rcpp::export]]
-List run_rjmc(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i)
+
+/*List run_rjmc_pp(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i)
 {
-  rjmc::RJMC_D RJMC; List output_full;
-  MatrixXd output;
-  MatrixXd jump;
+  Rcpp::Rcout << "Start: run_rjmc_full" << std::endl;
 
-  rjmc::init_samplePriorDistributions(&RJMC, model["samplePriorDistributions"]);
-  rjmc::init_evaluateLogPrior(&RJMC, model["evaluateLogPrior"]);
-  rjmc::init_evaluateLogLikelihood(&RJMC, model["evaluateLogLikelihood"]);
-  rjmc::init_jumpSampling(&RJMC, model["jumpSampling"]);
-  rjmc::init_initialiseJump(&RJMC, model["initialiseJump"]);
-  rjmc::init_evaluateAcceptanceRatioR(&RJMC, model["evaluateAcceptanceRatioR"]);
+  Rcpp::Rcout << "Initiate class" << std::endl;
+  rjmc_pp::RJMC_PP_D RJMC_PP;
+  Rcpp::Rcout << "End: Initiate class" << std::endl;
+
+  List output_full;
+  MatrixXd output;
+  List jump;
+  // Priors 
+  Rcpp::Rcout << "Start: initiate functions" << std::endl;
+  rjmc_pp::init_sampleInitPrior(&RJMC_PP, model["sampleInitPrior"]);
+  rjmc_pp::init_sampleInitJump(&RJMC_PP, model["sampleInitJump"]);
+  rjmc_pp::init_evaluateLogPrior(&RJMC_PP, model["evaluateLogPrior"]);
+  rjmc_pp::init_evaluateLogLikelihood(&RJMC_PP, model["evaluateLogLikelihood"]);
+  rjmc_pp::init_sampleBirthProposal(&RJMC_PP, model["sampleBirthProposal"]);
+  rjmc_pp::init_sampleDeathProposal(&RJMC_PP, model["sampleDeathProposal"]);
+  rjmc_pp::init_evaluateBirthProposal(&RJMC_PP, model["evaluateBirthProposal"]);
+  rjmc_pp::init_evaluateDeathProposal(&RJMC_PP, model["evaluateDeathProposal"]);
+  rjmc_pp::init_sampleJump(&RJMC_PP, model["sampleJump"]);
+  rjmc_pp::init_sampleProposal(&RJMC_PP, model["sampleProposal"]);
+
+  Rcpp::Rcout << "End: initiate functions" << std::endl;
 
   if (update_ind) {
-    RJMC.updateClass(settings, dataList, RJMCpar);
+    RJMC_PP.updateClass(settings, dataList, RJMCpar);
   } else {  
-    RJMC.initialiseClass(settings, dataList, i);
+    RJMC_PP.initialiseClass(settings, dataList, i);
   }
 
-  output_full = RJMC.runRJMCC();
+  output_full = RJMC_PP.runRJMCC();
 
-  RJMCpar = RJMC.saveRJMCpar();
+  RJMCpar = RJMC_PP.saveRJMCpar();
   output = output_full[0];
   jump = output_full[1];
+
+  Rcpp::Rcout << "End: run_rjmc_pp" << std::endl;
+
   return Rcpp::List::create(_["output"] = output, _["jump"] = jump, _["RJMCpar"] = RJMCpar);
 
-}
+}*/
+
 
 // [[Rcpp::export]]
 List run_rjmc_sero(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i)
 {
-  rjmc_sero::RJMC_SERO_D RJMC_SERO; List output_full;
-  MatrixXd output;
-  MatrixXd jump;
 
-  rjmc_sero::init_samplePriorDistributions(&RJMC_SERO, model["samplePriorDistributions"]);
-  rjmc_sero::init_evaluateLogPrior(&RJMC_SERO, model["evaluateLogPrior"]);
-  rjmc_sero::init_initialiseJump(&RJMC_SERO, model["initialiseJump"]);
-  rjmc_sero::init_evaluateLogLikelihood(&RJMC_SERO, model["evaluateLogLikelihood"]);
+  List exposureInfo = model["infoModel"];
+  List observationalModel = model["observationalModel"];
+  List abkineticsModel = model["abkineticsModel"];
 
-  rjmc_sero::init_exposureFunctionSample(&RJMC_SERO, model["exposureFunctionSample"]);
-  rjmc_sero::init_exposureFunctionDensity(&RJMC_SERO, model["exposureFunctionDensity"]);
+  Rcpp::Rcout << "Initiate class" << std::endl;
+  Rcpp::Rcout << "Initiate class2" << std::endl;
+    Rcpp::Rcout << "Initiate class2: " << i << std::endl;
 
+  auto SeroJumpRunInst = SeroJumpRun::create(exposureInfo, observationalModel, abkineticsModel);
+  Rcpp::Rcout << "End: Initiate class" << std::endl;
 
-  if (update_ind) {
-    RJMC_SERO.updateClass(settings, dataList, RJMCpar);
-  } else {  
-    RJMC_SERO.initialiseClass(settings, dataList, i);
-  }
+  List output_full;
+  MatrixXd output, jump, inf;
+  RObject titreexp, obstitre;
 
-  output_full = RJMC_SERO.runRJMCC();
+  Rcpp::Rcout << "Start: initiate functions" << std::endl;
+  init_samplePriorDistributions(SeroJumpRunInst.get(), model["samplePriorDistributions"]);
+  init_evaluateLogPrior(SeroJumpRunInst.get(), model["evaluateLogPrior"]);
+  init_evaluateLogPriorInfExp(SeroJumpRunInst.get(), model["evaluateLogPriorInfExp"]);
+  init_initialiseJump(SeroJumpRunInst.get(), model["initialiseJump"]);
+  init_exposureFunctionSample(SeroJumpRunInst.get(), model["exposureFunctionSample"]);
+  init_exposureFunctionDensity(SeroJumpRunInst.get(), model["exposureFunctionDensity"]);
+  Rcpp::Rcout << "End: initiate functions" << std::endl;
 
-  RJMCpar = RJMC_SERO.saveRJMCpar();
+  
+  output_full = SeroJumpRunInst->runRJMCC(settings, dataList, i);
+  RJMCpar = SeroJumpRunInst->saveRJMCpar();
   output = output_full[0];
   jump = output_full[1];
-  return Rcpp::List::create(_["output"] = output, _["jump"] = jump, _["RJMCpar"] = RJMCpar);
+  titreexp = output_full[2];
+  obstitre = output_full[3];
+
+  Rcpp::Rcout << "End: run_rjmc_sero" << std::endl;
+
+  return Rcpp::List::create(_["output"] = output, _["jump"] = jump, _["titreexp"] = titreexp, _["obstitre"] = obstitre, _["RJMCpar"] = RJMCpar);
 
 }
 
 
-// [[Rcpp::export]]
-List run_rjmc_full(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i)
+/*List run_rjmc_full(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i)
 {
   Rcpp::Rcout << "Start: run_rjmc_full" << std::endl;
 
@@ -169,4 +137,4 @@ List run_rjmc_full(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings
 
   return Rcpp::List::create(_["output"] = output, _["jump"] = jump, _["inf"] = inf, _["titreexp"] = titreexp, _["obstitre"] = obstitre, _["RJMCpar"] = RJMCpar);
 
-}
+}*/

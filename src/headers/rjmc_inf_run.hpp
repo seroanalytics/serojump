@@ -105,6 +105,7 @@ public:
                     }
                     initialInf(i) = 1;
                 } else {
+                    initialJump(i) = this->exposureFunctionSample();
                     /*double u = uniformContinuousDist(0, 1);
                     if (u < 0.5) {
                         Rcpp::Rcout << "initialJump(i): randomly added exposure (not infection)" << initialJump << std::endl;
@@ -269,7 +270,7 @@ public:
         this->proposedLogPosterior = loglikInit->evalLogPosterior(this->proposalSample, this->proposalJump, this->currentCovarianceMatrix, this->dataList);
         if (this->onDebug) Rcpp::Rcout << "Pre: evaluateMetropolisRatio" << std::endl;
 
-        evaluateMetropolisRatio();
+        this->evaluateMetropolisRatio();
     }
 
     /**
@@ -430,9 +431,9 @@ public:
 
             this->proposedLogPosterior = loglikInit->evalLogPosterior(this->currentSample, this->proposalJump, this->currentCovarianceMatrix, this->dataList);
 
-            evaluateMetropolisRatio();
-            updateJumpHistoric();
-            updateProposalGibbs(resampleIdx);
+            this->evaluateMetropolisRatio();
+            this->updateJumpHistoric();
+            this->updateProposalGibbs(resampleIdx);
     }
 
     /**
@@ -738,7 +739,7 @@ public:
             }
             this->proposalJump(t) = temp;
         }
-        bookKeepingSize();
+        this->bookKeepingSize();
     }
 
     /** 
@@ -760,12 +761,10 @@ public:
                 while ((this->proposalJump(t) >= this->endTitreTime(t) - 7) || (this->proposalJump(t) < this->initialTitreTime(t))) {
                     this->proposalJump(t) = this->exposureFunctionSample(); 
                 }
-                bookKeepingSize();
                 //   proposeInfection(t);
         } else { 
             // New exposure time is taken from previous exposure time in mcmc chain (95% of the time)
                 this->proposalJump(t) = this->historicJump(t);
-                bookKeepingSize();
 
                 //  if (r < 0.5) {
                     //  boost::random::beta_distribution<> b(1, 1); 
@@ -775,9 +774,8 @@ public:
                     //  boost::random::bernoulli_distribution<> l(0.5); 
                     // this->proposalInf(t) = l(rng);
                 // }
-                bookKeepingSize();
         }
-        bookKeepingSize();
+        this->bookKeepingSize();
     }
 
    /**

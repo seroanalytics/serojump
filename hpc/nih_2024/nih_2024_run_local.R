@@ -28,9 +28,9 @@ settings <-  list(
 
 ab_values <- c(0:10)
 names_ab <- 2^c(0:10) * 5
-names_ab[1] <- "<10"
+names_ab[2] <- "<10"
 names(ab_values) <- names_ab
 
-runRJMCMC(seroModel, settings, "hpc/nih_2024", "h1")
-postprocessFigs("hpc/nih_2024", "h1", 4, ab_values)
+runInfRJMCMC(seroModel, settings, "hpc/nih_2024_inf/prior1", "h1")
+postprocessFigs("hpc/nih_2024/prior1", "h1", 4, ab_values)
 

@@ -43,6 +43,16 @@ infSerumKinetics <- function(titre_est, timeSince, pars) {
     titre_est <- max(0, titre_est)
 }
 
+a <- 4
+b <- 0.03
+c <- 2
+data.frame(
+    t = 0:100,
+    x = log(exp(a) * exp(-b/10 * (0:100 - 14)) + exp(c))
+) %>% 
+    ggplot() + geom_line(aes(t, x))
+
+
 infIgAinetics <- function(titre_est, timeSince, pars) {
     d <- pars[1]
     e <- pars[2]

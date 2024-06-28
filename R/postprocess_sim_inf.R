@@ -252,7 +252,7 @@ plot_abkinetic_simInf <- function(outputfull, fitfull, fig_folder) {
     res$kinetics_parameters %>% filter(name %in% c("a", "b", "c")) %>% select(name, value) %>% rename(param = name)
 
     compare <- bind_rows(
-        post$mcmc %>% combine %>% as.data.frame %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
+        post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
             mutate(type = "Posterior distribution") %>% filter(param %in% c("a", "b", "c")) ,
         res$kinetics_parameters %>% filter(name %in% c("a", "b", "c")) %>% select(name, value)  %>% rename(param = name) %>%  mutate(type = "Simulated distribution") ,
         purrr::map_df(1:n_post,
@@ -275,7 +275,7 @@ plot_abkinetic_simInf <- function(outputfull, fitfull, fig_folder) {
     }
 
 
-    post_fit <- post$mcmc %>% combine %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
+    post_fit <- post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
     a_post <- post_fit[["a"]]
     b_post <- post_fit[["b"]]
     c_post <- post_fit[["c"]]
@@ -467,7 +467,7 @@ plot_cop_rec_simInf <- function(outputfull, fitfull, fig_folder) {
     chain_samples <- 1:n_chains %>% map(~c(rep(.x, n_post))) %>% unlist
 
     model_outline <- fitfull$model
-    post_fit <- post$mcmc %>% combine %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
+    post_fit <- post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
 
 
     n_post <- outputfull$n_post

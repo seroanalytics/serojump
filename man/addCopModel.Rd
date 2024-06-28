@@ -4,16 +4,16 @@
 \alias{addCopModel}
 \title{addCopModel}
 \usage{
-addCopModel(biomarker, exposureName, pars, logLikelihood)
+addCopModel(biomarker, exposureType, pars, funcForm, logLikelihood)
 }
 \arguments{
 \item{biomarker}{The name of the biomarker.}
 
-\item{exposureName}{The name of the exposure type.}
-
 \item{pars}{The parameters of the model.}
 
 \item{logLikelihood}{The log likelihood function.}
+
+\item{exposureName}{The name of the exposure type.}
 }
 \value{
 A list with the biomarker name, the exposure name, the parameters and the log likelihood function.

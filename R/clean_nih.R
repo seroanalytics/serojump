@@ -5,7 +5,7 @@
 
 get_data_titre_nih_2023_h3 <- function() {
     # Read in the titre data and exposure data
-    nih_hai_raw <- read.csv(file = here::here("data", "nih_2024", "serology.csv") )
+    nih_hai_raw <- read.csv(file = here::here("data", "data 2024", "serology.csv") )
     nih_hai_raw_24 <- nih_hai_raw %>% filter(year == 2023, subtype == "H3") %>% 
         select(pid, year, day, vax_inf, subtype, virus, titre) %>%
          mutate(titre = log2(titre / 5)) %>%
@@ -14,8 +14,8 @@ get_data_titre_nih_2023_h3 <- function() {
     biomarkers <- names(nih_hai_raw_24)[c(6, 7)]
 
     nih_hai_raw_24 %>% filter(vax_inf == "I")
-    nih_bleed_raw <- read.csv(file = here::here("data", "nih_2024", "bleed-dates.csv") )
-    nih_inf_dates_raw <- read.csv(file = here::here("data", "nih_2024", "postinf-bleed-dates.csv") )
+    nih_bleed_raw <- read.csv(file = here::here("data", "nih_2024_XX", "bleed-dates.csv") )
+    nih_inf_dates_raw <- read.csv(file = here::here("data", "nih_2024_XX", "postinf-bleed-dates.csv") )
 
     add_dates <- bind_rows(
         nih_bleed_raw %>% mutate(vax_inf = "V", date = dmy(date)),
@@ -52,18 +52,18 @@ get_data_titre_nih_2023_h3 <- function() {
     require(readxl)
 
     
-    nih_inf_raw <- read_excel(path = here::here("data", "nih_2024", "2022_2023_Flu_Swabs.xlsx") )
+    nih_inf_raw <- read_excel(path = here::here("data", "nih_2024_XX", "2022_2023_Flu_Swabs.xlsx") )
     h3_exp <- nih_inf_raw %>% filter(year == 2023) %>% filter(grepl("H3", swab_virus)) %>% select(pid, samp_date) %>% 
         mutate(exposure_type = "h3_2023") %>% mutate(time = as.numeric(ymd(samp_date) - start_date) + 1) %>% 
         select(pid, time, exposure_type) %>% left_join(pid_key)
 
     # get post-infection serology
-    nih_inf_dates_raw <- read.csv(file = here::here("data", "nih_2024", "postinf-bleed-dates.csv") )
+    nih_inf_dates_raw <- read.csv(file = here::here("data", "nih_2024_XX", "postinf-bleed-dates.csv") )
 
     exposure_data <- bind_rows(vax_exp, h3_exp) 
 
     # Read in the exposure prior data
-    flu_incidence <- read_excel(path = here::here("data", "nih_2024", "aus_flu_records_flunet.xlsx") )
+    flu_incidence <- read_excel(path = here::here("data", "nih_2024_XX", "aus_flu_records_flunet.xlsx") )
     week_cases <- flu_incidence %>% select(ISO_SDATE, INF_ALL, INF_NEGATIVE) %>% 
         mutate(date = ymd(substr(ISO_SDATE, 1, 10))) %>%
         mutate(INF_ALL = as.numeric(INF_ALL)) %>%
@@ -83,7 +83,7 @@ get_data_titre_nih_2023_h3 <- function() {
 
 get_data_titre_nih_2023_h1 <- function() {
     # Read in the titre data and exposure data
-    nih_hai_raw <- read.csv(file = here::here("data", "nih_2024", "serology.csv") )
+    nih_hai_raw <- read.csv(file = here::here("data", "data 2024", "serology.csv") )
     nih_hai_raw_24_h1 <- nih_hai_raw %>% filter(year == 2023, subtype == "H1") %>% 
         select(pid, year, day, vax_inf, subtype, virus, titre) %>%
          mutate(titre = log2(titre / 5)) %>%
@@ -92,8 +92,8 @@ get_data_titre_nih_2023_h1 <- function() {
     biomarkers_h1 <- names(nih_hai_raw_24_h1)[c(6, 7)]
 
     nih_hai_raw_24_h1 %>% filter(vax_inf == "I")
-    nih_bleed_raw <- read.csv(file = here::here("data", "nih_2024", "bleed-dates.csv") )
-    nih_inf_dates_raw <- read.csv(file = here::here("data", "nih_2024", "postinf-bleed-dates.csv") )
+    nih_bleed_raw <- read.csv(file = here::here("data", "nih_2024_XX", "bleed-dates.csv") )
+    nih_inf_dates_raw <- read.csv(file = here::here("data", "nih_2024_XX", "postinf-bleed-dates.csv") )
 
     add_dates <- bind_rows(
         nih_bleed_raw %>% mutate(vax_inf = "V", date = dmy(date)),
@@ -129,19 +129,18 @@ get_data_titre_nih_2023_h1 <- function() {
 
     require(readxl)
 
-    
-    nih_inf_raw <- read_excel(path = here::here("data", "nih_2024", "2022_2023_Flu_Swabs.xlsx") )
+    nih_inf_raw <- read_excel(path = here::here("data", "nih_2024_XX", "2022_2023_Flu_Swabs.xlsx") )
     h1_exp <- nih_inf_raw %>% filter(year == 2023) %>% filter(grepl("H1", swab_virus)) %>% select(pid, samp_date) %>% 
         mutate(exposure_type = "h1_2023") %>% mutate(time = as.numeric(ymd(samp_date) - start_date) + 1) %>% 
         select(pid, time, exposure_type) %>% left_join(pid_key_h1)
 
     # get post-infection serology
-    nih_inf_dates_raw <- read.csv(file = here::here("data", "nih_2024", "postinf-bleed-dates.csv") )
+    nih_inf_dates_raw <- read.csv(file = here::here("data", "nih_2024_XX", "postinf-bleed-dates.csv") )
 
     exposure_data_h1 <- bind_rows(vax_exp_h1, h1_exp) 
 
     # Read in the exposure prior data
-    flu_incidence <- read_excel(path = here::here("data", "nih_2024", "aus_flu_records_flunet.xlsx") )
+    flu_incidence <- read_excel(path = here::here("data", "nih_2024_XX", "aus_flu_records_flunet.xlsx") )
     week_cases <- flu_incidence %>% select(ISO_SDATE, INF_ALL, INF_NEGATIVE) %>% 
         mutate(date = ymd(substr(ISO_SDATE, 1, 10))) %>%
         mutate(INF_ALL = as.numeric(INF_ALL)) %>%
