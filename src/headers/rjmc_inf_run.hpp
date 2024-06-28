@@ -105,7 +105,7 @@ public:
                     }
                     initialInf(i) = 1;
                 } else {
-                    initialJump(i) = this->exposureFunctionSample();
+                   // initialJump(i) = this->exposureFunctionSample();
                     /*double u = uniformContinuousDist(0, 1);
                     if (u < 0.5) {
                         Rcpp::Rcout << "initialJump(i): randomly added exposure (not infection)" << initialJump << std::endl;
@@ -409,7 +409,7 @@ public:
         if (this->onDebug) Rcpp::Rcout << "In: updateTiming" << std::endl;
 
             this->currJumpType = 1;
-            this->proposalJump = this->currentJump;
+            //this->proposalJump = this->currentJump;
 
             // Calcuate the number of samples to resample
             int NoSample = roundDown( this->adaptiveResampleNo);
@@ -460,7 +460,7 @@ public:
             //Rcpp::Rcout << "ACCEPTED (GIBBS): " << this->alpha << std::endl;
         //     this->finddifferInf();
             this->currentSample = this->proposalSample;
-            this->currentJump = this->proposalJump;
+         //   this->currentJump = this->proposalJump;
 
             this->currentTitreExp = this->proposalTitreExp;
             this->currentObsTitre = this->proposalObsTitre;
@@ -469,12 +469,12 @@ public:
             this->currentTitreFull = this->proposalTitreFull;
 
             this->currentLogPosterior = this->proposedLogPosterior;
-            this->currInferredExpN = this->propInferredExpN;
-            this->currInferredInfN = this->propInferredInfN;
+         //   this->currInferredExpN = this->propInferredExpN;
+         //   this->currInferredInfN = this->propInferredInfN;
 
         } else {
             this->proposalSample = this->currentSample;
-            this->proposalJump = this->currentJump;
+          //  this->proposalJump = this->currentJump;
 
             this->proposalTitreExp = this->currentTitreExp;
             this->proposalObsTitre = this->currentObsTitre;
@@ -483,8 +483,8 @@ public:
             this->proposalTitreFull = this->currentTitreFull;
 
             this->proposedLogPosterior = this->currentLogPosterior;
-            this->propInferredExpN = this->currInferredExpN;
-            this->propInferredInfN = this->currInferredInfN;     
+          //  this->propInferredExpN = this->currInferredExpN;
+          //  this->propInferredInfN = this->currInferredInfN;     
         }
     }
 
@@ -598,7 +598,7 @@ public:
         } else {
             if (this->currInferredExpN == this->knownInfsN ) {
                 q_prob << 0, 0.67, 1.0;
-            } else if (this->currInferredExpN == (this->N ) ) {
+            } else if (this->currInferredExpN == this->N  ) {
                 q_prob << 0.33, 1.0, 0;
             } else {
                 q_prob << 0.33, 0.67, 1.0;
@@ -610,7 +610,7 @@ public:
         double q = uniformContinuousDist(0, 1);
         if (q < q_prob(0)) {
             //   Rcpp::Rcout << "In deletion" << std::endl;
-            this->currJumpIdx = this->sampleExposedNotInf(); // length is n_ - 114
+            this->currJumpIdx = this->sampleExposed(); // length is n_ - 114
             this->historicJump(this->currJumpIdx) = this->currentJump(this->currJumpIdx);
             this->proposalJump(this->currJumpIdx) = -1; // length now n_ - 144 - 1
             this->currJumpType = 0;
@@ -667,7 +667,7 @@ public:
         if (this->onDebug) Rcpp::Rcout << "In: sampleExposed" << std::endl;
 
         int s = uniformDiscreteDist(0, this->N - 1); 
-        while (this->currentJump(s) == -1) {
+        while ((this->knownInfsVec(s) == 1) || this->currentJump(s) == -1) {
             s = uniformDiscreteDist(0, this->N - 1); 
         }
         return s;
@@ -678,8 +678,12 @@ public:
      * @return The individual index
      */
     int sampleNotExposed() {
+        if (this->onDebug) Rcpp::Rcout << "In: sampleNotExposed" << std::endl;
         int s = uniformDiscreteDist(0, this->N - 1); 
         // Must be not exposured or infectio not known
+        if (this->onDebug) Rcpp::Rcout << "this->propInferredExpN: " << this->propInferredExpN << std::endl;
+        if (this->onDebug) Rcpp::Rcout << "this->currInferredExpN: " << this->currInferredExpN << std::endl;
+
         while ((this->knownInfsVec(s) == 1) || (this->currentJump(s) != -1 )) {
             /* if (this->knownInfsVec(s) == 1) {
                 Rcpp::Rcout << "this->knownInfsVec(s): " << s << std::endl;

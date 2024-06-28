@@ -1,4 +1,4 @@
 /data
 /src/rjmc_func.o
-/src/serojump.o
+/src/serojump.so
 /src/RcppExports.o
