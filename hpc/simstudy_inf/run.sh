@@ -18,4 +18,4 @@ module load boost/1.76.0
 source activate ~/miniconda3/envs/R
 
 # Change to the directory where your job script is located
-~/miniconda3/envs/R/bin/Rscript simstudy_run_R.R $SLURM_ARRAY_TASK_ID
+~/miniconda3/envs/R/bin/Rscript simstudy_run.R $SLURM_ARRAY_TASK_ID
