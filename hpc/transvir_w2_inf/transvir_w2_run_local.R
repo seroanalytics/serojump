@@ -27,5 +27,5 @@ settings <-  list(
     onDebug = FALSE
 )
 
-#runInfRJMCMC(seroW2_full[[i]], settings, paste0("hpc/transvir_w2_inf/", prior_names[i]), "w2")
+runInfRJMCMC(seroW2_full[[i]], settings, paste0("hpc/transvir_w2_inf/", prior_names[i]), "w2")
 postprocessFigsInf(paste0("hpc/transvir_w2_inf/",  prior_names[i]), "w2", 4)
