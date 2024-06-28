@@ -30,16 +30,12 @@ rjmc_sero_func <- function(model, data, settings, par = NULL) {
 }
 
 get_output_sero <- function(model, data_list, settings, update_ind, par) {
-
   outPTpost <- vector(mode = "list", length = settings[["numberChainRuns"]])
   outPTjump <- vector(mode = "list", length = settings[["numberChainRuns"]])
-  outPTtitreexp <- vector(mode = "list", length = settings[["numberChainRuns"]])
-  outPTobstitre <- vector(mode = "list", length = settings[["numberChainRuns"]])
   outPTlp <- vector(mode = "list", length = settings[["numberChainRuns"]])
   outPTacc <- vector(mode = "list", length = settings[["numberChainRuns"]])
   outPTpar <- vector(mode = "list", length = settings[["numberChainRuns"]])
-  out_raw <- vector(mode = "list", length = settings[["numberChainRuns"]])
-
+  out_raw <- list()
 
   # Run the chains in parallel
   if (settings[["runParallel"]]) {
@@ -64,8 +60,6 @@ get_output_sero <- function(model, data_list, settings, update_ind, par) {
     }
     outPTpost[[i]] <- mcmc(out_post)
     outPTjump[[i]] <- out_raw[[i]][["jump"]]
-    outPTtitreexp[[i]] <- out_raw[[i]][["titreexp"]]
-    outPTobstitre[[i]] <- out_raw[[i]][["obstitre"]]
     outPTlp[[i]] <- out_raw[[i]][["output"]][, settings$numberFittedPar + 1]
     outPTacc[[i]] <- out_raw[[i]][["output"]][, settings$numberFittedPar + 2]
   }
@@ -83,8 +77,6 @@ get_output_sero <- function(model, data_list, settings, update_ind, par) {
   output <- list(
     mcmc = as.mcmc.list(outPTpost),
     jump = outPTjump,
-    titreexp = outPTtitreexp,
-    obstitre = outPTobstitre,
     lpost = outlpv,
     acc = outlaccv,
     outPTpar = outPTpar

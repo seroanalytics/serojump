@@ -104,7 +104,6 @@
         "span": "cpp",
         "format": "cpp",
         "__memory": "cpp",
-        "execution": "cpp",
-        "stdfloat": "cpp"
+        "execution": "cpp"
     }
 }

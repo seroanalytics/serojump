@@ -4,18 +4,18 @@
 \alias{addAbkineticsModel}
 \title{addAbkineticsModel}
 \usage{
-addAbkineticsModel(id, biomarker, exposureType, pars, funcForm)
+addAbkineticsModel(biomarker, exposureName, inferred, pars, funcForm)
 }
 \arguments{
 \item{biomarker}{The name of the biomarker.}
 
+\item{exposureName}{The name of the exposure type.}
+
+\item{inferred}{Whether the exposure is inferred with in the RJMCMC algorithm (can only do this for ONE exposure type).}
+
 \item{pars}{The parameters of the model.}
 
 \item{funcForm}{The antibody kinetics function.}
-
-\item{is}{The name of the biomarker.}
-
-\item{exposureName}{The name of the exposure type.}
 }
 \value{
 A list with the biomarker name, the exposure name, whether the exposure is inferred, the parameters and the antibody kinetics function.

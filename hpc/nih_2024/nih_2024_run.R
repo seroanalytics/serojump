@@ -32,8 +32,8 @@ settings <-  list(
 
 ab_values <- c(0:10)
 names_ab <- 2^c(0:10) * 5
-names_ab[2] <- "<10"
+names_ab[1] <- "<10"
 names(ab_values) <- names_ab
 
 runRJMCMC(seroModel, settings, "hpc/nih_2024", output_file)
-postprocessFigs("hpc/nih_2024", output_file, 4, ab_values)
+postprocessFigs("hpc/nih_2024", output_file, 4, names_ab)

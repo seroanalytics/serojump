@@ -32,6 +32,54 @@ using namespace boost::math;
 #define MAX(a,b) ((a) > (b) ? (a) : (b)) // define MAX function for use later
 #endif
 
+
+double dirichlet_pdf(const VectorXd& x, const VectorXd& alpha) {
+    // Check if the sizes of x and alpha match
+    if (x.size() != alpha.size()) {
+        std::cerr << "Error: Size mismatch between x and alpha.\n";
+        return 0.0; // Return 0 as an error code
+    }
+
+    double sum_alpha = 0.0;
+    double sum_log_gamma_alpha = 0.0;
+    double sum_log_x_alpha = 0.0;
+
+    for (size_t i = 0; i < x.size(); ++i) {
+        sum_alpha += alpha[i];
+        sum_log_gamma_alpha += boost::math::lgamma(alpha[i]);
+        sum_log_x_alpha += (alpha[i] - 1) * std::log(x[i]);
+    }
+
+    double log_pdf = sum_log_gamma_alpha - boost::math::lgamma(sum_alpha);
+    log_pdf += sum_log_x_alpha;
+
+    return log_pdf;
+}
+
+unsigned long long binomialCoefficient(int n, int k) {
+    if (k == 0 || k == n) return 1;
+    unsigned long long result = 1;
+    for (int i = 1; i <= k; ++i) {
+        result *= n - (k - i);
+        result /= i;
+    }
+    return result;
+}
+
+// Function to calculate the Beta-Binomial PMF
+double betaBinomialPMF(int k, int n, double alpha, double beta) {
+    return binomialCoefficient(n, k) * tgamma(alpha + beta) / (tgamma(alpha) * tgamma(beta)) * 
+           tgamma(k + alpha) * tgamma(n - k + beta) / tgamma(n + alpha + beta);
+}
+
+double logFactorial(int n) {
+    double result = 0.0;
+    for (int i = 1; i <= n; ++i) {
+        result += log(i);
+    }
+    return result;
+}
+
 namespace rjmc_full{
 
 
@@ -283,7 +331,7 @@ namespace rjmc_full{
           //  this->finddifferInf();
           //  this->updateLists();
 
-            double logPrior = this->evaluateLogPrior(param, jump, dataList);// + log(1.0 / (this->propInferredExpN + 1));
+            double logPrior = this->evaluateLogPrior(param, jump, dataList);
 
             if (isinf(logPrior)) {
                 return log(0);
@@ -291,7 +339,6 @@ namespace rjmc_full{
             // need to be a converstion here as observationalModel is ObsFuncTemplate, but function call is Function
 
             double logLikelihood_ab = this->evaluateLogLikelihoodCOP_cpp(param, jump, jumpInf, init) + this->evaluateLogLikelihoodObs_cpp(param, jump, jumpInf, init);
-
 
             double logLikelihood_time = 0; 
             for (int i = 0; i < this->N; i++) {
@@ -308,9 +355,9 @@ namespace rjmc_full{
             double long M_adj, k_adj, k2_adj, i_adj, N_adj;
             VectorXd x_vec(3);
             VectorXd alpha_vec(3);
-            alpha_vec << 1.1, 1.1, 1.0;
+            alpha_vec << 5, 5, 1;
             if (init) {
-                if (this->currInferredExpN == 0) {
+                if (this->currInferredExpN < 1) {
                     logPriorInf = -1e10;
                     logPriorExp = -1e10;
                     logPriorExpInf = -1e10;
@@ -319,36 +366,27 @@ namespace rjmc_full{
                     M_adj = this->N - this->currInferredInfN;
                     k_adj = this->currInferredExpN - this->currInferredInfN;      
                     // infection priors
-                    k2_adj = this->currInferredExpN - this->currInferredInfN ;
-                    i_adj = this->currInferredInfN - this->knownInfsN ;
-                    N_adj = this->N - this->currInferredInfN ;//- this->knownInfsN ;
-                /*    Rcpp::Rcout << "M_adj : " << M_adj << std::endl;
+                    k2_adj = this->currInferredExpN - this->knownInfsN;
+                    i_adj = this->currInferredInfN - this->knownInfsN;
+                    N_adj = this->N - this->knownInfsN;
+                   /* Rcpp::Rcout << "M_adj : " << M_adj << std::endl;
                     Rcpp::Rcout << "k_adj : " << k_adj << std::endl;
                     Rcpp::Rcout << "k2_adj : " << k2_adj << std::endl;
                     Rcpp::Rcout << "i_adj : " << i_adj << std::endl;*/
-                  //  x_vec << (this->N - this->currInferredExpN) / static_cast<double>(this->N),  this->currInferredExpN / static_cast<double>(this->N);
-                //    x_vec << (M_adj - k_adj) / N_adj, k_adj / N_adj, i_adj / N_adj;
-                   /* Rcpp::Rcout << "alpha_vec1: " << alpha_vec[0] << std::endl;
+                   // x_vec << (this->N - this->currInferredExpN) / static_cast<double>(this->N),  this->currInferredExpN / static_cast<double>(this->N);
+                   x_vec << (M_adj - k_adj) / N_adj, k_adj / N_adj, i_adj / N_adj;
+                    /*Rcpp::Rcout << "alpha_vec1: " << alpha_vec[0] << std::endl;
                     Rcpp::Rcout << "alpha_vec2: " << alpha_vec[1] << std::endl;
-                    Rcpp::Rcout << "alpha_vec2: " << alpha_vec[2] << std::endl;
-*/
-  /*                  Rcpp::Rcout << "x_vec1: " << x_vec[0] << std::endl;
-                    Rcpp::Rcout << "x_vec2: " << x_vec[1] << std::endl;
-                    Rcpp::Rcout << "x_vec3: " << x_vec[2] << std::endl;
 
-                    Rcpp::Rcout << "dirichlet_pdf(x_vec, alpha_vec): " << dirichlet_pdf(x_vec, alpha_vec) << std::endl; */
-                   // logPriorExpInf =  binomial_log_pmf(k2_adj, N_adj, 0.5) + binomial_log_pmf(i_adj, k2_adj, 0.5);
-                    //log(1.0 / N_adj) + log(1.0 / k2_adj) + logFactorial(i_adj) + logFactorial(k_adj) + logFactorial(M_adj - k_adj) - logFactorial(N_adj ); // dirichlet_pdf(x_vec, alpha_vec) +
-                   // logPriorExpInf = 0; log(1.0 / (N_adj + 1))
-           //        beta_logpdf(k2_adj/N_adj, 1.1, 1.1) +     log(1.0 / (k2_adj + 1))
-                    logPriorExpInf =  beta_logpdf(k2_adj / N_adj, 1.1, 1.1) + logFactorial(k2_adj) + logFactorial(N_adj - k2_adj) - logFactorial(N_adj );// +
-                      //  log(1 / (k2_adj + 1)) + logFactorial(i_adj) + logFactorial(k2_adj - i_adj) - logFactorial(k2_adj );
-                    //dirichlet_pdf(x_vec, alpha_vec) + 
-                //    Rcpp::Rcout << "logPriorExpInf curr: " << logPriorExpInf << std::endl;
-                  //  logPriorExpInf = logFactorial(k_adj) + logFactorial(M_adj - k_adj) - logFactorial(M_adj );
+                    Rcpp::Rcout << "x_vec1: " << x_vec[0] << std::endl;
+                    Rcpp::Rcout << "x_vec2: " << x_vec[1] << std::endl;
+
+                    Rcpp::Rcout << "dirichlet_pdf(x_vec, alpha_vec): " << dirichlet_pdf(x_vec, alpha_vec) << std::endl;*/
+                    logPriorExpInf = dirichlet_pdf(x_vec, alpha_vec) + logFactorial(i_adj) + logFactorial(k_adj) + logFactorial(M_adj - k_adj) - logFactorial(N_adj );
+                    //logPriorExpInf = dirichlet_pdf(x_vec, alpha_vec) + logFactorial(k_adj) + logFactorial(M_adj - k_adj) - logFactorial(M_adj );
                 }
-            } else { // || this->propInferredExpN == this->propInferredInfN
-                if (this->propInferredExpN == 0 ) {
+            } else {
+                if (this->propInferredExpN < 1) {
                     logPriorInf = -1e10;
                     logPriorExp = -1e10;
                     logPriorExpInf = -1e10;
@@ -357,45 +395,36 @@ namespace rjmc_full{
                     M_adj = this->N - this->propInferredInfN;
                     k_adj = this->propInferredExpN - this->propInferredInfN;
                         // infection priors
-                    k2_adj = this->propInferredExpN - this->propInferredInfN ;
-                    i_adj = this->propInferredInfN - this->knownInfsN ;
-                    N_adj = this->N - this->propInferredInfN ;//- this->knownInfsN ;
-                    /*Rcpp::Rcout << "M_adj : " << M_adj << std::endl;
+                    k2_adj = this->propInferredExpN - this->knownInfsN;
+                    i_adj = this->propInferredInfN - this->knownInfsN;
+                    N_adj = this->N - this->knownInfsN;
+                 /*   Rcpp::Rcout << "M_adj : " << M_adj << std::endl;
                     Rcpp::Rcout << "k_adj : " << k_adj << std::endl;
                     Rcpp::Rcout << "k2_adj : " << k2_adj << std::endl;
                     Rcpp::Rcout << "i_adj : " << i_adj << std::endl;*/
-                  //  x_vec << (this->N - this->propInferredExpN) / static_cast<double>(this->N),  this->propInferredExpN / static_cast<double>(this->N);
-                  x_vec << (M_adj - k_adj) / N_adj, k_adj / N_adj, i_adj / N_adj;
+                    //x_vec << (this->N - this->propInferredExpN) / static_cast<double>(this->N),  this->propInferredExpN / static_cast<double>(this->N);
+                    x_vec << (M_adj - k_adj) / N_adj, k_adj / N_adj, i_adj / N_adj;
 
 
-                //   Rcpp::Rcout << "alpha_vec1: " << alpha_vec[0] << std::endl;
-                //    Rcpp::Rcout << "alpha_vec2: " << alpha_vec[1] << std::endl;
+                    /*Rcpp::Rcout << "alpha_vec1: " << alpha_vec[0] << std::endl;
+                    Rcpp::Rcout << "alpha_vec2: " << alpha_vec[1] << std::endl;
 
-                  /*  Rcpp::Rcout << "x_vec1: " << x_vec[0] << std::endl;
+                    Rcpp::Rcout << "x_vec1: " << x_vec[0] << std::endl;
                     Rcpp::Rcout << "x_vec2: " << x_vec[1] << std::endl;
-                    Rcpp::Rcout << "x_vec2: " << x_vec[2] << std::endl;
-
-                    Rcpp::Rcout << "logFactorial(i_adj): " <<  logFactorial(i_adj) << std::endl;
-                    Rcpp::Rcout << "logFactorial(k_adj): " << logFactorial(k_adj) << std::endl;
-                    Rcpp::Rcout << "logFactorial(M_adj - k_adj): " << logFactorial(M_adj - k_adj) << std::endl;
-                    Rcpp::Rcout << "logFactorial(N_adj ): " << logFactorial(N_adj ) << std::endl;
-
+ 
                     Rcpp::Rcout << "dirichlet_pdf(x_vec, alpha_vec): " << dirichlet_pdf(x_vec, alpha_vec) << std::endl;*/
-                    //logPriorExpInf = 0;
-                   // logPriorExpInf = logFactorial(k_adj) + logFactorial(M_adj - k_adj) - logFactorial(M_adj);
-                   // log(1.0 / (N_adj + 1))  +  log(1.0 / (k2_adj + 1))
-                  //  beta_logpdf(k2_adj / N_adj, 1.1, 1.1)
-                    logPriorExpInf = beta_logpdf(k2_adj / N_adj, 1.1, 1.1) + logFactorial(k2_adj) + logFactorial(N_adj - k2_adj) - logFactorial(N_adj ) ;//+
-                      //  log(1 / (k2_adj + 1)) + logFactorial(i_adj) + logFactorial(k2_adj - i_adj) - logFactorial(k2_adj );
-               //     Rcpp::Rcout << "logPriorExpInf prob: " << logPriorExpInf << std::endl;
-
-                   //logPriorExpInf = log(1.0 / N_adj) + log(1.0 / k2_adj) + logFactorial(i_adj) + logFactorial(k_adj) + logFactorial(M_adj - k_adj) - logFactorial(N_adj ); // dirichlet_pdf(x_vec, alpha_vec) +
-                  //  Rcpp::Rcout << "logPriorExpInf: " << logPriorExpInf << std::endl;
+                   // logPriorExpInf = dirichlet_pdf(x_vec, alpha_vec) + logFactorial(k_adj) + logFactorial(M_adj - k_adj) - logFactorial(M_adj);
+                    logPriorExpInf = dirichlet_pdf(x_vec, alpha_vec) + logFactorial(i_adj) + logFactorial(k_adj) + logFactorial(M_adj - k_adj) - logFactorial(N_adj );
                 }
             }
             if (isinf(logPriorExpInf) || isnan(logPriorExpInf)) {
                 return log(0);
             }
+            /*Rcpp::Rcout << "logPrior : " << logPrior << std::endl;
+            Rcpp::Rcout << "logPrlogPriorExpInfior : " << logPriorExpInf << std::endl;
+            Rcpp::Rcout << "logLikelihood_ab : " << logLikelihood_ab << std::endl;
+            Rcpp::Rcout << "logLikelihood_time : " << logLikelihood_time << std::endl;*/
+
             return logPrior + logPriorExpInf + logLikelihood_ab + logLikelihood_time;
         }
         
@@ -442,7 +471,8 @@ namespace rjmc_full{
         StringVector exposurePeriods;
         string exposureNameInf;
 
-        std::vector<DoubleWithString> sortevents(int i_idx, const VectorXd& jump, const VectorXd& jump_inf) {
+
+         std::vector<DoubleWithString> sortevents(int i_idx, const VectorXd& jump, const VectorXd& jump_inf) {
             NumericVector times_full_i = this->times_list[i_idx];
             std::vector<DoubleWithString> df_order_exp;
             // Add all bleed times
@@ -455,12 +485,12 @@ namespace rjmc_full{
 
                 if (exposureType_i == this->exposureFitted){
                     if (jump[i_idx] > -1) {
-                        df_order_exp.emplace_back(exposureType_i, jump[i_idx]);
+                        df_order_exp.emplace_back(exposureType_i, jump[i_idx]); // "pre-delta" event
                     }
                 } else {
                     NumericVector known_inf_i = this->knownInf[exposureType_i]; 
                     if (known_inf_i[i_idx] > -1) {
-                        df_order_exp.emplace_back(exposureType_i, known_inf_i[i_idx]); 
+                        df_order_exp.emplace_back(exposureType_i, known_inf_i[i_idx]); // "delta" event
                     }
                 }
             }
@@ -683,23 +713,21 @@ namespace rjmc_full{
             if (this->onDebug) Rcpp::Rcout << "In: Check 7ii" << std::endl;
             for (int i = 0; i < this->N; i++) {
                 if ((this->knownInfsVec(i) == 0)) {
+                    Rcpp::Rcout << "initialTitreValue(i, 0): " << this->initialTitreValue(i, 0) << std::endl;
+                    Rcpp::Rcout << "endTitreValue(i, 0): " << this->endTitreValue(i, 0) << std::endl;
+
                     if (this->initialTitreValue(i, 0) - this->endTitreValue(i, 0) < 0) {
-                        if (!knownExpInd) {
-                            initialJump(i) = this->exposureFunctionSample();
-                        }
+                        initialJump(i) = this->exposureFunctionSample();
+                        Rcpp::Rcout << "initialJump(i): implied exposure/infection" << initialJump(i) << std::endl;
                         initialInf(i) = 1;
                     } else {
                         double u = uniformContinuousDist(0, 1);
                         if (u < 0.5) {
                             Rcpp::Rcout << "initialJump(i): randomly added exposure (not infection)" << initialJump << std::endl;
-                            if (!knownExpInd) {
-                                initialJump(i) = this->exposureFunctionSample();
-                            }
+                            initialJump(i) = this->exposureFunctionSample();
                             initialInf(i) = 0;
                         } else {
-                            if (!knownExpInd) {
-                                initialJump(i) = -1;
-                            }
+                            initialJump(i) = -1;
                             initialInf(i) = 0;
                         }
                     }
@@ -895,6 +923,7 @@ namespace rjmc_full{
             if (this->onDebug) Rcpp::Rcout << "Pre: updateGibbsTiming" << std::endl;
             if (this->onDebug) Rcpp::Rcout << "currInferredExpN: " << currInferredExpN << std::endl;
             if (this->onDebug) Rcpp::Rcout << "knownInfsN: " << knownInfsN << std::endl;
+
             if ((this->currInferredExpN != this->knownInfsN) & !this->knownExpInd) { 
                 updateGibbsTiming();
             }
@@ -911,6 +940,7 @@ namespace rjmc_full{
         void updateRJMC() {
             if (this->onDebug) Rcpp::Rcout << "Pre: getAcceptanceRate" << std::endl;
             getAcceptanceRate();
+        //    Rcpp::Rcout << "alpha (kin): " << this->alpha << std::endl;
 
             if (this->onDebug) Rcpp::Rcout << "Pre: updateSampleAndLogPosterior" << std::endl;
             updateSampleAndLogPosterior();
@@ -954,24 +984,10 @@ namespace rjmc_full{
             return s;
         }
 
-        int sampleExposedNotInf() {
-            if (this->onDebug) Rcpp::Rcout << "In: sampleExposed" << std::endl;
-
-            int s = uniformDiscreteDist(0, this->N - 1); 
-            while ((this->currentInf(s) == 1) || (this->currentJump(s) == -1) ) {
-                s = uniformDiscreteDist(0, this->N - 1); 
-            }
-            return s;
-        }
-
         // Sample an individual who is not exposed in current chain
         int sampleNotExposed() {
             int s = uniformDiscreteDist(0, this->N - 1); 
             while ((this->knownInfsVec(s) == 1) || (this->currentJump(s) != -1 )) {
-               /* if (this->knownInfsVec(s) == 1) {
-                    Rcpp::Rcout << "this->knownInfsVec(s): " << s << std::endl;
-                    Rcpp::Rcout << "this->currentJump(s): " << this->currentJump(s) << std::endl;
-                }*/
                 s = uniformDiscreteDist(0, this->N - 1); 
             }
             return s;
@@ -981,15 +997,14 @@ namespace rjmc_full{
         void proposeInfection(int t) {
             if (this->onDebug) Rcpp::Rcout << "In: proposeInfection" << std::endl;
 
-          //  if (this->currInferredInfN <= 1) {
-          //      this->proposalInf(t) = 1;
-         //   } else if (this->currInferredInfN >= (this->currInferredExpN - 1)) {
-              //  boost::random::bernoulli_distribution<> l(0.5); 
-              //  this->proposalInf(t) = l(rng);
-         //   } else {
+            if (this->currInferredInfN <= 1) {
+                this->proposalInf(t) = 1;
+            } else if (this->currInferredInfN >= (this->currInferredExpN - 1)) {
+                this->proposalInf(t) = 0;
+            } else {
                 boost::random::bernoulli_distribution<> l(0.5); 
                 this->proposalInf(t) = l(rng);
-         //   }
+            }
             bookKeepingSize();
         }
 
@@ -1006,7 +1021,7 @@ namespace rjmc_full{
                     // check this
                     this->proposalJump(t) = this->exposureFunctionSample(); // this->exposureFunctionSample(); //runif(1, 1, 150) + 121 //
                 }
-               // proposeInfection(t);
+                proposeInfection(t);
             // An exisiting sample time is updated 95% of the time for an individual.
             } else {
                 double temp = this->currentJump(t) + normalDistSample(0, exp(this->adaptiveGibbsSD(t)));
@@ -1021,10 +1036,11 @@ namespace rjmc_full{
         }
 
         // 'birth' process of rjmcmc regime. Samples a new exposure from list unexposed individuals.
-        void sampleNewTime(int t, int prop) {
+        void sampleNewTime(int t) {
             if (this->onDebug) Rcpp::Rcout << "In: sampleNewTime" << std::endl;
 
             double r = uniformContinuousDist(0, 1);
+
 
             if ((this->historicJump(t) < 0) | (r < 0.05)) { 
                 // New exposure time is resampled from scratch, only do if first time individual exposed in mcmc chain or 5% of time thereafter.
@@ -1033,22 +1049,10 @@ namespace rjmc_full{
                         this->proposalJump(t) = this->exposureFunctionSample(); 
                     }
                     bookKeepingSize();
-                    this->proposalInf(t) = prop;
-                 //   proposeInfection(t);
+                    proposeInfection(t);
             } else { 
                 // New exposure time is taken from previous exposure time in mcmc chain (95% of the time)
                     this->proposalJump(t) = this->historicJump(t);
-                    this->proposalInf(t) = prop;
-                    bookKeepingSize();
-
-                   //  if (r < 0.5) {
-                       //  boost::random::beta_distribution<> b(1, 1); 
-                      //  double p = b(rng);
-                     //   double p0 = binomialCoefficient(this->propInferredExpN, this->currInferredInfN);
-                      //  double p1 = binomialCoefficient(this->propInferredExpN, this->currInferredInfN + 1);
-                      //  boost::random::bernoulli_distribution<> l(0.5); 
-                       // this->proposalInf(t) = l(rng);
-                   // }
                     bookKeepingSize();
             }
             bookKeepingSize();
@@ -1110,17 +1114,13 @@ namespace rjmc_full{
 
             if (this->knownExpInd) {
                 q_prob << 0, 1, 1;
-              //q_prob << 0, 1, 1, 1;
             } else {
-                if (this->currInferredExpN == this->currInferredInfN ) {
+                if (this->currInferredExpN == this->knownInfsN + 1) {
                     q_prob << 0, 0.67, 1.0;
-                    //q_prob << 0.0, 0.5, 0.75, 1.00;
-                } else if (this->currInferredExpN == (this->N ) ) {
-                    //q_prob << 0.25, 1.0, 1.0, 1.0;
+                } else if (this->currInferredExpN == this->N ) {
                     q_prob << 0.33, 1.0, 0;
                 } else {
                     q_prob << 0.33, 0.67, 1.0;
-                   // q_prob << 0.25, 0.5, 0.75, 1.0;
                 }
             }
 
@@ -1128,7 +1128,7 @@ namespace rjmc_full{
             if (this->onDebug) Rcpp::Rcout << "Find jumping" << std::endl;
             if (q < q_prob(0)) {
              //   Rcpp::Rcout << "In deletion" << std::endl;
-                this->currJumpIdx = this->sampleExposedNotInf(); // length is n_ - 114
+                this->currJumpIdx = this->sampleExposed(); // length is n_ - 114
                 this->historicJump(this->currJumpIdx) = this->currentJump(this->currJumpIdx);
                 this->proposalJump(this->currJumpIdx) = -1; // length now n_ - 144 - 1
                 this->currJumpType = 0;
@@ -1137,28 +1137,18 @@ namespace rjmc_full{
             // Stay same
             } else if (q < q_prob(1)) {
                // Rcpp::Rcout << "In stay same" << std::endl;
-               // this->propInferredExpN = this->currInferredExpN;
+                this->propInferredExpN = this->currInferredExpN;
                 if(this->currInferredExpN != this->knownInfsN) {
-                   // this->currJumpIdx = uniformDiscreteDist(0, this->N - 1);
-                   // this->currJumpIdx = this->sampleExposed(); // length is n_ - 114
+                    this->currJumpIdx = this->sampleExposed(); // length is n_ - 114
                     // RESAMPLE INFECTION
-                   // this->proposeInfection(this->currJumpIdx); // always rejecting
+                    proposeInfection(this->currJumpIdx);
                 }
                 this->currJumpType = 1;
             // Add an infection same
             } else if (q < q_prob(2)) {
               //  Rcpp::Rcout << "In addition same" << std::endl;
                 this->currJumpIdx = this->sampleNotExposed(); // length is 220 - n_
-                sampleNewTime(this->currJumpIdx, 0);
-                //proposalInf(this->currJumpIdx) = 0;
-                this->currJumpType = 2;
-                //this->propInferredExpN = this->currInferredExpN + 1;
-            }
-            else if (q < q_prob(3)) {
-              //  Rcpp::Rcout << "In addition same" << std::endl;
-                this->currJumpIdx = this->sampleNotExposed(); // length is 220 - n_
-                sampleNewTime(this->currJumpIdx, 1);
-               // proposalInf(this->currJumpIdx) = 0;
+                sampleNewTime(this->currJumpIdx);
                 this->currJumpType = 2;
                 //this->propInferredExpN = this->currInferredExpN + 1;
             }
@@ -1168,15 +1158,13 @@ namespace rjmc_full{
         void updateGibbsTiming() {
             if (this->onDebug) Rcpp::Rcout << "In: updateGibbsTiming" << std::endl;
 
-                this->currJumpType = 1;
+            this->currJumpType = 1;
          
                 this->proposalJump = this->currentJump;
 
                 for (int i = 0; i < this->noGibbsSteps; i++) { 
                     this->gibbsIdx = this->sampleExposed(); // stuck here
                     resampleTime(this->gibbsIdx);
-                    this->gibbsIdx = this->sampleExposed(); // stuck here
-                    proposeInfection(this->gibbsIdx);
                 }
                 //resample_inf()
 
@@ -1251,13 +1239,12 @@ namespace rjmc_full{
                         NumericVector pars = this->proposalParsCOP[bio];
                         rjadjustmentFactor2 += as<double>(evalLoglikelhoodCOP_i(this->currentInf(this->currJumpIdx), this->currentTitreExp(this->currJumpIdx, b), pars) ); 
                     }
-                    double N_adj = this->N - this->currInferredInfN;
-                    double curr_adj = this->currInferredExpN - this->currInferredInfN;
+                    double N_adj = this->N - this->knownInfsN;
+                    double curr_adj = this->currInferredExpN - this->knownInfsN;
 
-
-                    rjadjustmentFactor = log(curr_adj) - log((N_adj - curr_adj + 1) ) +
-                        this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)) + log(0.5); 
-                      //  rjadjustmentFactor2;
+                    rjadjustmentFactor = log(curr_adj) - log((N_adj - curr_adj + 1) ) + 
+                        this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)) +
+                        rjadjustmentFactor2;
                 } else if (this->currJumpType == 1) {
                     rjadjustmentFactor = 0;
                 } else if (this->currJumpType == 2) {
@@ -1268,12 +1255,12 @@ namespace rjmc_full{
                         NumericVector pars = this->currentParsCOP[bio];
                         rjadjustmentFactor2 += as<double>(evalLoglikelhoodCOP_i(this->proposalInf(this->currJumpIdx), this->proposalTitreExp(this->currJumpIdx, b), pars) ); 
                     }
-                    double N_adj = this->N - this->currInferredInfN;
-                    double curr_adj = this->currInferredExpN - this->currInferredInfN;// - this->knownInfsN;
+                    double N_adj = this->N - this->knownInfsN;
+                    double curr_adj = this->currInferredExpN - this->knownInfsN;// - this->knownInfsN;
 
-                    rjadjustmentFactor = log(this->N - curr_adj) - log(curr_adj + 1) - 
-                        this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx)) - log(0.5);// - 
-                       // rjadjustmentFactor2; 
+                    rjadjustmentFactor = log((this->N - curr_adj)) - log(curr_adj + 1) - 
+                        this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx)) - 
+                        rjadjustmentFactor2; 
                 }
                 this->alpha = min(1.0, exp((this->proposedLogPosterior - this->currentLogPosterior + rjadjustmentFactor)));
             }
@@ -1285,7 +1272,7 @@ namespace rjmc_full{
             this->diff_ind.clear();
             int count = 0;
             for (int i = 0; i < this->N; i++) {
-                if ((this->currentInf(i) != this->proposalInf(i)) || (this->currentJump(i) != this->proposalJump(i))) {
+                if (this->currentInf(i) != this->proposalInf(i) || this->currentJump(i) != this->proposalJump(i)) {
                     this->diff_ind.push_back(i);
                 }
             }
@@ -1311,17 +1298,12 @@ namespace rjmc_full{
                 this->currentLogPosterior = this->proposedLogPosterior;
                 this->currInferredExpN = this->propInferredExpN;
                 this->currInferredInfN = this->propInferredInfN;
-
-                this->currentParsCOP = this->proposalParsCOP;
-
             } else {
                 this->proposalSample = this->currentSample;
                 this->proposalJump = this->currentJump;
                 this->proposalInf = this->currentInf;
-
                 this->proposalTitreExp = this->currentTitreExp;
                 this->proposalObsTitre = this->currentObsTitre;
-
                 this->proposalEventsFull = this->currentEventsFull;
                 this->proposalTitreFull = this->currentTitreFull;
 
@@ -1339,29 +1321,23 @@ namespace rjmc_full{
                 this->currentSample = this->proposalSample;
                 this->currentJump = this->proposalJump;
                 this->currentInf = this->proposalInf;
-
                 this->currentTitreExp = this->proposalTitreExp;
                 this->currentObsTitre = this->proposalObsTitre;
-
                 this->currentEventsFull = this->proposalEventsFull;
                 this->currentTitreFull = this->proposalTitreFull;
 
                 this->currentLogPosterior = this->proposedLogPosterior;
                 this->currInferredExpN = this->propInferredExpN;
                 this->currInferredInfN = this->propInferredInfN;
-
                 this->currentParsCOP = this->proposalParsCOP;
             } else {
                 this->proposalSample = this->currentSample;
                 this->proposalJump = this->currentJump;
                 this->proposalInf = this->currentInf;
-
                 this->proposalTitreExp = this->currentTitreExp;
                 this->proposalObsTitre = this->currentObsTitre;
-
                 this->proposalEventsFull = this->currentEventsFull;
                 this->proposalTitreFull = this->currentTitreFull;
-
                 this->proposalParsCOP = this->currentParsCOP;
 
                 this->proposedLogPosterior = this->currentLogPosterior;
@@ -1496,7 +1472,7 @@ namespace rjmc_full{
         {
             int i = this->workingIteration;
             if(i%this->consoleUpdates == 0) {
-                Rcpp::Rcout << "Running MCMC-PT iteration number: " << this->workingIteration << " of " <<  this->iterations << ". Chain number " << this->chainNumber << ". Current logpost: " << this->currentLogPosterior << ". No exp/inf: " <<  this->currInferredExpN << "/" << this->currInferredInfN << ". \n";
+                Rcpp::Rcout << "Running MCMC-PT iteration number: " << this->workingIteration << " of " <<  this->iterations << ". Chain number " << this->chainNumber << ". Current logpost: " << this->currentLogPosterior << ". No exp/inf: " <<  this->currInferredExpN << "/" << this->currInferredInfN << " .          \r";
                 if (this->onDebug) {
                     Rcpp::Rcout << "\n Current values: " << this->currentSample << std::endl;
                 }
@@ -1557,6 +1533,10 @@ namespace rjmc_full{
                     List titre_list_i = this->titre_list[i_idx];
                     std::vector<std::vector<DoubleWithString> > proposalTitreFull_i = this->proposalTitreFull[i_idx];
                     for (int bio = 0; bio < this->B; bio++) {
+                        string biomarker_b = biomarkers[bio];
+
+                        Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[biomarker_b];
+                        NumericVector pars = this->proposalParsCOP[biomarker_b];
 
                         std::vector<DoubleWithString> proposalTitreFull_i_b = proposalTitreFull_i[bio];
 
@@ -1570,9 +1550,6 @@ namespace rjmc_full{
                         }
                         titreExp(i_idx, bio) = titre_est;
 
-                        string biomarker_b = biomarkers[bio];
-                        Function evalLoglikelhoodCOP_i = this->evalLoglikelhoodCOP[biomarker_b];
-                        NumericVector pars = this->proposalParsCOP[biomarker_b];
                         ll += as<double>(evalLoglikelhoodCOP_i(jumpinf[i_idx], titreExp(i_idx, bio), pars ) );
                     }
                 }

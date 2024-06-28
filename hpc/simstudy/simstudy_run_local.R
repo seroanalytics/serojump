@@ -25,7 +25,7 @@ settings <-  list(
     covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
     covarMaxVal = 1, # decrease if struggling toc sample in the middle
     runParallel = TRUE,
-    noGibbsSteps = 1,
+    noGibbsSteps = 5,
     onDebug = FALSE
 )
 

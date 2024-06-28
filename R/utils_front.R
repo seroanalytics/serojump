@@ -120,7 +120,6 @@ generate_data_alt <- function(data_titre_model, biomarkers, known_exp = NULL) {
     titre_true <-  data_titre_model %>% select(all_of(biomarkers)) %>% as.matrix
     times_full <- data_titre_model$time
     id_full <- data_titre_model$id
-    pid_full <- data_titre_model$pid
 
     initialTitreTime <- data_titre_model %>% group_by(id) %>% filter(time == min(time)) %>% unique %>% .[["time"]]
     endTitreTime <- data_titre_model %>% group_by(id) %>% filter(time == max(time)) %>% unique %>% .[["time"]]
@@ -149,7 +148,7 @@ generate_data_alt <- function(data_titre_model, biomarkers, known_exp = NULL) {
     } else {
         knownExpVec <- NA
     }
-
+    cat(endTitreValue)
     data_t <- list(
         N = N,
         T = T,
@@ -162,7 +161,6 @@ generate_data_alt <- function(data_titre_model, biomarkers, known_exp = NULL) {
         times_full = times_full,
         titre_list = titre_list,
         times_list = times_list,
-        pid_full = id_full,
         id_full = id_full,
         knownExpVec = knownExpVec
     )
@@ -381,7 +379,7 @@ rdunif <- function(n, lower_bound, upper_bound) {
 #                             "#44AA99", "#999933", "#882255", "#661100", "#6699CC", "#888888")
 #scales::show_col(safe_colorblind_palette)
 
-clean_simulated_rjmcmc <- function(modelname_sim, obs_er) {
+clean_simulated_rjmcmc <- function(modelname_sim, obs_er, prob_known, known_exp) {
     modeli <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
     res <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", obs_er, ".rds")))
     data_titre_model <- res$observed_biomarker_states %>% select(i, t, value) %>% rename(id = i, time = t, titre = value) 

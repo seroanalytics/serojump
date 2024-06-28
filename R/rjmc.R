@@ -1,4 +1,4 @@
-#' @useDynLib serojump
+#' @useDynLib rjmc
 #' @importFrom Rcpp sourceCpp
 #' @import coda
 #' @import parallel
@@ -6,7 +6,6 @@
 #' @import dplyr
 #' @import foreach
 #' @import doParallel
-#' @import bayesplot
 #' @importFrom magrittr %>% %<>%
 NULL
 

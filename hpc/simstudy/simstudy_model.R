@@ -25,14 +25,14 @@ obsLogLikelihood = function(titre_val, titre_est, pars) {
 copFuncForm <- function(inf_status, esttitreExp, params) {
     beta0 <- params[1]
     beta1 <- params[2]
-    p <- 1.0 / (1.0 + exp(- (beta0 + (-beta0 / 4 - beta1) * esttitreExp) ) )
+    p <- 1.0 / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
 }
 
 copLogLikelihood <- function(inf_status, esttitreExp, pars) {
     # COP parameters
     beta0 <- pars[1]
     beta1 <- pars[2]
-    p <- 1.0 / (1.0 + exp(- (beta0 + (-beta0 / 4 - beta1) * esttitreExp) ) )
+    p <- 1.0 / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
     ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
     ll
 }
@@ -84,8 +84,8 @@ copModel <- list(
         names = c("IgG"),
         model = makeModel(addCopModel("IgG", "delta", c("beta0", "beta1"), copFuncForm, copLogLikelihood)),
         prior = bind_rows(
-            add_par_df("beta0", 0, 10, "unif", 0, 10), # cop model (not used here)
-            add_par_df("beta1", 0, 5, "unif", 0, 5)
+            add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("beta1", -10, 10, "unif", -10, 10)
         ) # cop model (not used here),
 )
 

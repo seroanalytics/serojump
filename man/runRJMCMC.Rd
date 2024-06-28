@@ -2,12 +2,9 @@
 % Please edit documentation in R/utils_model.R
 \name{runRJMCMC}
 \alias{runRJMCMC}
-\alias{runInfRJMCMC}
 \title{run the RJMCMC algorithm}
 \usage{
 runRJMCMC(seroModel, settings, filename, modelname)
-
-runInfRJMCMC(seroModel, settings, filename, modelname, priorPred = TRUE)
 }
 \arguments{
 \item{seroModel}{The seroModel previously defined.}
@@ -20,11 +17,7 @@ runInfRJMCMC(seroModel, settings, filename, modelname, priorPred = TRUE)
 }
 \value{
 A list with the posterior samples, the model and the data.
-
-A list with the posterior samples, the model and the data.
 }
 \description{
-This function runs the RJMCMC algorithm given a defined seroModel, settings and filepaths for output
-
 This function runs the RJMCMC algorithm given a defined seroModel, settings and filepaths for output
 }

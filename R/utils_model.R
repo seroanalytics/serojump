@@ -90,45 +90,6 @@ console_update <- function(data_t, modelSeroJump) {
     cat("The fitted exposure type is ", modelSeroJump$abkineticsModel$model$exposureNameInf)
 }
 
-prior_predictive_ab <- function(seroModel) {
-    abModels <- seroModel$model$abkineticsModel 
-    M <- length(abModels)
-    seroModel$model$samplePriorDistributions() 
-
-    full_pp_ab <- map_df(
-        1:4,
-        function(i) {
-            abModel <- abModels[[i]]
-            pars <- abModel$pars
-            funcForm <- abModel$funcForm
-            id <- abModel$id
-
-            map_df(1:1000,
-                function(j) {
-                    samples <- as.numeric(seroModel$model$samplePriorDistributions()[pars] )
-                    prior_samples <- map_dbl(1:250, ~funcForm(0, .x, samples) )
-                    data.frame(
-                        t = 1:250,
-                        titre = prior_samples,
-                        sample = j,
-                        name = id
-                    )
-                }
-            )
-        }
-    )
-    full_pp_ab_sum <- full_pp_ab %>% group_by(t, name) %>% mean_qi(titre)
-
-    full_pp_ab_sum %>%
-        ggplot() + 
-            geom_ribbon(aes(x = t, ymin = .lower, ymax = .upper), alpha = 0.3) + 
-            geom_line(aes(x = t, titre), size = 3) + 
-            facet_wrap(vars(name)) + 
-            theme_minimal()
-}
-
-
-
 check_inputs <- function(data_sero, data_known, modeldefinition) {
     # CHECK inputs of modeldefinition are present
     if(is.null(modeldefinition$biomarkers)) {
@@ -146,9 +107,9 @@ check_inputs <- function(data_sero, data_known, modeldefinition) {
     if(is.null(modeldefinition$abkineticsModel)) {
         stop("Please define the `abkineticsModel` structure in `modeldefinition`")
     }
-   # if(is.null(modeldefinition$copModel)) {
-  #      stop("Please define the `copModel` structure in `modeldefinition`")
-  #  }
+    if(is.null(modeldefinition$copModel)) {
+        stop("Please define the `copModel` structure in `modeldefinition`")
+    }
     if(is.null(modeldefinition$exposurePrior)) {
         stop("Please define the `exposurePrior` data in `modeldefinition`")
     } 
@@ -249,7 +210,7 @@ check_priors <- function(modeldefinition) {
 #' @export
 createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_exp = NULL) {
     cat("OUTLINE OF INPUTTED MODEL\n")
-   # check_inputs(data_sero, data_known, modeldefinition)
+    check_inputs(data_sero, data_known, modeldefinition)
     check_priors(modeldefinition)
 
     #data_sero <- gambia_pvnt_w2
@@ -269,7 +230,6 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
     modelSeroJump$upperParSupport_fitted <- priors$ub
     modelSeroJump$namesOfParameters <- priors$par_name
 
-    # Add in custom functions
     modelSeroJump$samplePriorDistributions <- function(datalist) {
         get_sample_non_centered(priors)
     }
@@ -277,13 +237,6 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
     modelSeroJump$evaluateLogPrior <- function(params, jump, datalist) {
         cal_lprior_non_centered(priors, params)
     }
-
-    modelSeroJump$initialiseJump <- function(datalist) {
-    }
-
-    modelSeroJump$evaluateLogPriorInfExp <- modeldefinition$expInfPrior
-
-
 
     # 2. Define the models for the likelihoods
     modelSeroJump$observationalModel <- modeldefinition$observationalModel$model
@@ -294,15 +247,15 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
 
     data_t <- generate_data_alt(data_sero, modeldefinition$biomarkers, known_exp)
     data_t$par_names <- priors[, 1]
-    data_t$priorPredFlag <- FALSE
 
     # Add known infections to the model
     modelSeroJump$infoModel$biomarkers <- modeldefinition$biomarkers
     modelSeroJump$infoModel$exposureFitted <- modeldefinition$exposureFitted
 
-    modelSeroJump$exposureTypes <- modeldefinition$exposureTypes
+    id_exp <- modeldefinition$exposureTypes
 
     modelSeroJump$infoModel$exposureInfo <- list()
+    cat("lol1")
 
     know_inf <- list()
     for (i in 1:length(modeldefinition$exposureTypes)) {
@@ -332,7 +285,9 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
     }
 
     modelSeroJump <- addExposurePrior(modelSeroJump, data_t, modeldefinition$exposurePrior, type = modeldefinition$exposurePriorType)
-
+    cat("lol2")
+    modelSeroJump$initialiseJump <- function(datalist) {
+    }
     
     # Add help with exposure prior
 
@@ -359,65 +314,13 @@ runRJMCMC <- function(seroModel, settings, filename, modelname) {
     settings$lowerParBounds <- seroModel$model$lowerParSupport_fitted
     settings$upperParBounds <- seroModel$model$upperParSupport_fitted
     settings$lengthJumpVec <- seroModel$data$N
-    
+
     post <- rjmc_full_func(model = seroModel$model, data = seroModel$data, settings = settings)
     fitfull <- list(post = post,  model = seroModel$model, data_t = seroModel$data)
 
     dir.create(here::here("outputs", "fits", filename, modelname, "figs"), recursive = TRUE, showWarnings = FALSE)
     saveRDS(fitfull, here::here("outputs", "fits", filename, modelname, paste0("fit_", modelname, ".RDS")))
 }
-
-#' @title run the RJMCMC algorithm
-#' @name runRJMCMC
-#' @description This function runs the RJMCMC algorithm given a defined seroModel, settings and filepaths for output
-#' @param seroModel The seroModel previously defined.
-#' @param settings Settings used for the calibration
-#' @param filename Filepath of where the outputs are saved (outputs/fits/filename)
-#' @param modelname Name of the model outputs (in outputs/fits/filename)
-#' @return A list with the posterior samples, the model and the data.
-#' @export
-runInfRJMCMC <- function(seroModel, settings, filename, modelname, priorPred = TRUE) {
-
-    settings <- settings
-    settings$numberFittedPar <- seroModel$model$namesOfParameters %>% length
-    settings$lowerParBounds <- seroModel$model$lowerParSupport_fitted
-    settings$upperParBounds <- seroModel$model$upperParSupport_fitted
-    settings$lengthJumpVec <- seroModel$data$N
-
-    dir.create(here::here("outputs", "fits", filename, "figs", modelname), recursive = TRUE, showWarnings = FALSE)
-
-    if (!priorPred) {
-        out_pp <- rjmc_sero_func(model = seroModel$model, data = seroModel$data, settings = settings)
-        fitfull <- list(post = out_pp,  model = seroModel$model, data_t = seroModel$data)
-        saveRDS(fitfull, here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
-    } else {
-        seroModel_pp <- seroModel
-        seroModel_pp$data$priorPredFlag <- TRUE
-
-        if(settings$runParallel) {
-            out_pp_full <- mclapply(list(seroModel_pp, seroModel), 
-            function(i) { 
-                rjmc_sero_func(model = i$model, data = i$data, settings = settings)
-            },
-            mc.cores = 8
-            )
-        } else {
-            out_pp_full <- lapply(list(seroModel_pp, seroModel), 
-            function(i) { 
-                rjmc_sero_func(model = i$model, data = i$data, settings = settings)
-            }
-            )
-        }
-
-        fitfull_pp <- list(post = out_pp_full[[1]],  model = seroModel_pp$model, data_t = seroModel_pp$data)
-        fitfull <- list(post = out_pp_full[[2]],  model = seroModel$model, data_t = seroModel$data)
-
-        dir.create(here::here("outputs", "fits", filename, "figs", modelname), recursive = TRUE, showWarnings = FALSE)
-        saveRDS(fitfull_pp, here::here("outputs", "fits", filename, paste0("fit_prior_", modelname, ".RDS")))
-        saveRDS(fitfull, here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
-    }
-}
-
 
 
 #' @title Define the Log Likelihood function for the observational model
