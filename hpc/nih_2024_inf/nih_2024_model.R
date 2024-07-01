@@ -40,18 +40,18 @@ infSerumKinetics <- function(titre_est, timeSince, pars) {
 ########################################################################
 
 data_exp <- get_data_titre_nih_2023_h1()
-data_titre <- data_exp[[1]] #%>% check_titre
+data_titre_h1 <- data_exp[[1]] #%>% check_titre
 known_exposure <- data_exp[[2]] %>% unique # must be unique
 exp_prior <- data_exp[[3]]
 
 
 # Define the biomarkers and exposure types in the model
-biomarkers <- c("A/Sydney/5/2021", "A/Sydney/5/2021e")
-exposureTypes <- c("vax", "h1_2023")
-exposureFitted <- c("h1_2023")
+biomarkers_h1 <- c("A/Sydney/5/2021", "A/Sydney/5/2021e")
+exposureTypes_h1 <- c("vax", "h1_2023")
+exposureFitted_h1 <- c("h1_2023")
 
 # Define the observational model
-observationalModel <- list(
+observationalModel_h1 <- list(
     model = makeModel(
         addObservationalModel("A/Sydney/5/2021", c("sigma"), obsLogLikelihood),
         addObservationalModel("A/Sydney/5/2021e", c("sigma_e"), obsLogLikelihood)
@@ -63,7 +63,7 @@ observationalModel <- list(
 )
 
 # Define the antibody kinetics model
-abkineticsModel <- list(
+abkineticsModel_h1 <- list(
     model = makeModel(
             addAbkineticsModel("vax", "A/Sydney/5/2021", "vax", c("a_vax", "b_vax", "c_vax"), infSerumKinetics),
             addAbkineticsModel("h1_2023","A/Sydney/5/2021", "h1_2023", c("a_v", "b_v", "c_v"), infSerumKinetics),
@@ -109,11 +109,11 @@ inf_prior_3 <- function(N, E, I, K) {
 
 
 modeldefinition_h1_p1 <- list(
-    biomarkers = biomarkers,
-    exposureTypes = exposureTypes,
-    exposureFitted = exposureFitted,
-    observationalModel = observationalModel,
-    abkineticsModel = abkineticsModel,
+    biomarkers = biomarkers_h1,
+    exposureTypes = exposureTypes_h1,
+    exposureFitted = exposureFitted_h1,
+    observationalModel = observationalModel_h1,
+    abkineticsModel = abkineticsModel_h1,
     expInfPrior = inf_prior_1,
     exposurePrior = exp_prior,
     exposurePriorType = "empirical"
@@ -126,9 +126,9 @@ modeldefinition_h1_p3 <- modeldefinition_h1_p1
 modeldefinition_h1_p3$expInfPrior <- inf_prior_3
 
 
-seroModel_nih_h1_p1 <- createSeroJumpModel(data_titre, known_exposure, modeldefinition_h1_p1)
-seroModel_nih_h1_p2 <- createSeroJumpModel(data_titre, known_exposure, modeldefinition_h1_p2)
-seroModel_nih_h1_p3 <- createSeroJumpModel(data_titre, known_exposure, modeldefinition_h1_p3)
+seroModel_nih_h1_p1 <- createSeroJumpModel(data_titre_h1, known_exposure, modeldefinition_h1_p1)
+seroModel_nih_h1_p2 <- createSeroJumpModel(data_titre_h1, known_exposure, modeldefinition_h1_p2)
+seroModel_nih_h1_p3 <- createSeroJumpModel(data_titre_h1, known_exposure, modeldefinition_h1_p3)
 
 
 
@@ -183,11 +183,11 @@ abkineticsModel_h3 <- list(
 )
 
 modeldefinition_h3_p1 <- list(
-    biomarkers = biomarkers,
-    exposureTypes = exposureTypes,
-    exposureFitted = exposureFitted,
-    observationalModel = observationalModel,
-    abkineticsModel = abkineticsModel,
+    biomarkers = biomarkers_h3,
+    exposureTypes = exposureTypes_h3,
+    exposureFitted = exposureFitted_h3,
+    observationalModel = observationalModel_h3,
+    abkineticsModel = abkineticsModel_h3,
     expInfPrior = inf_prior_1,
     exposurePrior = exp_prior,
     exposurePriorType = "empirical"
@@ -200,9 +200,9 @@ modeldefinition_h3_p3 <- modeldefinition_h3_p1
 modeldefinition_h3_p3$expInfPrior <- inf_prior_3
 
 
-seroModel_nih_h3_p1 <- createSeroJumpModel(data_titre, known_exposure, modeldefinition_h3_p1)
-seroModel_nih_h3_p2 <- createSeroJumpModel(data_titre, known_exposure, modeldefinition_h3_p2)
-seroModel_nih_h3_p3 <- createSeroJumpModel(data_titre, known_exposure, modeldefinition_h3_p3)
+seroModel_nih_h3_p1 <- createSeroJumpModel(data_titre_h3, known_exposure, modeldefinition_h3_p1)
+seroModel_nih_h3_p2 <- createSeroJumpModel(data_titre_h3, known_exposure, modeldefinition_h3_p2)
+seroModel_nih_h3_p3 <- createSeroJumpModel(data_titre_h3, known_exposure, modeldefinition_h3_p3)
 
 
 ##########################################

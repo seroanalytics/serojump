@@ -13,6 +13,11 @@ postprocess_runInf <- function(fitfull, filename, modelname, n_chains, priorPred
 
     library(ggdist)
 
+    filename <- "hpc/nih_2024_inf/p3"
+    modelname <- "h3"
+    n_chain <- 4
+    fitfull <- fitfull_h3 
+
     post <- fitfull$post
     data_t <- fitfull$data_t
     model <- fitfull$model
@@ -27,7 +32,6 @@ postprocess_runInf <- function(fitfull, filename, modelname, n_chains, priorPred
     n_post <- post$mcmc[[1]] %>% nrow
     post_exp_combine <- post$jump 
     post_inf_combine <- post$inf 
-
 
     post_infexp <- 1:n_chains %>% map_df(
         function(i) {
@@ -46,6 +50,7 @@ postprocess_runInf <- function(fitfull, filename, modelname, n_chains, priorPred
     )
 
       # Get titre value at exposure
+
     post_titreexp <- 1:n_chains %>% map_df(
         function(i) {
             1:n_post %>% map_df( 
@@ -366,8 +371,6 @@ plot_cop_recInf <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
   
     cop_exp_sum_plot_all <- map_df(1:length(model_outline$observationalModel), 
         function(i) {
-        pars_extract <- model_outline$copModel[[i]]$pars
-        functionalForm <- model_outline$copModel[[i]]$funcForm
         biomarker <- model_outline$observationalModel[[i]]$biomarker
 
         titre_cop_sum <- fit_states %>% filter(!!sym(biomarker) != -1) %>%
@@ -507,9 +510,9 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
    #filename <-  "local/nih_2024_inf/test"
   # modelname <- "h3"
   # n_chains <- 4
-    filename <- "local/nih_2024_inf/prior2"
-    modelname <- "h3"
-    n_chain <- 4
+   # filename <- "local/nih_2024_inf/prior2"
+   # modelname <- "h3"
+   # n_chain <- 4
 
     dir.create(here::here("outputs", "fits", filename,  "figs", modelname), recursive = TRUE, showWarnings = FALSE)
     fitfull_pp <- readRDS(here::here("outputs", "fits", filename, paste0("fit_prior_", modelname, ".RDS")))

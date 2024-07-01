@@ -162,7 +162,7 @@ generate_data_alt <- function(data_titre_model, biomarkers, known_exp = NULL) {
         times_full = times_full,
         titre_list = titre_list,
         times_list = times_list,
-        pid_full = id_full,
+        pid_full = pid_full,
         id_full = id_full,
         knownExpVec = knownExpVec
     )

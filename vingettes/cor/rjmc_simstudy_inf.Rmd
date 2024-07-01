@@ -8,7 +8,9 @@ Fitting to the simulated data
 
 #install.packages("devtools")
 #library(devtools)
-devtools::load_all()
+devtools::install()
+devtools::install()
+
 library(lubridate)
 library(patchwork)
 library(tidybayes)
