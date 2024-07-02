@@ -13,10 +13,10 @@ postprocess_runInf <- function(fitfull, filename, modelname, n_chains, priorPred
 
     library(ggdist)
 
-    filename <- "hpc/nih_2024_inf/p3"
-    modelname <- "h3"
-    n_chain <- 4
-    fitfull <- fitfull_h3 
+    #filename <- "hpc/nih_2024_inf/p3"
+    #modelname <- "h3"
+    #n_chain <- 4
+    #fitfull <- fitfull_h3 
 
     post <- fitfull$post
     data_t <- fitfull$data_t

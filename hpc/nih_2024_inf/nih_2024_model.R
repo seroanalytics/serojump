@@ -41,7 +41,7 @@ infSerumKinetics <- function(titre_est, timeSince, pars) {
 
 data_exp <- get_data_titre_nih_2023_h1()
 data_titre_h1 <- data_exp[[1]] #%>% check_titre
-known_exposure <- data_exp[[2]] %>% unique # must be unique
+known_exposure_h1 <- data_exp[[2]] %>% unique # must be unique
 exp_prior <- data_exp[[3]]
 
 
@@ -126,9 +126,9 @@ modeldefinition_h1_p3 <- modeldefinition_h1_p1
 modeldefinition_h1_p3$expInfPrior <- inf_prior_3
 
 
-seroModel_nih_h1_p1 <- createSeroJumpModel(data_titre_h1, known_exposure, modeldefinition_h1_p1)
-seroModel_nih_h1_p2 <- createSeroJumpModel(data_titre_h1, known_exposure, modeldefinition_h1_p2)
-seroModel_nih_h1_p3 <- createSeroJumpModel(data_titre_h1, known_exposure, modeldefinition_h1_p3)
+seroModel_nih_h1_p1 <- createSeroJumpModel(data_titre_h1, known_exposure_h1, modeldefinition_h1_p1)
+seroModel_nih_h1_p2 <- createSeroJumpModel(data_titre_h1, known_exposure_h1, modeldefinition_h1_p2)
+seroModel_nih_h1_p3 <- createSeroJumpModel(data_titre_h1, known_exposure_h1, modeldefinition_h1_p3)
 
 
 
@@ -200,9 +200,9 @@ modeldefinition_h3_p3 <- modeldefinition_h3_p1
 modeldefinition_h3_p3$expInfPrior <- inf_prior_3
 
 
-seroModel_nih_h3_p1 <- createSeroJumpModel(data_titre_h3, known_exposure, modeldefinition_h3_p1)
-seroModel_nih_h3_p2 <- createSeroJumpModel(data_titre_h3, known_exposure, modeldefinition_h3_p2)
-seroModel_nih_h3_p3 <- createSeroJumpModel(data_titre_h3, known_exposure, modeldefinition_h3_p3)
+seroModel_nih_h3_p1 <- createSeroJumpModel(data_titre_h3, known_exposure_h3, modeldefinition_h3_p1)
+seroModel_nih_h3_p2 <- createSeroJumpModel(data_titre_h3, known_exposure_h3, modeldefinition_h3_p2)
+seroModel_nih_h3_p3 <- createSeroJumpModel(data_titre_h3, known_exposure_h3, modeldefinition_h3_p3)
 
 
 ##########################################
