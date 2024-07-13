@@ -18,6 +18,8 @@ postprocess_runInf <- function(fitfull, filename, modelname, n_chains, priorPred
     #n_chain <- 4
     #fitfull <- fitfull_h3 
 
+   # fitfull$post$jump[[1]][,781 ]
+
     post <- fitfull$post
     data_t <- fitfull$data_t
     model <- fitfull$model
@@ -48,6 +50,8 @@ postprocess_runInf <- function(fitfull, filename, modelname, n_chains, priorPred
             )
         }
     )
+    outputfull$fit_states %>% filter(id == 111)
+
 
       # Get titre value at exposure
 
@@ -510,9 +514,9 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
    #filename <-  "local/nih_2024_inf/test"
   # modelname <- "h3"
   # n_chains <- 4
-   # filename <- "local/nih_2024_inf/prior2"
-   # modelname <- "h3"
-   # n_chain <- 4
+    filename <- "hpc/nih_2024_inf/p3"
+    modelname <- "h3"
+    n_chains <- 4
 
     dir.create(here::here("outputs", "fits", filename,  "figs", modelname), recursive = TRUE, showWarnings = FALSE)
     fitfull_pp <- readRDS(here::here("outputs", "fits", filename, paste0("fit_prior_", modelname, ".RDS")))
@@ -585,6 +589,7 @@ plot_abkinetics_trajectoriesInf <- function(outputfull, fitfull, fig_folder) {
     model_outline <- fitfull$model
     post_fit <- post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
 
+    post$jump
     ###
     posteriorsAllExposure <- map_df(1:length(model_outline$abkineticsModel),
         function(name1) {
@@ -635,5 +640,294 @@ plot_abkinetics_trajectoriesInf <- function(outputfull, fitfull, fig_folder) {
         ggtitle("Antibody kinetic trajectories") +
         facet_wrap(vars(biomarker))
     ggsave(here::here("outputs", "fits", filename, "figs",  modelname, fig_folder, "ab_kinetics_trajectories.png"), height = 10, width = 10)
+
+}
+
+
+
+plot_abkinetics_trajectories2Inf <- function(outputfull, fitfull, fig_folder) {
+
+    require(posterior)
+    require(bayesplot) 
+    require(ggdist)
+
+    filename <- outputfull$filename
+    modelname <- outputfull$modelname
+
+    n_chains <- outputfull$n_chains
+    n_post <- outputfull$n_post
+
+    chain_samples <- 1:n_chains %>% map(~c(rep(.x, n_post))) %>% unlist
+    M <- length(chain_samples)
+    data_t <- fitfull$data_t
+    N <- data_t$N
+
+
+    post <- fitfull$post
+    par_tab <- fitfull$par_tab
+    model_outline <- fitfull$model
+    post_fit <- post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
+
+    ## FOR individual i
+    require(data.table)
+    bio_all <- model_outline$infoModel$biomarkers
+
+    # Get serological data to plot!
+    data_fit <- map_df(1:N, 
+        function(i) {
+            map_df(1:length(bio_all), 
+                function(b) {
+                    titre_b <- c(data_t$titre_list[[i]][[b]])
+                    times <- c(data_t$times_list[[i]])
+                    data.frame(
+                        id = i,
+                        type = "sero",
+                        titre = titre_b,
+                        times = times,
+                        bio = bio_all[b],
+                        row_num = 1:length(titre_b)
+                    )
+                }
+            )
+        }
+    )
+
+    # Extrat the order of the exposure for each individual
+
+
+    exposures <- model_outline$infoModel$exposureInfo %>% map(~.x$exposureType) %>% unlist
+    fit_states_dt <- as.data.table(outputfull$fit_states)
+    df_know_exp <- map_df(1:length(exposures),
+        function(e) { 
+            exp <- exposures[e]
+            known_inf_e  <- model_outline$infoModel$exposureInfo[[e]]$known_inf
+            data.frame(
+                id = 1:N,
+                time = known_inf_e,
+                type = exp
+            )
+        }
+    )
+    known_types <- df_know_exp$type
+
+
+    S <- 100
+    sample_s <- sample(1:M, S)
+    fit_states_dt_trim <- fit_states_dt[sample %in% sample_s]
+
+    exposures_fit <- model_outline$infoModel$exposureFitted
+    exposures <-  model_outline$exposureTypes
+
+    require(future)
+
+    plan(multisession, workers = 8)
+
+ 
+    cat("Get order of all entries")
+
+    df_exposure_order <- future_map(1:N, 
+        function(i) {
+            df_know_exp_i <- df_know_exp %>% filter(id == i) %>% filter(time > -1)
+            fit_i <- fit_states_dt[id == i]
+
+            map (1:S, 
+            function(s) {
+                # Get the inferred inection time first
+                fit_i_s <- fit_i[sample == sample_s[s]]
+                if (fit_i_s$inf_ind == 1){
+                    fit_i_s_long <- melt(fit_i_s, measure.vars = bio_all, variable.name = "biomarker", value.name = "titre")
+                    fit_i_s_long[, exp_type := exposures_fit]
+                    fit_i_s_long <- fit_i_s_long[, .(id, sample, time = inf_time, exp_type, biomarker, titre)]
+                } else {
+                    fit_i_s_long <- data.table()
+                }
+
+               if (nrow(df_know_exp_i) > 0) {
+                    new_rows_list <- lapply(1:nrow(df_know_exp_i), function(j) {
+                        data.table(
+                            id = i,
+                            sample = sample_s[s],
+                            time = df_know_exp_i$time[j],
+                            exp_type = df_know_exp_i$type[j],
+                            biomarker = bio_all,
+                            titre = NA
+                        )
+                    })
+                    fit_i_s_long <- rbindlist(c(list(fit_i_s_long), new_rows_list), fill = TRUE)
+                }
+
+                setorder(fit_i_s_long, time)
+                fit_i_s_long
+            }
+        ) %>% rbindlist
+            
+        }
+    ) %>% rbindlist
+      # Perform final mutations and groupings
+    df_exposure_order[, time := round(time, 0)]
+    df_exposure_order[, row_id := seq_len(.N), by = .(id, biomarker, sample)]
+    df_exposure_order <- df_exposure_order[order(id, biomarker, time)]
+
+
+    df_exposure_order[id == i & sample == s & biomarker == bio_i]   
+
+
+    bio_map_ab <- model_outline$abkineticsModel %>% map(~.x$biomarker) %>% unlist
+    exp_map_ab <- model_outline$abkineticsModel %>% map(~.x$exposureType) %>% unlist
+    df_map_ab <- data.frame(
+        k = 1:length(bio_map_ab),
+        bio = bio_map_ab,
+        exp = exp_map_ab
+    )
+
+    par_mean <- bind_rows(
+        post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame  %>% summarise(across(everything(), mean))  %>% 
+            mutate(type = "Posterior distribution") 
+    )
+
+    par_sample <- bind_rows(
+        post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame  
+    )
+
+    # Get the simulated trajectories for each individual and exposure type and biomarker
+    
+
+    i <- 1
+    plan(multisession, workers = 12)
+
+
+    setDT(data_fit)
+    setDT(df_map_ab)
+
+    # Pre-compute data_fit and df_map_ab selections
+    data_fit_list <- split(data_fit, data_fit$id)
+    df_map_ab_list <- split(df_map_ab, df_map_ab$bio)
+
+    # Get known exposures
+    exposures_know <- setdiff(exposures, exposures_fit)
+    df_ids_plot_known <- map_df(1:length(exposures_know),
+        function(i) {
+            df_exposure_order_k <- df_exposure_order %>% filter(exp_type == exposures_know[i]) 
+            ids_take <- df_exposure_order_k %>% pull(id) %>% unique
+            if (length(ids_take) > 20) {
+                ids_take <- sample(ids_take, 20)
+            }
+            df_ids_plot <- data.frame(
+                id = ids_take,
+                type = exposures_know[i]
+            )
+        }
+    )
+
+    id_skip <- df_ids_plot_known$id
+
+    # Get inferred trajectories for missed infections for each individual 
+    df_exposure_order_intense <- df_exposure_order %>% filter(!id %in% id_skip) %>% select(!biomarker) %>% filter(exp_type %in% exposures_fit) %>%
+        summarise(prob = n() / (S * length(bio_all)), .by = id) %>% mutate(
+            type = cut(prob, c(0, 0.25, 0.75, 1), labels = c("Low", "Medium", "High"))
+        )
+    type_infer <- c("Low", "Medium", "High")
+    df_ids_plot_infer <- map_df(1:3,
+        function(i) {
+            df_exposure_order_k <- df_exposure_order_intense %>% filter(type == type_infer[i]) 
+            ids_take <- df_exposure_order_k %>% pull(id) %>% unique
+            if (length(ids_take) > 20) {
+                ids_take <- sample(ids_take, 20)
+            }
+            df_ids_plot <- data.frame(
+                id = ids_take,
+                type = type_infer[i]
+            )
+        }
+    )
+
+    df_ids_plot <- bind_rows(df_ids_plot_known, df_ids_plot_infer)
+
+    ########
+
+    ####
+    df_ids_plot_i <- df_ids_plot %>% filter(type == "High")
+
+    id_i <- 217
+
+    df_exposure_order[id == id_i]
+    data_fit %>% filter(id == id_i)
+    data_t$initialTitreValue[id_i, ]
+    data_t$initialTitreTime[id_i]
+    data_t$titre_list[[id_i]]
+    data_t$times_list[[id_i]]
+    data_t$id_full[[id_i]]
+    data_t$T
+
+    df_traj_post_ind <- map(
+        df_ids_plot_i$id,
+        function(i) {
+                map(bio_all, 
+                    function(bio_i) {
+                        map(sample_s,
+                            function(s) {
+                                df_exposure_order_i <- df_exposure_order[id == i & sample == s & biomarker == bio_i] %>% arrange(time, .by_group = TRUE)
+                        
+                                times <- c(df_exposure_order_i[["time"]], 365)
+                                timesince_vec <- times %>% diff
+
+                                titre_traj <- NULL
+                                titre_anchor <- NULL
+
+                                for (j in seq_len(nrow(df_exposure_order_i))) {
+                                    exp_type_i <- df_exposure_order_i[j, exp_type]
+                                    id_key <- df_map_ab_list[[bio_i]][exp == exp_type_i]$k
+                                    ab_func <- model_outline$abkineticsModel[[id_key]]$funcForm
+                                    pars_extract <- model_outline$abkineticsModel[[id_key]]$pars
+                                    par_in <- as.numeric(par_sample[s, pars_extract])
+                                 #   cat(par_in)
+                                    titre_start <- data_fit_list[[i]][row_num == 1, titre]
+
+                                    if (df_exposure_order_i[j, row_id] == 1) {
+
+                                        time_anchor <- 1
+                                        titre_start <- data_fit_list[[i]][row_num == 1, titre]
+                                        titre_traj <- rep(NA, times[1])
+                                        traj_type <- rep(NA, times[1])
+                                        vector_titre <- unlist(lapply(seq_len(timesince_vec[j]), function(t) ab_func(titre_start, t, par_in)))
+
+                                        titre_traj <- c(titre_traj, vector_titre)
+                                        traj_type <- c(traj_type, rep(exp_type_i, length(vector_titre)))
+                                        titre_anchor <- ifelse(length(vector_titre) == 0, titre_start, vector_titre[length(vector_titre)])
+                                        time_anchor <- length(titre_traj)
+                                    } else {
+
+                                        vector_titre <- unlist(lapply(seq_len(timesince_vec[j]), function(t) ab_func(titre_anchor, t, par_in)))
+                                        titre_traj <- c(titre_traj, vector_titre)
+                                        traj_type <- c(traj_type, rep(exp_type_i, length(vector_titre)))
+                                        titre_anchor <- ifelse(length(vector_titre) == 0, titre_start, vector_titre[length(vector_titre)])
+                                    }
+                                }
+
+                                data.table(
+                                    id = i,
+                                    sample = s,
+                                    t = 1:365,
+                                    biomarker = bio_i,
+                                    type = traj_type,
+                                    titre_traj = titre_traj
+                                ) %>% filter(!is.na(titre_traj))
+                            }
+                        ) %>% rbindlist
+                    }
+                )  %>% rbindlist
+        }
+    ) %>% rbindlist
+
+
+
+    p1 <- df_traj_post_ind  %>% filter( biomarker == bio_all[1]) %>%
+        ggplot() +
+            geom_line(aes(x = t, y = titre_traj, color = type, group = sample), alpha = 0.05) + facet_wrap(vars(id)) + 
+            geom_point(aes(x = times, y = titre), data = data_fit %>% filter(id %in% df_ids_plot_i$id), shape = 21, size = 2, fill = "gray") + theme_bw()
+            fig_folder <- "post"
+    ggsave(here::here("outputs", "fits", filename, "figs",  modelname, fig_folder, "ab_kinetics_trajectories_2.png"), height = 10, width = 10)
+
+
 
 }

@@ -98,10 +98,23 @@ public:
 
         if (this->onDebug) Rcpp::Rcout << "In: Check 7ii" << std::endl;
         for (int i = 0; i < this->N; i++) {
+            Rcpp::Rcout << "i: " << i << std::endl;
             if (this->knownInfsVec(i) == 0) {
                 if (this->endTitreValue(i, 0) - this->initialTitreValue(i, 0) > 1) {
                     if (!knownExpInd) {
-                        initialJump(i) = this->exposureFunctionSample();
+                        int j = 0;
+                        initialJump(i) = this->exposureFunctionSample(); 
+                        if ((this->endTitreTime(i) - 7)  - (this->initialTitreTime(i) + 7) <= 0) {
+                            initialJump(i) = -1;
+                        } else {
+                            while ((initialJump(i) >= this->endTitreTime(i) - 7) || (initialJump(i) < this->initialTitreTime(i) + 7)) {
+                                initialJump(i) = this->exposureFunctionSample(); 
+                                j++;
+                                if (j > 10000) {
+                                    initialJump(i) = -1;
+                                }
+                            }
+                        }
                     }
                     initialInf(i) = 1;
                 } else {
@@ -568,6 +581,7 @@ public:
             double gainFactor = pow(this->counterAdaptiveGibbs(this->gibbsIdx), -0.5);
             int i_idx = resampleIdx[i];
             this->adaptiveGibbsSD(i_idx) += gainFactor*(this->alpha - 0.234);
+            this->adaptiveGibbsSD(i_idx) = MAX(this->adaptiveGibbsSD(i_idx), 1); // minimum value of exp(1) standard deviation in normal
         } 
         this->counterResampleNo++;
         double gainFactor = pow(this->counterResampleNo, -0.5);
@@ -684,7 +698,10 @@ public:
         if (this->onDebug) Rcpp::Rcout << "this->propInferredExpN: " << this->propInferredExpN << std::endl;
         if (this->onDebug) Rcpp::Rcout << "this->currInferredExpN: " << this->currInferredExpN << std::endl;
 
-        while ((this->knownInfsVec(s) == 1) || (this->currentJump(s) != -1 )) {
+        while (((this->knownInfsVec(s) == 1) || (this->currentJump(s) != -1 )) ||
+            ((this->endTitreTime(s) - 7)  - (this->initialTitreTime(s) + 7) < 0)
+        ) {
+
             /* if (this->knownInfsVec(s) == 1) {
                 Rcpp::Rcout << "this->knownInfsVec(s): " << s << std::endl;
                 Rcpp::Rcout << "this->currentJump(s): " << this->currentJump(s) << std::endl;
@@ -727,7 +744,7 @@ public:
         // Completely new sample time is drawn 5% of the time for an individual.
         if (r < 0.05) {
             this->proposalJump(t) = this->exposureFunctionSample();
-            while ((this->proposalJump(t) >= this->endTitreTime(t) - 7) || (this->proposalJump(t) < this->initialTitreTime(t))) {
+            while ((this->proposalJump(t) >= this->endTitreTime(t) - 7) || (this->proposalJump(t) < this->initialTitreTime(t) + 7)) {
                 // check this
                 this->proposalJump(t) = this->exposureFunctionSample(); 
             }
@@ -738,8 +755,8 @@ public:
             double temp = this->currentJump(t) + normalDistSample(0, exp(this->adaptiveGibbsSD(t)));
             if (temp >= this->endTitreTime(t) - 7) {
                 temp = this->endTitreTime(t) - 7; 
-            } else if (temp < this->initialTitreTime(t)) {
-                temp = this->initialTitreTime(t); 
+            } else if (temp < this->initialTitreTime(t) + 7) {
+                temp = this->initialTitreTime(t) + 7; 
             }
             this->proposalJump(t) = temp;
         }
@@ -762,7 +779,7 @@ public:
         if ((this->historicJump(t) < 0) | (r < 0.05)) { 
             // New exposure time is resampled from scratch, only do if first time individual exposed in mcmc chain or 5% of time thereafter.
                 this->proposalJump(t) = this->exposureFunctionSample(); 
-                while ((this->proposalJump(t) >= this->endTitreTime(t) - 7) || (this->proposalJump(t) < this->initialTitreTime(t))) {
+                while ((this->proposalJump(t) >= this->endTitreTime(t) - 7) || (this->proposalJump(t) < this->initialTitreTime(t) + 7)) {
                     this->proposalJump(t) = this->exposureFunctionSample(); 
                 }
                 //   proposeInfection(t);

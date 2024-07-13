@@ -83,13 +83,20 @@ summarise_inf_prop_h3 <- map_df(1:length(model_outline$observationalModel),
 
 
 
+# summarise_inf_prop_h1
+
+summarise_inf_prop_h1 %>% ggplot() + 
+    geom_point(aes(x = titre_val, y = prop, alpha = prop)) + 
+    facet_grid(vars(biomarker)) + 
+    theme_bw()
+
 pid_cols <- data_titre_h3 %>% select(pid, id) %>% unique
 swab_info <- nih_inf_raw %>% filter(year == 2023) %>% left_join(pid_cols) %>% select(pid, id, swab_virus) %>% unique
 
 df_post_compare <- bind_rows(
     swab_info %>% left_join(summarise_inf_prop_h1 %>% mutate(id = as.numeric(as.character(id))), by = "id" ) %>% mutate(subtype = "h1"),
     swab_info %>% left_join(summarise_inf_prop_h3 %>% mutate(id = as.numeric(as.character(id))), by = "id" ) %>% mutate(subtype = "h3")
-)
+) %>% mutate(prop = ifelse(is.na(prop), 0, prop))
 
 df_post_compare %>% select(pid, id, swab_virus, prop, subtype ) %>% unique %>% pivot_wider(names_from = "subtype", values_from = "prop") %>%
           ggplot() + 

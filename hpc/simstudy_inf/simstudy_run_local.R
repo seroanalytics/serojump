@@ -3,8 +3,7 @@ library(devtools)
 library(Rcpp)
 #Rcpp::compileAttributes()
 devtools::load_all()
-i <- Sys.getenv("SLURM_ARRAY_TASK_ID")
-i <- as.integer(i)
+i <- 3
 
 seroModel_full <- readRDS(here::here("hpc", "simstudy_inf", "simstudy_model.RData"))
 
