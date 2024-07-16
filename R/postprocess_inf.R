@@ -514,9 +514,9 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
    #filename <-  "local/nih_2024_inf/test"
   # modelname <- "h3"
   # n_chains <- 4
-    filename <- "hpc/nih_2024_inf/p3"
-    modelname <- "h3"
-    n_chains <- 4
+ #   filename <- "hpc/nih_2024_inf/p3"
+#    modelname <- "h3"
+  #  n_chains <- 4
 
     dir.create(here::here("outputs", "fits", filename,  "figs", modelname), recursive = TRUE, showWarnings = FALSE)
     fitfull_pp <- readRDS(here::here("outputs", "fits", filename, paste0("fit_prior_", modelname, ".RDS")))
