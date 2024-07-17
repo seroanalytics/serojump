@@ -89,8 +89,8 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
     std::function<double(VectorXd, VectorXd, RObject)> evaluateLogPrior;
     std::function<double(double, double, double, double)> evaluateLogPriorInfExp;
 
-    std::function<double()> exposureFunctionSample;
-    std::function<double(double)> exposureFunctionDensity;
+    std::function<double(int)> exposureFunctionSample;
+    std::function<double(double, int)> exposureFunctionDensity;
 
     // Functions for internal 
     Mvn Mvn_sampler;
@@ -500,9 +500,9 @@ namespace {
     }
 
     void init_exposureFunctionSample(SeroJumpBase* model, Rcpp::Function exposureFunctionSample) {
-        auto func = [exposureFunctionSample]() {
+        auto func = [exposureFunctionSample](int t) {
             PutRNGstate();
-            auto rData = exposureFunctionSample();
+            auto rData = exposureFunctionSample(t);
             GetRNGstate();
             return Rcpp::as<double>(rData);
         };
@@ -510,9 +510,9 @@ namespace {
     }
 
     void init_exposureFunctionDensity(SeroJumpBase* model, Rcpp::Function exposureFunctionDensity) {
-        auto func = [exposureFunctionDensity](double time) {
+        auto func = [exposureFunctionDensity](double time, int t) {
             PutRNGstate();
-            auto rData = exposureFunctionDensity(time);
+            auto rData = exposureFunctionDensity(time, t);
             GetRNGstate();
             return Rcpp::as<double>(rData);
         };

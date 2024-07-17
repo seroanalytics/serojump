@@ -35,7 +35,7 @@ public:
      * @brief Update the kinetic parameters values
      * @param params The new parameter values
      */
-    void updateAbKineticParams(VectorXd& params) {
+    void updateAbKineticParams(const VectorXd& params) {
         NumericVector paramsN = this->createNamedParam(params);
         this->updatePars(paramsN);
         this->initAbInfo();

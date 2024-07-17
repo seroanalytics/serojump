@@ -43,6 +43,20 @@ infSerumKinetics <- function(titre_est, timeSince, pars) {
     titre_est <- max(0, titre_est)
 }
 
+infSerumKinetics_titredep <- function(titre_est, timeSince, pars) {
+    a <- pars[1]
+    b <- pars[2]
+    c <- pars[3]
+    s <- pars[4]
+
+    if (timeSince < 14) {
+        titre_est <- titre_est + max(1 - s * titre_est, 0) * log(exp(a) + exp(c)) * (timeSince) / 14;
+    } else {
+        titre_est <- titre_est + max(1 - s * titre_est, 0) * (log(exp(a) * exp(-b/10 * (timeSince - 14)) + exp(c)));
+    }
+    titre_est
+}
+
 infSerumKinetics_v2 <- function(titre_est, timeSince, pars) {
 
     a <- pars[1]
@@ -109,40 +123,36 @@ observationalModel <- list(
 abkineticsModel <- list(
     model = makeModel(
             addAbkineticsModel("none", "sVNT", "none",  c("wane"), noInfSerumKinetics),
-            addAbkineticsModel("delta", "sVNT", "delta", c("a_d", "b_d", "c_d", "t_d"), infSerumKinetics_v2),
-            addAbkineticsModel("vax", "sVNT", "vax", c("a_vax", "b_vax", "c_vax", "t_vax"), infSerumKinetics_v2),
-            addAbkineticsModel("predelta", "sVNT", "predelta", c("a_pd", "b_pd", "c_pd", "t_pd"), infSerumKinetics_v2),
+            addAbkineticsModel("delta", "sVNT", "delta", c("a_d", "b_d", "c_d", "s"), infSerumKinetics_titredep),
+            addAbkineticsModel("vax", "sVNT", "vax", c("a_vax", "b_vax", "c_vax", "s"), infSerumKinetics_titredep),
+            addAbkineticsModel("predelta", "sVNT", "predelta", c("a_pd", "b_pd", "c_pd", "s"), infSerumKinetics_titredep),
             addAbkineticsModel("none_a", "IgA", "none",  c("wane_a"), noInfSerumKinetics),
-            addAbkineticsModel("delta_a", "IgA", "delta", c("a_d_a", "b_d_a", "c_d_a", "t_d_a"), infSerumKinetics_v2),
-            addAbkineticsModel("vax_a", "IgA", "vax", c("a_vax_a", "b_vax_a", "c_vax_a", "t_vax_a"), infSerumKinetics_v2),
-            addAbkineticsModel("predelta_a", "IgA", "predelta", c("a_pd_a", "b_pd_a", "c_pd_a", "t_pd_a"), infSerumKinetics_v2)
+            addAbkineticsModel("delta_a", "IgA", "delta", c("a_d_a", "b_d_a", "c_d_a", "s_a"), infSerumKinetics_titredep),
+            addAbkineticsModel("vax_a", "IgA", "vax", c("a_vax_a", "b_vax_a", "c_vax_a", "s_a"), infSerumKinetics_titredep),
+            addAbkineticsModel("predelta_a", "IgA", "predelta", c("a_pd_a", "b_pd_a", "c_pd_a", "s_a"), infSerumKinetics_titredep)
         ),
     prior = bind_rows(
         add_par_df("a_vax", -6, 6, "norm",  0, 2), # ab kinetics
         add_par_df("b_vax", 0, 1, "norm",  0.3, 0.05), # ab kinetics
         add_par_df("c_vax", 0, 4, "unif", 0,  4), # ab kinetics 
-        add_par_df("t_vax", 10, 25, "unif", 10, 25), # ab kinetics 
         add_par_df("a_pd", -6, 6, "norm",  0, 2), # ab kinetics
         add_par_df("b_pd", 0, 1, "norm",  0.3, 0.05), # ab kinetics
         add_par_df("c_pd", 0, 4, "unif", 0,  4), # ab kinetics
-        add_par_df("t_pd", 10, 25, "unif", 10, 25), # ab kinetics 
         add_par_df("a_d", -6, 6, "norm",  0, 2), # ab kinetics
         add_par_df("b_d", 0, 1, "norm",  0.3, 0.05), # ab kinetics
         add_par_df("c_d", 0, 4, "unif", 0,  4), # ab kinetics
-        add_par_df("t_d",  10, 25, "unif", 10, 25), # ab kinetics 
+        add_par_df("s",  0, 1, "unif", 0, 1), # ab kinetics 
         add_par_df("wane", 0.0, 0.01, "unif", 0.0, 0.01), # observational model
         add_par_df("a_vax_a", -6, 6, "norm",  0, 2), # ab kinetics
         add_par_df("b_vax_a", 0, 1, "norm",  0.3, 0.05), # ab kinetics
         add_par_df("c_vax_a", 0, 4, "unif", 0,  4), # ab kinetics 
-        add_par_df("t_vax_a",  10, 25, "unif", 10, 25), # ab kinetics 
         add_par_df("a_pd_a", -6, 6, "norm",  0, 2), # ab kinetics
         add_par_df("b_pd_a", 0, 1, "norm",  0.3, 0.05), # ab kinetics
         add_par_df("c_pd_a", 0, 4, "unif", 0,  4), # ab kinetics
-        add_par_df("t_pd_a",  10, 25, "unif", 10, 25), # ab kinetics 
         add_par_df("a_d_a", -6, 6, "norm",  0, 2), # ab kinetics
         add_par_df("b_d_a", 0, 1, "norm",  0.3, 0.05), # ab kinetics
         add_par_df("c_d_a", 0, 4, "unif", 0,  4), # ab kinetics
-        add_par_df("t_d_a",   10, 25, "unif", 10, 25), # ab kinetics 
+        add_par_df("s_a", 0, 1, "unif", 0, 1), # ab kinetics 
         add_par_df("wane_a", 0.0, 0.01, "unif", 0.0, 0.01) # observational model
     )
 )

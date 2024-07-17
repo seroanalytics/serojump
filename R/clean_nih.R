@@ -38,7 +38,7 @@ get_data_titre_nih_prior2022 <- function(year, subtype_i) {
         id = 1:(data_titre$id %>% max),
         start_time = data_titre %>% group_by(id) %>% filter(time == min(time)) %>% unique %>% pull(time),
         end_time = data_titre %>% group_by(id) %>% filter(time == max(time)) %>% unique %>% pull(time)
-    ) %>% mutate(time_diff = end_time - start_time) %>% filter(time_diff <= 7) %>% pull(id)
+    ) %>% mutate(time_diff = end_time - start_time) %>% filter(time_diff <= 15) %>% pull(id)
 
     data_titre <- data_titre %>% filter(!id %in% time_diff_too_small) %>% mutate(pid = factor(pid), id = as.numeric(factor(pid))) 
 
@@ -105,7 +105,7 @@ get_data_titre_nih_2023_h3 <- function() {
         id = 1:(data_titre$id %>% max),
         start_time = data_titre %>% group_by(id) %>% filter(time == min(time)) %>% unique %>% pull(time),
         end_time = data_titre %>% group_by(id) %>% filter(time == max(time)) %>% unique %>% pull(time)
-    ) %>% mutate(time_diff = end_time - start_time) %>% filter(time_diff <= 7) %>% pull(id)
+    ) %>% mutate(time_diff = end_time - start_time) %>% filter(time_diff <= 15) %>% pull(id)
 
     data_titre <- data_titre %>% filter(!id %in% time_diff_too_small) %>% mutate(pid = factor(pid), id = as.numeric(factor(pid))) 
 
@@ -183,7 +183,7 @@ get_data_titre_nih_2023_h1 <- function() {
         id = 1:(data_titre_h1$id %>% max),
         start_time = data_titre_h1 %>% group_by(id) %>% filter(time == min(time)) %>% unique %>% pull(time),
         end_time = data_titre_h1 %>% group_by(id) %>% filter(time == max(time)) %>% unique %>% pull(time)
-    ) %>% mutate(time_diff = end_time - start_time) %>% filter(time_diff <= 7) %>% pull(id)
+    ) %>% mutate(time_diff = end_time - start_time) %>% filter(time_diff <= 15) %>% pull(id)
 
     data_titre_h1 <- data_titre_h1 %>% filter(!id %in% time_diff_too_small) %>% mutate(pid = factor(pid), id = as.numeric(factor(pid))) 
 

@@ -123,7 +123,7 @@ public:
         logPriorExpTime = 0; 
         for (int i = 0; i < parent->N; i++) {
             if (jump[i] > -1) {
-                logPriorExpTime += parent->exposureFunctionDensity(jump[i]);
+                logPriorExpTime += parent->exposureFunctionDensity(jump[i], i + 1);
             }
         }
             

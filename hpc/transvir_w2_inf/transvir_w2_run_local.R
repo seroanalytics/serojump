@@ -2,7 +2,7 @@ library(devtools)
 library(Rcpp)
 
 devtools::load_all()
-i <- 2
+i <- 3
 seroW2_full <- readRDS(here::here("hpc", "transvir_w2_inf", "transvir_w2_model.RData"))
 prior_names <- c("p1", "p2", "p3")
 ## check entriee
@@ -10,10 +10,10 @@ prior_names <- c("p1", "p2", "p3")
 #seroModel$data$titre_list #id, bio, t
 
 settings <-  list(
-    numberChainRuns = 4,
+    numberChainRuns = 4, 
     numberCores = 4,
-    iterations = 10000,
-    burninPosterior = 5000,
+    iterations = 1000,
+    burninPosterior = 500,
     thin = 10,
     consoleUpdates = 100,
     onAdaptiveCov = TRUE,

@@ -285,6 +285,80 @@ createModelRJCMCFull <- function(ab_ll, par_tab) {
     model_type
 }
 
+
+calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
+   # model_type <- modelSeroJump
+   # data_t
+   # exp_prior_i <- modeldefinition$exposurePrior
+   # type <- modeldefinition$exposurePriorType
+
+    addExposurePrior_checkempirical(exp_prior_i, data_t)
+
+    if (is.null(type)) {
+        cat("Exposure rate is not defined over the time period. Defaulting to uniform distribution between 1 and ", data_t$T, ". \n")
+
+        exp_prior <- data.frame(
+            day = 1:data_t$T,
+            prob = dunif(1:data_t$T, 1, data_t$T)
+        )
+    } else if (type == "func") {
+        dist_name <- paste0("d", exp_prior_i[1, 3])
+        my_dist_name <- get(dist_name)
+
+        s <- do.call(my_dist_name, list(1:data_t$T, as.numeric(exp_prior_i[1, 4]),  as.numeric(exp_prior_i[1, 5])) )
+
+        exp_prior <- data.frame(
+            day = 1:data_t$T,
+            prob = s
+        )
+    } else if (type == "empirical") {
+        exp_prior <- exp_prior_i
+    } else {
+        cat("'type' argument must be either NULL, 'func' or 'empirical'. \n")
+    }
+
+    # Get the inidividual level exposure probabilities 
+    T <- exp_prior$day %>% length
+    exp_list <- list()
+    for (i in 1:data_t$N) {
+        exp_i <- exp_prior$prob
+        start_t <- data_t$initialTitreTime[i]
+        end_t <- data_t$endTitreTime[i]
+        exp_i[seq_len(start_t + 7)] <- 0
+        exp_i[(end_t - 7):T] <- 0
+
+        # Impossible times due to known infection
+        exposureInfo <- model_type$infoModel$exposureInfo
+        known_vec_ind <- vector()
+        for (j in 1:length(exposureInfo)) {
+            known_exp <- exposureInfo[[j]]$known_inf[i]
+            if (known_exp > -1) {
+                known_vec_ind[j] <- known_exp
+                exp_i[(known_exp):(known_exp + 21)] <- 0
+            }
+        }
+
+        # Add other known exposures into the mix 
+        if (data_t$knownInfsVec[i] == 1) {
+            cat("I: ", i, " has known infection. \n")
+            cat("I: ", data_t$knownInfsTimeVec[i], " date. \n")
+            exp_i[data_t$knownInfsTimeVec[i]] <- 1
+        }
+
+        if ( sum(exp_i) == 0) {
+            #cat("Individual number: ", i, " has no exposure times. \n")
+            exp_list[[i]] <- rep(0, T)
+            data_t$knownInfsVec[i] <- 1
+        } else {
+            exp_list[[i]] <- exp_i / sum(exp_i)
+        }
+
+    }
+    data_t$knownInfsN <- sum(data_t$knownInfsVec)
+    data_t$exp_list <- exp_list
+    data_t
+}
+
 #' @brief This function adds the exposure prior to the rjmc model.
 #' 
 #' This function takes two types of priors. Either a functional prior or an empirical prior.
@@ -297,12 +371,19 @@ createModelRJCMCFull <- function(ab_ll, par_tab) {
 #' 
 #' @see createModelRJCMCFull() and generate_data_t()
 addExposurePrior <- function(model_type, data_t, exp_prior, type = NULL) {
+
+    model_type <- modelSeroJump
+    data_t
+    exp_prior <- modeldefinition$exposurePrior
+    type <- modeldefinition$exposurePriorType
+
+
     if (is.null(type)) {
         cat("Exposure rate is not defined over the time period. Defaulting to uniform distribution between 1 and ", data_t$T, ". \n")
         model_type$exposureFunctionSample <- function() {
             s <- runif(1, 1, data_t$T)
         }
-        model_type$exposureFunctionDensity <- function(jump_i) {
+        model_type$exposureFunctionDensity <- function(jump_i,  i) {
             d <- log(1/data_t$T)
             d
         }
@@ -310,14 +391,14 @@ addExposurePrior <- function(model_type, data_t, exp_prior, type = NULL) {
         # Code to check form of exp_prior
         addExposurePrior_checkfunction(exp_prior)
 
-        model_type$exposureFunctionSample <- function() {
+        model_type$exposureFunctionSample <- function(i) {
             dist_name <- paste0("r", exp_prior[1, 3])
             my_dist_name <- get(dist_name)
             s <- do.call(my_dist_name, list(1, as.numeric(exp_prior[1, 4]),  as.numeric(exp_prior[1, 5])) )
             s
         }
 
-        model_type$exposureFunctionDensity <- function(jump_i) {
+        model_type$exposureFunctionDensity <- function(jump_i, i) {
             dist_name <- paste0("d", exp_prior[1, 3])
             my_dist_name <- get(dist_name)
             d <- do.call(my_dist_name, list(as.numeric(jump_i), as.numeric(exp_prior[1, 4]), as.numeric(exp_prior[1, 5])) )
@@ -327,13 +408,31 @@ addExposurePrior <- function(model_type, data_t, exp_prior, type = NULL) {
             
         addExposurePrior_checkempirical(exp_prior, data_t)
 
-        # Code to check form of exp_prior
-        model_type$exposureFunctionSample <- function() {
-            sample(exp_prior$day, 1, prob = exp_prior$prob)
+        T <- exp_prior$day %>% length
+        exp_prior$prob
+        exp_list <- list()
+        for (i in 1:data_t$N) {
+            exp_i <- exp_prior$prob
+            start_t <- data_t$initialTitreTime[i]
+            end_t <- data_t$endTitreTime[i]
+            exp_i[seq_len(start_t + 7)] <- 0
+            exp_i[(end_t - 7):T] <- 0
+
+            # Impossible times 
+            known_exp <- data_t$knownInfsTimeVec[i]
+            if (known_exp > -1) {
+                exp_i[known_exp:(known_exp + 21)] <- 0
+            }
+            exp_list[[i]] <- exp_i / sum(exp_i)
         }
 
-        model_type$exposureFunctionDensity <- function(jump_i) {
-            exp_prior$prob[max(round(jump_i, 0), 1)] %>% log
+        # Code to check form of exp_prior
+        model_type$exposureFunctionSample <- function(i) {
+            sample(exp_list[[i]]$day, 1, prob = exp_prior[[i]]$prob) 
+        }
+
+        model_type$exposureFunctionDensity <- function(jump_i, i) {
+            exp_prior[[i]]$prob[max(round(jump_i, 0), 1)] %>% log
         }
     } else {
         cat("'type' argument must be either NULL, 'func' or 'empirical'. \n")

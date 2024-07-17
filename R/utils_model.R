@@ -246,11 +246,20 @@ check_priors <- function(modeldefinition) {
 #' @param data_known The known exposure data.
 #' @param modeldefinition The model definition.
 #' @return A list with the data and the model.
-#' @export
+#' @exports
 createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_exp = NULL) {
     cat("OUTLINE OF INPUTTED MODEL\n")
    # check_inputs(data_sero, data_known, modeldefinition)
     check_priors(modeldefinition)
+
+   # data_sero <- gambia_pvnt_w2
+   # data_known <- gambia_exp_w2
+   # modeldefinition <- modeldefinition_p1
+   # known_exp <- NULL
+    #data_sero <- data_titre_h1
+    #data_known <- known_exposure_h1
+    #modeldefinition <- modeldefinition_h1_p1
+    #known_exp <- NULL
 
     #data_sero <- gambia_pvnt_w2
 #    data_known <- known_exposure
@@ -331,9 +340,20 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
         }
     }
 
-    modelSeroJump <- addExposurePrior(modelSeroJump, data_t, modeldefinition$exposurePrior, type = modeldefinition$exposurePriorType)
+    data_t <- calculateIndExposure(modelSeroJump, data_t, modeldefinition$exposurePrior, type = modeldefinition$exposurePriorType)
 
-    
+            # Code to check form of exp_prior
+    modelSeroJump$exposureFunctionSample <- function(i) {
+        sample(1:length(data_t$exp_list[[i]]), 1, prob = data_t$exp_list[[i]]) 
+    }
+
+    modelSeroJump$exposureFunctionDensity <- function(jump_i, i) {
+        if ((data_t$exp_list[[i]][max(round(jump_i, 0), 1)] %>% log) < -100) {
+
+        }
+        data_t$exp_list[[i]][max(round(jump_i, 0), 1)] %>% log
+    }
+
     # Add help with exposure prior
 
     list(

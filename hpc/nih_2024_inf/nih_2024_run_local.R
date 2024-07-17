@@ -1,8 +1,10 @@
 library(devtools)
 library(Rcpp)
+library(data.table)
+
 devtools::load_all()
 
-i <- 4
+i <- 3
 seroModel_full <- readRDS(here::here("hpc", "nih_2024_inf", "nih_2024_model.RData"))
 name_vec <- names(seroModel_full)
 name_vec_spl <- str_split(name_vec, "_")
@@ -15,7 +17,7 @@ settings <-  list(
     numberCores = 4,
     iterations = 5000,
     burninPosterior = 2500,
-    thin = 1,
+    thin = 10,
     consoleUpdates = 100,
     onAdaptiveCov = TRUE,
     updatesAdaptiveCov = 10,
@@ -33,6 +35,8 @@ names_ab <- 2^c(0:10) * 5
 names_ab[2] <- "<10"
 names(ab_values) <- names_ab
 
+#seroModel$data$exp_list
+#seroModel$model
 runInfRJMCMC(seroModel, settings, paste0("hpc/nih_2024_inf/", vec_names_i[2]), vec_names_i[1])
 postprocessFigsInf(paste0("hpc/nih_2024_inf/", vec_names_i[2]), vec_names_i[1], 4, ab_values)
 

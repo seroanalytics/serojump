@@ -101,14 +101,16 @@ public:
             Rcpp::Rcout << "i: " << i << std::endl;
             if (this->knownInfsVec(i) == 0) {
                 if (this->endTitreValue(i, 0) - this->initialTitreValue(i, 0) > 1) {
+                    Rcpp::Rcout << "A boost: " << std::endl;
                     if (!knownExpInd) {
                         int j = 0;
-                        initialJump(i) = this->exposureFunctionSample(); 
+                        initialJump(i) = this->exposureFunctionSample(i + 1); 
+                            Rcpp::Rcout << "A get exposure function sample: " << std::endl;
                         if ((this->endTitreTime(i) - 7)  - (this->initialTitreTime(i) + 7) <= 0) {
                             initialJump(i) = -1;
                         } else {
                             while ((initialJump(i) >= this->endTitreTime(i) - 7) || (initialJump(i) < this->initialTitreTime(i) + 7)) {
-                                initialJump(i) = this->exposureFunctionSample(); 
+                                initialJump(i) = this->exposureFunctionSample(i + 1); 
                                 j++;
                                 if (j > 10000) {
                                     initialJump(i) = -1;
@@ -134,6 +136,7 @@ public:
                     }*/
                 }
             }
+            Rcpp::Rcout << "initialJump(i): " << initialJump(i) << std::endl;
         }
 
         this->currentJump = initialJump;
@@ -358,7 +361,7 @@ public:
                 double curr_adj = this->propInferredExpN - this->knownInfsN;
 
                 rjadjustmentFactor = log(curr_adj + 1) - log((N_adj - curr_adj) ) +
-                    this->exposureFunctionDensity(this->currentJump(this->currJumpIdx)); 
+                    this->exposureFunctionDensity(this->currentJump(this->currJumpIdx), this->currJumpIdx + 1); 
                     //  rjadjustmentFactor2;
             } else if (this->currJumpType == 1) {
                 rjadjustmentFactor = 0;
@@ -368,7 +371,7 @@ public:
                 double curr_adj = this->propInferredExpN - this->knownInfsN;// - this->knownInfsN;
 
                 rjadjustmentFactor = log(N_adj - curr_adj + 1) - log(curr_adj) -
-                    this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx));// - 
+                    this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx), this->currJumpIdx + 1);// - 
                     // rjadjustmentFactor2; 
             }
             this->alpha = min(1.0, exp((this->proposedLogPosterior - this->currentLogPosterior + rjadjustmentFactor)));
@@ -430,7 +433,8 @@ public:
           //  Rcpp::Rcout << "adaptiveGibbStep: " << adaptiveGibbStep << std::endl;
             vector<int> resampleIdx;
           //  for (int i = 0; i < this->noGibbsSteps; i++) { 
-            for (int i = 0; i < adaptiveGibbStep; i++) { 
+           // Rcpp::Rcout << "adaptiveGibbStep: " << adaptiveGibbStep << std::endl;
+            for (int i = 0; i < 1; i++) { 
                 this->gibbsIdx = this->sampleExposed(); // stuck here
                 resampleIdx.push_back(this->gibbsIdx);
                 resampleTime(this->gibbsIdx);
@@ -439,7 +443,7 @@ public:
            // fixedProposalDist(false);
 
             recalInit->updateEventsFull();
-            recalInit->updateAbKineticParams(this->proposalSample);
+            recalInit->updateAbKineticParams(this->currentSample);
             recalInit->recalculateTitreAll();    
 
             this->proposedLogPosterior = loglikInit->evalLogPosterior(this->currentSample, this->proposalJump, this->currentCovarianceMatrix, this->dataList);
@@ -473,7 +477,7 @@ public:
             //Rcpp::Rcout << "ACCEPTED (GIBBS): " << this->alpha << std::endl;
         //     this->finddifferInf();
             this->currentSample = this->proposalSample;
-         //   this->currentJump = this->proposalJump;
+            this->currentJump = this->proposalJump;
 
             this->currentTitreExp = this->proposalTitreExp;
             this->currentObsTitre = this->proposalObsTitre;
@@ -487,7 +491,7 @@ public:
 
         } else {
             this->proposalSample = this->currentSample;
-          //  this->proposalJump = this->currentJump;
+            this->proposalJump = this->currentJump;
 
             this->proposalTitreExp = this->currentTitreExp;
             this->proposalObsTitre = this->currentObsTitre;
@@ -577,11 +581,11 @@ public:
         // Update adaptive proposal stuff
 
         for (int i = 0; i < resampleIdx.size(); i++) {
-            this->counterAdaptiveGibbs(this->gibbsIdx)++;
-            double gainFactor = pow(this->counterAdaptiveGibbs(this->gibbsIdx), -0.5);
             int i_idx = resampleIdx[i];
+            this->counterAdaptiveGibbs(i_idx)++;
+            double gainFactor = pow(this->counterAdaptiveGibbs(i_idx), -0.5);
             this->adaptiveGibbsSD(i_idx) += gainFactor*(this->alpha - 0.234);
-            this->adaptiveGibbsSD(i_idx) = MAX(this->adaptiveGibbsSD(i_idx), 1); // minimum value of exp(1) standard deviation in normal
+            this->adaptiveGibbsSD(i_idx) = MAX(this->adaptiveGibbsSD(i_idx), 0); // minimum value of exp(1) standard deviation in normal
         } 
         this->counterResampleNo++;
         double gainFactor = pow(this->counterResampleNo, -0.5);
@@ -743,15 +747,16 @@ public:
 
         // Completely new sample time is drawn 5% of the time for an individual.
         if (r < 0.05) {
-            this->proposalJump(t) = this->exposureFunctionSample();
+            this->proposalJump(t) = this->exposureFunctionSample(t + 1);
             while ((this->proposalJump(t) >= this->endTitreTime(t) - 7) || (this->proposalJump(t) < this->initialTitreTime(t) + 7)) {
                 // check this
-                this->proposalJump(t) = this->exposureFunctionSample(); 
+                this->proposalJump(t) = this->exposureFunctionSample(t + 1); 
             }
             // proposeInfection(t);
 
         // An exisiting sample time is updated 95% of the time for an individual.
         } else {
+          //  Rcpp::Rcout << "this->adaptiveGibbsSD(t): " << this->adaptiveGibbsSD(t) << std::endl;
             double temp = this->currentJump(t) + normalDistSample(0, exp(this->adaptiveGibbsSD(t)));
             if (temp >= this->endTitreTime(t) - 7) {
                 temp = this->endTitreTime(t) - 7; 
@@ -772,15 +777,15 @@ public:
      * 
      */
     void sampleNewTime(int t, int prop) {
-        if (this->onDebug) Rcpp::Rcout << "In: sampleNewTime" << std::endl;
+        if (this->onDebug) Rcpp::Rcout << "In: sampleNewTime: " << t << std::endl;
 
         double r = uniformContinuousDist(0, 1);
 
         if ((this->historicJump(t) < 0) | (r < 0.05)) { 
             // New exposure time is resampled from scratch, only do if first time individual exposed in mcmc chain or 5% of time thereafter.
-                this->proposalJump(t) = this->exposureFunctionSample(); 
+                this->proposalJump(t) = this->exposureFunctionSample(t + 1); 
                 while ((this->proposalJump(t) >= this->endTitreTime(t) - 7) || (this->proposalJump(t) < this->initialTitreTime(t) + 7)) {
-                    this->proposalJump(t) = this->exposureFunctionSample(); 
+                    this->proposalJump(t) = this->exposureFunctionSample(t + 1); 
                 }
                 //   proposeInfection(t);
         } else { 

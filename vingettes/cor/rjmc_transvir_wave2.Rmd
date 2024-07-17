@@ -75,12 +75,14 @@ infSerumKinetics <- function(titre_est, timeSince, pars) {
     a <- pars[1]
     b <- pars[2]
     c <- pars[3]
+    s <- pars[4]
+
     if (timeSince < 14) {
-        titre_est <- titre_est + log(exp(a) + exp(c)) * (timeSince) / 14;
+        titre_est <- titre_est + max(1 - s * titre_est, 0) * log(exp(a) + exp(c)) * (timeSince) / 14;
     } else {
-        titre_est <- titre_est + log(exp(a) * exp(-b/10 * (timeSince - 14)) + exp(c));
+        titre_est <- titre_est + max(1 - s * titre_est, 0) * (log(exp(a) * exp(-b/10 * (timeSince - 14)) + exp(c)));
     }
-    titre_est <- max(0, titre_est)
+    titre_est
 }
 
 infIgAinetics <- function(titre_est, timeSince, pars) {
@@ -285,7 +287,6 @@ settings <-  list(
 )
 
 runInfRJMCMC(modelW2_p3, settings, "local/transvir_inf/p3", "wave2")
-
 postprocessFigsInf("local/transvir_inf/p3", "wave2", 4)
 
 ```

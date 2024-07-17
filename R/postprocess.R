@@ -7,6 +7,7 @@
 #' @import ggdist
 #' @import patchwork
 #' @import tidybayes
+#' @import data.table
 #' @importFrom magrittr %>% %<>%
 NULL
 postprocess_run <- function(filename, modelname, n_chains) {
