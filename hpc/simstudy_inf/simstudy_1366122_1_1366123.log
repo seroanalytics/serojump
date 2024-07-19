@@ -1,0 +1,167 @@
+/var/spool/slurmd/job1366123/slurm_script: line 18: activate: No such file or directory
+Loading required package: usethis
+ℹ Loading serojump
+Warning messages:
+1: replacing previous import ‘foreach::when’ by ‘purrr::when’ when loading ‘serojump’ 
+2: replacing previous import ‘foreach::accumulate’ by ‘purrr::accumulate’ when loading ‘serojump’ 
+3: Objects listed as exports, but not present in namespace:
+• copModel
+• data_known_exposures
+• data_titre 
+`numberTempChains` not specified in settings. Default value 10. 
+`onAdaptiveTemp` not specified in settings.  Default value TRUE. 
+`updatesAdaptiveTemp` not specified in settings.  Default value 10. 
+Initiate class`numberTempChains` not specified in settings. Default value 10. 
+
+Initiate class2
+Initiate class2: 1
+Instance of the previous classes1`onAdaptiveTemp` not specified in settings.  Default value TRUE. 
+
+Testing in
+`updatesAdaptiveTemp` not specified in settings.  Default value 10. 
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+i: 0
+initialJump(i): -1
+i: 1
+initialJump(i): -1
+i: 2
+initialJump(i): -1
+i: 3
+A boost: 
+Initiate class
+Initiate class2
+Initiate class2: 2
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+Initiate class
+Initiate class2
+Initiate class2: 1
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+i: 0
+initialJump(i): -1
+i: 1
+initialJump(i): -1
+i: 2
+initialJump(i): -1
+i: 3
+A boost: 
+i: 0
+initialJump(i): -1
+i: 1
+initialJump(i): -1
+i: 2
+initialJump(i): -1
+i: 3
+A boost: 
+Initiate class
+Initiate class2
+Initiate class2: 2
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+i: 0
+initialJump(i): -1
+i: 1
+initialJump(i): -1
+i: 2
+initialJump(i): -1
+i: 3
+A boost: 
+Initiate class
+Initiate class2
+Initiate class2: 3
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+i: 0
+initialJump(i): -1
+i: 1
+initialJump(i): -1
+i: 2
+initialJump(i): -1
+i: 3
+A boost: 
+Initiate class
+Initiate class2
+Initiate class2: 4
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+i: 0
+initialJump(i): -1
+i: 1
+initialJump(i): -1
+i: 2
+initialJump(i): -1
+i: 3
+A boost: 
+Initiate class
+Initiate class2
+Initiate class2: 3
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+Initiate class
+Initiate class2
+Initiate class2: 4
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+i: 0
+initialJump(i): -1
+i: 1
+initialJump(i): -1
+i: 2
+initialJump(i): -1
+i: 3
+A boost: 
+i: 0
+initialJump(i): -1
+i: 1
+initialJump(i): -1
+i: 2
+initialJump(i): -1
+i: 3
+A boost: 
+Warning message:
+In mclapply(list(seroModel_pp, seroModel), function(i) { :
+  all scheduled cores encountered errors in user code
+Loading required package: ggdist
+Error in post$mcmc : $ operator is invalid for atomic vectors
+Calls: postprocessFigsInf -> postprocess_runInf -> %>% -> nrow
+Execution halted
