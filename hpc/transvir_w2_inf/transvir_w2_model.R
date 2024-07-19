@@ -172,22 +172,26 @@ abkineticsModel <- list(
 
 
 inf_prior_1 <- function(N, E, I, K) {
-    0
+    N_adj <- N - K
+    E_adj <- E - K 
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.01, log = TRUE)
+    logPriorExpInf
 }
 
 inf_prior_2 <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K 
-    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) #+ log(1 / N_adj)
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.02, log = TRUE)
     logPriorExpInf
 }
 
 inf_prior_3 <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K
-    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.01, log = TRUE)
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.03, log = TRUE)
     logPriorExpInf
 }
+
 
 modeldefinition_p1 <- list(
     biomarkers = biomarkers,

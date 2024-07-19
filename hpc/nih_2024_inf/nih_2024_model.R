@@ -59,6 +59,23 @@ known_exposure_h1 <- data_exp[[2]] %>% unique # must be unique
 exp_prior <- data_exp[[3]]
 
 
+# Get the number of four fold rises between point 2 and 3
+
+known_exposure_h1_add <- known_exposure_h1 %>% filter(exposure_type == "h1_2023") %>% select(pid, id) %>% mutate(type = "known")
+sero_confirmed <- left_join(
+    data_titre_h1 %>% group_by(id) %>% mutate(r = row_number(), r_max = max(r)) %>% filter(r_max >=3) %>% 
+        filter(r == 2 ) %>% rename(titre_2 = `A/Sydney/5/2021`, titre_2e = `A/Sydney/5/2021e` ) %>% 
+        select(pid, id, titre_2, titre_2e),
+
+    data_titre_h1 %>% group_by(id) %>% mutate(r = row_number(), r_max = max(r)) %>% filter(r_max >=3) %>% 
+        filter(r == 3 ) %>% rename(titre_3 = `A/Sydney/5/2021`, titre_3e = `A/Sydney/5/2021e` ) %>% 
+        select(pid, id, titre_3, titre_3e)
+    ) %>% mutate(titre_diff = titre_3 - titre_2, titre_diffe = titre_3e - titre_2e ) %>%
+    mutate(diff = if (titre_diff >= 2 & titre_diffe >= 2) {four_fold = 1} else {four_fold = 0}) %>% filter(diff == 1)
+
+sero_confirmed_trim <- sero_confirmed %>% left_join(known_exposure_h1_add) %>% filter(is.na(type))
+rate_inf_h1 <- (sero_confirmed_trim %>% nrow) / (data_titre_h1$id %>% unique %>% length)
+
 # Define the biomarkers and exposure types in the model
 biomarkers_h1 <- c("A/Sydney/5/2021", "A/Sydney/5/2021e")
 exposureTypes_h1 <- c("vax", "h1_2023")
@@ -109,14 +126,14 @@ inf_prior_1 <- function(N, E, I, K) {
 inf_prior_2 <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K 
-    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) #+ log(1 / N_adj)
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) 
     logPriorExpInf
 }
 
 inf_prior_3 <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K
-    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.01, log = TRUE)
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, rate_inf_h1, log = TRUE)
     logPriorExpInf
 }
 
@@ -142,7 +159,7 @@ modeldefinition_h1_p3 <- modeldefinition_h1_p1
 modeldefinition_h1_p3$expInfPrior <- inf_prior_3
 
 
-seroModel_nih_h1_p1 <- createSeroJumpModel(data_titre_h1, known_exposure_h1, modeldefinition_h1_p1)
+seroModel_nih_h1_p1 <- createSeroJumpModel(data_titre_h1, known_exposure_h1, modeldefinition_h1_p1, TRUE)
 seroModel_nih_h1_p2 <- createSeroJumpModel(data_titre_h1, known_exposure_h1, modeldefinition_h1_p2)
 seroModel_nih_h1_p3 <- createSeroJumpModel(data_titre_h1, known_exposure_h1, modeldefinition_h1_p3)
 
@@ -156,6 +173,23 @@ seroModel_nih_h1_p3 <- createSeroJumpModel(data_titre_h1, known_exposure_h1, mod
 data_exp_h3 <- get_data_titre_nih_2023_h3()
 data_titre_h3 <- data_exp_h3[[1]] #%>% check_titre
 known_exposure_h3 <- data_exp_h3[[2]] %>% unique # must be unique
+
+
+known_exposure_h3_add <- known_exposure_h3 %>% filter(exposure_type == "h3_2023") %>% select(pid, id) %>% mutate(type = "known")
+sero_confirmed <- left_join(
+    data_titre_h3 %>% group_by(id) %>% mutate(r = row_number(), r_max = max(r)) %>% filter(r_max >=3) %>% 
+        filter(r == 2 ) %>% rename(titre_2 = `A/Darwin/06/2021`, titre_2e = `A/Darwin/09/2021e` ) %>% 
+        select(pid, id, titre_2, titre_2e),
+
+    data_titre_h3 %>% group_by(id) %>% mutate(r = row_number(), r_max = max(r)) %>% filter(r_max >=3) %>% 
+        filter(r == 3 ) %>% rename(titre_3 = `A/Darwin/06/2021`, titre_3e = `A/Darwin/09/2021e` ) %>% 
+        select(pid, id, titre_3, titre_3e)
+    ) %>% mutate(titre_diff = titre_3 - titre_2, titre_diffe = titre_3e - titre_2e ) %>%
+    mutate(diff = if (titre_diff >= 2 & titre_diffe >= 2) {four_fold = 1} else {four_fold = 0}) %>% filter(diff == 1)
+
+sero_confirmed_trim <- sero_confirmed %>% left_join(known_exposure_h3_add) %>% filter(is.na(type))
+rate_inf_h3 <- (sero_confirmed_trim %>% nrow) / (data_titre_h3$id %>% unique %>% length)
+
 
 # Define the biomarkers and exposure types in the model
 biomarkers_h3 <- c("A/Darwin/06/2021", "A/Darwin/09/2021e")
@@ -200,6 +234,23 @@ abkineticsModel_h3 <- list(
     )
 )
 
+inf_prior_1 <- function(N, E, I, K) {
+    0
+}
+
+inf_prior_2 <- function(N, E, I, K) {
+    N_adj <- N - K
+    E_adj <- E - K 
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) 
+    logPriorExpInf
+}
+
+inf_prior_3 <- function(N, E, I, K) {
+    N_adj <- N - K
+    E_adj <- E - K
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, rate_inf_h3, log = TRUE)
+    logPriorExpInf
+}
 modeldefinition_h3_p1 <- list(
     biomarkers = biomarkers_h3,
     exposureTypes = exposureTypes_h3,
@@ -218,11 +269,11 @@ modeldefinition_h3_p3 <- modeldefinition_h3_p1
 modeldefinition_h3_p3$expInfPrior <- inf_prior_3
 
 
-seroModel_nih_h3_p1 <- createSeroJumpModel(data_titre_h3, known_exposure_h3, modeldefinition_h3_p1)
+seroModel_nih_h3_p1 <- createSeroJumpModel(data_titre_h3, known_exposure_h3, modeldefinition_h3_p1, TRUE)
 seroModel_nih_h3_p2 <- createSeroJumpModel(data_titre_h3, known_exposure_h3, modeldefinition_h3_p2)
 seroModel_nih_h3_p3 <- createSeroJumpModel(data_titre_h3, known_exposure_h3, modeldefinition_h3_p3)
 
-
+seroModel_nih_h3_p1$data$knownExpVec %>% names
 ##########################################
 ############ Make models
 ##########################################

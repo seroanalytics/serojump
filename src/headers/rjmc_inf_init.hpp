@@ -282,6 +282,7 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
 
         this->currInferredInfN = this->knownInfsN;
         this->propInferredInfN = this->knownInfsN;
+        Rcpp::Rcout << "this->knownExpInd:" << this->knownExpInd << std::endl;
         if (this->knownExpInd) {
             this->currInferredExpN = this->knownExpVec.sum();
             this->propInferredExpN = this->knownExpVec.sum();

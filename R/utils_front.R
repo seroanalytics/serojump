@@ -112,7 +112,7 @@ check_boundaries <- function(x, lb, ub) {
 }
 
 
-generate_data_alt <- function(data_titre_model, biomarkers, known_exp = NULL) {
+generate_data_alt <- function(data_titre_model, biomarkers, known_exp_bool = NULL) {
     #data_titre_model <- data_sero
     N <- data_titre_model$id %>% unique %>% length  
     N_data <- nrow(data_titre_model)
@@ -144,8 +144,8 @@ generate_data_alt <- function(data_titre_model, biomarkers, known_exp = NULL) {
     }
 
     # this is just for the simulated data
-    if (!is.null(known_exp)) {
-        knownExpVec <- known_exp
+    if (!is.null(known_exp_bool)) {
+        knownExpVec <- rep(-1, N)
     } else {
         knownExpVec <- NA
     }

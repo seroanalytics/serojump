@@ -85,7 +85,7 @@ public:
         initialSample = this->samplePriorDistributions(this->dataList);
 
         // Get initial Jump values, ONCE FUNCTION
-        if (knownExpInd) {
+        if (this->knownExpInd) {
             initialJump = this->knownExpVec;
         } else {
             if (this->onDebug) Rcpp::Rcout << "In: Check 7i" << std::endl;
@@ -98,14 +98,14 @@ public:
 
         if (this->onDebug) Rcpp::Rcout << "In: Check 7ii" << std::endl;
         for (int i = 0; i < this->N; i++) {
-            Rcpp::Rcout << "i: " << i << std::endl;
+      //      Rcpp::Rcout << "i: " << i << std::endl;
             if (this->knownInfsVec(i) == 0) {
                 if (this->endTitreValue(i, 0) - this->initialTitreValue(i, 0) > 1) {
-                    Rcpp::Rcout << "A boost: " << std::endl;
-                    if (!knownExpInd) {
+         //           Rcpp::Rcout << "A boost: " << std::endl;
+                    if (!this->knownExpInd) {
                         int j = 0;
                         initialJump(i) = this->exposureFunctionSample(i + 1); 
-                            Rcpp::Rcout << "A get exposure function sample: " << std::endl;
+             //               Rcpp::Rcout << "A get exposure function sample: " << std::endl;
                         if ((this->endTitreTime(i) - 7)  - (this->initialTitreTime(i) + 7) <= 0) {
                             initialJump(i) = -1;
                         } else {
@@ -136,7 +136,7 @@ public:
                     }*/
                 }
             }
-            Rcpp::Rcout << "initialJump(i): " << initialJump(i) << std::endl;
+        //    Rcpp::Rcout << "initialJump(i): " << initialJump(i) << std::endl;
         }
 
         this->currentJump = initialJump;

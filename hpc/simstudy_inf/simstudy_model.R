@@ -18,7 +18,6 @@ exp_prior <- data.frame(
 
 ## Define the functions required for the rjmcmc model
 
-
 obsLogLikelihood = function(titre_val, titre_est, pars) {
     ll <- dnorm(titre_val, titre_est, pars[1], log = TRUE)
 }

@@ -247,7 +247,7 @@ check_priors <- function(modeldefinition) {
 #' @param modeldefinition The model definition.
 #' @return A list with the data and the model.
 #' @exports
-createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_exp = NULL) {
+createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_exp_bool = NULL) {
     cat("OUTLINE OF INPUTTED MODEL\n")
    # check_inputs(data_sero, data_known, modeldefinition)
     check_priors(modeldefinition)
@@ -301,7 +301,7 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
    # id_ab <- modeldefinition$abkineticsModel$model %>% map(~.x$id) %>% unlist
    # names(modelSeroJump$abkineticsModel) <- id_ab
 
-    data_t <- generate_data_alt(data_sero, modeldefinition$biomarkers, known_exp)
+    data_t <- generate_data_alt(data_sero, modeldefinition$biomarkers, known_exp_bool)
     data_t$par_names <- priors[, 1]
     data_t$priorPredFlag <- FALSE
 
@@ -338,6 +338,10 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
             data_t$knownInfsVec = as.numeric(know_inf > -1)
             data_t$knownInfsN = length(know_inf[know_inf > -1])
         }
+    }
+
+    if (!is.null(known_exp_bool)) {
+        data_t$knownExpVec <- data_t$knownInfsTimeVec
     }
 
     data_t <- calculateIndExposure(modelSeroJump, data_t, modeldefinition$exposurePrior, type = modeldefinition$exposurePriorType)

@@ -513,8 +513,8 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
    #filename <-  "local/nih_2024_inf/test"
   # modelname <- "h3"
   # n_chains <- 4
-  #  filename <- "hpc/nih_2024_inf/p3"
-  #  modelname <- "h1"
+   # filename <- "hpc/nih_2024_inf/p3"
+   # modelname <- "h1"
   #  n_chains <- 4
 
     dir.create(here::here("outputs", "fits", filename,  "figs", modelname), recursive = TRUE, showWarnings = FALSE)
@@ -740,6 +740,7 @@ plot_abkinetics_trajectories2Inf <- function(outputfull, fitfull, fig_folder) {
     df_exposure_order <- future_map(1:N, 
         function(i) {
             df_know_exp_i <- df_know_exp %>% filter(id == i) %>% filter(time > -1)
+            df_know_exp_i <- df_know_exp_i %>% filter(!type %in% exposures_fit)
             fit_i <- fit_states_dt %>% filter(id == i)
             map (1:S, 
             function(s) {
@@ -774,6 +775,7 @@ plot_abkinetics_trajectories2Inf <- function(outputfull, fitfull, fig_folder) {
             
         }
     ) %>% rbindlist
+
       # Perform final mutations and groupings
     df_exposure_order <- df_exposure_order %>% mutate(time = round(time, 0))
     df_exposure_order <- df_exposure_order %>% group_by(id, biomarker, sample) %>% mutate(row_id = row_number())
@@ -832,7 +834,9 @@ plot_abkinetics_trajectories2Inf <- function(outputfull, fitfull, fig_folder) {
     cat("Get exposure ids1, \n")
 
     # Get inferred trajectories for missed infections for each individual 
-    df_exposure_order %>% filter(id == 1)
+    df_exposure_order %>% select(!biomarker) %>% filter(exp_type %in% exposures_fit) %>% filter(id == 14)
+    df_exposure_order %>% select(!biomarker) %>% filter(exp_type %in% exposures_fit) %>% filter(id == 744)
+
     df_exposure_order_intense <- df_exposure_order %>% filter(!id %in% id_skip) %>% select(!biomarker) %>% filter(exp_type %in% exposures_fit) %>%
         ungroup %>%
         summarise(prob = n() / (S * length(bio_all)), .by = id) %>% mutate(
