@@ -1,6 +1,8 @@
 filename <- "hpc/nih_2024_inf/p3"
 n_chains <- 4
 require(readxl)
+require(lubridate)
+
 nih_inf_raw <- read_excel(path = here::here("data", "nih_2024_XX", "2022_2023_Flu_Swabs.xlsx") )
 
 data_exp_h1 <- get_data_titre_nih_2023_h1()
@@ -98,8 +100,18 @@ df_post_compare <- bind_rows(
     swab_info %>% left_join(summarise_inf_prop_h3 %>% mutate(id = as.numeric(as.character(id))), by = "id" ) %>% mutate(subtype = "h3")
 ) %>% mutate(prop = ifelse(is.na(prop), 0, prop))
 
-df_post_compare %>% select(pid, id, swab_virus, prop, subtype ) %>% unique %>% pivot_wider(names_from = "subtype", values_from = "prop") %>%
+summary_plot <- df_post_compare %>% select(pid, id, swab_virus, prop, subtype ) %>% unique %>% pivot_wider(names_from = "subtype", values_from = "prop") %>%
+            mutate(h_diff = h1 - h3) 
+            
+summary_plot %>%
           ggplot() + 
             geom_point( 
             aes(x = h1, y = h3, color = swab_virus), size = 5, alpha = 0.7) + 
             theme_bw() 
+
+summary_plot %>%
+          ggplot() + 
+            geom_point( 
+            aes(x = pid, y = h_diff, color = swab_virus), size = 5, alpha = 0.7) + 
+            theme_bw() + facet_wrap(vars(swab_virus)) + 
+            labs(x = "PID", y = "Differece in probability of infection (h1 - h3)")

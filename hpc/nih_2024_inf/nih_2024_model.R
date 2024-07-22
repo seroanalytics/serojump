@@ -133,7 +133,7 @@ inf_prior_2 <- function(N, E, I, K) {
 inf_prior_3 <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K
-    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, rate_inf_h1, log = TRUE)
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.008482564, log = TRUE)
     logPriorExpInf
 }
 
@@ -248,7 +248,7 @@ inf_prior_2 <- function(N, E, I, K) {
 inf_prior_3 <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K
-    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, rate_inf_h3, log = TRUE)
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj,  0.005655042, log = TRUE)
     logPriorExpInf
 }
 modeldefinition_h3_p1 <- list(

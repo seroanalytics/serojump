@@ -513,9 +513,9 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
    #filename <-  "local/nih_2024_inf/test"
   # modelname <- "h3"
   # n_chains <- 4
-   # filename <- "hpc/nih_2024_inf/p3"
-   # modelname <- "h1"
-  #  n_chains <- 4
+    filename <- "hpc/nih_2024_inf/p3"
+    modelname <- "h1"
+     n_chains <- 4
 
     dir.create(here::here("outputs", "fits", filename,  "figs", modelname), recursive = TRUE, showWarnings = FALSE)
     fitfull_pp <- readRDS(here::here("outputs", "fits", filename, paste0("fit_prior_", modelname, ".RDS")))
@@ -879,8 +879,8 @@ plot_abkinetics_trajectories2Inf <- function(outputfull, fitfull, fig_folder) {
     ggsave(here::here("outputs", "fits", filename, "figs",  modelname, fig_folder, "diag", "timing_convergence.png"), height = 10, width = 10)
     cat("Get exposure ids3, \n")
 
-    type_infer <- c("Low", "Medium", "High")
-    df_ids_plot_infer <- map_df(1:3,
+    type_infer <- df_exposure_order_intense$type %>% unique
+    df_ids_plot_infer <- map_df(1:length(type_infer),
         function(i) {
             df_exposure_order_k <- df_exposure_order_intense %>% filter(type == type_infer[i]) 
             ids_take <- df_exposure_order_k %>% pull(id) %>% unique

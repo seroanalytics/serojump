@@ -11,6 +11,15 @@ gambia_exp_w2 <- get_exposures_wave2() # This is the empirical prior for the exp
 exp_prior_w2 <- get_exp_prior_wave2() # This is the empirical prior for the exposure time
 
 
+known_exposure_gambia_exp_w2_add <- gambia_exp_w2 %>% mutate(type = "known")
+sero_confirmed <-  gambia_pvnt_w2 %>% group_by(id) %>% mutate(r = row_number(), r_max = max(r)) %>% filter(r_max >=2) %>%
+        select(!c(IgA, time )) %>% pivot_wider(names_from = r, values_from = sVNT) %>% 
+        mutate(diff = `1` - `2`) %>% filter(diff < -0.903) %>% left_join(known_exposure_gambia_exp_w2_add) %>% 
+        filter(is.na(type))
+
+rate_inf <- (sero_confirmed %>% nrow) / (gambia_exp_w2$id %>% unique %>% length)
+
+
 obsLogLikelihoodSerum = function(titre_val, titre_est, pars) {
     if (titre_val <= log10(40)) {
         ll <- pnorm(log10(40), titre_est, pars[1], log.p = TRUE)
@@ -172,23 +181,20 @@ abkineticsModel <- list(
 
 
 inf_prior_1 <- function(N, E, I, K) {
-    N_adj <- N - K
-    E_adj <- E - K 
-    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.01, log = TRUE)
-    logPriorExpInf
+    0
 }
 
 inf_prior_2 <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K 
-    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.02, log = TRUE)
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) 
     logPriorExpInf
 }
 
 inf_prior_3 <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K
-    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.03, log = TRUE)
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.2797203, log = TRUE)
     logPriorExpInf
 }
 
@@ -211,7 +217,7 @@ modeldefinition_p3 <- modeldefinition_p1
 modeldefinition_p3$expInfPrior <- inf_prior_3
 
 
-modelW2_p1 <- createSeroJumpModel(gambia_pvnt_w2, gambia_exp_w2, modeldefinition_p1)
+modelW2_p1 <- createSeroJumpModel(gambia_pvnt_w2, gambia_exp_w2, modeldefinition_p1, TRUE)
 modelW2_p2 <- createSeroJumpModel(gambia_pvnt_w2, gambia_exp_w2, modeldefinition_p2)
 modelW2_p3 <- createSeroJumpModel(gambia_pvnt_w2, gambia_exp_w2, modeldefinition_p3)
 
