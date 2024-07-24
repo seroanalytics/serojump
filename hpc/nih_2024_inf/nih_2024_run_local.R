@@ -15,8 +15,8 @@ vec_names_i <- name_vec_spl[[i]]
 settings <-  list(
     numberChainRuns = 4,
     numberCores = 4,
-    iterations = 5000,
-    burninPosterior = 2500,
+    iterations = 500,
+    burninPosterior = 250,
     thin = 10,
     consoleUpdates = 100,
     onAdaptiveCov = TRUE,
@@ -34,6 +34,7 @@ ab_values <- c(0:10)
 names_ab <- 2^c(0:10) * 5
 names_ab[2] <- "<10"
 names(ab_values) <- names_ab
+
 
 runInfRJMCMC(seroModel, settings, paste0("hpc/nih_2024_inf/", vec_names_i[2]), vec_names_i[1])
 postprocessFigsInf(paste0("hpc/nih_2024_inf/", vec_names_i[2]), vec_names_i[1], 4, ab_values)

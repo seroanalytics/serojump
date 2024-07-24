@@ -42,6 +42,21 @@ noInfSerumKinetics <- function(titre_est, timeSince, pars) {
 }
 
 
+copFuncForm <- function(inf_status, esttitreExp, params) {
+    beta0 <- params[1]
+    beta1 <- params[2]
+    mu <- params[3]
+
+    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+}
+
+
+copLogLikelihood <- function(inf_status, esttitreExp, params) {
+    # COP parameters
+    p <- copFuncForm(inf_status, esttitreExp, params)
+    ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
+    ll
+}
 
 infSerumKinetics_titredep <- function(titre_est, timeSince, pars) {
     a <- pars[1]
@@ -136,6 +151,23 @@ abkineticsModel <- list(
     )
 )
 
+
+copModel <- list( 
+        model = makeModel(
+            addCopModel("sVNT", "delta", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
+            addCopModel("IgA", "delta", c("beta0_a", "beta1_a", "mu_a"), copFuncForm, copLogLikelihood)
+        ),
+        prior = bind_rows(
+            add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("beta1", -10, 10, "unif", -10, 10),
+            add_par_df("mu", 0, 1, "unif", 0, 1),
+            add_par_df("beta0_a", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("beta1_a", -10, 10, "unif", -10, 10),
+            add_par_df("mu_a", 0, 1, "unif", 0, 1),
+        ) # cop model (not used here),
+)
+
+
    # add_par_df("d_vax_a", -1, 50, "unif",  -1, 50), # ab kinetics
    # add_par_df("e_vax_a", 1, 5, "unif",  1, 5), # ab kinetics
    # add_par_df("s_vax_a", 2, 5, "unif", 2, 5), # ab kinetics 
@@ -175,6 +207,7 @@ modeldefinition_p1 <- list(
     exposureFitted = exposureFitted,
     observationalModel = observationalModel,
     abkineticsModel = abkineticsModel,
+    copModel = copModel,
     exposurePrior = exp_prior_w2,
     exposurePriorType = "empirical",
     expInfPrior = inf_prior_1

@@ -138,6 +138,20 @@ public:
 private:
 
 
+    double CORfunction(int y, double titre, NumericVector pars) {
+
+        double ll = 0;
+        double beta0 = pars[0];
+        double beta1 = pars[1];
+        double mu = pars[2];
+
+        double p = mu / (1.0 + exp(- (beta0 + beta1 * titre) ) );
+
+        ll = y * log(p) + (1 - y) * log(1 - p);
+
+        return ll;
+    }
+
 /**
  * @brief Evaluate the log likelihood of the COP part of the model
  * @param jump The jump vector for the exposure times
@@ -147,7 +161,7 @@ private:
  */
     double evaluateLogLikelihoodCOP_cpp( VectorXd jump, bool init) {
         if (parent->onDebug) Rcpp::Rcout << "In: evaluateLogLikelihoodCOP_cpp" << std::endl;
-
+        //random
         // Evaluate the titre values for all individuals given the new exposure times
         MatrixXd titreExp(parent->N, parent->B);
         double titre_est;
@@ -155,30 +169,33 @@ private:
         double ll = 0;
         // Evaluate the titre values for all individuals given the new exposure times
         for (int i_idx = 0; i_idx < parent->N; ++i_idx) {
-            // If no exposure time is provided, set the titre value to -1
-            if (jump[i_idx] == -1) {
-                for (int bio = 0; bio < parent->B; bio++) {
-                    titreExp(i_idx, bio) = -1;
-                }
-            } else {
-          
-                // Extract the titre values for the individual across all their event times
-                //List titre_list_i = parent->titre_list[i_idx];
-                std::vector<std::vector<DoubleWithString> > proposalTitreFull_i = parent->proposalTitreFull[i_idx]; 
-                // For all biomarkers, extract the titre value for the individual at the new exposure time
-                for (int bio = 0; bio < parent->B; bio++) {
-                    std::vector<DoubleWithString> proposalTitreFull_i_b = proposalTitreFull_i[bio];
+            std::vector<std::vector<DoubleWithString> > proposalTitreFull_i = parent->proposalTitreFull[i_idx]; 
+            for (int bio = 0; bio < parent->B; bio++) {
+                string biomarker_b = parent->biomarkers[bio];
+                NumericVector pars = parent->proposalParsCOP[biomarker_b];
+                std::vector<DoubleWithString> proposalTitreFull_i_b = proposalTitreFull_i[bio];
+                if (jump[i_idx] == -1) {
+                    if (parent->knownInfsVec(i_idx) == 0) {
+                        // use random titre values
+                        for (int j = 0; j < proposalTitreFull_i_b.size(); j++) {
+                            // If the titre value is the one at the fitted exposure type, store it
+                            if(proposalTitreFull_i_b[j].name == "random") {
+                                titre_est = proposalTitreFull_i_b[j].value;
+                            }
+                        }
+                        ll += this->CORfunction(0, titre_est, pars );
+                    }
+                } else {
+                    // 
                     for (int j = 0; j < proposalTitreFull_i_b.size(); j++) {
                         // If the titre value is the one at the fitted exposure type, store it
                         if(proposalTitreFull_i_b[j].name == parent->exposureFitted) {
                             titre_est = proposalTitreFull_i_b[j].value;
                         }
                     }
-                    // Store the titre value for the individual at the new exposure time
-                    titreExp(i_idx, bio) = titre_est;
-
-               
-                }
+                    ll += this->CORfunction(1, titre_est, pars );
+                }                    
+                titreExp(i_idx, bio) = titre_est;
             }
         }
         if (init) {
@@ -188,6 +205,7 @@ private:
         }
         return ll;
     }
+        
 
 /** 
  * @brief Evaluate the log likelihood of the observation model

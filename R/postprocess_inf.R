@@ -366,7 +366,91 @@ plot_cop_recInf <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
     chain_samples <- 1:n_chains %>% map(~c(rep(.x, n_post))) %>% unlist
 
     model_outline <- fitfull$model
+
     post_fit <- post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
+
+    df_cor <- map_df(1:length(model_outline$copModel), 
+    function(i) {
+            pars_extract <- model_outline$copModel[[i]]$pars
+            functionalForm <- model_outline$copModel[[i]]$funcForm
+            biomarker <- model_outline$copModel[[i]]$biomarker
+            exposureType <- model_outline$copModel[[i]]$exposureType
+            compare <- bind_rows(
+                post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
+                    mutate(type = "Posterior distribution") %>% filter(param %in% pars_extract)
+            )
+
+            cop_function <- function(T_vec, pars) {
+                T_vec %>% map( 
+                    ~functionalForm(0, .x, pars)
+                ) %>% unlist
+            }
+
+            post_par <- data.frame(post_fit[[pars_extract[1]]])
+            if (length(pars_extract) > 1) {
+                for (j in 2:length(pars_extract)) {
+                    post_par <- cbind(post_par, post_fit[[pars_extract[j]]])
+                }   
+            }
+
+            T_max <- data_t$titre_full[, i] %>% max
+            T_min <- data_t$titre_full[, i] %>% min
+
+            T_vec <- seq(T_min, T_max, length.out = 20)
+
+            traj_post <- 1:(100) %>% purrr::map_df(
+                ~data.frame(
+                    titre = T_vec,
+                    value = cop_function(T_vec, as.numeric(post_par[.x, ]))
+                )
+            )
+
+            traj_post_summ <- traj_post %>% group_by(titre) %>% mean_qi() %>% mutate(biomarker = biomarker)
+        }
+    )
+
+
+    df_gradient <- 
+    map_df(1:length(model_outline$copModel), 
+        function(i) {
+            pars_extract <- model_outline$copModel[[i]]$pars
+            functionalForm <- model_outline$copModel[[i]]$funcForm
+            biomarker <- model_outline$copModel[[i]]$biomarker
+            exposureType <- model_outline$copModel[[i]]$exposureType
+            compare <- bind_rows(
+                post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
+                    mutate(type = "Posterior distribution") %>% filter(param %in% pars_extract)
+            )
+
+            post_par <- data.frame(post_fit[[pars_extract[1]]])
+            if (length(pars_extract) > 1) {
+                for (i in 2:length(pars_extract)) {
+                    post_par <- cbind(post_par, post_fit[[pars_extract[i]]])
+                }   
+            }
+
+            gradient <- post_par[, 2] / 4
+            data.frame(
+                grad = gradient
+            ) %>% mutate(biomarker = biomarker)
+        }
+    )
+
+    p1 <- df_cor %>% ggplot() + 
+        # geom_smooth(aes(x = titre_val, y = inf_post)) +
+        geom_ribbon(
+            aes(x = titre, ymin = .lower, ymax = .upper, alpha = 0.3), size = 1) + 
+        geom_line(aes(x = titre, y = value)) + 
+        theme_bw() + 
+        ylim(0, 1) +
+        facet_wrap(vars(biomarker)) + 
+        labs(x = expression("Titre at exposure"), y = expression("Posterior probability of infection for correlate of protection, f"[cop]*"(Y"[j]^0*", "*theta[cop]*")"), color = "Curve type")
+
+    p2 <- df_gradient %>% 
+        ggplot() + geom_histogram(aes(x = grad, fill = biomarker), alpha = 0.5) + theme_bw() 
+
+    p1 / p2
+    ggsave(here::here("outputs", "fits", filename,  "figs", modelname, fig_folder, "cop_recov_1.png"), height = 10, width = 10)
 
 
     n_post <- outputfull$n_post
@@ -398,7 +482,6 @@ plot_cop_recInf <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
 
     figA <- cop_exp_sum_plot_all %>% 
         ggplot() + 
-        # geom_smooth(aes(x = titre_val, y = inf_post)) +
         geom_linerange(data = cop_exp_sum_plot_all, 
             aes(y = prop, xmin = .lower, xmax = .upper, alpha = prop), size = 1) + 
         geom_point(data = cop_exp_sum_plot_all, aes(x = titre_val, y = prop, alpha = prop)) + 
@@ -422,7 +505,7 @@ plot_cop_recInf <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
    #         geom_point(aes(x = titre_val, y = prop, color = swab_virus), alpha = 0.7, size = 3) + 
    #         theme_bw() 
 
-    ggsave(here::here("outputs", "fits", filename,  "figs", modelname, fig_folder, "cop_recov.png"), height = 10, width = 10)
+    ggsave(here::here("outputs", "fits", filename,  "figs", modelname, fig_folder, "cop_recov_2.png"), height = 10, width = 10)
 
 }
 
@@ -513,9 +596,10 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
    #filename <-  "local/nih_2024_inf/test"
   # modelname <- "h3"
   # n_chains <- 4
- #   filename <- "hpc/nih_2024_inf/p3"
-   # modelname <- "h1"
+  # filename <- "hpc/transvir_w2_inf/p3"
+  #  modelname <- "w2"
   #   n_chains <- 4
+    
 
     dir.create(here::here("outputs", "fits", filename,  "figs", modelname), recursive = TRUE, showWarnings = FALSE)
     fitfull_pp <- readRDS(here::here("outputs", "fits", filename, paste0("fit_prior_", modelname, ".RDS")))
@@ -531,16 +615,16 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
     postconvergeFigs_Inf(fitfull_pp, filename, modelname, TRUE)
     postconvergeFigs_Inf(fitfull, filename, modelname)
 
-    postprocess_cop(fitfull, filename, modelname, n_chains)
+   # postprocess_cop(fitfull, filename, modelname, n_chains)
 
     fig_folder <- "post"
     plot_titre_obsInf(outputfull, fitfull, fig_folder, scale_ab)
     plot_titre_expInf(outputfull, fitfull, fig_folder, scale_ab)
     plot_abkinetics_trajectoriesInf(outputfull, fitfull, fig_folder)
-    plot_abkinetics_trajectories2Inf(outputfull, fitfull, fig_folder)
     plot_inf_recInf(outputfull,fitfull, fig_folder,  scale_ab)
     plot_exp_times_recInf(outputfull, fitfull, fig_folder)
     plot_cop_recInf(outputfull, fitfull, fig_folder, scale_ab)
+    plot_abkinetics_trajectories2Inf(outputfull, fitfull, fig_folder)
 
 
     fig_folder <- "pp"

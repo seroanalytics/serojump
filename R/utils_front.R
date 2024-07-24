@@ -287,10 +287,12 @@ createModelRJCMCFull <- function(ab_ll, par_tab) {
 
 
 calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
-   # model_type <- modelSeroJump
+  #  model_type <- modelSeroJump
    # data_t
-   # exp_prior_i <- modeldefinition$exposurePrior
-   # type <- modeldefinition$exposurePriorType
+ #  exp_prior_i <- modeldefinition$exposurePrior
+ #   type <- modeldefinition$exposurePriorType
+
+  # modelSeroJump, data_t, modeldefinition$exposurePrior, type = modeldefinition$exposurePriorTyp
 
     addExposurePrior_checkempirical(exp_prior_i, data_t)
 

@@ -69,6 +69,23 @@ infSerumKinetics_titredep <- function(titre_est, timeSince, pars) {
     titre_est
 }
 
+copFuncForm <- function(inf_status, esttitreExp, params) {
+    beta0 <- params[1]
+    beta1 <- params[2]
+    mu <- params[3]
+
+    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+}
+
+
+copLogLikelihood <- function(inf_status, esttitreExp, params) {
+    # COP parameters
+    p <- copFuncForm(inf_status, esttitreExp, params)
+    ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
+    ll
+}
+
+
 ########################################################################
 ######## H1 ############
 ########################################################################
@@ -140,6 +157,22 @@ abkineticsModel_h1 <- list(
     )
 )
 
+copModel_h1 <- list( 
+        model = makeModel(
+            addCopModel("A/Sydney/5/2021", "h1_2023", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
+            addCopModel("A/Sydney/5/2021e", "h1_2023", c("beta0_e", "beta1_e", "mu_e"), copFuncForm, copLogLikelihood)
+        ),
+        prior = bind_rows(
+            add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("beta1", -10, 10, "unif", -10, 10),
+            add_par_df("mu", 0, 1, "unif", 0, 1),
+            add_par_df("beta0_e", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("beta1_e", -10, 10, "unif", -10, 10),
+            add_par_df("mu_e", 0, 1, "unif", 0, 1),
+        ) # cop model (not used here),
+)
+
+
 inf_prior_1 <- function(N, E, I, K) {
     0
 }
@@ -168,6 +201,7 @@ modeldefinition_h1_p1 <- list(
     exposureFitted = exposureFitted_h1,
     observationalModel = observationalModel_h1,
     abkineticsModel = abkineticsModel_h1,
+    copModel = copModel_h1,
     expInfPrior = inf_prior_1,
     exposurePrior = exp_prior,
     exposurePriorType = "empirical"
@@ -255,6 +289,22 @@ abkineticsModel_h3 <- list(
     )
 )
 
+copModel_h3 <- list( 
+        model = makeModel(
+            addCopModel("A/Darwin/06/2021", "h3_2023", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
+            addCopModel("A/Darwin/09/2021e", "h3_2023", c("beta0_e", "beta1_e", "mu_e"), copFuncForm, copLogLikelihood)
+        ),
+        prior = bind_rows(
+            add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("beta1", -10, 10, "unif", -10, 10),
+            add_par_df("mu", 0, 1, "unif", 0, 1),
+            add_par_df("beta0_e", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("beta1_e", -10, 10, "unif", -10, 10),
+            add_par_df("mu_e", 0, 1, "unif", 0, 1),
+        ) # cop model (not used here),
+)
+
+
 inf_prior_1 <- function(N, E, I, K) {
     0
 }
@@ -278,6 +328,7 @@ modeldefinition_h3_p1 <- list(
     exposureFitted = exposureFitted_h3,
     observationalModel = observationalModel_h3,
     abkineticsModel = abkineticsModel_h3,
+    copModel = copModel_h3,
     expInfPrior = inf_prior_1,
     exposurePrior = exp_prior,
     exposurePriorType = "empirical"

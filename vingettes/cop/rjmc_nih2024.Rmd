@@ -26,6 +26,7 @@ To help with this section please consult information in the documentation on how
 # Load data clean in the formet required for the model
 # THESE FUNCTIONS NEED TO CHANGE TO LOAD IN THE CRICK DATA
 
+
 data_exp <- get_data_titre_nih_2023_h3()
 data_titre <- data_exp[[1]] #%>% check_titre
 known_exposure <- data_exp[[2]] %>% unique # must be unique
@@ -183,12 +184,12 @@ settings <-  list(
     covarInitVal = 1e-2, # make very small if struggling to sample to beginning
     covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
     covarMaxVal = 1, # decrease if struggling toc sample in the middle
-    runParallel = TRUE,
+    runParallel = FALSE,
     noGibbsSteps = 1,
-    onDebug = FALSE
+    onDebug = TRUE
 )
 
-runRJMCMC(seroModel, settings, "local/nih_2024/test", "h3")
+runInfRJMCMC(seroModel, settings, "local/nih_2024/test", "h3")
 
 postprocessFigs("local/nih_2024/test", "h3", 4)
 

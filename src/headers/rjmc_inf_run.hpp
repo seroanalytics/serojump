@@ -36,10 +36,10 @@ public:
     * Must use this over a constructor to create the instance.
     * 
     */
-    static std::shared_ptr<SeroJumpRun> create(Rcpp::List infoModel, Rcpp::List observationalModel, Rcpp::List abkineticsModel) {
+    static std::shared_ptr<SeroJumpRun> create(Rcpp::List infoModel, Rcpp::List observationalModel, Rcpp::List abkineticsModel, Rcpp::List copModel) {
         // Use shared_ptr to create the instance
         Rcpp::Rcout << "Instance of the previous classes1" << std::endl;
-        std::shared_ptr<SeroJumpRun> instance(new SeroJumpRun(infoModel, observationalModel, abkineticsModel));
+        std::shared_ptr<SeroJumpRun> instance(new SeroJumpRun(infoModel, observationalModel, abkineticsModel, copModel));
         instance->initialize(instance);
         Rcpp::Rcout << "Instance of the previous classes2" << std::endl;
         return instance;
@@ -98,14 +98,14 @@ public:
 
         if (this->onDebug) Rcpp::Rcout << "In: Check 7ii" << std::endl;
         for (int i = 0; i < this->N; i++) {
-      //      Rcpp::Rcout << "i: " << i << std::endl;
+            Rcpp::Rcout << "i: " << i << std::endl;
             if (this->knownInfsVec(i) == 0) {
                 if (this->endTitreValue(i, 0) - this->initialTitreValue(i, 0) > 1) {
-         //           Rcpp::Rcout << "A boost: " << std::endl;
+                    Rcpp::Rcout << "A boost: " << std::endl;
                     if (!this->knownExpInd) {
                         int j = 0;
                         initialJump(i) = this->exposureFunctionSample(i + 1); 
-             //               Rcpp::Rcout << "A get exposure function sample: " << std::endl;
+                        Rcpp::Rcout << "A get exposure function sample: " << std::endl;
                         if ((this->endTitreTime(i) - 7)  - (this->initialTitreTime(i) + 7) <= 0) {
                             initialJump(i) = -1;
                         } else {
@@ -152,6 +152,8 @@ public:
         recalInit->updateEventsFull(true);
         recalInit->updateAbKineticParams(initialSample);
         recalInit->recalculateTitreAll();
+        if (this->onDebug) Rcpp::Rcout << "In: Check 8" << std::endl;
+
         this->currentTitreFull = this->proposalTitreFull;
         this->currentEventsFull = this->proposalEventsFull;
 
@@ -180,7 +182,7 @@ public:
 
         initialLogLikelihood = loglikInit->evalLogPosterior(initialSample, initialJump, this->currentCovarianceMatrix, this->dataList, true);
 
-        if (this->onDebug) Rcpp::Rcout << "In: Check 8" << std::endl;
+        if (this->onDebug) Rcpp::Rcout << "In: Check 9" << std::endl;
 
         while(isinf(initialLogLikelihood) || isnan(initialLogLikelihood)){
             if (this->onDebug) Rcpp::Rcout << "In: STUCK 8" << std::endl;

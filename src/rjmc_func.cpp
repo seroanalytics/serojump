@@ -57,12 +57,13 @@ List run_rjmc_sero(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings
   List exposureInfo = model["infoModel"];
   List observationalModel = model["observationalModel"];
   List abkineticsModel = model["abkineticsModel"];
+  List copModel = model["copModel"];
 
   Rcpp::Rcout << "Initiate class" << std::endl;
   Rcpp::Rcout << "Initiate class2" << std::endl;
     Rcpp::Rcout << "Initiate class2: " << i << std::endl;
 
-  auto SeroJumpRunInst = SeroJumpRun::create(exposureInfo, observationalModel, abkineticsModel);
+  auto SeroJumpRunInst = SeroJumpRun::create(exposureInfo, observationalModel, abkineticsModel, copModel);
   Rcpp::Rcout << "End: Initiate class" << std::endl;
 
   List output_full;

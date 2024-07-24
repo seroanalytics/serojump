@@ -12,11 +12,11 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
     // Vartiables which are initialise through the constructor
 
     Rcpp::List evalLoglikelhoodObs, evalabkineticsFunc; // List of functions to evaluate likelihoods and kinetics
-    Rcpp::List infoModel, observationalModel, abkineticsModel; // List of models and parameters
+    Rcpp::List infoModel, copModel, observationalModel, abkineticsModel; // List of models and parameters
 
-    List parsAbKinN, parsObsN; // Lists of all the parameters names for each model
+    List parsAbKinN, parsCOPN, parsObsN; // Lists of all the parameters names for each model
     std::vector<abKineticsInfo> abinfo; // Vector of all the abkinetics information
-    std::map<std::string, int> abmap, mapOfObs, mapOfExp; // Maps of the abkinetics and observational models
+    std::map<std::string, int> abmap, mapOfObs, mapOfCOP, mapOfExp; // Maps of the abkinetics and observational models
 
     std::map<std::pair<std::string, std::string>, int> mapOfAbkinetics; // Map of the abkinetics model
     std::vector<string> biomarkers, exposureType, abID; // Vector of biomarkers and exposure types
@@ -31,14 +31,14 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
      * @param abkineticsModel_in The antibody kinetics model
      * 
      */
-    SeroJumpBase(Rcpp::List infoModel_in, Rcpp::List observationalModel_in, Rcpp::List abkineticsModel_in) : infoModel(infoModel_in), observationalModel(observationalModel_in), abkineticsModel(abkineticsModel_in) {
+    SeroJumpBase(Rcpp::List infoModel_in, Rcpp::List observationalModel_in, Rcpp::List abkineticsModel_in, Rcpp::List copModel_in) : infoModel(infoModel_in), observationalModel(observationalModel_in), abkineticsModel(abkineticsModel_in), copModel(copModel_in) {
         Rcpp::Rcout << "Testing in" << std::endl;
     }    
     
     // Virtual destructor
     virtual ~SeroJumpBase() = default;
 
-    List currentParsObs, currentParsAb;
+    List currentParsObs, currentParsCOP, proposalParsCOP, currentParsAb;
     StringVector exposureNames, fittedParamNames;
 
     bool conPropIn = true;
@@ -171,6 +171,17 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
             this->mapOfObs[temp2] = i;
             this->evalLoglikelhoodObs[temp2] = temp3;
             this->parsObsN[temp2] = temp4;
+        }
+
+
+        for (int i = 0; i < this->copModel.size(); i++) {
+            List temp1 = this->copModel[i];
+            string temp2 = temp1["biomarker"];
+            //Function temp3 = temp1["logLikelihood"];
+            StringVector temp4 = temp1["pars"];
+            this->mapOfCOP[temp2] = i;
+           // this->evalLoglikelhoodCOP[temp2] = temp3;
+            this->parsCOPN[temp2] = temp4;
         }
 
         // Extract the information from the abKinetics model, mainly the biomarker, logliklihood and the parameters for the loglikelihood and the map

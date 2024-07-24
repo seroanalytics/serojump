@@ -256,15 +256,17 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
    # data_known <- gambia_exp_w2
    # modeldefinition <- modeldefinition_p1
    # known_exp <- NULL
-    #data_sero <- data_titre_h1
-    #data_known <- known_exposure_h1
-    #modeldefinition <- modeldefinition_h1_p1
-    #known_exp <- NULL
+   # data_sero <- data_titre_h1
+   # data_known <- known_exposure_h1
+   # modeldefinition <- modeldefinition_h1_p1
+   # known_exp_bool <- NULL
 
     #data_sero <- gambia_pvnt_w2
 #    data_known <- known_exposure
-
+    #data_sero <- data_titre
     modelSeroJump <- list()
+
+    cat("GER PRIORS\n")
 
     # Generate data for model
     # 1. Extract priors and defined define distributions for model 
@@ -345,6 +347,7 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
     }
 
     data_t <- calculateIndExposure(modelSeroJump, data_t, modeldefinition$exposurePrior, type = modeldefinition$exposurePriorType)
+
 
             # Code to check form of exp_prior
     modelSeroJump$exposureFunctionSample <- function(i) {

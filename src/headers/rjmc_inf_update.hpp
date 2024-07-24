@@ -52,14 +52,16 @@ public:
             std::vector<DoubleWithString> df_order_exp_i;
             std::vector<std::vector<DoubleWithString> > df_order_titre_i;
             for (int i_idx = 0; i_idx < parent->N; i_idx++) {
-
+                
+                //Rcpp::Rcout << "i_idx: " << i_idx << std::endl;
                 df_order_exp_i = this->sortevents(i_idx, parent->currentJump);
-              //  int l = df_order_exp_i.size();
+            //  int l = df_order_exp_i.size();
                 parent->proposalEventsFull.push_back(df_order_exp_i);
 
                 //df_order_titre_i = this->recalculateTitre_i(df_order_exp_i, i_idx);
                 //this->currentTitreFull.insert(this->currentTitreFull.begin() + i_idx, df_order_titre_i);
                 parent->proposalTitreFull.push_back(df_order_titre_i);
+            
             }
         } else {
             if (parent->onDebug) Rcpp::Rcout << "In: updateLists1" << std::endl;
@@ -127,6 +129,10 @@ private:
         for (int i = 0; i < times_full_i.size(); i++) {
             df_order_exp.emplace_back("bleed", times_full_i[i]); // End event
         }
+        if (parent->knownInfsVec(i_idx) == 0) {
+            double randomTime = parent->exposureFunctionSample(i_idx + 1);
+            df_order_exp.emplace_back("random", randomTime);
+        }
         // Append all exposure times
         for (int i = 0; i < parent->exposureType.size(); i++) {
             string exposureType_i = parent->exposureType[i];
@@ -176,6 +182,16 @@ private:
      * 
      */
     void updatePars(NumericVector paramsN) {
+        for (int i = 0; i < parent->B; ++i) {
+            NumericVector currentParsCOP_i;
+            int i_b = parent->mapOfCOP[parent->biomarkers[i]];
+            StringVector parnams = parent->parsCOPN[i_b];
+            for (int j = 0; j < parnams.size(); ++j) {
+                currentParsCOP_i.push_back(paramsN[as<string>(parnams[j])]);
+            } 
+            parent->proposalParsCOP[parent->biomarkers[i]] = currentParsCOP_i;
+        }
+
         for (int i = 0; i < parent->B; ++i) {
             NumericVector currentParsObs_i;
             int i_b = parent->mapOfObs[parent->biomarkers[i]];
@@ -250,9 +266,8 @@ private:
                 time_since = orderedEvents[i].value - anchor_time;
                 titre_obs = abkineticsFunction(anchor_titre, bio, anchor_func, time_since ); // Calcualte titre at new event
                 df_order_titre_b.emplace_back(orderedEvents[i].name, titre_obs); // add to vector
-
                 // Only update the anchors if the event is not a bleed, as bleeds don't affect titre trajectory
-                if (orderedEvents[i].name != "bleed") {
+                if ((orderedEvents[i].name != "bleed") && (orderedEvents[i].name != "random")) {
                     // Update the anchor time, titre and function if the event is the fitted exposure
                     if (orderedEvents[i].name == parent->exposureFitted){
                         anchor_titre = titre_obs;
