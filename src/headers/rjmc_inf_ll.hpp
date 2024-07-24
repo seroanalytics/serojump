@@ -128,14 +128,15 @@ public:
         }
             
         // Evaluate the log likelihood of the model given the exposure times and titre values
-        logLikelihood_ab = this->evaluateLogLikelihoodCOP_cpp(jump, init) + this->evaluateLogLikelihoodObs_cpp(init);
-
+        logLikelihood_ab = this->evaluateLogLikelihoodObs_cpp(init);
+        this->evaluateLogLikelihoodCOP_cpp(jump, init) ;
 
         // Evaluate the log likelihood of the model given the titre values
         return logPriorPars + logPriorJump + logLikelihood_ab + logPriorExpTime;
     }
 
 private:
+
 
 /**
  * @brief Evaluate the log likelihood of the COP part of the model
@@ -175,6 +176,8 @@ private:
                     }
                     // Store the titre value for the individual at the new exposure time
                     titreExp(i_idx, bio) = titre_est;
+
+               
                 }
             }
         }

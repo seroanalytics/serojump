@@ -1,0 +1,134 @@
+```{r}
+#install.packages("devtools")
+#library(devtools)
+devtools::load_all()
+
+library(lubridate)
+library(patchwork)
+library(tidybayes)
+library(ggdist)
+
+```
+
+
+```{r}
+
+
+infSerumKinetics <- function(x, a, b, c) {
+    titre_est <- 0
+    if (x < 14) {
+        titre_est <- titre_est + log(exp(a) + exp(c)) * (x) / 14;
+    } else {
+        titre_est <- titre_est + log(exp(a) * exp(-b/10 * (x - 14)) + exp(c));
+    }
+    titre_est
+}
+
+
+
+
+N <- 100
+a_vec <- runif(N, -1, 50)
+b_vec <- runif(N, 1, 5)
+c_vec <- runif(N, 2, 5)
+
+df_summary <- map_df(1:N,
+    function(i) {
+        data.frame(
+            samle = i,
+            x = seq(0, 150, 1),
+            f = map_dbl(seq(0, 150, 1), infSerumKinetics, a = a_vec[i], b = b_vec[i], c = c_vec[i]) 
+        ) 
+    }
+) %>% group_by(x) %>% mean_qi(f)
+
+
+df_summary %>% 
+    ggplot() + 
+       geom_ribbon(aes(x = x, ymin = .lower, ymax =  .upper), alpha = 0.5) + 
+        geom_line(aes(x = x, y = f))
+
+
+
+
+teunis_power <- function(x, y0, y1, v, r, t1) {
+    ##y0 <- 0
+    mu <- (y1 - y0) / t1
+    if (x < t1) {
+        titre_est <- y0 + mu * x
+    } else {
+        titre_est <- y1 - 1 / (r - 1) * log(1 + (r - 1) * 10^(y1)^(r - 1) * v * (x - t1));
+    }
+    titre_est
+}
+
+
+
+teunis_power_true <- function(x, y0, y1, r, t1, alpha) {
+
+    v <- 0.001
+    mu <- 1 / t1 * y1
+    if (x < t1) {
+        titre_est <- exp(mu * x)
+    } else {
+        titre_est <- exp(y1) * (1 + (r - 1) * exp(y1)^{r - 1} * v * (x - t1)) ^ {-1 / (r - 1)}
+    }
+    titre_est_log <- y0 + log(titre_est) 
+    titre_est_log * max(0, 1 - y0 * alpha)
+}
+
+
+
+y1_vec <- runif(N, 1, 6)
+t1_vec <- runif(N, 7, 30)
+r_vec <- runif(N, 1, 5)
+alpha_vec <- runif(N, 0.2, 0.2)
+
+infTuenisPower2016 <- function(titre_est, timeSince, pars) {
+
+    y1 <- pars[1]
+    t1 <- pars[2]
+    r <- pars[3]
+    alpha <- pars[4]
+
+    v <- 0.001
+    mu <- 1 / t1 * y1
+
+    if (timeSince < t1) {
+        titre_est_boost <- exp(mu * timeSince)
+    } else {
+        titre_est_boost <- exp(y1) * (1 + (r - 1) * exp(y1)^{r - 1} * v * (timeSince - t1)) ^ {-1 / (r - 1)}
+    }
+
+    titre_est_log <- titre_est + log(titre_est_boost) 
+    titre_est_log * max(0, 1 - titre_est * alpha)
+}
+
+
+
+
+
+N <- 1000
+y1_vec <- runif(N, 2, 2)
+t1_vec <- runif(N, 30, 30)
+r_vec <- runif(N, 1.2, 1.2)
+alpha_vec <- runif(N, 0.2, 0.2)
+
+
+df_summary <- map_df(1:N,
+    function(i) {
+        data.frame(
+            sample = i,
+            x = seq(0, 150, 1),
+            f = map_dbl(seq(0, 150, 1), teunis_power_true, y0 = 2, y1 = y1_vec[i],  r = r_vec[i], t1 = t1_vec[i], alpha = alpha_vec[i]) 
+        ) 
+    }
+) %>% group_by(x) %>% mean_qi(f)
+
+
+df_summary %>% 
+    ggplot() + 
+       geom_ribbon(aes(x = x, ymin = .lower, ymax =  .upper), alpha = 0.5) + 
+        geom_line(aes(x = x, y = f))
+
+```
