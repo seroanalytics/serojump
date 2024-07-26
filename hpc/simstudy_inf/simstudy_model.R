@@ -38,8 +38,21 @@ infSerumKinetics <- function(titre_est, timeSince, pars) {
     titre_est
 }
 
+copFuncForm <- function(inf_status, esttitreExp, params) {
+    beta0 <- params[1]
+    beta1 <- params[2]
+    mu <- params[3]
+
+    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+}
 
 
+copLogLikelihood <- function(inf_status, esttitreExp, params) {
+    # COP parameters
+    p <- copFuncForm(inf_status, esttitreExp, params)
+    ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
+    ll
+}
 
 ## Define the models for the rjmcmc model
 
@@ -68,6 +81,18 @@ abkineticsModel <- list(
     )
 )
 
+
+copModel <- list( 
+        model = makeModel(
+            addCopModel("IgG", "delta", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood)
+        ),
+        prior = bind_rows(
+            add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("beta1", -10, 10, "unif", -10, 10),
+            add_par_df("mu", 0, 1, "unif", 0, 1)
+        ) # cop model (not used here),
+)
+
 inf_prior_1 <- function(N, E, I, K) {
     0
 }
@@ -93,6 +118,7 @@ modeldefinition_p1 <- list(
     exposureFitted = exposureFitted,
     observationalModel = observationalModel,
     abkineticsModel = abkineticsModel,
+    copModel = copModel,
     expInfPrior = inf_prior_1,
     exposurePrior = exp_prior,
     exposurePriorType = "func",

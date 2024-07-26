@@ -128,8 +128,7 @@ public:
         }
             
         // Evaluate the log likelihood of the model given the exposure times and titre values
-        logLikelihood_ab = this->evaluateLogLikelihoodObs_cpp(init);
-        this->evaluateLogLikelihoodCOP_cpp(jump, init) ;
+        logLikelihood_ab = this->evaluateLogLikelihoodObs_cpp(init) + this->evaluateLogLikelihoodCOP_cpp(jump, init) ;
 
         // Evaluate the log likelihood of the model given the titre values
         return logPriorPars + logPriorJump + logLikelihood_ab + logPriorExpTime;
@@ -148,7 +147,11 @@ private:
         double p = mu / (1.0 + exp(- (beta0 + beta1 * titre) ) );
 
         ll = y * log(p) + (1 - y) * log(1 - p);
+        
+      //  Rcpp::Rcout << "beta0: " << beta0 << std::endl;
+       // Rcpp::Rcout << "beta1: " << beta1 << std::endl;
 
+       // Rcpp::Rcout << "ll: " << ll << std::endl;
         return ll;
     }
 

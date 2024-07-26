@@ -3,7 +3,7 @@ library(devtools)
 library(Rcpp)
 #Rcpp::compileAttributes()
 devtools::load_all()
-i <- 3
+i <- 1
 
 seroModel_full <- readRDS(here::here("hpc", "simstudy_inf", "simstudy_model.RData"))
 

@@ -264,6 +264,11 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
     #data_sero <- gambia_pvnt_w2
 #    data_known <- known_exposure
     #data_sero <- data_titre
+   # data_sero <- data_titre_model
+   # data_known
+   #modeldefinition
+   # known_exp_bool <- NULL
+
     modelSeroJump <- list()
 
     cat("GER PRIORS\n")

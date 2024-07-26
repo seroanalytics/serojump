@@ -291,10 +291,14 @@ calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
    # data_t
  #  exp_prior_i <- modeldefinition$exposurePrior
  #   type <- modeldefinition$exposurePriorType
+    #model_type <- modelSeroJump
+    #data_t
+    #exp_prior_i <- modeldefinition$exposurePrior
+    # type = modeldefinition$exposurePriorType
 
   # modelSeroJump, data_t, modeldefinition$exposurePrior, type = modeldefinition$exposurePriorTyp
 
-    addExposurePrior_checkempirical(exp_prior_i, data_t)
+    #addExposurePrior_checkempirical(exp_prior_i, data_t)
 
     if (is.null(type)) {
         cat("Exposure rate is not defined over the time period. Defaulting to uniform distribution between 1 and ", data_t$T, ". \n")
