@@ -596,10 +596,10 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
    #filename <-  "local/nih_2024_inf/test"
   # modelname <- "h3"
   # n_chains <- 4
-  # filename <- "hpc/transvir_w2_inf/p3"
-  #  modelname <- "w2"
-  #   n_chains <- 4
-    
+   # filename <- "hpc/transvir_w2_inf/p3"
+   # modelname <- "w2"
+   # n_chains <- 4
+   # scale_ab <- NULL
 
     dir.create(here::here("outputs", "fits", filename,  "figs", modelname), recursive = TRUE, showWarnings = FALSE)
     fitfull_pp <- readRDS(here::here("outputs", "fits", filename, paste0("fit_prior_", modelname, ".RDS")))
@@ -1012,14 +1012,12 @@ plot_abkinetics_trajectories2Inf <- function(outputfull, fitfull, fig_folder) {
       #  bio_i <- bio_all[1]
        # j <- 1
         #lol %>% ggplot() + geom_line(aes(x = t, y = titre_traj, group = id))
-
         df_traj_post_ind <- map(
             df_ids_plot_i$id,
             function(i) {
-
-                    map(bio_all, 
+                    lol <- map(bio_all, 
                         function(bio_i) {
-                            lol <- map(sample_s,
+                            map(sample_s,
                                 function(s) {
                                     df_exposure_order_i <- as.data.table(df_exposure_order) %>% filter(id == i, sample == s, biomarker == bio_i) %>% arrange(time, .by_group = TRUE)
                             
@@ -1051,6 +1049,11 @@ plot_abkinetics_trajectories2Inf <- function(outputfull, fitfull, fig_folder) {
                                             titre_anchor <- ifelse(length(vector_titre) == 0, titre_start, vector_titre[length(vector_titre)])
                                             time_anchor <- length(titre_traj)
                                         } else {
+                                                
+                                           #ab_func(titre_anchor, 1, par_in)
+                                           # mu <- 1 / (1.0572397 * 11.4044389)
+                                           # titre_est_boost <- exp(mu * 1)
+                                           # titre_anchor + titre_est_boost * max(0, 1 - titre_anchor * 0.1544596)
 
                                             vector_titre <- unlist(lapply(seq_len(timesince_vec[j]), function(t) ab_func(titre_anchor, t, par_in)))
                                             titre_traj <- c(titre_traj, vector_titre)

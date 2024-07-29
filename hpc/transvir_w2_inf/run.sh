@@ -7,7 +7,7 @@
 #SBATCH --mem=16G              # Request 8 GB of RAM
 #SBATCH --time=48:00:00       # Set runtime to 48 hours
 #SBATCH --output=transvir_w2_%j.log 
-#SBATCH --array=1-3
+#SBATCH --array=1-6
 
 # Load any necessary modules
 #module load R/4.1.2 

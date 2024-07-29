@@ -3,8 +3,10 @@ library(Rcpp)
 
 devtools::load_all()
 i <- 3
-seroW2_full <- readRDS(here::here("hpc", "transvir_w2_inf", "transvir_w2_model.RData"))
-prior_names <- c("p1", "p2", "p3")
+seroW2_full <- readRDS(here::here("hpc", "transvir_w2_inf", "transvir_w23_model.RData"))
+prior_names <- c("p1", "p2", "p3", "p1", "p2", "p3")
+prior_names_wave <- c("w2", "w2", "w2", "w3", "w3", "w3")
+
 ## check entriee
 #seroModel$data$times_list # id, t
 #seroModel$data$titre_list #id, bio, t
@@ -27,5 +29,5 @@ settings <-  list(
     onDebug = FALSE
 )
 
-runInfRJMCMC(seroW2_full[[i]], settings, paste0("hpc/transvir_w2_inf/", prior_names[i]), "w2")
-postprocessFigsInf(paste0("hpc/transvir_w2_inf/",  prior_names[i]), "w2", 4)
+runInfRJMCMC(seroW2_full[[i]], settings, paste0("hpc/transvir_w2_inf/", prior_names[i]), prior_names_wave[i])
+postprocessFigsInf(paste0("hpc/transvir_w2_inf/",  prior_names[i]), prior_names_wave[i], 4)

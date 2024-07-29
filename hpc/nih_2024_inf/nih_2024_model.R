@@ -50,8 +50,8 @@ infTuenisPower2016 <- function(titre_est, timeSince, pars) {
         titre_est_boost <- exp(y1) * (1 + (r - 1) * exp(y1)^{r - 1} * v * (timeSince - t1)) ^ {-1 / (r - 1)}
     }
 
-    titre_est_log <- titre_est + log(titre_est_boost) 
-    titre_est_log * max(0, 1 - titre_est * alpha)
+    titre_est_log <- titre_est + log(titre_est_boost) * max(0, 1 - titre_est * alpha)
+    titre_est_log 
 }
 
 

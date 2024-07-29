@@ -194,14 +194,6 @@ get_exposures_wave2 <- function() {
 
     known_exposures <- data_titre %>% select(pid, id) %>% unique %>% left_join(bind_rows(gambia_inf_dates_d, gambia_meta_short, gambia_inf_dates_pd) %>% filter(!is.na(time)) ) %>% 
         filter(!is.na(exposure_type))
-
-    #known_exposures <- data_titre %>% left_join(gambia_inf_dates_pd) %>% left_join(gambia_inf_dates_d) %>% left_join(gambia_meta_short) %>%
-    #    group_by(id) %>% mutate(t = row_number()) %>% ungroup %>% 
-     #   pivot_wider(names_from = "t", values_from = c("titre", "time")) %>% as.data.frame %>% filter(pid != "34-399H") %>%
-     #   mutate(inf_pd_time = case_when(inf_days_pd > time_1 & inf_days_pd <= time_2 ~ inf_days_pd, TRUE~-1)) %>% as.data.frame %>% 
-     #   mutate(inf_d_time = case_when(inf_days_d > time_1 & inf_days_d <= time_2 ~ inf_days_d, TRUE~-1)) %>%
-     #   mutate(vax_time = case_when(vax_days > time_1 & vax_days <= time_2 ~ vax_days, TRUE~-1)) %>%
-     #   dplyr::select(pid, id, time_1, time_2, titre_1, titre_2, vax_days, inf_pd_time, inf_d_time, vax_time) 
         
     known_exposures
 }
@@ -214,6 +206,106 @@ get_exp_prior_wave2 <- function() {
 
     start_date <- gambia_pvn_raw %>% dplyr::select(Participant_ID, V1_date, contains("ptna_Ancestral_V1")) %>% pull(V1_date) %>% dmy %>% min  #"2021-03-02"
     end_date <- gambia_pvn_raw %>% dplyr::select(Participant_ID, V2_date, contains("ptna_Ancestral_V2")) %>% pull(V2_date) %>% dmy %>% max(na.rm = TRUE)  #"2021-03-02"
+
+    gambia_daily_cases <- read.csv(file = here::here("data", "transvir", "gambia_covid_daily.csv") )
+    gambia_daily_cases_ed <- gambia_daily_cases %>% filter(date >= start_date &  date < end_date) %>% mutate(
+        date_time = as.numeric(ymd(date) - start_date)) %>% mutate(week = date_time %/% 14) %>% 
+        summarise(total = sum(new_cases, na.rm = TRUE), .by = week) %>% 
+        mutate(prop = total / sum(total)) %>% dplyr::select(week, prop)
+    # Truncate the exposure prior such thae probab of infection is 0 before fornight 7 and zero after day 19
+    gambia_daily_cases_ed <- gambia_daily_cases_ed %>% mutate(prop = case_when(week < 7 ~ 0, week > 19 ~ 0, TRUE ~ prop))
+    exp_prior <- data.frame(
+        day = 1:(nrow(gambia_daily_cases_ed)*14),
+        week = gambia_daily_cases_ed$week %>% map(~rep(.x, 14)) %>% unlist,
+        prob = gambia_daily_cases_ed$prop %>% map(~rep(.x / 14, 14)) %>% unlist
+    )
+
+    exp_prior
+}
+
+
+get_data_titre_model_wave3_pvnt_iga <- function() {
+    odd_people <- c("17-197B", "07-077B", "41-481E", "43-509K", "34-399H", "41-483J", "43-512H")
+    gambia_pvn_raw <- read.csv(file = here::here("data", "transvir", "Pseudovirus_data_V1_V2_V3.csv") ) %>% filter(!Participant_ID %in% odd_people)
+    gambia_iga_raw <- read.csv(file = here::here("data", "transvir", "IgA_data_V1_V2_V3.csv") ) %>% filter(!Participant_ID %in% odd_people)
+
+    gambia_pvn_raw_d2 <- gambia_pvn_raw %>% dplyr::select(Participant_ID, V2_date, contains("ptna_BA.1_V2"))
+    pids_v2_valid <- gambia_pvn_raw_d2 %>% filter(!is.na(V2_date)) %>% pull(Participant_ID)
+    gambia_pvn_raw_d3 <- gambia_pvn_raw %>% dplyr::select(Participant_ID, V3_date, contains("ptna_BA.1_V3"))
+    pids_v3_valid <- gambia_pvn_raw_d3 %>% filter(!is.na(V3_date)) %>% pull(Participant_ID)
+
+    pids_valid <- intersect(pids_v2_valid, pids_v3_valid)
+
+    start_date <- gambia_pvn_raw %>% dplyr::select(Participant_ID, V2_date, contains("ptna_BA.1_V2")) %>% filter(Participant_ID %in% pids_valid) %>%  pull(V2_date) %>% dmy %>% min  #"2021-03-02"
+    start_day <- yday(start_date)
+    gambia_pvnt_b0 <- gambia_pvn_raw %>% dplyr::select(Participant_ID, V2_date, contains("ptna_BA.1_V2")) %>% filter(Participant_ID %in% pids_valid) %>% mutate(
+        V2_date = as.numeric(dmy(V2_date) - start_date + 1)) %>% rename(pid = Participant_ID, time = V2_date, titre = ptna_BA.1_V2) %>% 
+        filter(!is.na(titre))
+    gambia_pvnt_b1 <- gambia_pvn_raw %>% dplyr::select(Participant_ID, V3_date, contains("ptna_BA.1_V3")) %>% filter(Participant_ID %in% pids_valid)%>% mutate(
+        V3_date = as.numeric(dmy(V3_date) - start_date + 1)) %>% rename(pid = Participant_ID, time = V3_date, titre = ptna_BA.1_V3) %>% 
+        filter(!is.na(titre))
+    ids <- gambia_pvnt_b1 %>% pull(pid)
+    gambia_pvnt <- bind_rows(gambia_pvnt_b0, gambia_pvnt_b1) %>% filter(pid %in% ids) %>% mutate(id = as.numeric(factor(pid))) %>%
+        arrange(id, time) %>% 
+        mutate(titre = case_when(titre <= 40 ~ 6.3245, TRUE~titre)) %>%
+        mutate(titre = case_when(
+            titre < 1 ~ 1,
+            TRUE ~ titre
+        )) %>% mutate(titre = pmax(log10(titre), 0)) %>% rename(sVNT = titre)
+
+    gambia_iga_raw <- read.csv(file = here::here("data", "transvir", "IgA_data_V1_V2_V3.csv") ) %>% filter(!Participant_ID %in% odd_people)
+
+    gambia_iga_b0 <- gambia_iga_raw %>% dplyr::select(Participant_ID, V2_date, contains("IgA_BA.1_V2")) %>% filter(Participant_ID %in% pids_valid) %>% mutate(
+        V2_date = as.numeric(dmy(V2_date) - start_date + 1)) %>% rename(pid = Participant_ID, time = V2_date, titre = IgA_BA.1_V2) %>% 
+        filter(!is.na(titre))
+    gambia_iga_b1 <- gambia_iga_raw %>% dplyr::select(Participant_ID, V3_date, contains("IgA_BA.1_V3")) %>% filter(Participant_ID %in% pids_valid) %>% mutate(
+        V3_date = as.numeric(dmy(V3_date) - start_date + 1)) %>% rename(pid = Participant_ID, time = V3_date, titre = IgA_BA.1_V3) %>% 
+        filter(!is.na(titre))
+
+    ids <- gambia_pvnt_b1 %>% pull(pid)
+
+    gambia_iga <- bind_rows(gambia_iga_b0, gambia_iga_b1) %>% filter(pid %in% ids) %>% mutate(id = as.numeric(factor(pid))) %>%
+        arrange(id, time)  %>% mutate(titre = pmax(log10(titre), 0))  %>% rename(IgA = titre)   
+
+    gambia_pvnt_both <- gambia_pvnt %>% left_join(gambia_iga)
+    full_ids <- gambia_pvnt_both$pid[!complete.cases(gambia_pvnt_both)]
+
+    gambia_pvnt_both_clean <- gambia_pvnt_both %>% filter(!pid %in% full_ids) %>% mutate(id = as.numeric(factor(pid, levels = unique(pid))))
+    gambia_pvnt_both_clean
+}
+
+
+get_exposures_wave3 <- function() {
+    odd_people <- c("17-197B", "07-077B", "41-481E", "43-509K", "34-399H", "41-483J", "43-512H")
+    gambia_pvn_raw <- read.csv(file = here::here("data", "transvir", "Pseudovirus_data_V1_V2_V3.csv") ) %>% filter(!Participant_ID %in% odd_people)
+
+    start_date <- gambia_pvn_raw %>% dplyr::select(Participant_ID, V2_date, contains("ptna_Ancestral_V2")) %>% pull(V2_date) %>% dmy %>% min(na.rm = TRUE)  #"2021-08-30"
+
+    gambia_inf_dates <- get_infection_dates()
+    gambia_inf_dates_o <- gambia_inf_dates %>% filter(!is.na(known_omicron)) %>% mutate(inf_days = as.numeric(ymd(known_omicron) - start_date) + 1) %>%
+        dplyr::select(pid = Participant_ID, time = inf_days) %>% mutate(exposure_type = "omicron")
+
+    # Get vaccine dates
+    gambia_meta <- read.csv(file = here::here("data", "transvir","full_demog_data.csv") )
+    gambia_meta_short <- gambia_meta %>% dplyr::select(pid = Participant_ID, vax_date) %>% mutate(vax_days = as.numeric(ymd(vax_date) - ymd("2021-08-30")) + 1) %>% 
+        select(pid, time = vax_days) %>% mutate(exposure_type = "vax") %>% mutate(time = if_else(time < 0, NA, time))
+
+    data_titre <- get_data_titre_model_wave3_pvnt_iga()
+
+    known_exposures <- data_titre %>% select(pid, id) %>% unique %>% left_join(bind_rows(gambia_inf_dates_o, gambia_meta_short) %>% filter(!is.na(time)) ) %>% 
+        filter(!is.na(exposure_type))
+        
+    known_exposures
+}
+
+
+get_exp_prior_wave3 <- function() {
+
+    odd_people <- c("17-197B", "07-077B", "41-481E", "43-509K", "34-399H", "41-483J", "43-512H")
+    gambia_pvn_raw <- read.csv(file = here::here("data", "transvir", "Pseudovirus_data_V1_V2_V3.csv") ) %>% filter(!Participant_ID %in% odd_people)
+
+    start_date <- gambia_pvn_raw %>% dplyr::select(Participant_ID, V2_date, contains("ptna_Ancestral_V2")) %>% pull(V2_date) %>% dmy %>% min(na.rm = TRUE)  #"2021-03-02"
+    end_date <- gambia_pvn_raw %>% dplyr::select(Participant_ID, V3_date, contains("ptna_Ancestral_V3")) %>% pull(V3_date) %>% dmy %>% max(na.rm = TRUE)  #"2021-03-02"
 
     gambia_daily_cases <- read.csv(file = here::here("data", "transvir", "gambia_covid_daily.csv") )
     gambia_daily_cases_ed <- gambia_daily_cases %>% filter(date >= start_date &  date < end_date) %>% mutate(
