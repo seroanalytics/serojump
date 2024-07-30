@@ -127,24 +127,24 @@ abkineticsModel <- list(
         ),
     prior = bind_rows(
         add_par_df("y1_d", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_d", 7, 30, "unif",  7, 30), # ab kinetics
+        add_par_df("t1_d", 7, 50, "unif",  7, 50), # ab kinetics
         add_par_df("r_d", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("y1_vax", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_vax", 7, 30, "unif",  7, 30), # ab kinetics
+        add_par_df("t1_vax", 7, 50, "unif",  7, 50), # ab kinetics
         add_par_df("r_vax", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("y1_pd", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_pd", 7, 30, "unif",  7, 30), # ab kinetics
+        add_par_df("t1_pd", 7, 50, "unif",  7, 50), # ab kinetics
         add_par_df("r_pd", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("s",  0, 1, "unif", 0, 1), # ab kinetics 
         add_par_df("wane", 0.0, 0.01, "unif", 0.0, 0.01), # observational model
         add_par_df("y1_d_a", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_d_a", 7, 30, "unif",  7, 30), # ab kinetics
+        add_par_df("t1_d_a", 7, 50, "unif",  7, 50), # ab kinetics
         add_par_df("r_d_a", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("y1_vax_a", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_vax_a", 7, 30, "unif",  7, 30), # ab kinetics
+        add_par_df("t1_vax_a", 7, 50, "unif",  7, 50), # ab kinetics
         add_par_df("r_vax_a", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("y1_pd_a", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_pd_a", 7, 30, "unif",  7, 30), # ab kinetics
+        add_par_df("t1_pd_a", 7, 50, "unif",  7, 50), # ab kinetics
         add_par_df("r_pd_a", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("s_a", 0, 1, "unif", 0, 1), # ab kinetics 
         add_par_df("wane_a", 0.0, 0.01, "unif", 0.0, 0.01) # observational model
@@ -196,7 +196,7 @@ inf_prior_2 <- function(N, E, I, K) {
 inf_prior_3 <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K
-    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, rate_inf_w2, log = TRUE)
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.2797203, log = TRUE)
     logPriorExpInf
 }
 
@@ -272,18 +272,18 @@ abkineticsModel <- list(
         ),
     prior = bind_rows(
         add_par_df("y1_o", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_o", 7, 30, "unif",  7, 30), # ab kinetics
+        add_par_df("t1_o", 7, 50, "unif",  7, 50), # ab kinetics
         add_par_df("r_o", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("y1_vax", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_vax", 7, 30, "unif",  7, 30), # ab kinetics
+        add_par_df("t1_vax", 7, 50, "unif",  7, 50), # ab kinetics
         add_par_df("r_vax", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("s",  0, 1, "unif", 0, 1), # ab kinetics 
         add_par_df("wane", 0.0, 0.01, "unif", 0.0, 0.01), # observational model
         add_par_df("y1_o_a", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_o_a", 7, 30, "unif",  7, 30), # ab kinetics
+        add_par_df("t1_o_a", 7, 50, "unif",  7, 50), # ab kinetics
         add_par_df("r_o_a", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("y1_vax_a", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_vax_a", 7, 30, "unif",  7, 30), # ab kinetics
+        add_par_df("t1_vax_a", 7, 50, "unif",  7, 50), # ab kinetics
         add_par_df("r_vax_a", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("s_a", 0, 1, "unif", 0, 1), # ab kinetics 
         add_par_df("wane_a", 0.0, 0.01, "unif", 0.0, 0.01) # observational model
@@ -335,7 +335,7 @@ inf_prior_2 <- function(N, E, I, K) {
 inf_prior_3 <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K
-    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, rate_inf_w3, log = TRUE)
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.3050847, log = TRUE)
     logPriorExpInf
 }
 

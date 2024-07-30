@@ -141,17 +141,17 @@ abkineticsModel_h1 <- list(
         ),
     prior = bind_rows(
         add_par_df("y1_vax", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_vax", 7, 30, "unif", 7, 30), # ab kinetics
+        add_par_df("t1_vax", 7, 50, "unif", 7, 50), # ab kinetics
         add_par_df("r_vax", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("y1_v", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_v", 7, 30, "unif", 7, 30), # ab kinetics
+        add_par_df("t1_v", 7, 50, "unif", 7, 50), # ab kinetics
         add_par_df("r_v", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("s", 0, 1, "unif", 0, 1), # ab kinetics 
         add_par_df("y1_vax_e", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_vax_e", 7, 30, "unif", 7, 30), # ab kinetics
+        add_par_df("t1_vax_e", 7, 50, "unif", 7, 50), # ab kinetics
         add_par_df("r_vax_e", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("y1_v_e", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_v_e", 7, 30, "unif", 7, 30), # ab kinetics
+        add_par_df("t1_v_e", 7, 50, "unif", 7, 50), # ab kinetics
         add_par_df("r_v_e", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("s_e", 0, 1, "unif", 0, 1) # ab kinetics 
     )
@@ -165,11 +165,11 @@ copModel_h1 <- list(
         prior = bind_rows(
             add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
             add_par_df("beta1", -10, 10, "unif", -10, 10),
-            add_par_df("mu", 0, 1, "unif", 0, 1),
+            add_par_df("mu", 0, 0.5, "unif", 0, 0.5),
             add_par_df("beta0_e", -10, 10, "unif", -10, 10), # cop model (not used here)
             add_par_df("beta1_e", -10, 10, "unif", -10, 10),
-            add_par_df("mu_e", 0, 1, "unif", 0, 1),
-        ) # cop model (not used here),
+            add_par_df("mu_e", 0, 0.5, "unif", 0, 0.5),
+        ) 
 )
 
 
@@ -273,17 +273,17 @@ abkineticsModel_h3 <- list(
         ),
     prior = bind_rows(
         add_par_df("y1_vax", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_vax", 7, 30, "unif", 7, 30), # ab kinetics
+        add_par_df("t1_vax", 7, 50, "unif", 7, 50), # ab kinetics
         add_par_df("r_vax", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("y1_v", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_v", 7, 30, "unif", 7, 30), # ab kinetics
+        add_par_df("t1_v", 7, 50, "unif", 7, 50), # ab kinetics
         add_par_df("r_v", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("s", 0, 1, "unif", 0, 1), # ab kinetics 
         add_par_df("y1_vax_e", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_vax_e", 7, 30, "unif", 7, 30), # ab kinetics
+        add_par_df("t1_vax_e", 7, 50, "unif", 7, 50), # ab kinetics
         add_par_df("r_vax_e", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("y1_v_e", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_v_e", 7, 30, "unif", 7, 30), # ab kinetics
+        add_par_df("t1_v_e", 7, 50, "unif", 7, 50), # ab kinetics
         add_par_df("r_v_e", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("s_e", 0, 1, "unif", 0, 1) # ab kinetics 
     )
@@ -297,10 +297,10 @@ copModel_h3 <- list(
         prior = bind_rows(
             add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
             add_par_df("beta1", -10, 10, "unif", -10, 10),
-            add_par_df("mu", 0, 1, "unif", 0, 1),
+            add_par_df("mu", 0, 0.5, "unif", 0, 0.5),
             add_par_df("beta0_e", -10, 10, "unif", -10, 10), # cop model (not used here)
             add_par_df("beta1_e", -10, 10, "unif", -10, 10),
-            add_par_df("mu_e", 0, 1, "unif", 0, 1),
+            add_par_df("mu_e", 0, 0.5, "unif", 0, 0.5),
         ) # cop model (not used here),
 )
 
