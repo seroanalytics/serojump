@@ -5,7 +5,7 @@ devtools::load_all()
 i <- Sys.getenv("SLURM_ARRAY_TASK_ID")
 i <- as.integer(i)
 
-seroW2_full <- readRDS(here::here("hpc", "transvir_w2_inf", "transvir_w2_model.RData"))
+seroW2_full <- readRDS(here::here("hpc", "transvir_w2_inf", "transvir_w23_model.RData"))
 prior_names <- c("p1", "p2", "p3", "p1", "p2", "p3")
 prior_names_wave <- c("w2", "w2", "w2", "w3", "w3", "w3")
 
