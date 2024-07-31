@@ -77,6 +77,25 @@ copFuncForm <- function(inf_status, esttitreExp, params) {
     p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
 }
 
+copFuncFormInformed_h1 <- function(inf_status, esttitreExp, params) {
+    ep <- params[1]
+    beta1 <- params[2]
+    mu <- params[3]
+
+    beta0 <- log(0.1) - beta1 * 9 - ep
+    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+}
+
+copFuncFormInformed_h3 <- function(inf_status, esttitreExp, params) {
+    ep <- params[1]
+    beta1 <- params[2]
+    mu <- params[3]
+
+    beta0 <- log(0.1) - beta1 * 9 - ep
+    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+}
+
+
 
 copLogLikelihood <- function(inf_status, esttitreExp, params) {
     # COP parameters
@@ -141,17 +160,17 @@ abkineticsModel_h1 <- list(
         ),
     prior = bind_rows(
         add_par_df("y1_vax", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_vax", 7, 50, "unif", 7, 50), # ab kinetics
+        add_par_df("t1_vax", 7, 24, "norm", 14, 3), # ab kinetics
         add_par_df("r_vax", 1, 5, "unif", 1, 5), # ab kinetics 
-        add_par_df("y1_v", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_v", 7, 50, "unif", 7, 50), # ab kinetics
+        add_par_df("y1_v", 1, 9, "unif",  1, 9), # ab kinetics
+        add_par_df("t1_v", 7, 24, "norm", 14, 3), # ab kinetics
         add_par_df("r_v", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("s", 0, 1, "unif", 0, 1), # ab kinetics 
         add_par_df("y1_vax_e", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_vax_e", 7, 50, "unif", 7, 50), # ab kinetics
+        add_par_df("t1_vax_e", 7, 24, "norm", 14, 3), # ab kinetics
         add_par_df("r_vax_e", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("y1_v_e", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_v_e", 7, 50, "unif", 7, 50), # ab kinetics
+        add_par_df("t1_v_e", 7, 24, "norm", 14, 3), # ab kinetics
         add_par_df("r_v_e", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("s_e", 0, 1, "unif", 0, 1) # ab kinetics 
     )
@@ -159,14 +178,14 @@ abkineticsModel_h1 <- list(
 
 copModel_h1 <- list( 
         model = makeModel(
-            addCopModel("A/Sydney/5/2021", "h1_2023", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
-            addCopModel("A/Sydney/5/2021e", "h1_2023", c("beta0_e", "beta1_e", "mu_e"), copFuncForm, copLogLikelihood)
+            addCopModel("A/Sydney/5/2021", "h1_2023", c("ep", "beta1", "mu"), copFuncFormInformed_h1, copLogLikelihood),
+            addCopModel("A/Sydney/5/2021e", "h1_2023", c("ep_e", "beta1_e", "mu_e"), copFuncFormInformed_h1, copLogLikelihood)
         ),
         prior = bind_rows(
-            add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("ep", 0, 10, "unif", 0, 10), # cop model (not used here)
             add_par_df("beta1", -10, 10, "unif", -10, 10),
             add_par_df("mu", 0, 0.5, "unif", 0, 0.5),
-            add_par_df("beta0_e", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("ep_e", 0, 10, "unif", 0, 10), # cop model (not used here)
             add_par_df("beta1_e", -10, 10, "unif", -10, 10),
             add_par_df("mu_e", 0, 0.5, "unif", 0, 0.5),
         ) 
@@ -273,17 +292,17 @@ abkineticsModel_h3 <- list(
         ),
     prior = bind_rows(
         add_par_df("y1_vax", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_vax", 7, 50, "unif", 7, 50), # ab kinetics
+        add_par_df("t1_vax", 7, 24, "norm", 14, 3), # ab kinetics
         add_par_df("r_vax", 1, 5, "unif", 1, 5), # ab kinetics 
-        add_par_df("y1_v", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_v", 7, 50, "unif", 7, 50), # ab kinetics
+        add_par_df("y1_v", 1, 9, "unif",  1, 9), # ab kinetics
+        add_par_df("t1_v", 7, 24, "norm", 14, 3), # ab kinetics
         add_par_df("r_v", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("s", 0, 1, "unif", 0, 1), # ab kinetics 
         add_par_df("y1_vax_e", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_vax_e", 7, 50, "unif", 7, 50), # ab kinetics
+        add_par_df("t1_vax_e", 7, 24, "norm", 14, 3), # ab kinetics
         add_par_df("r_vax_e", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("y1_v_e", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_v_e", 7, 50, "unif", 7, 50), # ab kinetics
+        add_par_df("t1_v_e", 7, 24, "norm", 14, 3), # ab kinetics
         add_par_df("r_v_e", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("s_e", 0, 1, "unif", 0, 1) # ab kinetics 
     )
@@ -291,17 +310,17 @@ abkineticsModel_h3 <- list(
 
 copModel_h3 <- list( 
         model = makeModel(
-            addCopModel("A/Darwin/06/2021", "h3_2023", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
-            addCopModel("A/Darwin/09/2021e", "h3_2023", c("beta0_e", "beta1_e", "mu_e"), copFuncForm, copLogLikelihood)
+            addCopModel("A/Darwin/06/2021", "h3_2023", c("ep", "beta1", "mu"), copFuncFormInformed_h3, copLogLikelihood),
+            addCopModel("A/Darwin/09/2021e", "h3_2023", c("ep_e", "beta1_e", "mu_e"), copFuncFormInformed_h3, copLogLikelihood)
         ),
         prior = bind_rows(
-            add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("ep", 0, 10, "unif", 0, 10), # cop model (not used here)
             add_par_df("beta1", -10, 10, "unif", -10, 10),
             add_par_df("mu", 0, 0.5, "unif", 0, 0.5),
-            add_par_df("beta0_e", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("ep_e", 0, 10, "unif", 0, 10), # cop model (not used here)
             add_par_df("beta1_e", -10, 10, "unif", -10, 10),
             add_par_df("mu_e", 0, 0.5, "unif", 0, 0.5),
-        ) # cop model (not used here),
+        )
 )
 
 
@@ -345,7 +364,8 @@ seroModel_nih_h3_p1 <- createSeroJumpModel(data_titre_h3, known_exposure_h3, mod
 seroModel_nih_h3_p2 <- createSeroJumpModel(data_titre_h3, known_exposure_h3, modeldefinition_h3_p2)
 seroModel_nih_h3_p3 <- createSeroJumpModel(data_titre_h3, known_exposure_h3, modeldefinition_h3_p3)
 
-seroModel_nih_h3_p1$data$knownExpVec %>% names
+seroModel_nih_h3_p1$data$max_titre
+
 ##########################################
 ############ Make models
 ##########################################

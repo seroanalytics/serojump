@@ -38,4 +38,3 @@ names(ab_values) <- names_ab
 
 runInfRJMCMC(seroModel, settings, paste0("hpc/nih_2024_inf/", vec_names_i[2]), vec_names_i[1])
 postprocessFigsInf(paste0("hpc/nih_2024_inf/", vec_names_i[2]), vec_names_i[1], 4, ab_values)
-

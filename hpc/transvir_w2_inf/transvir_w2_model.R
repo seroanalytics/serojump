@@ -58,18 +58,13 @@ copLogLikelihood <- function(inf_status, esttitreExp, params) {
     ll
 }
 
-infSerumKinetics_titredep <- function(titre_est, timeSince, pars) {
-    a <- pars[1]
-    b <- pars[2]
-    c <- pars[3]
-    s <- pars[4]
+copFuncFormInformed <- function(inf_status, esttitreExp, params) {
+    ep <- params[1]
+    beta1 <- params[2]
+    mu <- params[3]
 
-    if (timeSince < 14) {
-        titre_est <- titre_est + max(1 - s * titre_est, 0) * log(exp(a) + exp(c)) * (timeSince) / 14;
-    } else {
-        titre_est <- titre_est + max(1 - s * titre_est, 0) * (log(exp(a) * exp(-b/10 * (timeSince - 14)) + exp(c)));
-    }
-    titre_est
+    beta0 <- log(0.1) - beta1 * 4 - ep
+    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
 }
 
 
@@ -127,25 +122,25 @@ abkineticsModel <- list(
         ),
     prior = bind_rows(
         add_par_df("y1_d", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_d", 7, 50, "unif",  7, 50), # ab kinetics
+        add_par_df("t1_d", 10, 25, "unif",  10, 25), # ab kinetics
         add_par_df("r_d", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("y1_vax", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_vax", 7, 50, "unif",  7, 50), # ab kinetics
+        add_par_df("t1_vax", 10, 25, "unif",  10, 25), # ab kinetics
         add_par_df("r_vax", 1, 5, "unif", 1, 5), # ab kinetics 
-        add_par_df("y1_pd", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_pd", 7, 50, "unif",  7, 50), # ab kinetics
-        add_par_df("r_pd", 1, 5, "unif", 1, 5), # ab kinetics 
+        add_par_df("y1_pd", 1, 9, "unif",  1, 9), # ab kinetics
+        add_par_df("t1_pd", 10, 25, "unif",  10, 25), # ab kinetics
+        add_par_df("r_pd", 1, 7, "unif", 1, 7), # ab kinetics 
         add_par_df("s",  0, 1, "unif", 0, 1), # ab kinetics 
         add_par_df("wane", 0.0, 0.01, "unif", 0.0, 0.01), # observational model
         add_par_df("y1_d_a", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_d_a", 7, 50, "unif",  7, 50), # ab kinetics
+        add_par_df("t1_d_a", 25, 75, "unif",  25, 75), # ab kinetics
         add_par_df("r_d_a", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("y1_vax_a", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_vax_a", 7, 50, "unif",  7, 50), # ab kinetics
+        add_par_df("t1_vax_a", 25, 75, "unif",  25, 75), # ab kinetics
         add_par_df("r_vax_a", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("y1_pd_a", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_pd_a", 7, 50, "unif",  7, 50), # ab kinetics
-        add_par_df("r_pd_a", 1, 5, "unif", 1, 5), # ab kinetics 
+        add_par_df("t1_pd_a", 25, 75, "unif",  25, 75), # ab kinetics
+        add_par_df("r_pd_a", 1, 7, "unif", 1, 7), # ab kinetics 
         add_par_df("s_a", 0, 1, "unif", 0, 1), # ab kinetics 
         add_par_df("wane_a", 0.0, 0.01, "unif", 0.0, 0.01) # observational model
     )
@@ -154,14 +149,14 @@ abkineticsModel <- list(
 
 copModel <- list( 
         model = makeModel(
-            addCopModel("sVNT", "delta", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
-            addCopModel("IgA", "delta", c("beta0_a", "beta1_a", "mu_a"), copFuncForm, copLogLikelihood)
+            addCopModel("sVNT", "delta", c("ep", "beta1", "mu"), copFuncFormInformed, copLogLikelihood),
+            addCopModel("IgA", "delta", c("ep_a", "beta1_a", "mu_a"), copFuncFormInformed, copLogLikelihood)
         ),
         prior = bind_rows(
-            add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("ep", 0, 10, "unif", 0, 10), # cop model (not used here)
             add_par_df("beta1", -10, 10, "unif", -10, 10),
             add_par_df("mu", 0, 1, "unif", 0, 1),
-            add_par_df("beta0_a", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("ep_a", 0, 10, "unif", 0, 10), # cop model (not used here)
             add_par_df("beta1_a", -10, 10, "unif", -10, 10),
             add_par_df("mu_a", 0, 1, "unif", 0, 1),
         ) # cop model (not used here),
@@ -272,18 +267,18 @@ abkineticsModel <- list(
         ),
     prior = bind_rows(
         add_par_df("y1_o", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_o", 7, 50, "unif",  7, 50), # ab kinetics
+        add_par_df("t1_o", 10, 25, "unif",  10, 25), # ab kinetics
         add_par_df("r_o", 1, 5, "unif", 1, 5), # ab kinetics 
-        add_par_df("y1_vax", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_vax", 7, 50, "unif",  7, 50), # ab kinetics
+        add_par_df("y1_vax", 1, 9, "unif",  1, 9), # ab kinetics
+        add_par_df("t1_vax", 10, 25, "unif",  10, 25), # ab kinetics
         add_par_df("r_vax", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("s",  0, 1, "unif", 0, 1), # ab kinetics 
         add_par_df("wane", 0.0, 0.01, "unif", 0.0, 0.01), # observational model
         add_par_df("y1_o_a", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_o_a", 7, 50, "unif",  7, 50), # ab kinetics
+        add_par_df("t1_o_a", 25, 75, "unif",  25, 75), # ab kinetics
         add_par_df("r_o_a", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("y1_vax_a", 1, 6, "unif",  1, 6), # ab kinetics
-        add_par_df("t1_vax_a", 7, 50, "unif",  7, 50), # ab kinetics
+        add_par_df("t1_vax_a", 25, 75, "unif",  25, 75), # ab kinetics
         add_par_df("r_vax_a", 1, 5, "unif", 1, 5), # ab kinetics 
         add_par_df("s_a", 0, 1, "unif", 0, 1), # ab kinetics 
         add_par_df("wane_a", 0.0, 0.01, "unif", 0.0, 0.01) # observational model
@@ -291,20 +286,22 @@ abkineticsModel <- list(
 )
 
 
+
 copModel <- list( 
         model = makeModel(
-            addCopModel("sVNT", "omicron", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
-            addCopModel("IgA", "omicron", c("beta0_a", "beta1_a", "mu_a"), copFuncForm, copLogLikelihood)
+            addCopModel("sVNT", "omicron", c("ep", "beta1", "mu"), copFuncFormInformed, copLogLikelihood),
+            addCopModel("IgA", "omicron", c("ep_a", "beta1_a", "mu_a"), copFuncFormInformed, copLogLikelihood)
         ),
         prior = bind_rows(
-            add_par_df("beta0", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("ep", 0, 10, "unif", 0, 10), # cop model (not used here)
             add_par_df("beta1", -10, 10, "unif", -10, 10),
             add_par_df("mu", 0, 1, "unif", 0, 1),
-            add_par_df("beta0_a", -10, 10, "unif", -10, 10), # cop model (not used here)
+            add_par_df("ep_a", 0, 10, "unif", 0, 10), # cop model (not used here)
             add_par_df("beta1_a", -10, 10, "unif", -10, 10),
-            add_par_df("mu_a", 0, 1, "unif", 0, 1)
+            add_par_df("mu_a", 0, 1, "unif", 0, 1),
         ) # cop model (not used here),
 )
+
 
 
    # add_par_df("d_vax_a", -1, 50, "unif",  -1, 50), # ab kinetics

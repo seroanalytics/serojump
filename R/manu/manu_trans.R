@@ -18,3 +18,19 @@ df_temp <- outputfull_w2$fit_states %>% filter(id %in% ids_infer) %>% group_by(i
     summarise(sVNT = mean(sVNT), IgA = mean(IgA))
 
 df_temp
+
+
+# Get priors for peak value
+joiner <- gambia_exp_w2 %>% filter(exposure_type == "delta") %>% rename(inf_time = time) %>% select(!exposure_type)
+summarise_post_inf <- gambia_pvnt_w2 %>% left_join(joiner) %>% filter(!is.na(inf_time) ) %>% mutate(time_diff = time - inf_time) %>% 
+    filter(time_diff > 0) 
+
+summarise_post_inf %>%
+        ggplot() + 
+            geom_point(aes(time_diff, sVNT)) + 
+            geom_smooth(aes(time_diff, sVNT))
+
+summarise_post_inf %>%
+        ggplot() + 
+            geom_point(aes(time_diff, IgA)) + 
+            geom_smooth(aes(time_diff, IgA))

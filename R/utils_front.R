@@ -113,6 +113,12 @@ check_boundaries <- function(x, lb, ub) {
 
 
 generate_data_alt <- function(data_titre_model, biomarkers, known_exp_bool = NULL) {
+
+    #data_titre_model <- data_sero
+   # biomarkers <- modeldefinition$biomarkers
+   # known_exp_bool
+
+
     #data_titre_model <- data_sero
     N <- data_titre_model$id %>% unique %>% length  
     N_data <- nrow(data_titre_model)
@@ -150,6 +156,8 @@ generate_data_alt <- function(data_titre_model, biomarkers, known_exp_bool = NUL
         knownExpVec <- NA
     }
 
+    max_titre <- titre_true %>% apply(2, max)
+
     data_t <- list(
         N = N,
         T = T,
@@ -162,6 +170,7 @@ generate_data_alt <- function(data_titre_model, biomarkers, known_exp_bool = NUL
         times_full = times_full,
         titre_list = titre_list,
         times_list = times_list,
+        max_titre = max_titre,
         pid_full = pid_full,
         id_full = id_full,
         knownExpVec = knownExpVec

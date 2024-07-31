@@ -269,6 +269,12 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
    #modeldefinition
    # known_exp_bool <- NULL
 
+
+   # data_sero <- data_titre_h1
+  #  data_known <- known_exposure_h1
+  #  modeldefinition <- modeldefinition_h1_p1
+  #  known_exp_bool <- NULL
+
     modelSeroJump <- list()
 
     cat("GER PRIORS\n")
