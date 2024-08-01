@@ -137,12 +137,15 @@ public:
 private:
 
 
-    double CORfunction(int y, double titre, NumericVector pars) {
+    /*double CORfunction(int y, double titre, NumericVector pars) {
 
         double ll = 0;
         double beta0 = pars[0];
         double beta1 = pars[1];
         double mu = pars[2];
+        double max_titre = parent->max_titre[b];
+
+
 
         double p = mu / (1.0 + exp(- (beta0 + beta1 * titre) ) );
 
@@ -153,7 +156,7 @@ private:
 
        // Rcpp::Rcout << "ll: " << ll << std::endl;
         return ll;
-    }
+    }*/
 
 /**
  * @brief Evaluate the log likelihood of the COP part of the model
@@ -175,7 +178,10 @@ private:
             std::vector<std::vector<DoubleWithString> > proposalTitreFull_i = parent->proposalTitreFull[i_idx]; 
             for (int bio = 0; bio < parent->B; bio++) {
                 string biomarker_b = parent->biomarkers[bio];
+                Function evalLoglikelhoodCOP_i = parent->evalLoglikelhoodCOP[biomarker_b];
+                double maxtitre_b = parent->max_titre[biomarker_b];
                 NumericVector pars = parent->proposalParsCOP[biomarker_b];
+
                 std::vector<DoubleWithString> proposalTitreFull_i_b = proposalTitreFull_i[bio];
                 if (jump[i_idx] == -1) {
                     if (parent->knownInfsVec(i_idx) == 0) {
@@ -186,7 +192,9 @@ private:
                                 titre_est = proposalTitreFull_i_b[j].value;
                             }
                         }
-                        ll += this->CORfunction(0, titre_est, pars );
+                        ll += as<double>(evalLoglikelhoodCOP_i(0, titre_est, pars, maxtitre_b) );
+
+                       // ll += this->CORfunction(0, titre_est, pars, b );
                     }
                 } else {
                     // 
@@ -196,7 +204,7 @@ private:
                             titre_est = proposalTitreFull_i_b[j].value;
                         }
                     }
-                    ll += this->CORfunction(1, titre_est, pars );
+                    ll += as<double>(evalLoglikelhoodCOP_i(1, titre_est, pars, maxtitre_b) );
                 }                    
                 titreExp(i_idx, bio) = titre_est;
             }

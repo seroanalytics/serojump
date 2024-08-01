@@ -11,7 +11,7 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
 {
     // Vartiables which are initialise through the constructor
 
-    Rcpp::List evalLoglikelhoodObs, evalabkineticsFunc; // List of functions to evaluate likelihoods and kinetics
+    Rcpp::List evalLoglikelhoodObs, evalLoglikelhoodCOP, evalabkineticsFunc; // List of functions to evaluate likelihoods and kinetics
     Rcpp::List infoModel, copModel, observationalModel, abkineticsModel; // List of models and parameters
 
     List parsAbKinN, parsCOPN, parsObsN; // Lists of all the parameters names for each model
@@ -60,6 +60,7 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
     MatrixXd currentObsTitre, proposalObsTitre;
 
     VectorXd historicJump;
+    NumericVector max_titre;
 
     vector<vector<DoubleWithString> >  currentEventsFull, proposalEventsFull;
     vector<vector<vector<DoubleWithString> > > currentTitreFull, proposalTitreFull;
@@ -177,10 +178,10 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
         for (int i = 0; i < this->copModel.size(); i++) {
             List temp1 = this->copModel[i];
             string temp2 = temp1["biomarker"];
-            //Function temp3 = temp1["logLikelihood"];
+            Function temp3 = temp1["logLikelihood"];
             StringVector temp4 = temp1["pars"];
             this->mapOfCOP[temp2] = i;
-           // this->evalLoglikelhoodCOP[temp2] = temp3;
+            this->evalLoglikelhoodCOP[temp2] = temp3;
             this->parsCOPN[temp2] = temp4;
         }
 
@@ -231,6 +232,8 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
         this->knownInfsVec = this->dataListCPP["knownInfsVec"];
         this->knownInfsTimeVec = this->dataListCPP["knownInfsTimeVec"];
         this->knownInfsN = this->dataListCPP["knownInfsN"];
+        this->max_titre = this->dataListCPP["max_titre"];
+
        // if (this->onDebug) Rcpp::Rcout << "In: Extract data from dataList3" << std::endl;
 
 

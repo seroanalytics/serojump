@@ -77,29 +77,26 @@ copFuncForm <- function(inf_status, esttitreExp, params) {
     p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
 }
 
-copFuncFormInformed_h1 <- function(inf_status, esttitreExp, params) {
+
+copFuncFormInformed <- function(inf_status, esttitreExp, params, maxtitre) {
     ep <- params[1]
     beta1 <- params[2]
     mu <- params[3]
 
-    beta0 <- log(0.1) - beta1 * 9 - ep
-    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
-}
-
-copFuncFormInformed_h3 <- function(inf_status, esttitreExp, params) {
-    ep <- params[1]
-    beta1 <- params[2]
-    mu <- params[3]
-
-    beta0 <- log(0.1) - beta1 * 9 - ep
+    beta0 <- log(0.1) - beta1 * maxtitre - ep
     p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
 }
 
 
-
-copLogLikelihood <- function(inf_status, esttitreExp, params) {
+copLogLikelihood <- function(inf_status, esttitreExp, params, maxtitre) {
     # COP parameters
-    p <- copFuncForm(inf_status, esttitreExp, params)
+    ep <- params[1]
+    beta1 <- params[2]
+    mu <- params[3]
+
+    beta0 <- log(0.1) - beta1 * maxtitre - ep
+    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+
     ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
     ll
 }
@@ -178,8 +175,8 @@ abkineticsModel_h1 <- list(
 
 copModel_h1 <- list( 
         model = makeModel(
-            addCopModel("A/Sydney/5/2021", "h1_2023", c("ep", "beta1", "mu"), copFuncFormInformed_h1, copLogLikelihood),
-            addCopModel("A/Sydney/5/2021e", "h1_2023", c("ep_e", "beta1_e", "mu_e"), copFuncFormInformed_h1, copLogLikelihood)
+            addCopModel("A/Sydney/5/2021", "h1_2023", c("ep", "beta1", "mu"), copFuncFormInformed, copLogLikelihood),
+            addCopModel("A/Sydney/5/2021e", "h1_2023", c("ep_e", "beta1_e", "mu_e"), copFuncFormInformed, copLogLikelihood)
         ),
         prior = bind_rows(
             add_par_df("ep", 0, 10, "unif", 0, 10), # cop model (not used here)
@@ -310,8 +307,8 @@ abkineticsModel_h3 <- list(
 
 copModel_h3 <- list( 
         model = makeModel(
-            addCopModel("A/Darwin/06/2021", "h3_2023", c("ep", "beta1", "mu"), copFuncFormInformed_h3, copLogLikelihood),
-            addCopModel("A/Darwin/09/2021e", "h3_2023", c("ep_e", "beta1_e", "mu_e"), copFuncFormInformed_h3, copLogLikelihood)
+            addCopModel("A/Darwin/06/2021", "h3_2023", c("ep", "beta1", "mu"), copFuncFormInformed, copLogLikelihood),
+            addCopModel("A/Darwin/09/2021e", "h3_2023", c("ep_e", "beta1_e", "mu_e"), copFuncFormInformed, copLogLikelihood)
         ),
         prior = bind_rows(
             add_par_df("ep", 0, 10, "unif", 0, 10), # cop model (not used here)
@@ -341,6 +338,7 @@ inf_prior_3 <- function(N, E, I, K) {
     logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj,  0.005655042, log = TRUE)
     logPriorExpInf
 }
+
 modeldefinition_h3_p1 <- list(
     biomarkers = biomarkers_h3,
     exposureTypes = exposureTypes_h3,

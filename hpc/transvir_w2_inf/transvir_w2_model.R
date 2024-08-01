@@ -50,21 +50,29 @@ copFuncForm <- function(inf_status, esttitreExp, params) {
     p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
 }
 
-
-copLogLikelihood <- function(inf_status, esttitreExp, params) {
-    # COP parameters
-    p <- copFuncForm(inf_status, esttitreExp, params)
-    ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
-    ll
-}
-
-copFuncFormInformed <- function(inf_status, esttitreExp, params) {
+copFuncFormInformed <- function(inf_status, esttitreExp, params, maxtitre) {
     ep <- params[1]
     beta1 <- params[2]
     mu <- params[3]
 
-    beta0 <- log(0.1) - beta1 * 4 - ep
+    beta0 <- log(0.1) - beta1 * maxtitre - ep
     p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+}
+
+
+copLogLikelihood <- function(inf_status, esttitreExp, params, maxtitre) {
+    # COP parameters
+    ep <- params[1]
+    beta1 <- params[2]
+    mu <- params[3]
+
+    cat("maxtitre: ", maxtitre, "\n")
+
+    beta0 <- log(0.1) - beta1 * maxtitre - ep
+    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+
+    ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
+    ll
 }
 
 
@@ -163,18 +171,6 @@ copModel <- list(
 )
 
 
-   # add_par_df("d_vax_a", -1, 50, "unif",  -1, 50), # ab kinetics
-   # add_par_df("e_vax_a", 1, 5, "unif",  1, 5), # ab kinetics
-   # add_par_df("s_vax_a", 2, 5, "unif", 2, 5), # ab kinetics 
-   # add_par_df("h_vax_a", 0.5, 5, "unif", 0.5,  3), # ab kinetics 
-   # add_par_df("d_pd_a", -1, 50, "unif",  -1, 50), # ab kinetics
-   # add_par_df("e_pd_a", 1, 5, "unif",  1, 5), # ab kinetics
-   # add_par_df("s_pd_a", 2, 5, "unif", 2, 5), # ab kinetics 
-   # add_par_df("h_pd_a", 0.5, 5, "unif", 0.5,  3), # ab kinetics 
-   # add_par_df("d_d_a", -1, 50, "unif",  -1, 50), # ab kinetics
-   # add_par_df("e_d_a", 1, 5, "unif",  1, 5), # ab kinetics
-   # add_par_df("s_d_a", 2, 5, "unif", 2, 5), # ab kinetics 
-   # add_par_df("h_d_a", 0.5, 5, "unif", 0.5,  3), # ab kinetics 
 
 
 inf_prior_1 <- function(N, E, I, K) {
@@ -194,7 +190,6 @@ inf_prior_3 <- function(N, E, I, K) {
     logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.2797203, log = TRUE)
     logPriorExpInf
 }
-
 
 modeldefinition_w2_p1 <- list(
     biomarkers = biomarkers,

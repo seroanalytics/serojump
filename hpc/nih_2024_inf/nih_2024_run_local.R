@@ -4,7 +4,7 @@ library(data.table)
 
 devtools::load_all()
 
-i <- 3
+i <- 6
 seroModel_full <- readRDS(here::here("hpc", "nih_2024_inf", "nih_2024_model.RData"))
 name_vec <- names(seroModel_full)
 name_vec_spl <- str_split(name_vec, "_")
@@ -25,7 +25,7 @@ settings <-  list(
     covarInitVal = 1e-2, # make very small if struggling to sample to beginning
     covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
     covarMaxVal = 1, # decrease if struggling toc sample in the middle
-    runParallel = TRUE,
+    runParallel = FALSE,
     noGibbsSteps = 1,
     onDebug = FALSE
 )

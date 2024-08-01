@@ -30,7 +30,6 @@ seroJumpPostDaig <- function(fitfull, filepathfig) {
 calcScaleModelIndicator <- function(fitfull, filepathfig) {
 
     C <- length(fitfull$post$jump)
-    cat(C)
     dims <- dim(fitfull$post$jump[[1]])
     cat(str(fitfull$post$jump[[1]]))
     M <- dims[1]

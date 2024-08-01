@@ -380,9 +380,9 @@ plot_cop_recInf <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
                     mutate(type = "Posterior distribution") %>% filter(param %in% pars_extract)
             )
 
-            cop_function <- function(T_vec, pars) {
+            cop_function <- function(T_vec, pars, maxtitre) {
                 T_vec %>% map( 
-                    ~functionalForm(0, .x, pars)
+                    ~functionalForm(0, .x, pars, maxtitre)
                 ) %>% unlist
             }
 
@@ -393,15 +393,15 @@ plot_cop_recInf <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
                 }   
             }
 
-            T_max <- data_t$titre_full[, i] %>% max
+            T_max <- data_t$max_titre
             T_min <- data_t$titre_full[, i] %>% min
 
-            T_vec <- seq(T_min, T_max, length.out = 20)
+            T_vec <- seq(T_min, T_max[i], length.out = 20)
 
             traj_post <- 1:(100) %>% purrr::map_df(
                 ~data.frame(
                     titre = T_vec,
-                    value = cop_function(T_vec, as.numeric(post_par[.x, ]))
+                    value = cop_function(T_vec, as.numeric(post_par[.x, ]), T_max[i])
                 )
             )
 
