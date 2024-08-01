@@ -66,8 +66,6 @@ copLogLikelihood <- function(inf_status, esttitreExp, params, maxtitre) {
     beta1 <- params[2]
     mu <- params[3]
 
-    cat("maxtitre: ", maxtitre, "\n")
-
     beta0 <- log(0.1) - beta1 * maxtitre - ep
     p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
 
