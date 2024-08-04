@@ -150,9 +150,9 @@ copFuncForm2 <- function(esttitreExp, ep, beta1, mu) {
 
 N <- 1000
 
-ep_vec <- runif(N, 0, 10)
+ep_vec <- runif(N, exp(2), exp(2))
 b0_vec <- runif(N, -10, 10)
-b1_vec <- runif(N, -10, 10)
+b1_vec <- runif(N, -5, -5)
 mu_vec <- runif(N, 0.5, 0.5)
 
 df_summary <- map_df(1:N,

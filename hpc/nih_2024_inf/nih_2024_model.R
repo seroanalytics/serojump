@@ -181,10 +181,10 @@ copModel_h1 <- list(
         prior = bind_rows(
             add_par_df("ep", 0, 10, "unif", 0, 10), # cop model (not used here)
             add_par_df("beta1", -10, 10, "unif", -10, 10),
-            add_par_df("mu", 0, 0.5, "unif", 0, 0.5),
+            add_par_df("mu", 0.05, 0.5, "unif", 0, 0.5),
             add_par_df("ep_e", 0, 10, "unif", 0, 10), # cop model (not used here)
             add_par_df("beta1_e", -10, 10, "unif", -10, 10),
-            add_par_df("mu_e", 0, 0.5, "unif", 0, 0.5),
+            add_par_df("mu_e", 0.05, 0.5, "unif", 0, 0.5),
         ) 
 )
 
@@ -313,10 +313,10 @@ copModel_h3 <- list(
         prior = bind_rows(
             add_par_df("ep", 0, 10, "unif", 0, 10), # cop model (not used here)
             add_par_df("beta1", -10, 10, "unif", -10, 10),
-            add_par_df("mu", 0, 0.5, "unif", 0, 0.5),
+            add_par_df("mu",  0.05, 0.5, "unif", 0, 0.5),
             add_par_df("ep_e", 0, 10, "unif", 0, 10), # cop model (not used here)
             add_par_df("beta1_e", -10, 10, "unif", -10, 10),
-            add_par_df("mu_e", 0, 0.5, "unif", 0, 0.5),
+            add_par_df("mu_e",  0.05, 0.5, "unif", 0, 0.5),
         )
 )
 

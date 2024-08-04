@@ -17,7 +17,11 @@ sero_confirmed <-  gambia_pvnt_w2 %>% group_by(id) %>% mutate(r = row_number(), 
         mutate(diff = `1` - `2`) %>% filter(diff < -0.903) %>% left_join(known_exposure_gambia_exp_w2_add) %>% 
         filter(is.na(type))
 
-rate_inf_w2 <- (sero_confirmed %>% nrow) / (gambia_exp_w2$id %>% unique %>% length)
+
+log10((10^1.64) / (10^0.801))
+
+
+rate_inf_w2 <- (sero_confirmed %>% nrow) / (gambia_pvnt_w2$id %>% unique %>% length)
 
 
 obsLogLikelihoodSerum = function(titre_val, titre_est, pars) {
@@ -185,7 +189,7 @@ inf_prior_2 <- function(N, E, I, K) {
 inf_prior_3 <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K
-    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.2797203, log = TRUE)
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.137931, log = TRUE)
     logPriorExpInf
 }
 
@@ -228,7 +232,7 @@ sero_confirmed <-  gambia_pvnt_w3 %>% group_by(id) %>% mutate(r = row_number(), 
         mutate(diff = `1` - `2`) %>% filter(diff < -0.903) %>% left_join(known_exposure_gambia_exp_w3_add) %>% 
         filter(is.na(type))
 
-rate_inf_w3 <- (sero_confirmed %>% nrow) / (gambia_exp_w3$id %>% unique %>% length)
+rate_inf_w3 <- (sero_confirmed %>% nrow) / (gambia_pvnt_w3$id %>% unique %>% length)
 
 
 # Define the biomarkers and exposure types in the model
@@ -325,7 +329,7 @@ inf_prior_2 <- function(N, E, I, K) {
 inf_prior_3 <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K
-    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.3050847, log = TRUE)
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.1395349, log = TRUE)
     logPriorExpInf
 }
 
