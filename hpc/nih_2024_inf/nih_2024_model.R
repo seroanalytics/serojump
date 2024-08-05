@@ -69,7 +69,7 @@ infSerumKinetics_titredep <- function(titre_est, timeSince, pars) {
     titre_est
 }
 
-copFuncForm <- function(inf_status, esttitreExp, params) {
+copFuncForm <- function(inf_status, esttitreExp, params, maxtitre) {
     beta0 <- params[1]
     beta1 <- params[2]
     mu <- params[3]
@@ -175,19 +175,22 @@ abkineticsModel_h1 <- list(
 
 copModel_h1 <- list( 
         model = makeModel(
-            addCopModel("A/Sydney/5/2021", "h1_2023", c("ep", "beta1", "mu"), copFuncFormInformed, copLogLikelihood),
-            addCopModel("A/Sydney/5/2021e", "h1_2023", c("ep_e", "beta1_e", "mu_e"), copFuncFormInformed, copLogLikelihood)
+            addCopModel("A/Sydney/5/2021", "h1_2023", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
+            addCopModel("A/Sydney/5/2021e", "h1_2023", c("beta0_e", "beta1_e", "mu_e"), copFuncForm, copLogLikelihood)
         ),
         prior = bind_rows(
-            add_par_df("ep", 0, 10, "unif", 0, 10), # cop model (not used here)
-            add_par_df("beta1", -10, 10, "unif", -10, 10),
-            add_par_df("mu", 0.05, 0.5, "unif", 0, 0.5),
-            add_par_df("ep_e", 0, 10, "unif", 0, 10), # cop model (not used here)
-            add_par_df("beta1_e", -10, 10, "unif", -10, 10),
-            add_par_df("mu_e", 0.05, 0.5, "unif", 0, 0.5),
-        ) 
+            add_par_df("beta0", 0, 10, "unif", 4.5, 2.5), # cop model (not used here)
+            add_par_df("beta1", -5, 0, "unif", -5, 0),
+            add_par_df("mu", 0.01, 0.5, "unif", 0.01, 0.5),
+            add_par_df("beta0_e", 0, 10, "unif",  4.5, 2.5), # cop model (not used here)
+            add_par_df("beta1_e", -5, 0, "unif", -5, 0),
+            add_par_df("mu_e", 0.01, 0.5, "unif", 0.01, 0.5),
+        )
 )
 
+          #  add_par_df("beta0", 0, 10, "norm", 5, 2.5), # cop model (not used here)
+           # add_par_df("beta1", -5, 0, "unif", -5, 0),
+            #add_par_df("mu",  0.01, 0.5, "unif", 0.01, 0.5),
 
 inf_prior_1 <- function(N, E, I, K) {
     0
@@ -307,16 +310,16 @@ abkineticsModel_h3 <- list(
 
 copModel_h3 <- list( 
         model = makeModel(
-            addCopModel("A/Darwin/06/2021", "h3_2023", c("ep", "beta1", "mu"), copFuncFormInformed, copLogLikelihood),
-            addCopModel("A/Darwin/09/2021e", "h3_2023", c("ep_e", "beta1_e", "mu_e"), copFuncFormInformed, copLogLikelihood)
+            addCopModel("A/Darwin/06/2021", "h3_2023", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
+            addCopModel("A/Darwin/09/2021e", "h3_2023", c("beta0_e", "beta1_e", "mu_e"), copFuncForm, copLogLikelihood)
         ),
         prior = bind_rows(
-            add_par_df("ep", 0, 10, "unif", 0, 10), # cop model (not used here)
-            add_par_df("beta1", -10, 10, "unif", -10, 10),
-            add_par_df("mu",  0.05, 0.5, "unif", 0, 0.5),
-            add_par_df("ep_e", 0, 10, "unif", 0, 10), # cop model (not used here)
-            add_par_df("beta1_e", -10, 10, "unif", -10, 10),
-            add_par_df("mu_e",  0.05, 0.5, "unif", 0, 0.5),
+            add_par_df("beta0", 0, 10, "norm", 4, 2.5), # cop model (not used here)
+            add_par_df("beta1", -5, 0, "unif", -5, 0),
+            add_par_df("mu", 0.01, 0.5, "unif", 0.01, 0.5),
+            add_par_df("beta0_e", 0, 10, "norm",  5, 2.5), # cop model (not used here)
+            add_par_df("beta1_e", -5, 0, "unif", -5, 0),
+            add_par_df("mu_e", 0.01, 0.5, "unif", 0.01, 0.5),
         )
 )
 

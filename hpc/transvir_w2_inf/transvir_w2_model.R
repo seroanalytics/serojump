@@ -46,7 +46,7 @@ noInfSerumKinetics <- function(titre_est, timeSince, pars) {
 }
 
 
-copFuncForm <- function(inf_status, esttitreExp, params) {
+copFuncForm <- function(inf_status, esttitreExp, params, maxtitre) {
     beta0 <- params[1]
     beta1 <- params[2]
     mu <- params[3]
@@ -159,17 +159,17 @@ abkineticsModel <- list(
 
 copModel <- list( 
         model = makeModel(
-            addCopModel("sVNT", "delta", c("ep", "beta1", "mu"), copFuncFormInformed, copLogLikelihood),
-            addCopModel("IgA", "delta", c("ep_a", "beta1_a", "mu_a"), copFuncFormInformed, copLogLikelihood)
+            addCopModel("sVNT", "delta", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
+            addCopModel("IgA", "delta", c("beta0_a", "beta1_a", "mu_a"), copFuncForm, copLogLikelihood)
         ),
         prior = bind_rows(
-            add_par_df("ep", 0, 10, "unif", 0, 10), # cop model (not used here)
-            add_par_df("beta1", -10, 10, "unif", -10, 10),
-            add_par_df("mu", 0, 1, "unif", 0, 1),
-            add_par_df("ep_a", 0, 10, "unif", 0, 10), # cop model (not used here)
-            add_par_df("beta1_a", -10, 10, "unif", -10, 10),
-            add_par_df("mu_a", 0, 1, "unif", 0, 1),
-        ) # cop model (not used here),
+            add_par_df("beta0", 0, 4, "norm", 1.76852, 1), # cop model (not used here)
+            add_par_df("beta1", -5, 0, "unif", -5, 0),
+            add_par_df("mu", 0.01, 1, "unif", 0.01, 1),
+            add_par_df("beta0_a", 0, 4, "norm", 1.76852, 1), # cop model (not used here)
+            add_par_df("beta1_a", -5, 0, "unif", -5, 0),
+            add_par_df("mu_a", 0.01, 1, "unif", 0.01, 1),
+        )
 )
 
 
@@ -286,17 +286,17 @@ abkineticsModel <- list(
 
 copModel <- list( 
         model = makeModel(
-            addCopModel("sVNT", "omicron", c("ep", "beta1", "mu"), copFuncFormInformed, copLogLikelihood),
-            addCopModel("IgA", "omicron", c("ep_a", "beta1_a", "mu_a"), copFuncFormInformed, copLogLikelihood)
+            addCopModel("sVNT", "omicron", c("bea0", "beta1", "mu"), copFuncForm, copLogLikelihood),
+            addCopModel("IgA", "omicron", c("bea0_a", "beta1_a", "mu_a"), copFuncForm, copLogLikelihood)
         ),
         prior = bind_rows(
-            add_par_df("ep", 0, 10, "unif", 0, 10), # cop model (not used here)
-            add_par_df("beta1", -10, 10, "unif", -10, 10),
-            add_par_df("mu", 0, 1, "unif", 0, 1),
-            add_par_df("ep_a", 0, 10, "unif", 0, 10), # cop model (not used here)
-            add_par_df("beta1_a", -10, 10, "unif", -10, 10),
-            add_par_df("mu_a", 0, 1, "unif", 0, 1),
-        ) # cop model (not used here),
+            add_par_df("beta0", 0, 4, "norm", 1.76852, 1), # cop model (not used here)
+            add_par_df("beta1", -5, 0, "unif", -5, 0),
+            add_par_df("mu", 0.01, 1, "unif", 0.01, 1),
+            add_par_df("beta0_a", 0, 4, "norm", 1.76852, 1), # cop model (not used here)
+            add_par_df("beta1_a", -5, 0, "unif", -5, 0),
+            add_par_df("mu_a", 0.01, 1, "unif", 0.01, 1),
+        )
 )
 
 
@@ -352,6 +352,7 @@ modeldefinition_w3_p2$expInfPrior <- inf_prior_2
 modeldefinition_w3_p3 <- modeldefinition_w3_p1
 modeldefinition_w3_p3$expInfPrior <- inf_prior_3
 
+modelW3_p1$data$max_titre
 
 modelW3_p1 <- createSeroJumpModel(gambia_pvnt_w3, gambia_exp_w3, modeldefinition_w3_p1, TRUE)
 modelW3_p2 <- createSeroJumpModel(gambia_pvnt_w3, gambia_exp_w3, modeldefinition_w3_p2)

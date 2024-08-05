@@ -78,7 +78,6 @@ teunis_power_true <- function(x, y0, y1, r, t1, alpha) {
 }
 
 
-
 y1_vec <- runif(N, 1, 6)
 t1_vec <- runif(N, 7, 30)
 r_vec <- runif(N, 1, 5)
@@ -112,7 +111,7 @@ N <- 1000
 y1_vec <- runif(N, 2, 2)
 t1_vec <- runif(N, 30, 30)
 r_vec <- runif(N, 1.2, 1.2)
-alpha_vec <- runif(N, 0.2, 0.2)
+alpha_vec <- runif(N, 0.05, 0.5)
 
 
 df_summary <- map_df(1:N,
@@ -123,12 +122,12 @@ df_summary <- map_df(1:N,
             f = map_dbl(seq(0, 150, 1), teunis_power_true, y0 = 2, y1 = y1_vec[i],  r = r_vec[i], t1 = t1_vec[i], alpha = alpha_vec[i]) 
         ) 
     }
-) %>% group_by(x) %>% mean_qi(f)
+) %>% group_by(x) %>% mean_qi(f, .width = c(0.5, 0.75, 0.95))
 
 
 df_summary %>% 
     ggplot() + 
-       geom_ribbon(aes(x = x, ymin = .lower, ymax =  .upper), alpha = 0.5) + 
+       geom_ribbon(aes(x = x, ymin = .lower, ymax = .upper), alpha = 0.5) + 
         geom_line(aes(x = x, y = f))
 
 ```
@@ -143,33 +142,49 @@ copFuncForm <- function(esttitreExp, beta0, beta1, mu) {
 }
 
 copFuncForm2 <- function(esttitreExp, ep, beta1, mu) {
-    beta0 <- log(0.1) - beta1 * 10 - ep
+   # beta0 <- log(0.1) - beta1 * 10 - ep
     p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
 }
 
 
 N <- 1000
 
-ep_vec <- runif(N, exp(2), exp(2))
-b0_vec <- runif(N, -10, 10)
-b1_vec <- runif(N, -5, -5)
-mu_vec <- runif(N, 0.5, 0.5)
+          #  add_par_df("beta0", 0, 10, "norm", 5, 2.5), # cop model (not used here)
+           # add_par_df("beta1", -5, 0, "unif", -5, 0),
+            #add_par_df("mu",  0.01, 0.5, "unif", 0.01, 0.5),
+
+           # add_par_df("beta0", 0, 4, "norm", 1.76852, 1), # cop model (not used here)
+            #add_par_df("beta1", -5, 0, "unif", -5, 0),
+           # add_par_df("mu", 0.01, 1, "unif", 0.01, 1),
+
+
+ep_vec <- rexp(N, 1)
+b0_vec <- rnorm(N,  1.76852, 1)
+b1_vec <- runif(N, -5, 0)
+mu_vec <- runif(N, 1, 1)
 
 df_summary <- map_df(1:N,
     function(i) {
         data.frame(
             samle = i,
-            x = seq(0, 10, 0.1),
-            f = map_dbl(seq(0, 10, 0.1), copFuncForm2, ep = ep_vec[i], beta1 = b1_vec[i], mu = mu_vec[i]) 
+            x = seq(0, 4, 0.1),
+            f = map_dbl(seq(0, 4, 0.1), copFuncForm, beta0 = b0_vec[i], beta1 = b1_vec[i], mu = mu_vec[i]) 
         ) 
     }
-) %>% group_by(x) %>% mean_qi(f)
+) %>% group_by(x) %>% mean_qi(f, .width = c(0.1, 0.5, 0.75, 0.95))
 
 
 df_summary %>% 
     ggplot() + 
-       geom_ribbon(aes(x = x, ymin = .lower, ymax =  .upper), alpha = 0.5) + 
-        geom_line(aes(x = x, y = f))
+       geom_ribbon(data = df_summary %>% filter(.width == 0.1), 
+        aes(x = x, ymin = .lower, ymax =  .upper), alpha = 0.5) + 
+       geom_ribbon(data = df_summary %>% filter(.width == 0.5), 
+        aes(x = x, ymin = .lower, ymax =  .upper), alpha = 0.5) + 
+       geom_ribbon(data = df_summary %>% filter(.width == 0.75), 
+        aes(x = x, ymin = .lower, ymax =  .upper), alpha = 0.5) + 
+       geom_ribbon(data = df_summary %>% filter(.width == 0.95), 
+        aes(x = x, ymin = .lower, ymax =  .upper), alpha = 0.5) + 
+        geom_line(data = df_summary %>% filter(.width == 0.1), aes(x = x, y = f))
 
 
 
