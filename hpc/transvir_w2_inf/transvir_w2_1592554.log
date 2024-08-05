@@ -1,0 +1,2503 @@
+/var/spool/slurmd/job1592554/slurm_script: line 17: activate: No such file or directory
+Loading required package: usethis
+ℹ Loading serojump
+Warning messages:
+1: replacing previous import ‘foreach::when’ by ‘purrr::when’ when loading ‘serojump’ 
+2: replacing previous import ‘foreach::accumulate’ by ‘purrr::accumulate’ when loading ‘serojump’ 
+3: Objects listed as exports, but not present in namespace:
+• copModel
+• data_known_exposures
+• data_titre 
+`numberTempChains` not specified in settings. Default value 10. 
+`onAdaptiveTemp` not specified in settings.  Default value TRUE. 
+`updatesAdaptiveTemp` not specified in settings.  Default value 10. 
+`numberTempChains` not specified in settings. Default value 10. 
+`onAdaptiveTemp` not specified in settings.  Default value TRUE. 
+`updatesAdaptiveTemp` not specified in settings.  Default value 10. 
+Initiate class
+Initiate class2
+Initiate class2: 1
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+this->knownExpInd:1
+Initiate class
+Initiate class2
+Initiate class2: 1
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+this->knownExpInd:1
+i: 0
+A boost: 
+i: 1
+i: 2
+i: 3
+i: 4
+i: 5
+i: 6
+i: 7
+i: 8
+i: 9
+i: 10
+A boost: 
+i: 11
+i: 12
+i: 13
+i: 14
+i: 15
+i: 16
+A boost: 
+i: 17
+i: 18
+i: 19
+i: 20
+A boost: 
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+A boost: 
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+i: 31
+i: 32
+i: 33
+i: 34
+i: 35
+i: 36
+i: 37
+i: 38
+i: 39
+A boost: 
+i: 40
+i: 41
+i: 42
+i: 43
+i: 44
+i: 45
+A boost: 
+i: 46
+i: 47
+i: 48
+i: 49
+i: 50
+i: 51
+i: 52
+i: 53
+i: 54
+i: 55
+i: 56
+i: 57
+i: 58
+i: 59
+i: 60
+i: 61
+i: 62
+i: 63
+i: 64
+i: 65
+i: 66
+i: 67
+i: 68
+i: 69
+A boost: 
+i: 70
+i: 71
+i: 72
+i: 73
+i: 74
+i: 75
+A boost: 
+i: 76
+A boost: 
+i: 77
+i: 78
+i: 79
+i: 80
+i: 81
+i: 82
+i: 83
+i: 84
+i: 85
+i: 86
+i: 87
+A boost: 
+i: 88
+i: 89
+A boost: 
+i: 90
+i: 91
+A boost: 
+i: 92
+i: 93
+i: 94
+i: 95
+i: 96
+A boost: 
+i: 97
+i: 98
+i: 99
+i: 100
+i: 101
+i: 102
+i: 103
+i: 104
+A boost: 
+i: 105
+i: 106
+i: 107
+A boost: 
+i: 108
+i: 109
+i: 110
+i: 111
+A boost: 
+i: 112
+i: 113
+i: 114
+i: 115
+A boost: 
+i: 116
+A boost: 
+i: 117
+i: 118
+i: 119
+i: 120
+i: 121
+i: 122
+i: 123
+i: 124
+i: 125
+i: 126
+i: 127
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+i: 133
+i: 134
+A boost: 
+i: 135
+i: 136
+i: 137
+i: 138
+i: 139
+i: 140
+i: 141
+i: 142
+i: 143
+i: 144
+i: 145
+A boost: 
+i: 146
+i: 147
+i: 148
+i: 149
+i: 150
+i: 151
+i: 152
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+i: 159
+i: 160
+i: 161
+A boost: 
+i: 162
+i: 163
+i: 164
+A boost: 
+i: 165
+i: 166
+i: 167
+A boost: 
+i: 168
+i: 169
+i: 170
+i: 171
+i: 172
+i: 173
+i: 174
+i: 175
+A boost: 
+i: 176
+i: 177
+i: 178
+i: 179
+i: 180
+A boost: 
+i: 181
+A boost: 
+i: 182
+i: 183
+i: 184
+A boost: 
+i: 185
+i: 186
+i: 187
+i: 188
+A boost: 
+i: 189
+A boost: 
+i: 190
+i: 191
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200
+i: 201
+i: 202
+i: 203
+i: 204
+A boost: 
+i: 205
+i: 206
+i: 207
+i: 208
+i: 209
+A boost: 
+i: 210
+i: 211
+i: 212
+i: 213
+A boost: 
+i: 214
+A boost: 
+i: 215
+i: 216
+i: 217
+i: 218
+i: 219
+A boost: 
+i: 220
+i: 221
+A boost: 
+i: 222
+i: 223
+i: 224
+i: 225
+i: 226
+i: 227
+i: 228
+i: 229
+i: 230
+i: 231
+i: 232
+A boost: 
+i: 233
+i: 234
+i: 235
+A boost: 
+i: 236
+i: 237
+i: 238
+i: 239
+i: 240
+i: 241
+i: 242
+i: 243
+i: 244
+i: 245
+i: 246
+i: 247
+A boost: 
+i: 248
+i: 249
+i: 250
+i: 251
+i: 252
+i: 253
+i: 254
+A boost: 
+i: 255
+A boost: 
+i: 256
+i: 257
+i: 0
+A boost: 
+i: 1
+i: 2
+i: 3
+i: 4
+i: 5
+i: 6
+i: 7
+i: 8
+i: 9
+i: 10
+A boost: 
+i: 11
+i: 12
+i: 13
+i: 14
+i: 15
+i: 16
+A boost: 
+i: 17
+i: 18
+i: 19
+i: 20
+A boost: 
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+A boost: 
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+i: 31
+i: 32
+i: 33
+i: 34
+i: 35
+i: 36
+i: 37
+i: 38
+i: 39
+A boost: 
+i: 40
+i: 41
+i: 42
+i: 43
+i: 44
+i: 45
+A boost: 
+i: 46
+i: 47
+i: 48
+i: 49
+i: 50
+i: 51
+i: 52
+i: 53
+i: 54
+i: 55
+i: 56
+i: 57
+i: 58
+i: 59
+i: 60
+i: 61
+i: 62
+i: 63
+i: 64
+i: 65
+i: 66
+i: 67
+i: 68
+i: 69
+A boost: 
+i: 70
+i: 71
+i: 72
+i: 73
+i: 74
+i: 75
+A boost: 
+i: 76
+A boost: 
+i: 77
+i: 78
+i: 79
+i: 80
+i: 81
+i: 82
+i: 83
+i: 84
+i: 85
+i: 86
+i: 87
+A boost: 
+i: 88
+i: 89
+A boost: 
+i: 90
+i: 91
+A boost: 
+i: 92
+i: 93
+i: 94
+i: 95
+i: 96
+A boost: 
+i: 97
+i: 98
+i: 99
+i: 100
+i: 101
+i: 102
+i: 103
+i: 104
+A boost: 
+i: 105
+i: 106
+i: 107
+A boost: 
+i: 108
+i: 109
+i: 110
+i: 111
+A boost: 
+i: 112
+i: 113
+i: 114
+i: 115
+A boost: 
+i: 116
+A boost: 
+i: 117
+i: 118
+i: 119
+i: 120
+i: 121
+i: 122
+i: 123
+i: 124
+i: 125
+i: 126
+i: 127
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+i: 133
+i: 134
+A boost: 
+i: 135
+i: 136
+i: 137
+i: 138
+i: 139
+i: 140
+i: 141
+i: 142
+i: 143
+i: 144
+i: 145
+A boost: 
+i: 146
+i: 147
+i: 148
+i: 149
+i: 150
+i: 151
+i: 152
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+i: 159
+i: 160
+i: 161
+A boost: 
+i: 162
+i: 163
+i: 164
+A boost: 
+i: 165
+i: 166
+i: 167
+A boost: 
+i: 168
+i: 169
+i: 170
+i: 171
+i: 172
+i: 173
+i: 174
+i: 175
+A boost: 
+i: 176
+i: 177
+i: 178
+i: 179
+i: 180
+A boost: 
+i: 181
+A boost: 
+i: 182
+i: 183
+i: 184
+A boost: 
+i: 185
+i: 186
+i: 187
+i: 188
+A boost: 
+i: 189
+A boost: 
+i: 190
+i: 191
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200
+i: 201
+i: 202
+i: 203
+i: 204
+A boost: 
+i: 205
+i: 206
+i: 207
+i: 208
+i: 209
+A boost: 
+i: 210
+i: 211
+i: 212
+i: 213
+A boost: 
+i: 214
+A boost: 
+i: 215
+i: 216
+i: 217
+i: 218
+i: 219
+A boost: 
+i: 220
+i: 221
+A boost: 
+i: 222
+i: 223
+i: 224
+i: 225
+i: 226
+i: 227
+i: 228
+i: 229
+i: 230
+i: 231
+i: 232
+A boost: 
+i: 233
+i: 234
+i: 235
+A boost: 
+i: 236
+i: 237
+i: 238
+i: 239
+i: 240
+i: 241
+i: 242
+i: 243
+i: 244
+i: 245
+i: 246
+i: 247
+A boost: 
+i: 248
+i: 249
+i: 250
+i: 251
+i: 252
+i: 253
+i: 254
+A boost: 
+i: 255
+A boost: 
+i: 256
+i: 257
+Initiate class
+Initiate class2
+Initiate class2: 2
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+Initiate class
+Initiate class2
+Initiate class2: 2
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+this->knownExpInd:1
+this->knownExpInd:1
+i: 0
+A boost: 
+i: 1
+i: 2
+i: 3
+i: 4
+i: 5
+i: 6
+i: 7
+i: 8
+i: 9
+i: 10
+A boost: 
+i: 11
+i: 12
+i: 13
+i: 14
+i: 15
+i: 16
+A boost: 
+i: 17
+i: 18
+i: 19
+i: 20
+A boost: 
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+A boost: 
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+i: 31
+i: 32
+i: 33
+i: 34
+i: 35
+i: 36
+i: 37
+i: 38
+i: 39
+A boost: 
+i: 40
+i: 41
+i: 42
+i: 43
+i: 44
+i: 45
+A boost: 
+i: 46
+i: 47
+i: 48
+i: 49
+i: 50
+i: 51
+i: 52
+i: 53
+i: 54
+i: 55
+i: 56
+i: 57
+i: 58
+i: 59
+i: 60
+i: 61
+i: 62
+i: 63
+i: 64
+i: 65
+i: 66
+i: 67
+i: 68
+i: 69
+A boost: 
+i: 70
+i: 71
+i: 72
+i: 73
+i: 74
+i: 75
+A boost: 
+i: 76
+A boost: 
+i: 77
+i: 78
+i: 79
+i: 80
+i: 81
+i: 82
+i: 83
+i: 84
+i: 85
+i: 86
+i: 87
+A boost: 
+i: 88
+i: 89
+A boost: 
+i: 90
+i: 91
+A boost: 
+i: 92
+i: 93
+i: 94
+i: 95
+i: 96
+A boost: 
+i: 97
+i: 98
+i: 99
+i: 100
+i: 101
+i: 102
+i: 103
+i: 104
+A boost: 
+i: 105
+i: 106
+i: 107
+A boost: 
+i: 108
+i: 109
+i: 110
+i: 111
+A boost: 
+i: 112
+i: 113
+i: 114
+i: 115
+A boost: 
+i: i: 116
+0A boost: 
+
+i: 117A boost: 
+
+i: i: 1181
+
+i: i: 1192
+
+i: i: 1203
+
+i: i: 1214
+
+i: i: 1225
+
+i: i: 1236
+
+i: i: 1247
+
+i: i: 1258
+
+i: i: 1269
+
+i: i: 12710
+
+i: A boost: 128
+
+i: i: 11129
+
+i: i: 12130
+
+i: i: 13131
+
+i: i: 14132
+
+i: i: 15133
+
+i: i: 16134
+
+A boost: A boost: 
+
+i: i: 17135
+
+i: i: 18136
+
+i: i: 19137
+
+i: i: 20138
+
+A boost: i: 
+139i: 
+21i: 
+140i: 
+22i: 
+141i: 
+23i: 
+142i: 
+24i: 
+143i: 
+25i: 
+144A boost: 
+
+i: i: 14526
+
+A boost: i: 
+27i: 
+146i: 
+28i: 
+147i: 
+29i: 
+148i: 
+30i: 
+149i: 
+31i: 
+150i: 
+32i: 
+151i: 
+33i: 
+152i: 
+34i: 
+153i: 
+35i: 
+154i: 
+36i: 
+155i: 
+37i: 
+156i: 
+38i: 
+157i: 
+39i: 
+158A boost: 
+
+i: i: 15940
+
+i: i: 16041
+
+i: i: 16142
+
+A boost: i: 
+43i: 
+162i: 
+44i: 
+163i: 
+45i: 
+164A boost: 
+
+A boost: i: 
+46i: 
+165i: 
+47i: 
+166i: 
+48i: 
+167i: 
+49A boost: 
+
+i: i: 50168
+
+i: i: 51169
+
+i: i: 52170
+
+i: i: 53171
+
+i: i: 54172
+
+i: i: 55173
+
+i: i: 56174
+
+i: i: 57175
+
+i: A boost: 58
+
+i: i: 17659
+
+i: i: 17760
+
+i: i: 17861
+
+i: i: 17962
+
+i: i: 18063
+
+A boost: i: 
+64i: 
+181i: 
+65A boost: 
+
+i: i: 66182
+
+i: i: 67183
+
+i: i: 68184
+
+i: A boost: 69
+
+i: A boost: 185
+
+i: i: 70186
+
+i: i: 71187
+
+i: i: 72188
+
+i: A boost: 73
+
+i: i: 18974
+
+A boost: i: 
+75i: 
+190A boost: 
+
+i: i: 19176
+
+i: A boost: 192
+
+i: i: 77193
+
+i: i: 78194
+
+i: i: 79195
+
+i: i: 80196
+
+i: i: 81197
+
+i: i: 82198
+
+i: i: 83199
+
+i: i: 84200
+
+i: i: 85201
+
+i: i: 86202
+
+i: i: 87203
+
+A boost: i: 
+204i: 
+88A boost: 
+
+i: i: 89205
+
+A boost: i: 
+206i: 
+90i: 
+207i: 
+91i: 
+208A boost: 
+
+i: i: 20992
+
+A boost: i: 
+93i: 
+210i: 
+94i: 
+211i: 
+95i: 
+212i: 
+96i: 
+213A boost: 
+
+A boost: i: 
+97i: 
+214i: 
+98A boost: 
+
+i: i: 99215
+
+i: i: 100216
+
+i: i: 101217
+
+i: i: 102218
+
+i: i: 103219
+
+i: A boost: 104
+
+i: A boost: 220
+
+i: i: 105221
+
+i: A boost: 106
+
+i: i: 222107
+
+i: A boost: 223
+
+i: i: 108224
+
+i: i: 109225
+
+i: i: 110226
+
+i: i: 111227
+
+A boost: i: 
+228i: 
+112i: 
+229i: 
+113i: 
+230i: 
+114i: 
+231i: 
+115i: 
+232A boost: 
+
+A boost: i: 
+116i: 
+233A boost: 
+
+i: i: 234117
+
+i: i: 235118
+
+A boost: i: 
+119i: 
+236i: 
+120i: 
+237i: 
+121i: 
+238i: 
+122i: 
+239i: 
+123i: 
+240i: 
+124i: 
+241i: 
+125i: 
+242i: 
+126i: 
+243i: 
+127i: 
+244i: 
+128i: 
+245i: 
+129i: 
+246i: 
+130i: 
+247i: 
+131A boost: 
+
+i: i: 132248
+
+i: i: 133249
+
+i: i: 134250
+
+A boost: i: 
+251i: 
+135i: 
+252i: 
+136i: 
+253i: 
+137i: 
+254i: 
+138A boost: 
+
+i: i: 139255
+
+i: A boost: 140
+
+i: i: 256141
+
+i: i: 257142
+
+i: 143
+i: 144
+i: 145
+A boost: 
+i: 146
+i: 147
+i: 148
+i: 149
+i: 150
+i: 151
+i: 152
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+i: 159
+i: 160
+i: 161
+A boost: 
+i: 162
+i: 163
+i: 164
+A boost: 
+i: 165
+i: 166
+i: 167
+A boost: 
+i: 168
+i: 169
+i: 170
+i: 171
+i: 172
+i: 173
+i: 174
+i: 175
+A boost: 
+i: 176
+i: 177
+i: 178
+i: 179
+i: 180
+A boost: 
+i: 181
+A boost: 
+i: 182
+i: 183
+i: 184
+A boost: 
+i: 185
+i: 186
+i: 187
+i: 188
+A boost: 
+i: 189
+A boost: 
+i: 190
+i: 191
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200
+i: 201
+i: 202
+i: 203
+i: 204
+A boost: 
+i: 205
+i: 206
+i: 207
+i: 208
+i: 209
+A boost: 
+i: 210
+i: 211
+i: 212
+i: 213
+A boost: 
+i: 214
+A boost: 
+i: 215
+i: 216
+i: 217
+i: 218
+i: 219
+A boost: 
+i: 220
+i: 221
+A boost: 
+i: 222
+i: 223
+i: 224
+i: 225
+i: 226
+i: 227
+i: 228
+i: 229
+i: 230
+i: 231
+i: 232
+A boost: 
+i: 233
+i: 234
+i: 235
+A boost: 
+i: 236
+i: 237
+i: 238
+i: 239
+i: 240
+i: 241
+i: 242
+i: 243
+i: 244
+i: 245
+i: 246
+i: 247
+A boost: 
+i: 248
+i: 249
+i: 250
+i: 251
+i: 252
+i: 253
+i: 254
+A boost: 
+i: 255
+A boost: 
+i: 256
+i: 257
+Initiate class
+Initiate class2
+Initiate class2: 3
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+this->knownExpInd:1
+i: 0
+A boost: 
+i: 1
+i: 2
+i: 3
+i: 4
+i: 5
+i: 6
+i: 7
+i: 8
+i: 9
+i: 10
+A boost: 
+i: 11
+i: 12
+i: 13
+i: 14
+i: 15
+i: 16
+A boost: 
+i: 17
+i: 18
+i: 19
+i: 20
+A boost: 
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+A boost: 
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+i: 31
+i: 32
+i: 33
+i: 34
+i: 35
+i: 36
+i: 37
+i: 38
+i: 39
+A boost: 
+i: 40
+i: 41
+i: 42
+i: 43
+i: 44
+i: 45
+A boost: 
+i: 46
+i: 47
+i: 48
+i: 49
+i: 50
+i: 51
+i: 52
+i: 53
+i: 54
+i: 55
+i: 56
+i: 57
+i: 58
+i: 59
+i: 60
+i: 61
+i: 62
+i: 63
+i: 64
+i: 65
+i: 66
+i: 67
+i: 68
+i: 69
+A boost: 
+i: 70
+i: 71
+i: 72
+i: 73
+i: 74
+i: 75
+A boost: 
+i: 76
+A boost: 
+i: 77
+i: 78
+i: 79
+i: 80
+i: 81
+i: 82
+i: 83
+i: 84
+i: 85
+i: 86
+i: 87
+A boost: 
+i: 88
+i: 89
+A boost: 
+i: 90
+i: 91
+A boost: 
+i: 92
+i: 93
+i: 94
+i: 95
+i: 96
+A boost: 
+i: 97
+i: 98
+i: 99
+i: 100
+i: 101
+i: 102
+i: 103
+i: 104
+A boost: 
+i: 105
+i: 106
+i: 107
+A boost: 
+i: 108
+i: 109
+i: 110
+i: 111
+A boost: 
+i: 112
+i: 113
+i: 114
+i: 115
+A boost: 
+i: 116
+A boost: 
+i: 117
+i: 118
+i: 119
+i: 120
+i: 121
+i: 122
+i: 123
+i: 124
+i: 125
+i: 126
+i: 127
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+i: 133
+i: 134
+A boost: 
+i: 135
+i: 136
+i: 137
+i: 138
+i: 139
+i: 140
+i: 141
+i: 142
+i: 143
+i: 144
+i: 145
+A boost: 
+i: 146
+i: 147
+i: 148
+i: 149
+i: 150
+i: 151
+i: 152
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+i: 159
+i: 160
+i: 161
+A boost: 
+i: 162
+i: 163
+i: 164
+A boost: 
+i: 165
+i: 166
+i: 167
+A boost: 
+i: 168
+i: 169
+i: 170
+i: 171
+i: 172
+i: 173
+i: 174
+i: 175
+A boost: 
+i: 176
+i: 177
+i: 178
+i: 179
+i: 180
+A boost: 
+i: 181
+A boost: 
+i: 182
+i: 183
+i: 184
+A boost: 
+i: 185
+i: 186
+i: 187
+i: 188
+A boost: 
+i: 189
+A boost: 
+i: 190
+i: 191
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200
+i: 201
+i: 202
+i: 203
+i: 204
+A boost: 
+i: 205
+i: 206
+i: 207
+i: 208
+i: 209
+A boost: 
+i: 210
+i: 211
+i: 212
+i: 213
+A boost: 
+i: 214
+A boost: 
+i: 215
+i: 216
+i: 217
+i: 218
+i: 219
+A boost: 
+i: 220
+i: 221
+A boost: 
+i: 222
+i: 223
+i: 224
+i: 225
+i: 226
+i: 227
+i: 228
+i: 229
+i: 230
+i: 231
+i: 232
+A boost: 
+i: 233
+i: 234
+i: 235
+A boost: 
+i: 236
+i: 237
+i: 238
+i: 239
+i: 240
+i: 241
+i: 242
+i: 243
+i: 244
+i: 245
+i: 246
+i: 247
+A boost: 
+i: 248
+i: 249
+i: 250
+i: 251
+i: 252
+i: 253
+i: 254
+A boost: 
+i: 255
+A boost: 
+i: 256
+i: 257
+Initiate class
+Initiate class2
+Initiate class2: 3
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+this->knownExpInd:1
+Initiate class
+Initiate class2
+Initiate class2: 4
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+this->knownExpInd:1
+i: 0
+A boost: 
+i: 1
+i: 2
+i: 3
+i: 4
+i: 5
+i: 6
+i: 7
+i: 8
+i: 9
+i: 10
+A boost: 
+i: 11
+i: 12
+i: 13
+i: 14
+i: 15
+i: 16
+A boost: 
+i: 17
+i: 18
+i: 19
+i: 20
+A boost: 
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+A boost: 
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+i: 31
+i: 32
+i: 33
+i: 34
+i: 35
+i: 36
+i: 37
+i: 38
+i: 39
+A boost: 
+i: 40
+i: 41
+i: 42
+i: 43
+i: 44
+i: 45
+A boost: 
+i: 46
+i: 47
+i: 48
+i: 49
+i: 50
+i: 51
+i: 52
+i: 53
+i: 54
+i: 55
+i: 56
+i: 57
+i: 58
+i: 59
+i: 60
+i: 61
+i: 62
+i: 63
+i: 64
+i: 65
+i: 66
+i: 67
+i: 68
+i: 69
+A boost: 
+i: 70
+i: 71
+i: 72
+i: 73
+i: 74
+i: 75
+A boost: 
+i: 76
+A boost: 
+i: 77
+i: 78
+i: 79
+i: 80
+i: 81
+i: 82
+i: 83
+i: 84
+i: 85
+i: 86
+i: 87
+A boost: 
+i: 88
+i: 89
+A boost: 
+i: 90
+i: 91
+A boost: 
+i: 92
+i: 93
+i: 94
+i: 95
+i: 96
+A boost: 
+i: 97
+i: 98
+i: 99
+i: 100
+i: 101
+i: 102
+i: 103
+i: 104
+A boost: 
+i: 105
+i: 106
+i: 107
+A boost: 
+i: 108
+i: 109
+i: 110
+i: 111
+A boost: 
+i: 112
+i: 113
+i: 114
+i: 115
+A boost: 
+i: 116
+A boost: 
+i: 117
+i: 118
+i: 119
+i: 120
+i: 121
+i: 122
+i: 123
+i: 124
+i: 125
+i: 126
+i: 127
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+i: 133
+i: 134
+A boost: 
+i: 135
+i: 136
+i: 137
+i: 138
+i: 139
+i: 140
+i: 141
+i: 142
+i: 143
+i: 144
+i: 145
+A boost: 
+i: 146
+i: 147
+i: 148
+i: 149
+i: 150
+i: 151
+i: 152
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+i: 159
+i: 160
+i: 161
+A boost: 
+i: 162
+i: 163
+i: 164
+A boost: 
+i: 165
+i: 166
+i: 167
+A boost: 
+i: 168
+i: 169
+i: 170
+i: 171
+i: 172
+i: 173
+i: 174
+i: 175
+A boost: 
+i: 176
+i: 177
+i: 178
+i: 179
+i: 180
+A boost: 
+i: 181
+A boost: 
+i: 182
+i: 183
+i: 184
+A boost: 
+i: 185
+i: 186
+i: 187
+i: 188
+A boost: 
+i: 189
+A boost: 
+i: 190
+i: 191
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200
+i: 201
+i: 202
+i: 203
+i: 204
+A boost: 
+i: 205
+i: 206
+i: 207
+i: 208
+i: 209
+A boost: 
+i: 210
+i: 211
+i: 212
+i: 213
+A boost: 
+i: 214
+A boost: 
+i: 215
+i: 216
+i: 217
+i: 218
+i: 219
+A boost: 
+i: 220
+i: 221
+A boost: 
+i: 222
+i: 223
+i: 224
+i: 225
+i: 226
+i: 227
+i: 228
+i: 229
+i: 230
+i: 231
+i: 232
+A boost: 
+i: 233
+i: 234
+i: 235
+A boost: 
+i: 236
+i: 237
+i: 238
+i: 239
+i: 240
+i: 241
+i: 242
+i: 243
+i: 244
+i: 245
+i: 246
+i: 247
+A boost: 
+i: 248
+i: 249
+i: 250
+i: 251
+i: 252
+i: 253
+i: 254
+A boost: 
+i: 255
+A boost: 
+i: 256
+i: 257
+i: 0
+A boost: 
+i: 1
+i: 2
+i: 3
+i: 4
+i: 5
+i: 6
+i: 7
+i: 8
+i: 9
+i: 10
+A boost: 
+i: 11
+i: 12
+i: 13
+i: 14
+i: 15
+i: 16
+A boost: 
+i: 17
+i: 18
+i: 19
+i: 20
+A boost: 
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+A boost: 
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+i: 31
+i: 32
+i: 33
+i: 34
+i: 35
+i: 36
+i: 37
+i: 38
+i: 39
+A boost: 
+i: 40
+i: 41
+i: 42
+i: 43
+i: 44
+i: 45
+A boost: 
+i: 46
+i: 47
+i: 48
+i: 49
+i: 50
+i: 51
+i: 52
+i: 53
+i: 54
+i: 55
+i: 56
+i: 57
+i: 58
+i: 59
+i: 60
+i: 61
+i: 62
+i: 63
+i: 64
+i: 65
+i: 66
+i: 67
+i: 68
+i: 69
+A boost: 
+i: 70
+i: 71
+i: 72
+i: 73
+i: 74
+i: 75
+A boost: 
+i: 76
+A boost: 
+i: 77
+i: 78
+i: 79
+i: 80
+i: 81
+i: 82
+i: 83
+i: 84
+i: 85
+i: 86
+i: 87
+A boost: 
+i: 88
+i: 89
+A boost: 
+i: 90
+i: 91
+A boost: 
+i: 92
+i: 93
+i: 94
+i: 95
+i: 96
+A boost: 
+i: 97
+i: 98
+i: 99
+i: 100
+i: 101
+i: 102
+i: 103
+i: 104
+A boost: 
+i: 105
+i: 106
+i: 107
+A boost: 
+i: 108
+i: 109
+i: 110
+i: 111
+A boost: 
+i: 112
+i: 113
+i: 114
+i: 115
+A boost: 
+i: 116
+A boost: 
+i: 117
+i: 118
+i: 119
+i: 120
+i: 121
+i: 122
+i: 123
+i: 124
+i: 125
+i: 126
+i: 127
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+i: 133
+i: 134
+A boost: 
+i: 135
+i: 136
+i: 137
+i: 138
+i: 139
+i: 140
+i: 141
+i: 142
+i: 143
+i: 144
+i: 145
+A boost: 
+i: 146
+i: 147
+i: 148
+i: 149
+i: 150
+i: 151
+i: 152
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+i: 159
+i: 160
+i: 161
+A boost: 
+i: 162
+i: 163
+i: 164
+A boost: 
+i: 165
+i: 166
+i: 167
+A boost: 
+i: 168
+i: 169
+i: 170
+i: 171
+i: 172
+i: 173
+i: 174
+i: 175
+A boost: 
+i: 176
+i: 177
+i: 178
+i: 179
+i: 180
+A boost: 
+i: 181
+A boost: 
+i: 182
+i: 183
+i: 184
+A boost: 
+i: 185
+i: 186
+i: 187
+i: 188
+A boost: 
+i: 189
+A boost: 
+i: 190
+i: 191
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200
+i: 201
+i: 202
+i: 203
+i: 204
+A boost: 
+i: 205
+i: 206
+i: 207
+i: 208
+i: 209
+A boost: 
+i: 210
+i: 211
+i: 212
+i: 213
+A boost: 
+i: 214
+A boost: 
+i: 215
+i: 216
+i: 217
+i: 218
+i: 219
+A boost: 
+i: 220
+i: 221
+A boost: 
+i: 222
+i: 223
+i: 224
+i: 225
+i: 226
+i: 227
+i: 228
+i: 229
+i: 230
+i: 231
+i: 232
+A boost: 
+i: 233
+i: 234
+i: 235
+A boost: 
+i: 236
+i: 237
+i: 238
+i: 239
+i: 240
+i: 241
+i: 242
+i: 243
+i: 244
+i: 245
+i: 246
+i: 247
+A boost: 
+i: 248
+i: 249
+i: 250
+i: 251
+i: 252
+i: 253
+i: 254
+A boost: 
+i: 255
+A boost: 
+i: 256
+i: 257
+Initiate class
+Initiate class2
+Initiate class2: 4
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+this->knownExpInd:1
+i: 0
+A boost: 
+i: 1
+i: 2
+i: 3
+i: 4
+i: 5
+i: 6
+i: 7
+i: 8
+i: 9
+i: 10
+A boost: 
+i: 11
+i: 12
+i: 13
+i: 14
+i: 15
+i: 16
+A boost: 
+i: 17
+i: 18
+i: 19
+i: 20
+A boost: 
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+A boost: 
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+i: 31
+i: 32
+i: 33
+i: 34
+i: 35
+i: 36
+i: 37
+i: 38
+i: 39
+A boost: 
+i: 40
+i: 41
+i: 42
+i: 43
+i: 44
+i: 45
+A boost: 
+i: 46
+i: 47
+i: 48
+i: 49
+i: 50
+i: 51
+i: 52
+i: 53
+i: 54
+i: 55
+i: 56
+i: 57
+i: 58
+i: 59
+i: 60
+i: 61
+i: 62
+i: 63
+i: 64
+i: 65
+i: 66
+i: 67
+i: 68
+i: 69
+A boost: 
+i: 70
+i: 71
+i: 72
+i: 73
+i: 74
+i: 75
+A boost: 
+i: 76
+A boost: 
+i: 77
+i: 78
+i: 79
+i: 80
+i: 81
+i: 82
+i: 83
+i: 84
+i: 85
+i: 86
+i: 87
+A boost: 
+i: 88
+i: 89
+A boost: 
+i: 90
+i: 91
+A boost: 
+i: 92
+i: 93
+i: 94
+i: 95
+i: 96
+A boost: 
+i: 97
+i: 98
+i: 99
+i: 100
+i: 101
+i: 102
+i: 103
+i: 104
+A boost: 
+i: 105
+i: 106
+i: 107
+A boost: 
+i: 108
+i: 109
+i: 110
+i: 111
+A boost: 
+i: 112
+i: 113
+i: 114
+i: 115
+A boost: 
+i: 116
+A boost: 
+i: 117
+i: 118
+i: 119
+i: 120
+i: 121
+i: 122
+i: 123
+i: 124
+i: 125
+i: 126
+i: 127
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+i: 133
+i: 134
+A boost: 
+i: 135
+i: 136
+i: 137
+i: 138
+i: 139
+i: 140
+i: 141
+i: 142
+i: 143
+i: 144
+i: 145
+A boost: 
+i: 146
+i: 147
+i: 148
+i: 149
+i: 150
+i: 151
+i: 152
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+i: 159
+i: 160
+i: 161
+A boost: 
+i: 162
+i: 163
+i: 164
+A boost: 
+i: 165
+i: 166
+i: 167
+A boost: 
+i: 168
+i: 169
+i: 170
+i: 171
+i: 172
+i: 173
+i: 174
+i: 175
+A boost: 
+i: 176
+i: 177
+i: 178
+i: 179
+i: 180
+A boost: 
+i: 181
+A boost: 
+i: 182
+i: 183
+i: 184
+A boost: 
+i: 185
+i: 186
+i: 187
+i: 188
+A boost: 
+i: 189
+A boost: 
+i: 190
+i: 191
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200
+i: 201
+i: 202
+i: 203
+i: 204
+A boost: 
+i: 205
+i: 206
+i: 207
+i: 208
+i: 209
+A boost: 
+i: 210
+i: 211
+i: 212
+i: 213
+A boost: 
+i: 214
+A boost: 
+i: 215
+i: 216
+i: 217
+i: 218
+i: 219
+A boost: 
+i: 220
+i: 221
+A boost: 
+i: 222
+i: 223
+i: 224
+i: 225
+i: 226
+i: 227
+i: 228
+i: 229
+i: 230
+i: 231
+i: 232
+A boost: 
+i: 233
+i: 234
+i: 235
+A boost: 
+i: 236
+i: 237
+i: 238
+i: 239
+i: 240
+i: 241
+i: 242
+i: 243
+i: 244
+i: 245
+i: 246
+i: 247
+A boost: 
+i: 248
+i: 249
+i: 250
+i: 251
+i: 252
+i: 253
+i: 254
+A boost: 
+i: 255
+A boost: 
+i: 256
+i: 257
+Warning message:
+In mclapply(list(seroModel_pp, seroModel), function(i) { :
+  all scheduled cores encountered errors in user code
+Loading required package: ggdist
+Error in post$mcmc : $ operator is invalid for atomic vectors
+Calls: postprocessFigsInf -> postprocess_runInf -> %>% -> nrow
+Execution halted

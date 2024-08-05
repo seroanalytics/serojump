@@ -1,0 +1,4088 @@
+/var/spool/slurmd/job1592552/slurm_script: line 17: activate: No such file or directory
+Loading required package: usethis
+ℹ Loading serojump
+Warning messages:
+1: replacing previous import ‘foreach::when’ by ‘purrr::when’ when loading ‘serojump’ 
+2: replacing previous import ‘foreach::accumulate’ by ‘purrr::accumulate’ when loading ‘serojump’ 
+3: Objects listed as exports, but not present in namespace:
+• copModel
+• data_known_exposures
+• data_titre 
+`numberTempChains` not specified in settings. Default value 10. 
+`onAdaptiveTemp` not specified in settings.  Default value TRUE. 
+`updatesAdaptiveTemp` not specified in settings.  Default value 10. 
+`numberTempChains` not specified in settings. Default value 10. 
+`onAdaptiveTemp` not specified in settings.  Default value TRUE. 
+`updatesAdaptiveTemp` not specified in settings.  Default value 10. 
+Initiate class
+Initiate class2
+Initiate class2: 1
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+this->knownExpInd:0
+Initiate class
+Initiate class2
+Initiate class2: 1
+Instance of the previous classes1
+i: 0Testing in
+
+i: 1
+Instance of the previous classesA boost: 
+
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+A get exposure function sample: 
+i: 2
+A boost: 
+A get exposure function sample: 
+i: 3
+i: 4
+i: 5
+i: 6
+i: 7
+A boost: 
+A get exposure function sample: 
+i: 8
+i: 9
+i: 10
+i: 11
+i: 12
+i: 13
+i: 14
+i: 15
+i: 16
+i: 17
+i: 18
+i: 19
+i: 20
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+i: 31
+i: 32
+i: 33
+i: 34
+A boost: 
+A get exposure function sample: 
+i: 35
+A boost: 
+A get exposure function sample: 
+i: 36
+i: 37
+i: 38
+i: 39
+i: 40
+i: 41
+i: 42
+i: 43
+A boost: 
+A get exposure function sample: 
+i: 44
+A boost: 
+A get exposure function sample: 
+i: 45
+A boost: 
+A get exposure function sample: 
+i: 46
+A boost: 
+A get exposure function sample: 
+i: 47
+A boost: 
+A get exposure function sample: 
+i: 48
+A boost: 
+A get exposure function sample: 
+i: 49
+i: 50
+i: 51
+i: 52
+i: 53
+i: 54
+i: 55
+A boost: 
+this->knownExpInd:0
+A get exposure function sample: 
+i: 56
+i: 57
+A boost: 
+A get exposure function sample: 
+i: 58
+i: 59
+i: 60
+A boost: 
+A get exposure function sample: 
+i: 61
+i: 62
+A boost: 
+A get exposure function sample: 
+i: 63
+i: 64
+i: 65
+A boost: 
+A get exposure function sample: 
+i: 66
+i: 67
+A boost: 
+A get exposure function sample: 
+i: 68
+i: 69
+i: 70
+i: 71
+i: 72
+i: 73
+i: 74
+i: 75
+i: 76
+i: 77
+i: 78
+i: 79
+i: 80
+i: 81
+i: 82
+i: 83
+i: 84
+A boost: 
+A get exposure function sample: 
+i: 85
+i: 86
+A boost: 
+A get exposure function sample: 
+i: 87
+i: 88
+i: 89
+i: 90
+A boost: 
+A get exposure function sample: 
+i: 91
+A boost: 
+A get exposure function sample: 
+i: 92
+i: 93
+i: 94
+A boost: 
+A get exposure function sample: 
+i: 95
+A boost: 
+A get exposure function sample: 
+i: 96
+A boost: 
+A get exposure function sample: 
+i: 97
+i: 98
+A boost: 
+A get exposure function sample: 
+i: 99
+i: 100
+i: 101
+i: 102
+i: 103
+i: 104
+i: 105
+i: 106
+i: 107
+i: 108
+i: 109
+i: 110
+i: 111
+i: 112
+i: 113
+A boost: 
+A get exposure function sample: 
+i: 114
+i: 115
+i: 116
+i: 117
+A boost: Initiate class
+
+Initiate class2
+Initiate class2: 2
+Instance of the previous classes1
+A get exposure function sample: 
+i: 118
+i: 119
+A boost: 
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+A get exposure function sample: 
+i: 120
+i: 121
+A boost: 
+End: initiate functions
+A get exposure function sample: 
+i: 122
+i: 123
+i: 124
+A boost: 
+A get exposure function sample: 
+i: 125
+A boost: 
+A get exposure function sample: 
+i: 126
+i: 127
+A boost: 
+A get exposure function sample: 
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+i: 133
+i: 134
+i: 135
+i: 136
+i: 137
+i: 138
+i: 139
+i: 140
+A boost: 
+A get exposure function sample: 
+i: 141
+i: 142
+i: 143
+i: 144
+i: 145
+i: 146
+A boost: 
+A get exposure function sample: 
+i: 147
+i: 148
+i: 149
+i: 150
+A boost: 
+A get exposure function sample: 
+i: 151
+i: 152
+A boost: 
+A get exposure function sample: 
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+A boost: 
+A get exposure function sample: 
+i: 159
+i: 160
+A boost: 
+A get exposure function sample: 
+i: 161
+i: 162
+i: 163
+i: 164
+i: 165
+i: 166
+i: 167
+i: 168
+A boost: 
+A get exposure function sample: 
+i: 169
+i: 170
+i: 171
+i: 172
+A boost: 
+A get exposure function sample: 
+i: 173
+i: 174
+i: 175
+i: 176
+i: 177
+A boost: 
+A get exposure function sample: 
+i: 178
+i: 179
+A boost: 
+A get exposure function sample: 
+i: 180this->knownExpInd:
+i: 1810
+
+i: 182
+i: 183
+i: 184
+i: 185
+i: 186
+A boost: 
+A get exposure function sample: 
+i: 187
+i: 188
+i: 189
+i: 190
+A boost: 
+A get exposure function sample: 
+i: 191
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200
+i: 201
+i: 202
+i: 203
+i: 204
+i: 205
+A boost: 
+A get exposure function sample: 
+i: 206
+i: 207
+i: 208
+i: 209
+A boost: 
+A get exposure function sample: 
+i: 210
+i: 211
+A boost: 
+A get exposure function sample: 
+i: 212
+A boost: 
+A get exposure function sample: 
+i: 213
+i: 214
+A boost: 
+A get exposure function sample: 
+i: 215
+i: 216
+i: 217
+i: 218
+i: 219
+i: 220
+A boost: 
+A get exposure function sample: 
+i: 221
+i: 222
+i: 223
+i: 224
+i: 225
+i: 226
+i: 227
+i: 228
+i: 229
+i: 230
+i: 231
+i: 232
+A boost: 
+A get exposure function sample: 
+i: 233
+A boost: 
+A get exposure function sample: 
+i: 234
+i: 235
+i: 236
+i: 237
+i: 238
+i: 239
+i: 240
+i: 241
+i: 242
+i: 243
+A boost: 
+A get exposure function sample: 
+i: 244
+i: 245
+i: 246
+i: 247
+i: 248
+i: 249
+i: 250
+i: 251
+i: 252
+A boost: 
+A get exposure function sample: 
+i: 253
+i: 254
+i: 255
+i: 256
+i: 257
+i: 258
+i: 259
+i: 260
+i: 261
+i: 262
+i: 263
+i: 264
+i: 265
+i: 266
+i: 267
+i: 268
+i: 269
+i: 270
+i: 271
+i: 272
+i: 273
+i: 274
+i: 275
+A boost: 
+A get exposure function sample: 
+i: 276
+i: 277
+i: 278
+i: 279
+A boost: 
+A get exposure function sample: 
+i: 280
+i: 281
+i: 282
+i: 283
+i: 284
+i: 285
+i: 286
+i: 287
+i: 288
+i: 289
+i: 0
+i: 1
+A boost: 
+A get exposure function sample: 
+i: 2
+A boost: 
+A get exposure function sample: 
+i: 3
+i: 4
+i: 5
+i: 6
+i: 7
+A boost: 
+A get exposure function sample: 
+i: 8
+i: 9
+i: 10
+i: 11
+i: 12
+i: 13
+i: 14
+i: 15
+i: 16
+i: 17
+i: 18
+i: 19
+i: 20
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+i: 31
+i: 32
+i: 33
+i: 34
+A boost: 
+A get exposure function sample: 
+i: 35
+A boost: 
+A get exposure function sample: 
+i: 36
+i: 37
+i: 38
+i: 39
+i: 40
+i: 41
+i: 42
+i: 43
+A boost: 
+A get exposure function sample: 
+i: 44
+A boost: 
+A get exposure function sample: 
+i: 45
+A boost: 
+A get exposure function sample: 
+i: 46
+A boost: 
+A get exposure function sample: 
+i: 47
+A boost: 
+A get exposure function sample: 
+i: 48
+A boost: 
+A get exposure function sample: 
+i: 49
+i: 50
+i: 51
+i: 52
+i: 53
+i: 54
+i: 55
+A boost: 
+A get exposure function sample: 
+i: 56
+i: 57
+A boost: 
+A get exposure function sample: 
+i: 58
+i: 59
+i: 60
+A boost: 
+A get exposure function sample: 
+i: 61
+i: 62
+A boost: 
+A get exposure function sample: 
+i: 63
+i: 64
+i: 65
+A boost: 
+A get exposure function sample: 
+i: 66
+i: 67
+A boost: 
+A get exposure function sample: 
+i: 68
+i: 69
+i: 70
+i: 71
+i: 72
+i: 73
+i: 74
+i: 75
+i: 76
+i: 77
+i: 78
+i: 79
+i: 80
+i: 81
+i: 82
+i: 83
+i: 84
+A boost: 
+A get exposure function sample: 
+i: 85
+i: 86
+A boost: 
+A get exposure function sample: 
+i: 87
+i: 88
+i: 89
+i: 90
+A boost: 
+A get exposure function sample: 
+i: 91
+A boost: 
+A get exposure function sample: 
+i: 92
+i: 93
+i: 94
+A boost: 
+A get exposure function sample: 
+i: 95
+A boost: 
+A get exposure function sample: 
+i: 96
+A boost: 
+A get exposure function sample: 
+i: 97
+i: 98
+A boost: 
+A get exposure function sample: 
+i: 99
+i: 100
+i: 101
+i: 102
+i: 103
+i: 104
+i: 105
+i: 106
+i: 107
+i: 108
+i: 109
+i: 110
+i: 111
+i: 112
+i: 113
+A boost: 
+A get exposure function sample: 
+i: 114
+i: 115
+i: 116
+i: 117
+A boost: 
+A get exposure function sample: 
+i: 118
+i: 119
+A boost: 
+A get exposure function sample: 
+i: 120
+i: 121
+A boost: 
+A get exposure function sample: 
+i: 122
+i: 123
+i: 124
+A boost: 
+A get exposure function sample: 
+i: 125
+A boost: 
+A get exposure function sample: 
+i: 126
+i: 127
+A boost: 
+A get exposure function sample: 
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+i: 133
+i: 134
+i: 135
+i: 136
+i: 137
+i: 138
+i: 139
+i: 140
+A boost: 
+A get exposure function sample: 
+i: 141
+i: 142
+i: 143
+i: 144
+i: 145
+i: 146
+A boost: 
+A get exposure function sample: 
+i: 147
+i: 148
+i: 149
+i: 150
+A boost: 
+A get exposure function sample: 
+i: 151
+i: 152
+A boost: 
+A get exposure function sample: 
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+A boost: 
+A get exposure function sample: 
+i: 159
+i: 160
+A boost: 
+A get exposure function sample: 
+i: 161
+i: 162
+i: 163
+i: 164
+i: 165
+i: 166
+i: 167
+i: 168
+A boost: 
+A get exposure function sample: 
+i: 169
+i: 170
+i: 171
+i: 172
+A boost: 
+A get exposure function sample: 
+i: 173
+i: 174
+i: 175
+i: 176
+i: 177
+A boost: 
+A get exposure function sample: 
+i: 178
+i: 179
+A boost: 
+A get exposure function sample: 
+i: 180
+i: 181
+i: 182
+i: 183
+i: 184
+i: 185
+i: 186
+A boost: 
+A get exposure function sample: 
+i: 187
+i: 188
+i: 189
+i: 190
+A boost: 
+A get exposure function sample: 
+i: 191
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200
+i: 201
+i: 202
+i: 203
+i: 204
+i: 205
+A boost: 
+A get exposure function sample: 
+i: 206
+i: 207
+i: 208
+i: 209
+A boost: 
+A get exposure function sample: 
+i: 210
+i: 211
+A boost: 
+A get exposure function sample: 
+i: 212
+A boost: 
+A get exposure function sample: 
+i: 213
+i: 214
+A boost: 
+A get exposure function sample: 
+i: 215
+i: 216
+i: 217
+i: 218
+i: 219
+i: 220
+A boost: 
+A get exposure function sample: 
+i: 221
+i: 222
+i: 223
+i: 224
+i: 225
+i: 226
+i: 227
+i: 228
+i: 229
+i: 230
+i: 231
+i: 232
+A boost: 
+A get exposure function sample: 
+i: 233
+A boost: 
+A get exposure function sample: 
+i: 234
+i: 235
+i: 236
+i: 237
+i: 238
+i: 239
+i: 240
+i: 241
+i: 242
+i: 243
+A boost: 
+A get exposure function sample: 
+i: 244
+i: 245
+i: 246
+i: 247
+i: 248
+i: 249
+i: 250
+i: 251
+i: 252
+A boost: 
+A get exposure function sample: 
+i: 253
+i: 254
+i: 255
+i: 256
+i: 257
+i: 258
+i: 259
+i: 260
+i: 261
+i: 262
+i: 263
+i: 264
+i: 265
+i: 266
+i: 267
+i: 268
+i: 269
+i: 270
+i: 271
+i: 272
+i: 273
+i: 274
+i: 275
+A boost: 
+A get exposure function sample: 
+i: 276
+i: 277
+i: 278
+i: 279
+A boost: 
+A get exposure function sample: 
+i: 280
+i: 281
+i: 282
+i: 283
+i: 284
+i: 285
+i: 286
+i: 287
+i: 288
+i: 289
+i: 0
+i: 1
+A boost: 
+A get exposure function sample: 
+i: 2
+A boost: 
+A get exposure function sample: 
+i: 3
+i: 4
+i: 5
+i: 6
+i: 7
+A boost: 
+A get exposure function sample: 
+i: 8
+i: 9
+i: 10
+i: 11
+i: 12
+i: 13
+i: 14
+i: 15
+i: 16
+i: 17
+i: 18
+i: 19
+i: 20
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+i: 31
+i: 32
+i: 33
+i: 34
+A boost: 
+A get exposure function sample: 
+i: 35
+A boost: 
+A get exposure function sample: 
+i: 36
+i: 37
+i: 38
+i: 39
+i: 40
+i: 41
+i: 42
+i: 43
+A boost: 
+A get exposure function sample: 
+i: 44
+A boost: 
+A get exposure function sample: 
+i: 45
+A boost: 
+A get exposure function sample: 
+i: 46
+A boost: 
+A get exposure function sample: 
+i: 47
+A boost: 
+A get exposure function sample: 
+i: 48
+A boost: 
+A get exposure function sample: 
+i: 49
+i: 50
+i: 51
+i: 52
+i: 53
+i: 54
+i: 55
+A boost: 
+A get exposure function sample: 
+i: 56
+i: 57
+A boost: 
+A get exposure function sample: 
+i: 58
+i: 59
+i: 60
+A boost: 
+A get exposure function sample: 
+i: 61
+i: 62
+A boost: 
+A get exposure function sample: 
+i: 63
+i: 64
+i: 65
+A boost: 
+A get exposure function sample: 
+i: 66
+i: 67
+A boost: 
+A get exposure function sample: 
+i: 68
+i: 69
+i: 70
+i: 71
+i: 72
+i: 73
+i: 74
+i: 75
+i: 76
+i: 77
+i: 78
+i: 79
+i: 80
+i: 81
+i: 82
+i: 83
+i: 84
+A boost: 
+A get exposure function sample: 
+i: 85
+i: 86
+A boost: 
+A get exposure function sample: 
+i: 87
+i: 88
+i: 89
+i: 90
+A boost: 
+A get exposure function sample: 
+i: 91
+A boost: 
+A get exposure function sample: 
+i: 92
+i: 93
+i: 94
+A boost: 
+A get exposure function sample: 
+i: 95
+A boost: 
+A get exposure function sample: 
+i: 96
+A boost: 
+A get exposure function sample: 
+i: 97
+i: 98
+A boost: 
+A get exposure function sample: 
+i: 99
+i: 100
+i: 101
+i: 102
+i: 103
+i: 104
+i: 105
+i: 106
+i: 107
+i: 108
+i: 109
+i: 110
+i: 111
+i: 112
+i: 113
+A boost: 
+A get exposure function sample: 
+i: 114
+i: 115
+i: 116
+i: 117
+A boost: 
+A get exposure function sample: 
+i: 118
+i: 119
+A boost: 
+A get exposure function sample: 
+i: 120
+i: 121
+A boost: 
+A get exposure function sample: 
+i: 122
+i: 123
+i: 124
+A boost: 
+A get exposure function sample: 
+i: 125
+A boost: 
+A get exposure function sample: 
+i: 126
+i: 127
+A boost: 
+A get exposure function sample: 
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+i: 133
+i: 134
+i: 135
+i: 136
+i: 137
+i: 138
+i: 139
+i: 140
+A boost: 
+A get exposure function sample: 
+i: 141
+i: 142
+i: 143
+i: 144
+i: 145
+i: 146
+A boost: 
+A get exposure function sample: 
+i: 147
+i: 148
+i: 149
+i: 150
+A boost: 
+A get exposure function sample: 
+i: 151
+i: 152
+A boost: 
+A get exposure function sample: 
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+A boost: 
+A get exposure function sample: 
+i: 159
+i: 160
+A boost: 
+A get exposure function sample: 
+i: 161
+i: 162
+i: 163
+i: 164
+i: 165
+i: 166
+i: 167
+i: 168
+A boost: 
+A get exposure function sample: 
+i: 169
+i: 170
+i: 171
+i: 172
+A boost: 
+A get exposure function sample: 
+i: 173
+i: 174
+i: 175
+i: 176
+i: 177
+A boost: 
+A get exposure function sample: 
+i: 178
+i: 179
+A boost: 
+A get exposure function sample: 
+i: 180
+i: 181
+i: 182
+i: 183
+i: 184
+i: 185
+i: 186
+A boost: 
+A get exposure function sample: 
+i: 187
+i: 188
+i: 189
+i: 190
+A boost: 
+A get exposure function sample: 
+i: 191
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200
+i: 201
+i: 202
+i: 203
+i: 204
+i: 205
+A boost: 
+A get exposure function sample: 
+i: 206
+i: 207
+i: 208
+i: 209
+A boost: 
+A get exposure function sample: 
+i: 210
+i: 211
+A boost: 
+A get exposure function sample: 
+i: 212
+A boost: 
+A get exposure function sample: 
+i: 213
+i: 214
+A boost: 
+A get exposure function sample: 
+i: 215
+i: 216
+i: 217
+i: 218
+i: 219
+i: 220
+A boost: 
+A get exposure function sample: 
+i: 221
+i: 222
+i: 223
+i: 224
+i: 225
+i: 226
+i: 227
+i: 228
+i: 229
+i: 230
+i: 231
+i: 232
+A boost: 
+A get exposure function sample: 
+i: 233
+A boost: 
+A get exposure function sample: 
+i: 234
+i: 235
+i: 236
+i: 237
+i: 238
+i: 239
+i: 240
+i: 241
+i: 242
+i: 243
+A boost: 
+A get exposure function sample: 
+i: 244
+i: 245
+i: 246
+i: 247
+i: 248
+i: 249
+i: 250
+i: 251
+i: 252
+A boost: 
+A get exposure function sample: 
+i: 253
+i: 254
+i: 255
+i: 256
+i: 257
+i: 258
+i: 259
+i: 260
+i: 261
+i: 262
+i: 263
+i: 264
+i: 265
+i: 266
+i: 267
+i: 268
+i: 269
+i: 270
+i: 271
+i: 272
+i: 273
+i: 274
+i: 275
+A boost: 
+A get exposure function sample: 
+i: 276
+i: 277
+i: 278
+i: 279
+A boost: 
+A get exposure function sample: 
+i: 280
+i: 281
+i: 282
+i: 283
+i: 284
+i: 285
+i: 286
+i: 287
+i: 288
+i: 289
+Initiate class
+Initiate class2
+Initiate class2: 3
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+Initiate class
+Initiate class2
+Initiate class2: 2
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+this->knownExpInd:0
+this->knownExpInd:0
+i: 0
+i: 1
+A boost: 
+A get exposure function sample: 
+i: 2
+A boost: 
+A get exposure function sample: 
+i: 3
+i: 4
+i: 5
+i: 6
+i: 7
+A boost: 
+A get exposure function sample: 
+i: 8
+i: 9
+i: 10
+i: 11
+i: 12
+i: 13
+i: 14
+i: 15
+i: 16
+i: 17
+i: 18
+i: 19
+i: 20
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+i: 31
+i: 32
+i: 33
+i: 34
+A boost: 
+A get exposure function sample: 
+i: 35
+A boost: 
+A get exposure function sample: 
+i: 36
+i: 37
+i: 38
+i: 39
+i: 40
+i: 41
+i: 42
+i: 43
+A boost: 
+A get exposure function sample: 
+i: 44
+A boost: 
+A get exposure function sample: 
+i: 45
+A boost: 
+A get exposure function sample: 
+i: 46
+A boost: 
+A get exposure function sample: 
+i: 47
+A boost: 
+A get exposure function sample: 
+i: 48
+A boost: 
+A get exposure function sample: 
+i: 49
+i: 50
+i: 51
+i: 52
+i: 53
+i: 54
+i: 55
+A boost: 
+A get exposure function sample: 
+i: 56
+i: 57
+A boost: 
+A get exposure function sample: 
+i: 58
+i: 59
+i: 60
+A boost: 
+A get exposure function sample: 
+i: 61
+i: 62
+A boost: 
+A get exposure function sample: 
+i: 63
+i: 64
+i: 65
+A boost: 
+A get exposure function sample: 
+i: 66
+i: 67
+A boost: 
+A get exposure function sample: 
+i: 68
+i: 69
+i: 70
+i: 71
+i: 72
+i: 73
+i: 74
+i: 75
+i: 76
+i: 77
+i: 78
+i: 79
+i: 80
+i: 81
+i: 82
+i: 83
+i: 84
+A boost: 
+A get exposure function sample: 
+i: 85
+i: 86
+A boost: 
+A get exposure function sample: 
+i: 87
+i: 88
+i: 89
+i: 90
+A boost: 
+A get exposure function sample: 
+i: 91
+A boost: 
+A get exposure function sample: 
+i: 92
+i: 93
+i: 94
+A boost: 
+A get exposure function sample: 
+i: 95
+A boost: 
+A get exposure function sample: 
+i: 96
+A boost: 
+A get exposure function sample: 
+i: 97
+i: 98
+A boost: 
+A get exposure function sample: 
+i: 99
+i: 100
+i: 101
+i: 102
+i: 103
+i: 104
+i: 105
+i: 106
+i: 107
+i: 108
+i: 109
+i: 110
+i: 111
+i: 112
+i: 113
+A boost: 
+A get exposure function sample: 
+i: 114
+i: 115
+i: 116
+i: 117
+A boost: 
+A get exposure function sample: 
+i: 118
+i: 119
+A boost: 
+A get exposure function sample: 
+i: 120
+i: 121
+A boost: 
+A get exposure function sample: 
+i: 122
+i: 123
+i: 124
+A boost: 
+A get exposure function sample: 
+i: 125
+A boost: 
+A get exposure function sample: 
+i: 126
+i: 127
+A boost: 
+A get exposure function sample: 
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+i: 133
+i: 134
+i: 135
+i: 136
+i: 137
+i: 138
+i: 139
+i: 140
+A boost: 
+A get exposure function sample: 
+i: 141
+i: 142
+i: 143
+i: 144
+i: 145
+i: 146
+A boost: 
+A get exposure function sample: 
+i: 147
+i: 148
+i: 149
+i: 150
+A boost: 
+A get exposure function sample: 
+i: 151
+i: 152
+A boost: 
+A get exposure function sample: 
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+A boost: 
+A get exposure function sample: 
+i: 159
+i: 160
+A boost: 
+A get exposure function sample: 
+i: 161
+i: 162
+i: 163
+i: 164
+i: 165
+i: 166
+i: 167
+i: 168
+A boost: 
+A get exposure function sample: 
+i: 169
+i: 170
+i: 171
+i: 172
+A boost: 
+A get exposure function sample: 
+i: 173
+i: 174
+i: 175
+i: 176
+i: 177
+A boost: 
+A get exposure function sample: 
+i: 178
+i: 179
+A boost: 
+A get exposure function sample: 
+i: 180
+i: 181
+i: 182
+i: 183
+i: 184
+i: 185
+i: 186
+A boost: 
+A get exposure function sample: 
+i: 187
+i: 188
+i: 189
+i: 190
+A boost: 
+A get exposure function sample: 
+i: 191
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200
+i: 201
+i: 202
+i: 203
+i: 204
+i: 205
+A boost: 
+A get exposure function sample: 
+i: 206
+i: 207
+i: 208
+i: 209
+A boost: 
+A get exposure function sample: 
+i: 210
+i: 211
+A boost: 
+A get exposure function sample: 
+i: 212
+A boost: 
+A get exposure function sample: 
+i: 213
+i: 214
+A boost: 
+A get exposure function sample: 
+i: 215
+i: 216
+i: 217
+i: 218
+i: 219
+i: 220
+A boost: 
+A get exposure function sample: 
+i: 221
+i: 222
+i: 223
+i: 224
+i: 225
+i: 226
+i: 227
+i: 228
+i: 229
+i: 230
+i: 231
+i: 232
+A boost: 
+A get exposure function sample: 
+i: 233
+A boost: 
+A get exposure function sample: 
+i: 234
+i: 235
+i: 236
+i: 237
+i: 238
+i: 239
+i: 240
+i: 241
+i: 242
+i: 243
+A boost: 
+A get exposure function sample: 
+i: 244
+i: 245
+i: 246
+i: 247
+i: 248
+i: 249
+i: 250
+i: 251
+i: 252
+A boost: 
+A get exposure function sample: 
+i: 253
+i: 254
+i: 255
+i: 256
+i: 257
+i: 258
+i: 259
+i: 260
+i: 261
+i: 262
+i: 263
+i: 264
+i: 265
+i: 266
+i: 267
+i: 268
+i: 269
+i: 270
+i: 271
+i: 272
+i: 273
+i: 274
+i: 275
+A boost: 
+A get exposure function sample: 
+i: 276
+i: 277
+i: 278
+i: 279
+A boost: 
+A get exposure function sample: 
+i: 280
+i: 281
+i: 282
+i: 283
+i: 284
+i: 285
+i: 286
+i: 287
+i: 288
+i: 289
+Initiate class
+Initiate class2
+Initiate class2: 4
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+i: 0
+i: 1
+A boost: 
+A get exposure function sample: 
+i: 2
+A boost: 
+A get exposure function sample: 
+i: 3
+i: 4
+i: 5
+i: 6
+i: 7
+A boost: 
+A get exposure function sample: 
+i: 8
+i: 9
+i: 10
+i: 11
+i: 12
+i: 13
+i: 14
+i: 15
+i: 16
+i: 17
+i: 18
+i: 19
+i: 20
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+i: 31
+i: 32
+i: 33
+i: 34
+A boost: 
+A get exposure function sample: 
+i: 35
+A boost: 
+A get exposure function sample: 
+i: 36
+i: 37
+i: 38
+i: 39
+i: 40
+i: 41
+i: 42
+i: 43
+A boost: 
+A get exposure function sample: 
+i: 44
+A boost: 
+A get exposure function sample: 
+i: 45
+A boost: 
+A get exposure function sample: 
+i: 46
+A boost: 
+A get exposure function sample: 
+i: 47
+A boost: 
+A get exposure function sample: 
+i: 48
+A boost: 
+A get exposure function sample: 
+i: 49
+i: 50
+i: 51
+i: 52
+i: 53
+i: 54
+i: 55
+A boost: 
+A get exposure function sample: 
+i: 56
+i: 57
+A boost: 
+this->knownExpInd:0
+A get exposure function sample: 
+i: 58
+i: 59
+i: 60
+A boost: 
+A get exposure function sample: 
+i: 61
+i: 62
+A boost: 
+A get exposure function sample: 
+i: 63
+i: 64
+i: 65
+A boost: 
+A get exposure function sample: 
+i: 66
+i: 67
+A boost: 
+A get exposure function sample: 
+i: 68
+i: 69
+i: 70
+i: 71
+i: 72
+i: 73
+i: 74
+i: 75
+i: 76
+i: 77
+i: 78
+i: 79
+i: 80
+i: 81
+i: 82
+i: 83
+i: 84
+A boost: 
+A get exposure function sample: 
+i: 85
+i: 86
+A boost: 
+A get exposure function sample: 
+i: 87
+i: 88
+i: 89
+i: 90
+A boost: 
+A get exposure function sample: 
+i: 91
+A boost: 
+A get exposure function sample: 
+i: 92
+i: 93
+i: 94
+A boost: 
+A get exposure function sample: 
+i: 95
+A boost: 
+A get exposure function sample: 
+i: 96
+A boost: 
+A get exposure function sample: 
+i: 97
+i: 98
+A boost: 
+A get exposure function sample: 
+i: 99
+i: 100
+i: 101
+i: 102
+i: 103
+i: 104
+i: 105
+i: 106
+i: 107
+i: 108
+i: 109
+i: 110
+i: 111
+i: 112
+i: 113
+A boost: 
+A get exposure function sample: 
+i: 114
+i: 115
+i: 116
+i: 117
+A boost: 
+A get exposure function sample: 
+i: 118
+i: 119
+A boost: 
+A get exposure function sample: 
+i: 120
+i: 121
+A boost: 
+A get exposure function sample: 
+i: 122
+i: 123
+i: 124
+A boost: 
+A get exposure function sample: 
+i: 125
+A boost: 
+A get exposure function sample: 
+i: 126
+i: 127
+A boost: 
+A get exposure function sample: 
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+i: 133
+i: 134
+i: 135
+i: 136
+i: 137
+i: 138
+i: 139
+i: 140
+A boost: 
+A get exposure function sample: 
+i: 141
+i: 142
+i: 143
+i: 144
+i: 145
+i: 146
+A boost: 
+A get exposure function sample: 
+i: 147
+i: 148
+i: 149
+i: 150
+A boost: 
+A get exposure function sample: 
+i: 151
+i: 152
+A boost: 
+A get exposure function sample: 
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+A boost: 
+A get exposure function sample: 
+i: 159
+i: 160
+A boost: 
+A get exposure function sample: 
+i: 161
+i: 162
+i: 163
+i: 164
+i: 165
+i: 166
+i: 167
+i: 168
+A boost: 
+A get exposure function sample: 
+i: 169
+i: 170
+i: 171
+i: 172
+A boost: 
+A get exposure function sample: 
+i: 173
+i: 174
+i: 175
+i: 176
+i: 177
+A boost: 
+A get exposure function sample: 
+i: 178
+i: 179
+A boost: 
+A get exposure function sample: 
+i: 180
+i: 181
+i: 182
+i: 183
+i: 184
+i: 185
+i: 186
+A boost: 
+A get exposure function sample: 
+i: 187
+i: 188
+i: 189
+i: 190
+A boost: 
+A get exposure function sample: 
+i: 191
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200
+i: 201
+i: 202
+i: 203
+i: 204
+i: 205
+A boost: 
+A get exposure function sample: 
+i: 206
+i: 207
+i: 208
+i: 209
+A boost: 
+A get exposure function sample: 
+i: 210
+i: 211
+A boost: 
+A get exposure function sample: 
+i: 212
+A boost: 
+A get exposure function sample: 
+i: 213
+i: 214
+A boost: 
+A get exposure function sample: 
+i: 215
+i: 216
+i: 217
+i: 218
+i: 219
+i: 220
+A boost: 
+A get exposure function sample: 
+i: 221
+i: 222
+i: 223
+i: 224
+i: 225
+i: 226
+i: 227
+i: 228
+i: 229
+i: 230
+i: 231
+i: 232
+A boost: 
+A get exposure function sample: 
+i: 233
+A boost: 
+A get exposure function sample: 
+i: 234
+i: 235
+i: 236
+i: 237
+i: 238
+i: 239
+i: 240
+i: 241
+i: 242
+i: 243
+A boost: 
+A get exposure function sample: 
+i: 244
+i: 245
+i: 246
+i: 247
+i: 248
+i: 249
+i: 250
+i: 251
+i: 252
+A boost: 
+A get exposure function sample: 
+i: 253
+i: 254
+i: 255
+i: 256
+i: 257
+i: 258
+i: 259
+i: 260
+i: 261
+i: 262
+i: 263
+i: 264
+i: 265
+i: 266
+i: 267
+i: 268
+i: 269
+i: 270
+i: 271
+i: 272
+i: 273
+i: 274
+i: 275
+A boost: 
+A get exposure function sample: 
+i: 276
+i: 277
+i: 278
+i: 279
+A boost: 
+A get exposure function sample: 
+i: 280
+i: 281
+i: 282
+i: 283
+i: 284
+i: 285
+i: 286
+i: 287
+i: 288
+i: 289
+i: 0
+i: 1
+A boost: 
+Initiate class
+Initiate class2
+Initiate class2: A get exposure function sample: 
+4i: 
+2Instance of the previous classes1
+
+A boost: 
+Testing in
+Instance of the previous classes
+A get exposure function sample: 
+Instance of the previous classes2i: 
+3End: Initiate class
+
+i: Start: initiate functions4
+
+i: 5
+i: 6
+i: 7
+A boost: 
+End: initiate functions
+A get exposure function sample: 
+i: 8
+i: 9
+i: 10
+i: 11
+i: 12
+i: 13
+i: 14
+i: 15
+i: 16
+i: 17
+i: 18
+i: 19
+i: 20
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+i: 31
+i: 32
+i: 33
+i: 34
+A boost: 
+A get exposure function sample: 
+i: 35
+A boost: 
+A get exposure function sample: 
+i: 36
+i: 37
+i: 38
+i: 39
+i: 40
+i: 41
+i: 42
+i: 43
+A boost: 
+A get exposure function sample: 
+i: 44
+A boost: 
+A get exposure function sample: 
+i: 45
+A boost: 
+A get exposure function sample: 
+i: 46
+A boost: 
+A get exposure function sample: 
+i: 47
+A boost: 
+A get exposure function sample: 
+i: 48
+A boost: 
+A get exposure function sample: 
+i: 49
+i: 50
+i: 51
+i: 52
+i: 53
+i: 54
+i: 55
+A boost: 
+A get exposure function sample: 
+i: 56
+i: 57
+A boost: 
+A get exposure function sample: 
+i: 58
+i: 59
+i: 60
+A boost: 
+A get exposure function sample: 
+i: 61
+i: 62
+A boost: 
+A get exposure function sample: 
+i: 63
+i: 64
+i: 65
+A boost: 
+A get exposure function sample: 
+i: 66
+i: 67
+A boost: 
+A get exposure function sample: 
+i: 68
+i: 69
+i: 70
+i: 71
+i: 72
+i: 73
+i: 74
+i: 75
+i: 76
+i: 77
+i: 78
+i: 79
+i: 80
+i: 81this->knownExpInd:
+i: 82
+i: 083
+
+i: 84
+A boost: 
+A get exposure function sample: 
+i: 85
+i: 86
+A boost: 
+A get exposure function sample: 
+i: 87
+i: 88
+i: 89
+i: 90
+A boost: 
+A get exposure function sample: 
+i: 91
+A boost: 
+A get exposure function sample: 
+i: 92
+i: 93
+i: 94
+A boost: 
+A get exposure function sample: 
+i: 95
+A boost: 
+A get exposure function sample: 
+i: 96
+A boost: 
+A get exposure function sample: 
+i: 97
+i: 98
+A boost: 
+A get exposure function sample: 
+i: 99
+i: 100
+i: 101
+i: 102
+i: 103
+i: 104
+i: 105
+i: 106
+i: 107
+i: 108
+i: 109
+i: 110
+i: 111
+i: 112
+i: 113
+A boost: 
+A get exposure function sample: 
+i: 114
+i: 115
+i: 116
+i: 117
+A boost: 
+A get exposure function sample: 
+i: 118
+i: 119
+A boost: 
+A get exposure function sample: 
+i: 120
+i: 121
+A boost: 
+A get exposure function sample: 
+i: 122
+i: 123
+i: 124
+A boost: 
+A get exposure function sample: 
+i: 125
+A boost: 
+A get exposure function sample: 
+i: 126
+i: 127
+A boost: 
+A get exposure function sample: 
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+i: 133
+i: 134
+i: 135
+i: 136
+i: 137
+i: 138
+i: 139
+i: 140
+A boost: 
+A get exposure function sample: 
+i: 141
+i: 142
+i: 143
+i: 144
+i: 145
+i: 146
+A boost: 
+A get exposure function sample: 
+i: 147
+i: 148
+i: 149
+i: 150
+A boost: 
+A get exposure function sample: 
+i: 151
+i: 152
+A boost: 
+A get exposure function sample: 
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+Initiate classA boost: 
+
+Initiate class2
+Initiate class2: 3
+Instance of the previous classes1
+A get exposure function sample: 
+i: 159
+i: 160
+A boost: 
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+A get exposure function sample: 
+i: 161
+i: 162
+i: 163
+i: 164
+i: 165
+i: 166
+i: 167
+End: initiate functionsi: 
+168
+A boost: 
+A get exposure function sample: 
+i: 169
+i: 170
+i: 171
+i: 172
+A boost: 
+A get exposure function sample: 
+i: 173
+i: 174
+i: 175
+i: 176
+i: 177
+A boost: 
+A get exposure function sample: 
+i: 178
+i: 179
+A boost: 
+A get exposure function sample: 
+i: 180
+i: 181
+i: 182
+i: 183
+i: 184
+i: 185
+i: 186
+A boost: 
+A get exposure function sample: 
+i: 187
+i: 188
+i: 189
+i: 190
+A boost: 
+A get exposure function sample: 
+i: 191
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200
+i: 201
+i: 202
+i: 203
+i: 204
+i: 205
+A boost: 
+A get exposure function sample: 
+i: 206
+i: 207
+i: 208
+i: 209
+A boost: 
+A get exposure function sample: 
+i: 210
+i: 211
+A boost: 
+A get exposure function sample: 
+i: 212
+A boost: 
+A get exposure function sample: 
+i: 213
+i: 214
+A boost: 
+A get exposure function sample: 
+i: 215
+i: 216
+i: 217
+i: 218
+i: 219
+i: 220
+A boost: 
+A get exposure function sample: 
+i: 221
+i: 222
+i: 223
+i: 224
+i: 225
+i: 226
+i: 227
+i: 228
+i: 229
+i: 230
+i: 231
+i: 232
+A boost: 
+A get exposure function sample: 
+i: 233
+A boost: 
+A get exposure function sample: 
+i: 234
+i: 235
+i: 236
+i: 237
+i: 238
+i: 239
+i: 240
+i: 241
+i: 242
+i: 243
+A boost: 
+A get exposure function sample: 
+i: 244
+i: 245
+i: 246
+i: 247
+i: 248
+i: 249
+i: 250
+i: 251
+i: 252
+A boost: 
+this->knownExpInd:0
+A get exposure function sample: 
+i: 253
+i: 254
+i: 255
+i: 256
+i: 257
+i: 258
+i: 259
+i: 260
+i: 261
+i: 262
+i: 263
+i: 264
+i: 265
+i: 266
+i: 267
+i: 268
+i: 269
+i: 270
+i: 271
+i: 272
+i: 273
+i: 274
+i: 275
+A boost: 
+A get exposure function sample: 
+i: 276
+i: 277
+i: 278
+i: 279
+A boost: 
+A get exposure function sample: 
+i: 280
+i: 281
+i: 282
+i: 283
+i: 284
+i: 285
+i: 286
+i: 287
+i: 288
+i: 289
+i: 0
+i: 1
+A boost: 
+A get exposure function sample: 
+i: 2
+A boost: 
+A get exposure function sample: 
+i: 3
+i: 4
+i: 5
+i: 6
+i: 7
+A boost: 
+A get exposure function sample: 
+i: 8
+i: 9
+i: 10
+i: 11
+i: 12
+i: 13
+i: 14
+i: 15
+i: 16
+i: 17
+i: 18
+i: 19
+i: 20
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+i: 31
+i: 32
+i: 33
+i: 34
+A boost: 
+A get exposure function sample: 
+i: 35
+A boost: 
+A get exposure function sample: 
+i: 36
+i: 37
+i: 38
+i: 39
+i: 40
+i: 41
+i: 42
+i: 43
+A boost: 
+A get exposure function sample: 
+i: 44
+A boost: 
+A get exposure function sample: 
+i: 45
+A boost: 
+A get exposure function sample: 
+i: 46
+A boost: 
+A get exposure function sample: 
+i: 47
+A boost: 
+A get exposure function sample: 
+i: 48
+A boost: 
+A get exposure function sample: 
+i: 49
+i: 50
+i: 51
+i: 52
+i: 53
+i: 54
+i: 55
+A boost: 
+A get exposure function sample: 
+i: 56
+i: 57
+A boost: 
+A get exposure function sample: 
+i: 58
+i: 59
+i: 60
+A boost: 
+A get exposure function sample: 
+i: 61
+i: 62
+A boost: 
+A get exposure function sample: 
+i: 63
+i: 64
+i: 65
+A boost: 
+A get exposure function sample: 
+i: 66
+i: 67
+A boost: 
+A get exposure function sample: 
+i: 68
+i: 69
+i: 70
+i: 71
+i: 72
+i: 73
+i: 74
+i: 75
+i: 76
+i: 77
+i: 78
+i: 79
+i: 80
+i: 81
+i: 82
+i: 83
+i: 84
+A boost: 
+A get exposure function sample: 
+i: 85
+i: 86
+A boost: 
+A get exposure function sample: 
+i: 87
+i: 88
+i: 89
+i: 90
+A boost: 
+A get exposure function sample: 
+i: 91
+A boost: 
+A get exposure function sample: 
+i: 92
+i: 93
+i: 94
+A boost: 
+A get exposure function sample: 
+i: 95
+A boost: 
+A get exposure function sample: 
+i: 96
+A boost: 
+A get exposure function sample: 
+i: 97
+i: 98
+A boost: 
+A get exposure function sample: 
+i: 99
+i: 100
+i: 101
+i: 102
+i: 103
+i: 104
+i: 105
+i: 106
+i: 107
+i: 108
+i: 109
+i: 110
+i: 111
+i: 112
+i: 113
+A boost: 
+A get exposure function sample: 
+i: 114
+i: 115
+i: 116
+i: 117
+A boost: 
+A get exposure function sample: 
+i: 118
+i: 119
+A boost: 
+A get exposure function sample: 
+i: 120
+i: 121
+A boost: 
+A get exposure function sample: 
+i: 122
+i: 123
+i: 124
+A boost: 
+A get exposure function sample: 
+i: 125
+A boost: 
+A get exposure function sample: 
+i: 126
+i: 127
+A boost: 
+A get exposure function sample: 
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+i: 133
+i: 134
+i: 135
+i: 136
+i: 137
+i: 138
+i: 139
+i: 140
+A boost: 
+A get exposure function sample: 
+i: 141
+i: 142
+i: 143
+i: 144
+i: 145
+i: 146
+A boost: 
+A get exposure function sample: 
+i: 147
+i: 148
+i: 149
+i: 150
+A boost: 
+A get exposure function sample: 
+i: 151
+i: 152
+A boost: 
+A get exposure function sample: 
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+A boost: 
+A get exposure function sample: 
+i: 159
+i: 160
+A boost: 
+A get exposure function sample: 
+i: 161
+i: 162
+i: 163
+i: 164
+i: 165
+i: 166
+i: 167
+i: 168
+A boost: 
+A get exposure function sample: 
+i: 169
+i: 170
+i: 171
+i: 172
+A boost: 
+A get exposure function sample: 
+i: 173
+i: 174
+i: 175
+i: 176
+i: 177
+A boost: 
+i: 0
+i: 1
+A boost: 
+A get exposure function sample: 
+i: 2
+A boost: 
+A get exposure function sample: 
+i: 3
+i: 4
+i: 5
+i: 6
+i: 7
+A boost: 
+A get exposure function sample: 
+i: 8
+i: 9
+i: 10
+i: 11
+i: 12
+i: 13
+i: 14
+i: 15
+i: 16
+i: 17
+i: 18
+i: 19
+i: 20
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+i: 31
+i: 32
+i: 33
+i: 34
+A boost: 
+A get exposure function sample: 
+i: 35
+A boost: 
+A get exposure function sample: 
+i: 36
+i: 37
+i: 38
+i: 39
+i: 40
+i: 41
+i: 42
+i: 43
+A boost: 
+A get exposure function sample: 
+i: 44
+A boost: 
+A get exposure function sample: 
+i: 45
+A boost: 
+A get exposure function sample: 
+i: 46
+A boost: 
+A get exposure function sample: 
+i: 47
+A boost: 
+A get exposure function sample: 
+i: 48
+A boost: 
+A get exposure function sample: 
+i: 49
+i: 50
+i: 51
+i: 52
+i: 53
+i: 54
+i: 55
+A boost: 
+A get exposure function sample: 
+i: 56
+i: 57
+A boost: 
+A get exposure function sample: 
+i: 58
+i: 59
+i: 60
+A boost: 
+A get exposure function sample: 
+i: 61
+i: 62
+A boost: 
+A get exposure function sample: 
+i: 63
+i: 64
+i: 65
+A boost: 
+A get exposure function sample: 
+i: 66
+i: 67
+A boost: 
+A get exposure function sample: 
+i: 68
+i: 69
+i: 70
+i: 71
+i: 72
+i: 73
+i: 74
+i: 75
+i: 76
+i: 77
+i: 78
+i: 79
+i: 80
+i: 81
+i: 82
+i: 83
+i: 84
+A boost: 
+A get exposure function sample: 
+i: 85
+i: 86
+A boost: 
+A get exposure function sample: 
+i: 87
+i: 88
+i: 89
+i: 90
+A boost: 
+A get exposure function sample: 
+i: 91
+A boost: 
+A get exposure function sample: 
+i: 92
+i: 93
+i: 94
+A boost: 
+A get exposure function sample: 
+i: 95
+A boost: 
+A get exposure function sample: 
+i: 96
+A boost: 
+A get exposure function sample: 
+i: 97
+i: 98
+A boost: 
+A get exposure function sample: 
+i: 99
+i: 100
+i: 101
+i: 102
+i: 103
+i: 104
+i: 105
+i: 106
+i: 107
+i: 108
+i: 109
+i: 110
+i: 111
+i: 112
+i: 113
+A boost: 
+A get exposure function sample: 
+i: 114
+i: 115
+i: 116
+i: 117
+A boost: 
+A get exposure function sample: 
+i: 118
+i: 119
+A boost: 
+A get exposure function sample: 
+i: 120
+i: 121
+A boost: 
+A get exposure function sample: 
+i: 122
+i: 123
+i: 124
+A boost: 
+A get exposure function sample: 
+i: 125
+A boost: 
+A get exposure function sample: 
+i: 126
+i: 127
+A boost: 
+A get exposure function sample: 
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+i: 133
+i: 134
+i: 135
+i: 136
+i: 137
+i: 138
+i: 139
+i: 140
+A boost: 
+A get exposure function sample: 
+i: 141
+i: 142
+i: 143
+i: 144
+i: 145
+i: 146
+A boost: 
+A get exposure function sample: 
+i: 147
+i: 148
+i: 149
+i: 150
+A boost: 
+A get exposure function sample: 
+i: 151
+i: 152
+A boost: 
+A get exposure function sample: 
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+A boost: 
+A get exposure function sample: 
+i: 159
+i: 160
+A boost: 
+A get exposure function sample: 
+i: 161
+i: 162
+i: 163
+i: 164
+i: 165
+i: 166
+i: 167
+i: 168
+A boost: 
+A get exposure function sample: 
+i: 169
+i: 170
+i: 171
+i: 172
+A boost: 
+A get exposure function sample: 
+i: 173
+i: 174
+i: 175
+i: 176
+i: 177
+A boost: 
+A get exposure function sample: 
+i: 178
+i: 179
+A boost: 
+A get exposure function sample: 
+i: 180
+i: 181
+i: 182
+i: 183
+i: 184
+i: 185
+i: 186
+A boost: 
+A get exposure function sample: 
+i: 187
+i: 188
+i: 189
+i: 190
+A boost: 
+A get exposure function sample: 
+i: 191
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200
+i: 201
+i: 202
+i: 203
+i: 204
+i: 205
+A boost: 
+A get exposure function sample: 
+i: 206
+i: 207
+i: 208
+i: 209
+A boost: 
+A get exposure function sample: 
+i: 210
+i: 211
+A boost: 
+A get exposure function sample: 
+i: 212
+A boost: 
+A get exposure function sample: 
+i: 213
+i: 214
+A boost: 
+A get exposure function sample: 
+i: 215
+i: 216
+i: 217
+i: 218
+i: 219
+i: 220
+A boost: 
+A get exposure function sample: 
+i: 221
+i: 222
+i: 223
+i: 224
+i: 225
+i: 226
+i: 227
+i: 228
+i: 229
+i: 230
+i: 231
+i: 232
+A boost: 
+A get exposure function sample: 
+i: 233
+A boost: 
+A get exposure function sample: 
+i: 234
+i: 235
+i: 236
+i: 237
+i: 238
+i: 239
+i: 240
+i: 241
+i: 242
+i: 243
+A boost: 
+A get exposure function sample: 
+i: 244
+i: 245
+i: 246
+i: 247
+i: 248
+i: 249
+i: 250
+i: 251
+i: 252
+A boost: 
+A get exposure function sample: 
+i: 253
+i: 254
+i: 255
+i: 256
+i: 257
+i: 258
+i: 259
+i: 260
+i: 261
+i: 262
+i: 263
+i: 264
+i: 265
+i: 266
+i: 267
+i: 268
+i: 269
+i: 270
+i: 271
+i: 272
+i: 273
+i: 274
+i: 275
+A boost: 
+A get exposure function sample: 
+i: 276
+i: 277
+i: 278
+i: 279
+A boost: 
+A get exposure function sample: 
+i: 280
+i: 281
+i: 282
+i: 283
+i: 284
+i: 285
+i: 286
+i: 287
+i: 288
+i: 289
+A get exposure function sample: 
+i: 178
+i: 179
+A boost: 
+A get exposure function sample: 
+i: 180
+i: 181
+i: 182
+i: 183
+i: 184
+i: 185
+i: 186
+A boost: 
+A get exposure function sample: 
+i: 187
+i: 188
+i: 189
+i: 190
+A boost: 
+A get exposure function sample: 
+i: 191
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200
+i: 201
+i: 202
+i: 203
+i: 204
+i: 205
+A boost: 
+A get exposure function sample: 
+i: 206
+i: 207
+i: 208
+i: 209
+A boost: 
+A get exposure function sample: 
+i: 210
+i: 211
+A boost: 
+A get exposure function sample: 
+i: 212
+A boost: 
+A get exposure function sample: 
+i: 213
+i: 214
+A boost: 
+A get exposure function sample: 
+i: 215
+i: 216
+i: 217
+i: 218
+i: 219
+i: 220
+A boost: 
+A get exposure function sample: 
+i: 221
+i: 222
+i: 223
+i: 224
+i: 225
+i: 226
+i: 227
+i: 228
+i: 229
+i: 230
+i: 231
+i: 232
+A boost: 
+A get exposure function sample: 
+i: 233
+A boost: 
+A get exposure function sample: 
+i: 234
+i: 235
+i: 236
+i: 237
+i: 238
+i: 239
+i: 240
+i: 241
+i: 242
+i: 243
+A boost: 
+A get exposure function sample: 
+i: 244
+i: 245
+i: 246
+i: 247
+i: 248
+i: 249
+i: 250
+i: 251
+i: 252
+A boost: 
+A get exposure function sample: 
+i: 253
+i: 254
+i: 255
+i: 256
+i: 257
+i: 258
+i: 259
+i: 260
+i: 261
+i: 262
+i: 263
+i: 264
+i: 265
+i: 266
+i: 267
+i: 268
+i: 269
+i: 270
+i: 271
+i: 272
+i: 273
+i: 274
+i: 275
+A boost: 
+A get exposure function sample: 
+i: 276
+i: 277
+i: 278
+i: 279
+A boost: 
+A get exposure function sample: 
+i: 280
+i: 281
+i: 282
+i: 283
+i: 284
+i: 285
+i: 286
+i: 287
+i: 288
+i: 289
+Running MCMC-PT iteration number: 0 of 400000. Chain number 1. Current logpost: -1008.94. No exp/inf: 146/90. 
+Running MCMC-PT iteration number: 0 of 400000. Chain number 2. Current logpost: -1032.7. No exp/inf: 146/90. 
+Running MCMC-PT iteration number: 0 of 400000. Chain number 1. Current logpost: -1.08327e+06. No exp/inf: 146/90. 
+Running MCMC-PT iteration number: 0 of 400000. Chain number 2. Current logpost: Running MCMC-PT iteration number: 0 of 400000. Chain number 4. Current logpost: -2511.87. No exp/inf: 146/90. 
+-1272.43. No exp/inf: 147/90. 
+Running MCMC-PT iteration number: 0 of 400000. Chain number 3. Current logpost: -2371.15. No exp/inf: 146/90. 
+Running MCMC-PT iteration number: 0 of 400000. Chain number 3. Current logpost: -1630.94. No exp/inf: 146/90. 
+Running MCMC-PT iteration number: 0 of 400000. Chain number 4. Current logpost: -3301.88. No exp/inf: 146/90. 
+Running MCMC-PT iteration number: 100 of 400000. Chain number 2. Current logpost: -815.377. No exp/inf: 129/90. 
+Running MCMC-PT iteration number: 100 of 400000. Chain number 1. Current logpost: -767.225. No exp/inf: 130/90. 
+Running MCMC-PT iteration number: 100 of 400000. Chain number 3. Current logpost: -1043.69. No exp/inf: 123/90. 
+Running MCMC-PT iteration number: 100 of 400000. Chain number 4. Current logpost: -927.376. No exp/inf: 138/90. 
+Running MCMC-PT iteration number: 100 of 400000. Chain number 2. Current logpost: -2104.87. No exp/inf: 136/90. 
+Running MCMC-PT iteration number: 100 of 400000. Chain number 4. Current logpost: -2708.21. No exp/inf: 130/90. 
+Running MCMC-PT iteration number: 100 of 400000. Chain number 3. Current logpost: -2168.98. No exp/inf: 150/90. 
+Running MCMC-PT iteration number: 100 of 400000. Chain number 1. Current logpost: -1918.24. No exp/inf: 137/90. 
+Running MCMC-PT iteration number: 200 of 400000. Chain number 2. Current logpost: -712.362. No exp/inf: 128/90. 
+Running MCMC-PT iteration number: 200 of 400000. Chain number 1. Current logpost: -654.81. No exp/inf: 116/90. 
+Running MCMC-PT iteration number: 200 of 400000. Chain number 3. Current logpost: -823.106. No exp/inf: 131/90. 
+Running MCMC-PT iteration number: 200 of 400000. Chain number 4. Current logpost: -741.686. No exp/inf: 130/90. 
+Running MCMC-PT iteration number: 200 of 400000. Chain number 2. Current logpost: -1714.61. No exp/inf: 126/90. 
+Running MCMC-PT iteration number: 200 of 400000. Chain number 4. Current logpost: -2407.28. No exp/inf: 129/90. 
+Running MCMC-PT iteration number: 200 of 400000. Chain number 3. Current logpost: -1922.6. No exp/inf: 149/90. 
+Running MCMC-PT iteration number: 200 of 400000. Chain number 1. Current logpost: -1838.84. No exp/inf: 131/90. 
+Running MCMC-PT iteration number: 300 of 400000. Chain number 2. Current logpost: -673.794. No exp/inf: 124/90. 
+Running MCMC-PT iteration number: 300 of 400000. Chain number 1. Current logpost: -579.351. No exp/inf: 107/90. 
+Running MCMC-PT iteration number: 300 of 400000. Chain number 3. Current logpost: -687.233. No exp/inf: 124/90. 
+Running MCMC-PT iteration number: 300 of 400000. Chain number 4. Current logpost: -703.364. No exp/inf: 125/90. 
+Running MCMC-PT iteration number: 300 of 400000. Chain number 2. Current logpost: -1611.99. No exp/inf: 126/90. 
+Running MCMC-PT iteration number: 300 of 400000. Chain number 4. Current logpost: -1998. No exp/inf: 125/90. 
+Running MCMC-PT iteration number: 300 of 400000. Chain number 1. Current logpost: -1842.05. No exp/inf: 135/90. 
+Running MCMC-PT iteration number: 300 of 400000. Chain number 3. Current logpost: -1796.72. No exp/inf: 140/90. 
+Running MCMC-PT iteration number: 400 of 400000. Chain number 2. Current logpost: -644.49. No exp/inf: 119/90. 
+Running MCMC-PT iteration number: 400 of 400000. Chain number 1. Current logpost: -513.064. No exp/inf: 99/90. 
+Running MCMC-PT iteration number: 400 of 400000. Chain number 3. Current logpost: -664.815. No exp/inf: 121/90. 
+Running MCMC-PT iteration number: 400 of 400000. Chain number 4. Current logpost: -645.439. No exp/inf: 117/90. 
+Running MCMC-PT iteration number: 500 of 400000. Chain number 1. Current logpost: -438.977. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 400 of 400000. Chain number 2. Current logpost: -1605.43. No exp/inf: 128/90. 
+Running MCMC-PT iteration number: 400 of 400000. Chain number 4. Current logpost: -1885.34. No exp/inf: 125/90. 
+Running MCMC-PT iteration number: 500 of 400000. Chain number 2. Current logpost: -617.351. No exp/inf: 114/90. 
+Running MCMC-PT iteration number: 400 of 400000. Chain number 1. Current logpost: -1811.79. No exp/inf: 132/90. 
+Running MCMC-PT iteration number: 400 of 400000. Chain number 3. Current logpost: -1731.12. No exp/inf: 136/90. 
+Running MCMC-PT iteration number: 500 of 400000. Chain number 4. Current logpost: -575.308. No exp/inf: 107/90. 
+Running MCMC-PT iteration number: 500 of 400000. Chain number 3. Current logpost: -645.71. No exp/inf: 118/90. 
+Running MCMC-PT iteration number: 600 of 400000. Chain number 1. Current logpost: -427.056. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 700 of 400000. Chain number 1. Current logpost: -422.779. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 600 of 400000. Chain number 2. Current logpost: -615.074. No exp/inf: 115/90. 
+Running MCMC-PT iteration number: 600 of 400000. Chain number 4. Current logpost: -480.346. No exp/inf: 96/90. 
+Running MCMC-PT iteration number: 500 of 400000. Chain number 2. Current logpost: -1568.38. No exp/inf: 127/90. 
+Running MCMC-PT iteration number: 600 of 400000. Chain number 3. Current logpost: -608.925. No exp/inf: 111/90. 
+Running MCMC-PT iteration number: 500 of 400000. Chain number 4. Current logpost: -1791.2. No exp/inf: 126/90. 
+Running MCMC-PT iteration number: 500 of 400000. Chain number 1. Current logpost: -1774.04. No exp/inf: 130/90. 
+Running MCMC-PT iteration number: 500 of 400000. Chain number 3. Current logpost: -1690.33. No exp/inf: 136/90. 
+Running MCMC-PT iteration number: 800 of 400000. Chain number 1. Current logpost: -422.147. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 900 of 400000. Chain number 1. Current logpost: -425.754. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 700 of 400000. Chain number 4. Current logpost: -423.532. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 700 of 400000. Chain number 2. Current logpost: -548.189. No exp/inf: 105/90. 
+Running MCMC-PT iteration number: 700 of 400000. Chain number 3. Current logpost: -545.256. No exp/inf: 103/90. 
+Running MCMC-PT iteration number: 600 of 400000. Chain number 2. Current logpost: -1550.76. No exp/inf: 128/90. 
+Running MCMC-PT iteration number: 600 of 400000. Chain number 4. Current logpost: -1681. No exp/inf: 130/90. 
+Running MCMC-PT iteration number: 600 of 400000. Chain number 1. Current logpost: -1738.83. No exp/inf: 125/90. 
+Running MCMC-PT iteration number: 600 of 400000. Chain number 3. Current logpost: -1658.88. No exp/inf: 132/90. 
+Running MCMC-PT iteration number: 1000 of 400000. Chain number 1. Current logpost: -426.817. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 800 of 400000. Chain number 4. Current logpost: -457.163. No exp/inf: 93/90. 
+Running MCMC-PT iteration number: 800 of 400000. Chain number 2. Current logpost: -444.96. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 800 of 400000. Chain number 3. Current logpost: -504.043. No exp/inf: 98/90. 
+Running MCMC-PT iteration number: 1100 of 400000. Chain number 1. Current logpost: -427.201. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 900 of 400000. Chain number 4. Current logpost: -424.246. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 700 of 400000. Chain number 2. Current logpost: -1500.23. No exp/inf: 125/90. 
+Running MCMC-PT iteration number: 700 of 400000. Chain number 4. Current logpost: -1597.04. No exp/inf: 129/90. 
+Running MCMC-PT iteration number: 900 of 400000. Chain number 2. Current logpost: -427.152. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 700 of 400000. Chain number 1. Current logpost: -1686.29. No exp/inf: 123/90. 
+Running MCMC-PT iteration number: 700 of 400000. Chain number 3. Current logpost: -1584.67. No exp/inf: 123/90. 
+Running MCMC-PT iteration number: 1200 of 400000. Chain number 1. Current logpost: -425.142. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1000 of 400000. Chain number 4. Current logpost: -424.798. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 900 of 400000. Chain number 3. Current logpost: -447.555. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 1000 of 400000. Chain number 2. Current logpost: -422.748. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1300 of 400000. Chain number 1. Current logpost: -425.48. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1100 of 400000. Chain number 4. Current logpost: -424.07. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 800 of 400000. Chain number 2. Current logpost: -1495.38. No exp/inf: 126/90. 
+Running MCMC-PT iteration number: 1000 of 400000. Chain number 3. Current logpost: -429.43. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 800 of 400000. Chain number 4. Current logpost: -1514.19. No exp/inf: 130/90. 
+Running MCMC-PT iteration number: 1100 of 400000. Chain number 2. Current logpost: -443.612. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 800 of 400000. Chain number 1. Current logpost: -1649.57. No exp/inf: 120/90. 
+Running MCMC-PT iteration number: 800 of 400000. Chain number 3. Current logpost: -1580.86. No exp/inf: 124/90. 
+Running MCMC-PT iteration number: 1200 of 400000. Chain number 4. Current logpost: -434.511. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 1400 of 400000. Chain number 1. Current logpost: -425.114. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1100 of 400000. Chain number 3. Current logpost: -443.444. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 1200 of 400000. Chain number 2. Current logpost: -434.86. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 1300 of 400000. Chain number 4. Current logpost: -433.172. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 1500 of 400000. Chain number 1. Current logpost: -425.496. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 900 of 400000. Chain number 2. Current logpost: -1422.72. No exp/inf: 119/90. 
+Running MCMC-PT iteration number: 1200 of 400000. Chain number 3. Current logpost: -428.985. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 900 of 400000. Chain number 4. Current logpost: -1431. No exp/inf: 125/90. 
+Running MCMC-PT iteration number: 900 of 400000. Chain number 1. Current logpost: -1596.03. No exp/inf: 115/90. 
+Running MCMC-PT iteration number: 1400 of 400000. Chain number 4. Current logpost: -423.02. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1300 of 400000. Chain number 2. Current logpost: -422.612. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 900 of 400000. Chain number 3. Current logpost: -1562.98. No exp/inf: 125/90. 
+Running MCMC-PT iteration number: 1600 of 400000. Chain number 1. Current logpost: -427.119. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1300 of 400000. Chain number 3. Current logpost: -428.192. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1500 of 400000. Chain number 4. Current logpost: -422.447. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1400 of 400000. Chain number 2. Current logpost: -422.75. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1700 of 400000. Chain number 1. Current logpost: -425.696. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1400 of 400000. Chain number 3. Current logpost: -427.474. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1000 of 400000. Chain number 2. Current logpost: -1364.28. No exp/inf: 113/90. 
+Running MCMC-PT iteration number: 1000 of 400000. Chain number 4. Current logpost: -1370.01. No exp/inf: 120/90. 
+Running MCMC-PT iteration number: 1600 of 400000. Chain number 4. Current logpost: -423.659. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1500 of 400000. Chain number 2. Current logpost: -423.563. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1000 of 400000. Chain number 1. Current logpost: -1556.17. No exp/inf: 110/90. 
+Running MCMC-PT iteration number: 1800 of 400000. Chain number 1. Current logpost: -424.572. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1000 of 400000. Chain number 3. Current logpost: -1532.89. No exp/inf: 121/90. 
+Running MCMC-PT iteration number: 1500 of 400000. Chain number 3. Current logpost: -428.367. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1700 of 400000. Chain number 4. Current logpost: -424.13. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1600 of 400000. Chain number 2. Current logpost: -423.485. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1900 of 400000. Chain number 1. Current logpost: -424.641. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1600 of 400000. Chain number 3. Current logpost: -437.41. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 1100 of 400000. Chain number 2. Current logpost: -1363.02. No exp/inf: 114/90. 
+Running MCMC-PT iteration number: 1100 of 400000. Chain number 4. Current logpost: -1376.35. No exp/inf: 121/90. 
+Running MCMC-PT iteration number: 1800 of 400000. Chain number 4. Current logpost: -426.666. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1700 of 400000. Chain number 2. Current logpost: -434.738. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 1100 of 400000. Chain number 1. Current logpost: -1526.78. No exp/inf: 111/90. 
+Running MCMC-PT iteration number: 2000 of 400000. Chain number 1. Current logpost: -425.442. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1100 of 400000. Chain number 3. Current logpost: -1520.41. No exp/inf: 119/90. 
+Running MCMC-PT iteration number: 1700 of 400000. Chain number 3. Current logpost: -427.991. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1900 of 400000. Chain number 4. Current logpost: -423.316. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1800 of 400000. Chain number 2. Current logpost: -423.186. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2100 of 400000. Chain number 1. Current logpost: -423.625. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1800 of 400000. Chain number 3. Current logpost: -437.013. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 1200 of 400000. Chain number 2. Current logpost: -1299.76. No exp/inf: 106/90. 
+Running MCMC-PT iteration number: 2000 of 400000. Chain number 4. Current logpost: -423.625. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1200 of 400000. Chain number 4. Current logpost: -1367.59. No exp/inf: 123/90. 
+Running MCMC-PT iteration number: 1200 of 400000. Chain number 1. Current logpost: -1506.96. No exp/inf: 111/90. 
+Running MCMC-PT iteration number: 1900 of 400000. Chain number 2. Current logpost: -425.843. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2200 of 400000. Chain number 1. Current logpost: -436.15. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 1200 of 400000. Chain number 3. Current logpost: -1462.01. No exp/inf: 110/90. 
+Running MCMC-PT iteration number: 1900 of 400000. Chain number 3. Current logpost: -423.75. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2100 of 400000. Chain number 4. Current logpost: -435.344. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 2300 of 400000. Chain number 1. Current logpost: -434.76. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 2000 of 400000. Chain number 2. Current logpost: -423.821. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2000 of 400000. Chain number 3. Current logpost: -437.443. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 1300 of 400000. Chain number 2. Current logpost: -1310.89. No exp/inf: 110/90. 
+Running MCMC-PT iteration number: 2400 of 400000. Chain number 1. Current logpost: -425.903. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1300 of 400000. Chain number 4. Current logpost: -1341.26. No exp/inf: 120/90. 
+Running MCMC-PT iteration number: 2200 of 400000. Chain number 4. Current logpost: -423.2. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1300 of 400000. Chain number 1. Current logpost: -1458.88. No exp/inf: 109/90. 
+Running MCMC-PT iteration number: 2100 of 400000. Chain number 2. Current logpost: -423.947. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1300 of 400000. Chain number 3. Current logpost: -1450.45. No exp/inf: 110/90. 
+Running MCMC-PT iteration number: 2100 of 400000. Chain number 3. Current logpost: -436.717. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 2500 of 400000. Chain number 1. Current logpost: -424.661. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2200 of 400000. Chain number 2. Current logpost: -425.12. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2300 of 400000. Chain number 4. Current logpost: -435.033. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 2200 of 400000. Chain number 3. Current logpost: -424.057. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1400 of 400000. Chain number 2. Current logpost: -1301.63. No exp/inf: 108/90. 
+Running MCMC-PT iteration number: 2300 of 400000. Chain number 2. Current logpost: -422.911. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2400 of 400000. Chain number 4. Current logpost: -433.092. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 2600 of 400000. Chain number 1. Current logpost: -445.542. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 1400 of 400000. Chain number 1. Current logpost: -1394.59. No exp/inf: 107/90. 
+Running MCMC-PT iteration number: 1400 of 400000. Chain number 4. Current logpost: -1354.31. No exp/inf: 124/90. 
+Running MCMC-PT iteration number: 1400 of 400000. Chain number 3. Current logpost: -1474.57. No exp/inf: 117/90. 
+Running MCMC-PT iteration number: 2300 of 400000. Chain number 3. Current logpost: -425.946. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2400 of 400000. Chain number 2. Current logpost: -424.169. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2500 of 400000. Chain number 4. Current logpost: -421.266. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2700 of 400000. Chain number 1. Current logpost: -427.798. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2400 of 400000. Chain number 3. Current logpost: -426.829. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2500 of 400000. Chain number 2. Current logpost: -424.448. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2600 of 400000. Chain number 4. Current logpost: -422.833. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1500 of 400000. Chain number 2. Current logpost: -1325.13. No exp/inf: 112/90. 
+Running MCMC-PT iteration number: 1500 of 400000. Chain number 1. Current logpost: -1375.26. No exp/inf: 106/90. 
+Running MCMC-PT iteration number: 2800 of 400000. Chain number 1. Current logpost: -428.459. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1500 of 400000. Chain number 4. Current logpost: -1338.68. No exp/inf: 123/90. 
+Running MCMC-PT iteration number: 2500 of 400000. Chain number 3. Current logpost: -435.148. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 1500 of 400000. Chain number 3. Current logpost: -1498.54. No exp/inf: 124/90. 
+Running MCMC-PT iteration number: 2600 of 400000. Chain number 2. Current logpost: -425.143. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2700 of 400000. Chain number 4. Current logpost: -422.399. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2900 of 400000. Chain number 1. Current logpost: -427.78. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2600 of 400000. Chain number 3. Current logpost: -425.27. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2700 of 400000. Chain number 2. Current logpost: -424.792. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1600 of 400000. Chain number 2. Current logpost: -1296.19. No exp/inf: 109/90. 
+Running MCMC-PT iteration number: 2800 of 400000. Chain number 4. Current logpost: -434.235. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 1600 of 400000. Chain number 1. Current logpost: -1329.36. No exp/inf: 107/90. 
+Running MCMC-PT iteration number: 1600 of 400000. Chain number 4. Current logpost: -1344.41. No exp/inf: 125/90. 
+Running MCMC-PT iteration number: 2700 of 400000. Chain number 3. Current logpost: -436.535. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 3000 of 400000. Chain number 1. Current logpost: -449.718. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 1600 of 400000. Chain number 3. Current logpost: -1483.79. No exp/inf: 124/90. 
+Running MCMC-PT iteration number: 2800 of 400000. Chain number 2. Current logpost: -424.393. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2900 of 400000. Chain number 4. Current logpost: -425.007. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3100 of 400000. Chain number 1. Current logpost: -424.945. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2800 of 400000. Chain number 3. Current logpost: -436.226. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 2900 of 400000. Chain number 2. Current logpost: -423.114. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1700 of 400000. Chain number 2. Current logpost: -1291.13. No exp/inf: 110/90. 
+Running MCMC-PT iteration number: 3000 of 400000. Chain number 4. Current logpost: -426.492. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1700 of 400000. Chain number 1. Current logpost: -1305.96. No exp/inf: 111/90. 
+Running MCMC-PT iteration number: 1700 of 400000. Chain number 4. Current logpost: -1351.68. No exp/inf: 126/90. 
+Running MCMC-PT iteration number: 2900 of 400000. Chain number 3. Current logpost: -438.563. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 3200 of 400000. Chain number 1. Current logpost: -424.848. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3000 of 400000. Chain number 2. Current logpost: -422.59. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1700 of 400000. Chain number 3. Current logpost: -1447.34. No exp/inf: 119/90. 
+Running MCMC-PT iteration number: 3100 of 400000. Chain number 4. Current logpost: -422.72. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3300 of 400000. Chain number 1. Current logpost: -426.547. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3000 of 400000. Chain number 3. Current logpost: -424.162. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3100 of 400000. Chain number 2. Current logpost: -425.698. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1800 of 400000. Chain number 2. Current logpost: -1270.26. No exp/inf: 107/90. 
+Running MCMC-PT iteration number: 3200 of 400000. Chain number 4. Current logpost: -422.406. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1800 of 400000. Chain number 1. Current logpost: -1255.78. No exp/inf: 107/90. 
+Running MCMC-PT iteration number: 1800 of 400000. Chain number 4. Current logpost: -1320.23. No exp/inf: 123/90. 
+Running MCMC-PT iteration number: 3100 of 400000. Chain number 3. Current logpost: -425.754. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3400 of 400000. Chain number 1. Current logpost: -421.986. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3200 of 400000. Chain number 2. Current logpost: -442.528. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 1800 of 400000. Chain number 3. Current logpost: -1502.78. No exp/inf: 128/90. 
+Running MCMC-PT iteration number: 3300 of 400000. Chain number 4. Current logpost: -426.124. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3500 of 400000. Chain number 1. Current logpost: -424.139. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3200 of 400000. Chain number 3. Current logpost: -425.836. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3300 of 400000. Chain number 2. Current logpost: -443.532. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 3400 of 400000. Chain number 4. Current logpost: -426.306. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1900 of 400000. Chain number 2. Current logpost: -1286.66. No exp/inf: 110/90. 
+Running MCMC-PT iteration number: 3600 of 400000. Chain number 1. Current logpost: -426.573. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1900 of 400000. Chain number 1. Current logpost: -1267.36. No exp/inf: 109/90. 
+Running MCMC-PT iteration number: 1900 of 400000. Chain number 4. Current logpost: -1310.06. No exp/inf: 122/90. 
+Running MCMC-PT iteration number: 3300 of 400000. Chain number 3. Current logpost: -425.522. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3400 of 400000. Chain number 2. Current logpost: -422.443. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 1900 of 400000. Chain number 3. Current logpost: -1456.54. No exp/inf: 120/90. 
+Running MCMC-PT iteration number: 3500 of 400000. Chain number 4. Current logpost: -424.376. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3700 of 400000. Chain number 1. Current logpost: -423.588. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3400 of 400000. Chain number 3. Current logpost: -424.713. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3500 of 400000. Chain number 2. Current logpost: -423.609. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3600 of 400000. Chain number 4. Current logpost: -443.21. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 2000 of 400000. Chain number 2. Current logpost: -1329.96. No exp/inf: 117/90. 
+Running MCMC-PT iteration number: 3800 of 400000. Chain number 1. Current logpost: -422.974. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3500 of 400000. Chain number 3. Current logpost: -425.561. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2000 of 400000. Chain number 1. Current logpost: -1282.84. No exp/inf: 110/90. 
+Running MCMC-PT iteration number: 2000 of 400000. Chain number 4. Current logpost: -1303.17. No exp/inf: 122/90. 
+Running MCMC-PT iteration number: 3700 of 400000. Chain number 4. Current logpost: -422.136. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3600 of 400000. Chain number 2. Current logpost: -423.482. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2000 of 400000. Chain number 3. Current logpost: -1450.29. No exp/inf: 120/90. 
+Running MCMC-PT iteration number: 3900 of 400000. Chain number 1. Current logpost: -424.049. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3600 of 400000. Chain number 3. Current logpost: -424.309. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3800 of 400000. Chain number 4. Current logpost: -432.096. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 3700 of 400000. Chain number 2. Current logpost: -422.228. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4000 of 400000. Chain number 1. Current logpost: -435.438. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 2100 of 400000. Chain number 2. Current logpost: -1356.67. No exp/inf: 121/90. 
+Running MCMC-PT iteration number: 3700 of 400000. Chain number 3. Current logpost: -425.54. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2100 of 400000. Chain number 1. Current logpost: -1240.55. No exp/inf: 105/90. 
+Running MCMC-PT iteration number: 2100 of 400000. Chain number 4. Current logpost: -1306.46. No exp/inf: 125/90. 
+Running MCMC-PT iteration number: 3900 of 400000. Chain number 4. Current logpost: -426.248. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3800 of 400000. Chain number 2. Current logpost: -422.697. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4100 of 400000. Chain number 1. Current logpost: -422.965. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2100 of 400000. Chain number 3. Current logpost: -1421.19. No exp/inf: 114/90. 
+Running MCMC-PT iteration number: 3800 of 400000. Chain number 3. Current logpost: -425.114. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3900 of 400000. Chain number 2. Current logpost: -423.263. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4000 of 400000. Chain number 4. Current logpost: -434.498. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 3900 of 400000. Chain number 3. Current logpost: -427.55. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2200 of 400000. Chain number 2. Current logpost: -1370.24. No exp/inf: 126/90. 
+Running MCMC-PT iteration number: 4200 of 400000. Chain number 1. Current logpost: -434.455. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 2200 of 400000. Chain number 1. Current logpost: -1240.23. No exp/inf: 105/90. 
+Running MCMC-PT iteration number: 4000 of 400000. Chain number 2. Current logpost: -426.536. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2200 of 400000. Chain number 4. Current logpost: -1285.55. No exp/inf: 124/90. 
+Running MCMC-PT iteration number: 4100 of 400000. Chain number 4. Current logpost: -423.088. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2200 of 400000. Chain number 3. Current logpost: -1389.89. No exp/inf: 108/90. 
+Running MCMC-PT iteration number: 4000 of 400000. Chain number 3. Current logpost: -424.941. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4300 of 400000. Chain number 1. Current logpost: -424.089. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4100 of 400000. Chain number 2. Current logpost: -423.19. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4200 of 400000. Chain number 4. Current logpost: -422.94. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4400 of 400000. Chain number 1. Current logpost: -425.551. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4100 of 400000. Chain number 3. Current logpost: -437.244. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 2300 of 400000. Chain number 2. Current logpost: -1336.59. No exp/inf: 124/90. 
+Running MCMC-PT iteration number: 2300 of 400000. Chain number 1. Current logpost: -1238.31. No exp/inf: 105/90. 
+Running MCMC-PT iteration number: 4200 of 400000. Chain number 2. Current logpost: -433.594. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 4300 of 400000. Chain number 4. Current logpost: -422.285. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2300 of 400000. Chain number 4. Current logpost: -1291.21. No exp/inf: 127/90. 
+Running MCMC-PT iteration number: 2300 of 400000. Chain number 3. Current logpost: -1368.57. No exp/inf: 107/90. 
+Running MCMC-PT iteration number: 4500 of 400000. Chain number 1. Current logpost: -423.693. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4200 of 400000. Chain number 3. Current logpost: -426.098. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4400 of 400000. Chain number 4. Current logpost: -444.387. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 4300 of 400000. Chain number 2. Current logpost: -421.929. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4300 of 400000. Chain number 3. Current logpost: -427.213. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4600 of 400000. Chain number 1. Current logpost: -422.795. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2400 of 400000. Chain number 2. Current logpost: -1363.01. No exp/inf: 131/90. 
+Running MCMC-PT iteration number: 2400 of 400000. Chain number 1. Current logpost: -1245.25. No exp/inf: 109/90. 
+Running MCMC-PT iteration number: 4400 of 400000. Chain number 2. Current logpost: -422.698. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4500 of 400000. Chain number 4. Current logpost: -422.866. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2400 of 400000. Chain number 4. Current logpost: -1298.4. No exp/inf: 128/90. 
+Running MCMC-PT iteration number: 4700 of 400000. Chain number 1. Current logpost: -425.029. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2400 of 400000. Chain number 3. Current logpost: -1420.32. No exp/inf: 114/90. 
+Running MCMC-PT iteration number: 4400 of 400000. Chain number 3. Current logpost: -436.603. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 4600 of 400000. Chain number 4. Current logpost: -421.802. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4500 of 400000. Chain number 2. Current logpost: -460.451. No exp/inf: 94/90. 
+Running MCMC-PT iteration number: 4800 of 400000. Chain number 1. Current logpost: -426.037. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4500 of 400000. Chain number 3. Current logpost: -449.315. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 2500 of 400000. Chain number 2. Current logpost: -1363.47. No exp/inf: 135/90. 
+Running MCMC-PT iteration number: 2500 of 400000. Chain number 1. Current logpost: -1232.7. No exp/inf: 108/90. 
+Running MCMC-PT iteration number: 4700 of 400000. Chain number 4. Current logpost: -421.706. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4600 of 400000. Chain number 2. Current logpost: -422.101. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2500 of 400000. Chain number 4. Current logpost: -1347.24. No exp/inf: 136/90. 
+Running MCMC-PT iteration number: 4900 of 400000. Chain number 1. Current logpost: -423.139. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2500 of 400000. Chain number 3. Current logpost: -1418.3. No exp/inf: 112/90. 
+Running MCMC-PT iteration number: 4600 of 400000. Chain number 3. Current logpost: -446.462. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 4700 of 400000. Chain number 2. Current logpost: -422.644. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4800 of 400000. Chain number 4. Current logpost: -422.266. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5000 of 400000. Chain number 1. Current logpost: -443.004. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 2600 of 400000. Chain number 2. Current logpost: -1353.42. No exp/inf: 135/90. 
+Running MCMC-PT iteration number: 4700 of 400000. Chain number 3. Current logpost: -425.483. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4900 of 400000. Chain number 4. Current logpost: -420.474. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2600 of 400000. Chain number 1. Current logpost: -1242.03. No exp/inf: 110/90. 
+Running MCMC-PT iteration number: 4800 of 400000. Chain number 2. Current logpost: -422.782. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2600 of 400000. Chain number 4. Current logpost: -1337.76. No exp/inf: 135/90. 
+Running MCMC-PT iteration number: 2600 of 400000. Chain number 3. Current logpost: -1370.88. No exp/inf: 107/90. 
+Running MCMC-PT iteration number: 5100 of 400000. Chain number 1. Current logpost: -423.135. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4800 of 400000. Chain number 3. Current logpost: -426.632. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5000 of 400000. Chain number 4. Current logpost: -423.288. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4900 of 400000. Chain number 2. Current logpost: -422.921. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5000 of 400000. Chain number 2. Current logpost: -424.56. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5100 of 400000. Chain number 4. Current logpost: -421.807. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5200 of 400000. Chain number 1. Current logpost: -424.648. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4900 of 400000. Chain number 3. Current logpost: -426.604. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2700 of 400000. Chain number 2. Current logpost: -1358.39. No exp/inf: 135/90. 
+Running MCMC-PT iteration number: 2700 of 400000. Chain number 1. Current logpost: -1254.46. No exp/inf: 112/90. 
+Running MCMC-PT iteration number: 2700 of 400000. Chain number 4. Current logpost: -1324.46. No exp/inf: 133/90. 
+Running MCMC-PT iteration number: 5100 of 400000. Chain number 2. Current logpost: -422.437. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2700 of 400000. Chain number 3. Current logpost: -1364.12. No exp/inf: 106/90. 
+Running MCMC-PT iteration number: 5000 of 400000. Chain number 3. Current logpost: -426.448. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5200 of 400000. Chain number 4. Current logpost: -421.324. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5300 of 400000. Chain number 1. Current logpost: -422.337. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5200 of 400000. Chain number 2. Current logpost: -422.091. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5100 of 400000. Chain number 3. Current logpost: -427.569. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5400 of 400000. Chain number 1. Current logpost: -434.533. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 5300 of 400000. Chain number 4. Current logpost: -423.033. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2800 of 400000. Chain number 1. Current logpost: -1273.7. No exp/inf: 115/90. 
+Running MCMC-PT iteration number: 2800 of 400000. Chain number 2. Current logpost: -1340.72. No exp/inf: 135/90. 
+Running MCMC-PT iteration number: 5300 of 400000. Chain number 2. Current logpost: -421.445. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2800 of 400000. Chain number 4. Current logpost: -1300.03. No exp/inf: 131/90. 
+Running MCMC-PT iteration number: 5200 of 400000. Chain number 3. Current logpost: -426.988. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2800 of 400000. Chain number 3. Current logpost: -1391.62. No exp/inf: 110/90. 
+Running MCMC-PT iteration number: 5500 of 400000. Chain number 1. Current logpost: -421.989. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5400 of 400000. Chain number 4. Current logpost: -424.063. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5300 of 400000. Chain number 3. Current logpost: -428.39. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5400 of 400000. Chain number 2. Current logpost: -422.647. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5600 of 400000. Chain number 1. Current logpost: -422.582. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5500 of 400000. Chain number 4. Current logpost: -434.242. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 2900 of 400000. Chain number 1. Current logpost: -1273.47. No exp/inf: 116/90. 
+Running MCMC-PT iteration number: 2900 of 400000. Chain number 2. Current logpost: -1338.13. No exp/inf: 136/90. 
+Running MCMC-PT iteration number: 5500 of 400000. Chain number 2. Current logpost: -424.309. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5400 of 400000. Chain number 3. Current logpost: -428.523. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2900 of 400000. Chain number 4. Current logpost: -1306.65. No exp/inf: 131/90. 
+Running MCMC-PT iteration number: 5700 of 400000. Chain number 1. Current logpost: -424.186. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 2900 of 400000. Chain number 3. Current logpost: -1385.42. No exp/inf: 108/90. 
+Running MCMC-PT iteration number: 5600 of 400000. Chain number 4. Current logpost: -434.523. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 5600 of 400000. Chain number 2. Current logpost: -424.008. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5800 of 400000. Chain number 1. Current logpost: -422.736. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5500 of 400000. Chain number 3. Current logpost: -447.475. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 5700 of 400000. Chain number 4. Current logpost: -434.155. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 3000 of 400000. Chain number 1. Current logpost: -1262. No exp/inf: 116/90. 
+Running MCMC-PT iteration number: 3000 of 400000. Chain number 2. Current logpost: -1338.84. No exp/inf: 138/90. 
+Running MCMC-PT iteration number: 5700 of 400000. Chain number 2. Current logpost: -423.076. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5900 of 400000. Chain number 1. Current logpost: -422.165. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3000 of 400000. Chain number 3. Current logpost: -1391.31. No exp/inf: 110/90. 
+Running MCMC-PT iteration number: 3000 of 400000. Chain number 4. Current logpost: -1309. No exp/inf: 132/90. 
+Running MCMC-PT iteration number: 5600 of 400000. Chain number 3. Current logpost: -427.168. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5800 of 400000. Chain number 4. Current logpost: -420.442. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5800 of 400000. Chain number 2. Current logpost: -421.544. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5700 of 400000. Chain number 3. Current logpost: -425.693. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6000 of 400000. Chain number 1. Current logpost: -422.206. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5900 of 400000. Chain number 4. Current logpost: -437.209. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 3100 of 400000. Chain number 1. Current logpost: -1253.69. No exp/inf: 114/90. 
+Running MCMC-PT iteration number: 3100 of 400000. Chain number 2. Current logpost: -1383.5. No exp/inf: 147/90. 
+Running MCMC-PT iteration number: 5900 of 400000. Chain number 2. Current logpost: -431.933. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 6100 of 400000. Chain number 1. Current logpost: -421.693. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3100 of 400000. Chain number 3. Current logpost: -1437.26. No exp/inf: 115/90. 
+Running MCMC-PT iteration number: 3100 of 400000. Chain number 4. Current logpost: -1307.86. No exp/inf: 132/90. 
+Running MCMC-PT iteration number: 5800 of 400000. Chain number 3. Current logpost: -438.441. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 6000 of 400000. Chain number 4. Current logpost: -422.389. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6000 of 400000. Chain number 2. Current logpost: -422.929. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6100 of 400000. Chain number 4. Current logpost: -443.731. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 6200 of 400000. Chain number 1. Current logpost: -432.685. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 5900 of 400000. Chain number 3. Current logpost: -436.002. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 3200 of 400000. Chain number 1. Current logpost: -1305.41. No exp/inf: 122/90. 
+Running MCMC-PT iteration number: 3200 of 400000. Chain number 2. Current logpost: -1383.71. No exp/inf: 147/90. 
+Running MCMC-PT iteration number: 6100 of 400000. Chain number 2. Current logpost: -423.496. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3200 of 400000. Chain number 3. Current logpost: -1440.12. No exp/inf: 116/90. 
+Running MCMC-PT iteration number: 6300 of 400000. Chain number 1. Current logpost: -422.274. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3200 of 400000. Chain number 4. Current logpost: -1306.82. No exp/inf: 132/90. 
+Running MCMC-PT iteration number: 6000 of 400000. Chain number 3. Current logpost: -427.367. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6200 of 400000. Chain number 4. Current logpost: -422.998. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6200 of 400000. Chain number 2. Current logpost: -433.568. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 6400 of 400000. Chain number 1. Current logpost: -420.7. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6100 of 400000. Chain number 3. Current logpost: -424.573. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6300 of 400000. Chain number 4. Current logpost: -443.365. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 3300 of 400000. Chain number 1. Current logpost: -1306.31. No exp/inf: 123/90. 
+Running MCMC-PT iteration number: 6300 of 400000. Chain number 2. Current logpost: -422.898. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3300 of 400000. Chain number 2. Current logpost: -1432.85. No exp/inf: 158/90. 
+Running MCMC-PT iteration number: 6500 of 400000. Chain number 1. Current logpost: -435.235. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 6200 of 400000. Chain number 3. Current logpost: -435.688. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 3300 of 400000. Chain number 3. Current logpost: -1381.83. No exp/inf: 108/90. 
+Running MCMC-PT iteration number: 6400 of 400000. Chain number 4. Current logpost: -424.905. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3300 of 400000. Chain number 4. Current logpost: -1325.63. No exp/inf: 135/90. 
+Running MCMC-PT iteration number: 6400 of 400000. Chain number 2. Current logpost: -424.365. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6300 of 400000. Chain number 3. Current logpost: -434.743. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 6600 of 400000. Chain number 1. Current logpost: -422.847. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6500 of 400000. Chain number 4. Current logpost: -424.637. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3400 of 400000. Chain number 1. Current logpost: -1304.22. No exp/inf: 122/90. 
+Running MCMC-PT iteration number: 6400 of 400000. Chain number 3. Current logpost: -424.582. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6500 of 400000. Chain number 2. Current logpost: -446.743. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 6600 of 400000. Chain number 4. Current logpost: -425.242. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6700 of 400000. Chain number 1. Current logpost: -433.967. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 3400 of 400000. Chain number 2. Current logpost: -1463.93. No exp/inf: 164/90. 
+Running MCMC-PT iteration number: 3400 of 400000. Chain number 3. Current logpost: -1349.07. No exp/inf: 104/90. 
+Running MCMC-PT iteration number: 3400 of 400000. Chain number 4. Current logpost: -1362.09. No exp/inf: 142/90. 
+Running MCMC-PT iteration number: 6500 of 400000. Chain number 3. Current logpost: -424.292. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6600 of 400000. Chain number 2. Current logpost: -435.429. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 6700 of 400000. Chain number 4. Current logpost: -424.592. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6800 of 400000. Chain number 1. Current logpost: -422.755. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3500 of 400000. Chain number 1. Current logpost: -1249.55. No exp/inf: 115/90. 
+Running MCMC-PT iteration number: 6700 of 400000. Chain number 2. Current logpost: -422.049. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6600 of 400000. Chain number 3. Current logpost: -424.045. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6800 of 400000. Chain number 4. Current logpost: -420.643. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6900 of 400000. Chain number 1. Current logpost: -423.391. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3500 of 400000. Chain number 2. Current logpost: -1492.33. No exp/inf: 175/90. 
+Running MCMC-PT iteration number: 3500 of 400000. Chain number 3. Current logpost: -1416.5. No exp/inf: 114/90. 
+Running MCMC-PT iteration number: 3500 of 400000. Chain number 4. Current logpost: -1372.22. No exp/inf: 144/90. 
+Running MCMC-PT iteration number: 6700 of 400000. Chain number 3. Current logpost: -426.79. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6900 of 400000. Chain number 4. Current logpost: -420.941. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6800 of 400000. Chain number 2. Current logpost: -425.39. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7000 of 400000. Chain number 1. Current logpost: -436.765. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 6900 of 400000. Chain number 2. Current logpost: -423.021. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3600 of 400000. Chain number 1. Current logpost: -1264.12. No exp/inf: 118/90. 
+Running MCMC-PT iteration number: 7000 of 400000. Chain number 4. Current logpost: -422.175. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7100 of 400000. Chain number 1. Current logpost: -422.61. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6800 of 400000. Chain number 3. Current logpost: -435.498. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 3600 of 400000. Chain number 3. Current logpost: -1435.27. No exp/inf: 117/90. 
+Running MCMC-PT iteration number: 3600 of 400000. Chain number 2. Current logpost: -1489.59. No exp/inf: 175/90. 
+Running MCMC-PT iteration number: 3600 of 400000. Chain number 4. Current logpost: -1364.32. No exp/inf: 145/90. 
+Running MCMC-PT iteration number: 7000 of 400000. Chain number 2. Current logpost: -423.63. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7100 of 400000. Chain number 4. Current logpost: -421.337. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7200 of 400000. Chain number 1. Current logpost: -432.961. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 6900 of 400000. Chain number 3. Current logpost: -452.004. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 7100 of 400000. Chain number 2. Current logpost: -422.54. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3700 of 400000. Chain number 1. Current logpost: -1249.16. No exp/inf: 115/90. 
+Running MCMC-PT iteration number: 7200 of 400000. Chain number 4. Current logpost: -460.043. No exp/inf: 94/90. 
+Running MCMC-PT iteration number: 7300 of 400000. Chain number 1. Current logpost: -423.765. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7000 of 400000. Chain number 3. Current logpost: -427.173. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3700 of 400000. Chain number 3. Current logpost: -1444.38. No exp/inf: 120/90. 
+Running MCMC-PT iteration number: 3700 of 400000. Chain number 2. Current logpost: -1499.27. No exp/inf: 181/90. 
+Running MCMC-PT iteration number: 7200 of 400000. Chain number 2. Current logpost: -434.376. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 3700 of 400000. Chain number 4. Current logpost: -1374.18. No exp/inf: 148/90. 
+Running MCMC-PT iteration number: 7300 of 400000. Chain number 4. Current logpost: -420.161. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7400 of 400000. Chain number 1. Current logpost: -434.604. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 7100 of 400000. Chain number 3. Current logpost: -427.249. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7300 of 400000. Chain number 2. Current logpost: -424.161. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3800 of 400000. Chain number 1. Current logpost: -1275.47. No exp/inf: 121/90. 
+Running MCMC-PT iteration number: 7400 of 400000. Chain number 4. Current logpost: -440.804. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 7500 of 400000. Chain number 1. Current logpost: -423.015. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7200 of 400000. Chain number 3. Current logpost: -423.734. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3800 of 400000. Chain number 3. Current logpost: -1466.39. No exp/inf: 123/90. 
+Running MCMC-PT iteration number: 7400 of 400000. Chain number 2. Current logpost: -424.921. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7600 of 400000. Chain number 1. Current logpost: -423.603. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3800 of 400000. Chain number 2. Current logpost: -1522.03. No exp/inf: 187/90. 
+Running MCMC-PT iteration number: 7500 of 400000. Chain number 4. Current logpost: -430.967. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 3800 of 400000. Chain number 4. Current logpost: -1346.02. No exp/inf: 146/90. 
+Running MCMC-PT iteration number: 7300 of 400000. Chain number 3. Current logpost: -424.603. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7500 of 400000. Chain number 2. Current logpost: -422.905. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7700 of 400000. Chain number 1. Current logpost: -434.44. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 7600 of 400000. Chain number 4. Current logpost: -431.898. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 3900 of 400000. Chain number 1. Current logpost: -1312.86. No exp/inf: 127/90. 
+Running MCMC-PT iteration number: 7400 of 400000. Chain number 3. Current logpost: -424.609. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7600 of 400000. Chain number 2. Current logpost: -423.151. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3900 of 400000. Chain number 3. Current logpost: -1460.28. No exp/inf: 121/90. 
+Running MCMC-PT iteration number: 7700 of 400000. Chain number 4. Current logpost: -441.106. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 7800 of 400000. Chain number 1. Current logpost: -422.567. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 3900 of 400000. Chain number 4. Current logpost: -1347.61. No exp/inf: 147/90. 
+Running MCMC-PT iteration number: 3900 of 400000. Chain number 2. Current logpost: -1541.4. No exp/inf: 193/90. 
+Running MCMC-PT iteration number: 7500 of 400000. Chain number 3. Current logpost: -424.945. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7700 of 400000. Chain number 2. Current logpost: -422.561. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7900 of 400000. Chain number 1. Current logpost: -422.675. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7800 of 400000. Chain number 4. Current logpost: -432.419. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 4000 of 400000. Chain number 1. Current logpost: -1303.21. No exp/inf: 125/90. 
+Running MCMC-PT iteration number: 7600 of 400000. Chain number 3. Current logpost: -425.78. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7800 of 400000. Chain number 2. Current logpost: -436.161. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 4000 of 400000. Chain number 3. Current logpost: -1461.01. No exp/inf: 123/90. 
+Running MCMC-PT iteration number: 7900 of 400000. Chain number 4. Current logpost: -423.078. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8000 of 400000. Chain number 1. Current logpost: -423.486. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4000 of 400000. Chain number 4. Current logpost: -1358.91. No exp/inf: 148/90. 
+Running MCMC-PT iteration number: 7700 of 400000. Chain number 3. Current logpost: -437.662. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 4000 of 400000. Chain number 2. Current logpost: -1538.27. No exp/inf: 196/90. 
+Running MCMC-PT iteration number: 7900 of 400000. Chain number 2. Current logpost: -422.596. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8000 of 400000. Chain number 4. Current logpost: -421.953. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8100 of 400000. Chain number 1. Current logpost: -423.324. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4100 of 400000. Chain number 1. Current logpost: -1288.24. No exp/inf: 125/90. 
+Running MCMC-PT iteration number: 7800 of 400000. Chain number 3. Current logpost: -424.217. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8000 of 400000. Chain number 2. Current logpost: -433.552. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 4100 of 400000. Chain number 3. Current logpost: -1487.76. No exp/inf: 129/90. 
+Running MCMC-PT iteration number: 8100 of 400000. Chain number 4. Current logpost: -424.499. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8200 of 400000. Chain number 1. Current logpost: -427.775. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 7900 of 400000. Chain number 3. Current logpost: -426.72. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4100 of 400000. Chain number 4. Current logpost: -1361.07. No exp/inf: 149/90. 
+Running MCMC-PT iteration number: 8100 of 400000. Chain number 2. Current logpost: -420.837. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4100 of 400000. Chain number 2. Current logpost: -1542.94. No exp/inf: 199/90. 
+Running MCMC-PT iteration number: 8200 of 400000. Chain number 4. Current logpost: -424.228. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8300 of 400000. Chain number 1. Current logpost: -422.404. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4200 of 400000. Chain number 1. Current logpost: -1301.26. No exp/inf: 128/90. 
+Running MCMC-PT iteration number: 8200 of 400000. Chain number 2. Current logpost: -421.774. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8000 of 400000. Chain number 3. Current logpost: -424.184. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8300 of 400000. Chain number 4. Current logpost: -425.234. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8400 of 400000. Chain number 1. Current logpost: -422.171. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4200 of 400000. Chain number 3. Current logpost: -1463.16. No exp/inf: 127/90. 
+Running MCMC-PT iteration number: 8100 of 400000. Chain number 3. Current logpost: -425.408. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8400 of 400000. Chain number 4. Current logpost: -447.75. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 8300 of 400000. Chain number 2. Current logpost: -423.197. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4200 of 400000. Chain number 4. Current logpost: -1392.58. No exp/inf: 153/90. 
+Running MCMC-PT iteration number: 8500 of 400000. Chain number 1. Current logpost: -422.714. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4200 of 400000. Chain number 2. Current logpost: -1549.64. No exp/inf: 203/90. 
+Running MCMC-PT iteration number: 4300 of 400000. Chain number 1. Current logpost: -1321.38. No exp/inf: 130/90. 
+Running MCMC-PT iteration number: 8200 of 400000. Chain number 3. Current logpost: -426.584. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8400 of 400000. Chain number 2. Current logpost: -443.627. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 8500 of 400000. Chain number 4. Current logpost: -422.119. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8600 of 400000. Chain number 1. Current logpost: -423.798. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4300 of 400000. Chain number 3. Current logpost: -1452.05. No exp/inf: 125/90. 
+Running MCMC-PT iteration number: 8300 of 400000. Chain number 3. Current logpost: -426.572. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8500 of 400000. Chain number 2. Current logpost: -421.946. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8700 of 400000. Chain number 1. Current logpost: -434.968. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 8600 of 400000. Chain number 4. Current logpost: -426.266. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4300 of 400000. Chain number 4. Current logpost: -1388.91. No exp/inf: 153/90. 
+Running MCMC-PT iteration number: 4300 of 400000. Chain number 2. Current logpost: -1567.89. No exp/inf: 208/90. 
+Running MCMC-PT iteration number: 8400 of 400000. Chain number 3. Current logpost: -433.573. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 4400 of 400000. Chain number 1. Current logpost: -1308.77. No exp/inf: 130/90. 
+Running MCMC-PT iteration number: 8600 of 400000. Chain number 2. Current logpost: -423.198. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8800 of 400000. Chain number 1. Current logpost: -464.365. No exp/inf: 94/90. 
+Running MCMC-PT iteration number: 8700 of 400000. Chain number 4. Current logpost: -424.41. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4400 of 400000. Chain number 3. Current logpost: -1410.17. No exp/inf: 119/90. 
+Running MCMC-PT iteration number: 8500 of 400000. Chain number 3. Current logpost: -427.926. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8700 of 400000. Chain number 2. Current logpost: -442.44. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 8900 of 400000. Chain number 1. Current logpost: -422.612. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8800 of 400000. Chain number 4. Current logpost: -433.244. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 4400 of 400000. Chain number 4. Current logpost: -1372.25. No exp/inf: 152/90. 
+Running MCMC-PT iteration number: 8600 of 400000. Chain number 3. Current logpost: -424.618. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8800 of 400000. Chain number 2. Current logpost: -422.049. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4500 of 400000. Chain number 1. Current logpost: -1303.65. No exp/inf: 127/90. 
+Running MCMC-PT iteration number: 4400 of 400000. Chain number 2. Current logpost: -1564.83. No exp/inf: 211/90. 
+Running MCMC-PT iteration number: 9000 of 400000. Chain number 1. Current logpost: -435.091. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 8900 of 400000. Chain number 4. Current logpost: -422.357. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4500 of 400000. Chain number 3. Current logpost: -1414.3. No exp/inf: 120/90. 
+Running MCMC-PT iteration number: 8700 of 400000. Chain number 3. Current logpost: -424.972. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8900 of 400000. Chain number 2. Current logpost: -432.325. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 9000 of 400000. Chain number 4. Current logpost: -433.7. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 9100 of 400000. Chain number 1. Current logpost: -423.415. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4500 of 400000. Chain number 4. Current logpost: -1373.57. No exp/inf: 152/90. 
+Running MCMC-PT iteration number: 8800 of 400000. Chain number 3. Current logpost: -457.5. No exp/inf: 93/90. 
+Running MCMC-PT iteration number: 9000 of 400000. Chain number 2. Current logpost: -422.659. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4600 of 400000. Chain number 1. Current logpost: -1327.67. No exp/inf: 131/90. 
+Running MCMC-PT iteration number: 9100 of 400000. Chain number 4. Current logpost: -426.733. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9200 of 400000. Chain number 1. Current logpost: -422.95. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4500 of 400000. Chain number 2. Current logpost: -1574.47. No exp/inf: 211/90. 
+Running MCMC-PT iteration number: 4600 of 400000. Chain number 3. Current logpost: -1401.68. No exp/inf: 118/90. 
+Running MCMC-PT iteration number: 9100 of 400000. Chain number 2. Current logpost: -420.413. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 8900 of 400000. Chain number 3. Current logpost: -425.745. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9300 of 400000. Chain number 1. Current logpost: -426.47. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9200 of 400000. Chain number 4. Current logpost: -434.421. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 4600 of 400000. Chain number 4. Current logpost: -1386.75. No exp/inf: 155/90. 
+Running MCMC-PT iteration number: 9200 of 400000. Chain number 2. Current logpost: -424.163. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9000 of 400000. Chain number 3. Current logpost: -424.447. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4700 of 400000. Chain number 1. Current logpost: -1311.23. No exp/inf: 128/90. 
+Running MCMC-PT iteration number: 9400 of 400000. Chain number 1. Current logpost: -424.419. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4700 of 400000. Chain number 3. Current logpost: -1417.35. No exp/inf: 120/90. 
+Running MCMC-PT iteration number: 4600 of 400000. Chain number 2. Current logpost: -1593. No exp/inf: 216/90. 
+Running MCMC-PT iteration number: 9300 of 400000. Chain number 2. Current logpost: -423.264. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9300 of 400000. Chain number 4. Current logpost: -434.126. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 9100 of 400000. Chain number 3. Current logpost: -426.537. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9500 of 400000. Chain number 1. Current logpost: -434.941. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 9400 of 400000. Chain number 2. Current logpost: -421.443. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9400 of 400000. Chain number 4. Current logpost: -421.645. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9200 of 400000. Chain number 3. Current logpost: -424.454. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4700 of 400000. Chain number 4. Current logpost: -1395.5. No exp/inf: 158/90. 
+Running MCMC-PT iteration number: 9600 of 400000. Chain number 1. Current logpost: -423.604. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4800 of 400000. Chain number 1. Current logpost: -1325.45. No exp/inf: 131/90. 
+Running MCMC-PT iteration number: 9500 of 400000. Chain number 2. Current logpost: -423.768. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4800 of 400000. Chain number 3. Current logpost: -1457.84. No exp/inf: 127/90. 
+Running MCMC-PT iteration number: 9500 of 400000. Chain number 4. Current logpost: -425.013. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9300 of 400000. Chain number 3. Current logpost: -437.129. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 4700 of 400000. Chain number 2. Current logpost: -1613.46. No exp/inf: 222/90. 
+Running MCMC-PT iteration number: 9700 of 400000. Chain number 1. Current logpost: -447.553. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 9600 of 400000. Chain number 2. Current logpost: -424.549. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9600 of 400000. Chain number 4. Current logpost: -421.721. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4800 of 400000. Chain number 4. Current logpost: -1393.29. No exp/inf: 157/90. 
+Running MCMC-PT iteration number: 9800 of 400000. Chain number 1. Current logpost: -434.532. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 9400 of 400000. Chain number 3. Current logpost: -425.508. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9700 of 400000. Chain number 2. Current logpost: -422.23. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4900 of 400000. Chain number 1. Current logpost: -1320.63. No exp/inf: 131/90. 
+Running MCMC-PT iteration number: 9700 of 400000. Chain number 4. Current logpost: -423.588. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4900 of 400000. Chain number 3. Current logpost: -1401.84. No exp/inf: 118/90. 
+Running MCMC-PT iteration number: 9900 of 400000. Chain number 1. Current logpost: -422.246. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9800 of 400000. Chain number 2. Current logpost: -425.26. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9500 of 400000. Chain number 3. Current logpost: -425.954. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4800 of 400000. Chain number 2. Current logpost: -1608.89. No exp/inf: 225/90. 
+Running MCMC-PT iteration number: 9800 of 400000. Chain number 4. Current logpost: -423.613. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10000 of 400000. Chain number 1. Current logpost: -421.213. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9900 of 400000. Chain number 2. Current logpost: -423.002. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4900 of 400000. Chain number 4. Current logpost: -1383.42. No exp/inf: 157/90. 
+Running MCMC-PT iteration number: 9600 of 400000. Chain number 3. Current logpost: -424.193. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9900 of 400000. Chain number 4. Current logpost: -422.155. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5000 of 400000. Chain number 1. Current logpost: -1306.31. No exp/inf: 129/90. 
+Running MCMC-PT iteration number: 10100 of 400000. Chain number 1. Current logpost: -424.659. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5000 of 400000. Chain number 3. Current logpost: -1422.1. No exp/inf: 123/90. 
+Running MCMC-PT iteration number: 10000 of 400000. Chain number 2. Current logpost: -431.583. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 9700 of 400000. Chain number 3. Current logpost: -426.785. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10000 of 400000. Chain number 4. Current logpost: -422.203. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 4900 of 400000. Chain number 2. Current logpost: -1616.7. No exp/inf: 228/90. 
+Running MCMC-PT iteration number: 10100 of 400000. Chain number 2. Current logpost: -420.955. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10200 of 400000. Chain number 1. Current logpost: -426.816. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9800 of 400000. Chain number 3. Current logpost: -427.38. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5000 of 400000. Chain number 4. Current logpost: -1411.06. No exp/inf: 163/90. 
+Running MCMC-PT iteration number: 10100 of 400000. Chain number 4. Current logpost: -424.025. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5100 of 400000. Chain number 1. Current logpost: -1302.33. No exp/inf: 127/90. 
+Running MCMC-PT iteration number: 10300 of 400000. Chain number 1. Current logpost: -422.678. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10200 of 400000. Chain number 2. Current logpost: -419.832. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5100 of 400000. Chain number 3. Current logpost: -1451.51. No exp/inf: 126/90. 
+Running MCMC-PT iteration number: 10200 of 400000. Chain number 4. Current logpost: -422.976. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 9900 of 400000. Chain number 3. Current logpost: -425.842. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10400 of 400000. Chain number 1. Current logpost: -424.61. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10300 of 400000. Chain number 2. Current logpost: -421.541. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5000 of 400000. Chain number 2. Current logpost: -1638.32. No exp/inf: 237/90. 
+Running MCMC-PT iteration number: 10300 of 400000. Chain number 4. Current logpost: -424.049. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10000 of 400000. Chain number 3. Current logpost: -422.893. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5100 of 400000. Chain number 4. Current logpost: -1431.7. No exp/inf: 165/90. 
+Running MCMC-PT iteration number: 5200 of 400000. Chain number 1. Current logpost: -1325.44. No exp/inf: 132/90. 
+Running MCMC-PT iteration number: 10500 of 400000. Chain number 1. Current logpost: -435.363. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 10400 of 400000. Chain number 2. Current logpost: -420.705. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10400 of 400000. Chain number 4. Current logpost: -433.612. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 5200 of 400000. Chain number 3. Current logpost: -1428.84. No exp/inf: 122/90. 
+Running MCMC-PT iteration number: 10100 of 400000. Chain number 3. Current logpost: -426.167. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10600 of 400000. Chain number 1. Current logpost: -432.935. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 10500 of 400000. Chain number 2. Current logpost: -423.425. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10500 of 400000. Chain number 4. Current logpost: -425.245. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10200 of 400000. Chain number 3. Current logpost: -423.82. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5100 of 400000. Chain number 2. Current logpost: -1626.74. No exp/inf: 236/90. 
+Running MCMC-PT iteration number: 5200 of 400000. Chain number 4. Current logpost: -1443.07. No exp/inf: 168/90. 
+Running MCMC-PT iteration number: 5300 of 400000. Chain number 1. Current logpost: -1334.8. No exp/inf: 135/90. 
+Running MCMC-PT iteration number: 10700 of 400000. Chain number 1. Current logpost: -423.548. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10600 of 400000. Chain number 4. Current logpost: -434.931. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 10600 of 400000. Chain number 2. Current logpost: -419.707. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5300 of 400000. Chain number 3. Current logpost: -1425.2. No exp/inf: 122/90. 
+Running MCMC-PT iteration number: 10300 of 400000. Chain number 3. Current logpost: -425.209. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10700 of 400000. Chain number 2. Current logpost: -420.869. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10700 of 400000. Chain number 4. Current logpost: -426.188. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10800 of 400000. Chain number 1. Current logpost: -433.021. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 10400 of 400000. Chain number 3. Current logpost: -437.023. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 10800 of 400000. Chain number 2. Current logpost: -423.296. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10800 of 400000. Chain number 4. Current logpost: -422.574. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5200 of 400000. Chain number 2. Current logpost: -1626.38. No exp/inf: 238/90. 
+Running MCMC-PT iteration number: 5400 of 400000. Chain number 1. Current logpost: -1341.2. No exp/inf: 137/90. 
+Running MCMC-PT iteration number: 5300 of 400000. Chain number 4. Current logpost: -1458.74. No exp/inf: 175/90. 
+Running MCMC-PT iteration number: 10900 of 400000. Chain number 1. Current logpost: -422.49. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5400 of 400000. Chain number 3. Current logpost: -1403.01. No exp/inf: 117/90. 
+Running MCMC-PT iteration number: 10500 of 400000. Chain number 3. Current logpost: -435.853. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 10900 of 400000. Chain number 4. Current logpost: -423.737. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10900 of 400000. Chain number 2. Current logpost: -420.979. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11000 of 400000. Chain number 1. Current logpost: -422.539. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10600 of 400000. Chain number 3. Current logpost: -423.911. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11000 of 400000. Chain number 4. Current logpost: -423.75. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11000 of 400000. Chain number 2. Current logpost: -422.055. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5500 of 400000. Chain number 1. Current logpost: -1350.02. No exp/inf: 140/90. 
+Running MCMC-PT iteration number: 11100 of 400000. Chain number 1. Current logpost: -427.517. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5400 of 400000. Chain number 4. Current logpost: -1481.42. No exp/inf: 180/90. 
+Running MCMC-PT iteration number: 5300 of 400000. Chain number 2. Current logpost: -1648.64. No exp/inf: 245/90. 
+Running MCMC-PT iteration number: 5500 of 400000. Chain number 3. Current logpost: -1422.49. No exp/inf: 121/90. 
+Running MCMC-PT iteration number: 10700 of 400000. Chain number 3. Current logpost: -423.106. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11100 of 400000. Chain number 4. Current logpost: -422.507. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11100 of 400000. Chain number 2. Current logpost: -421.3. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11200 of 400000. Chain number 1. Current logpost: -423.957. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 10800 of 400000. Chain number 3. Current logpost: -422.822. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11200 of 400000. Chain number 4. Current logpost: -427.717. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11200 of 400000. Chain number 2. Current logpost: -422.468. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11300 of 400000. Chain number 1. Current logpost: -424.601. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5600 of 400000. Chain number 1. Current logpost: -1346.37. No exp/inf: 140/90. 
+Running MCMC-PT iteration number: 10900 of 400000. Chain number 3. Current logpost: -424.548. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5600 of 400000. Chain number 3. Current logpost: -1393.3. No exp/inf: 118/90. 
+Running MCMC-PT iteration number: 5500 of 400000. Chain number 4. Current logpost: -1446.46. No exp/inf: 174/90. 
+Running MCMC-PT iteration number: 5400 of 400000. Chain number 2. Current logpost: -1651.65. No exp/inf: 251/90. 
+Running MCMC-PT iteration number: 11300 of 400000. Chain number 4. Current logpost: -421.53. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11300 of 400000. Chain number 2. Current logpost: -422.401. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11400 of 400000. Chain number 1. Current logpost: -441.508. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 11000 of 400000. Chain number 3. Current logpost: -425.151. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11400 of 400000. Chain number 4. Current logpost: -423.34. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11400 of 400000. Chain number 2. Current logpost: -420.628. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11500 of 400000. Chain number 1. Current logpost: -423.045. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5700 of 400000. Chain number 1. Current logpost: -1348.5. No exp/inf: 144/90. 
+Running MCMC-PT iteration number: 11100 of 400000. Chain number 3. Current logpost: -425.463. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5700 of 400000. Chain number 3. Current logpost: -1419.1. No exp/inf: 123/90. 
+Running MCMC-PT iteration number: 5600 of 400000. Chain number 4. Current logpost: -1445.11. No exp/inf: 175/90. 
+Running MCMC-PT iteration number: 11500 of 400000. Chain number 4. Current logpost: -443.857. No exp/inf: 92/90. 
+Running MCMC-PT iteration number: 11500 of 400000. Chain number 2. Current logpost: -420.416. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11600 of 400000. Chain number 1. Current logpost: -423.316. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5500 of 400000. Chain number 2. Current logpost: -1667.01. No exp/inf: 263/90. 
+Running MCMC-PT iteration number: 11600 of 400000. Chain number 4. Current logpost: -424.521. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11200 of 400000. Chain number 3. Current logpost: -423.507. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11600 of 400000. Chain number 2. Current logpost: -419.932. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11700 of 400000. Chain number 1. Current logpost: -422.523. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5800 of 400000. Chain number 1. Current logpost: -1341.61. No exp/inf: 144/90. 
+Running MCMC-PT iteration number: 11700 of 400000. Chain number 4. Current logpost: -423.487. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5800 of 400000. Chain number 3. Current logpost: -1409.39. No exp/inf: 121/90. 
+Running MCMC-PT iteration number: 11300 of 400000. Chain number 3. Current logpost: -423.734. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11700 of 400000. Chain number 2. Current logpost: -421.464. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5700 of 400000. Chain number 4. Current logpost: -1452.03. No exp/inf: 175/90. 
+Running MCMC-PT iteration number: 11800 of 400000. Chain number 1. Current logpost: -422.564. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11800 of 400000. Chain number 4. Current logpost: -423.377. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5600 of 400000. Chain number 2. Current logpost: -1662.8. No exp/inf: 272/90. 
+Running MCMC-PT iteration number: 11800 of 400000. Chain number 2. Current logpost: -423.12. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11400 of 400000. Chain number 3. Current logpost: -422.632. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11900 of 400000. Chain number 1. Current logpost: -423.112. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5900 of 400000. Chain number 3. Current logpost: -1395.48. No exp/inf: 119/90. 
+Running MCMC-PT iteration number: 5900 of 400000. Chain number 1. Current logpost: -1355.14. No exp/inf: 146/90. 
+Running MCMC-PT iteration number: 11500 of 400000. Chain number 3. Current logpost: -423.528. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11900 of 400000. Chain number 2. Current logpost: -432.907. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 11900 of 400000. Chain number 4. Current logpost: -421.55. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5800 of 400000. Chain number 4. Current logpost: -1469.32. No exp/inf: 177/90. 
+Running MCMC-PT iteration number: 12000 of 400000. Chain number 1. Current logpost: -423.169. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11600 of 400000. Chain number 3. Current logpost: -424.651. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12000 of 400000. Chain number 2. Current logpost: -421.294. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12000 of 400000. Chain number 4. Current logpost: -423.879. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5700 of 400000. Chain number 2. Current logpost: -1660.29. No exp/inf: 284/90. 
+Running MCMC-PT iteration number: 12100 of 400000. Chain number 1. Current logpost: -422.876. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6000 of 400000. Chain number 3. Current logpost: -1382.53. No exp/inf: 117/90. 
+Running MCMC-PT iteration number: 6000 of 400000. Chain number 1. Current logpost: -1362.96. No exp/inf: 150/90. 
+Running MCMC-PT iteration number: 11700 of 400000. Chain number 3. Current logpost: -423.746. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12100 of 400000. Chain number 2. Current logpost: -420.731. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12100 of 400000. Chain number 4. Current logpost: -425.408. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12200 of 400000. Chain number 1. Current logpost: -423.326. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 5900 of 400000. Chain number 4. Current logpost: -1468.09. No exp/inf: 179/90. 
+Running MCMC-PT iteration number: 11800 of 400000. Chain number 3. Current logpost: -424.267. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12200 of 400000. Chain number 4. Current logpost: -422.109. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12200 of 400000. Chain number 2. Current logpost: -424.268. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12300 of 400000. Chain number 1. Current logpost: -423.476. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 11900 of 400000. Chain number 3. Current logpost: -425.591. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6100 of 400000. Chain number 3. Current logpost: -1372.37. No exp/inf: 115/90. 
+Running MCMC-PT iteration number: 5800 of 400000. Chain number 2. Current logpost: -1662.57. No exp/inf: 285/90. 
+Running MCMC-PT iteration number: 12300 of 400000. Chain number 4. Current logpost: -423.968. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6100 of 400000. Chain number 1. Current logpost: -1359.37. No exp/inf: 149/90. 
+Running MCMC-PT iteration number: 12400 of 400000. Chain number 1. Current logpost: -422.782. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12300 of 400000. Chain number 2. Current logpost: -421.434. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6000 of 400000. Chain number 4. Current logpost: -1469.35. No exp/inf: 181/90. 
+Running MCMC-PT iteration number: 12000 of 400000. Chain number 3. Current logpost: -433.094. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 12400 of 400000. Chain number 4. Current logpost: -421.333. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12500 of 400000. Chain number 1. Current logpost: -425.77. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12400 of 400000. Chain number 2. Current logpost: -432.801. No exp/inf: 91/90. 
+Running MCMC-PT iteration number: 12500 of 400000. Chain number 4. Current logpost: -422.091. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12100 of 400000. Chain number 3. Current logpost: -423.583. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6200 of 400000. Chain number 3. Current logpost: -1344.39. No exp/inf: 110/90. 
+Running MCMC-PT iteration number: 6200 of 400000. Chain number 1. Current logpost: -1381.54. No exp/inf: 154/90. 
+Running MCMC-PT iteration number: 5900 of 400000. Chain number 2. Current logpost: -1665.21. No exp/inf: 285/90. 
+Running MCMC-PT iteration number: 12500 of 400000. Chain number 2. Current logpost: -423.377. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12600 of 400000. Chain number 1. Current logpost: -423.589. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12600 of 400000. Chain number 4. Current logpost: -424.497. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12200 of 400000. Chain number 3. Current logpost: -424.93. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6100 of 400000. Chain number 4. Current logpost: -1491.94. No exp/inf: 188/90. 
+Running MCMC-PT iteration number: 12600 of 400000. Chain number 2. Current logpost: -421.113. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12700 of 400000. Chain number 1. Current logpost: -423.895. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12700 of 400000. Chain number 4. Current logpost: -422.16. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12300 of 400000. Chain number 3. Current logpost: -423.884. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6300 of 400000. Chain number 3. Current logpost: -1355.83. No exp/inf: 112/90. 
+Running MCMC-PT iteration number: 12800 of 400000. Chain number 1. Current logpost: -421.741. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12700 of 400000. Chain number 2. Current logpost: -421.987. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6300 of 400000. Chain number 1. Current logpost: -1371.45. No exp/inf: 152/90. 
+Running MCMC-PT iteration number: 12800 of 400000. Chain number 4. Current logpost: -423.551. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12400 of 400000. Chain number 3. Current logpost: -424.689. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 6000 of 400000. Chain number 2. Current logpost: -1651.82. No exp/inf: 285/90. 
+Running MCMC-PT iteration number: 6200 of 400000. Chain number 4. Current logpost: -1522.88. No exp/inf: 194/90. 
+Running MCMC-PT iteration number: 12900 of 400000. Chain number 1. Current logpost: -423.868. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12800 of 400000. Chain number 2. Current logpost: -421.383. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12900 of 400000. Chain number 4. Current logpost: -424.245. No exp/inf: 90/90. 
+Running MCMC-PT iteration number: 12500 of 400000. Chain number 3. Current logpost: -423.407. No exp/inf: 90/90. 
+slurmstepd-c20: error: *** JOB 1592552 ON c20 CANCELLED AT 2024-08-05T09:30:55 ***

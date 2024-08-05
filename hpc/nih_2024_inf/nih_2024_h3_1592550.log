@@ -1,0 +1,10715 @@
+/var/spool/slurmd/job1592550/slurm_script: line 17: activate: No such file or directory
+Loading required package: usethis
+ℹ Loading serojump
+Warning messages:
+1: replacing previous import ‘foreach::when’ by ‘purrr::when’ when loading ‘serojump’ 
+2: replacing previous import ‘foreach::accumulate’ by ‘purrr::accumulate’ when loading ‘serojump’ 
+3: Objects listed as exports, but not present in namespace:
+• copModel
+• data_known_exposures
+• data_titre 
+`numberTempChains` not specified in settings. Default value 10. 
+`onAdaptiveTemp` not specified in settings.  Default value TRUE. 
+`updatesAdaptiveTemp` not specified in settings.  Default value 10. 
+Initiate class
+Initiate class2
+Initiate class2: 1
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+End: initiate functions
+`numberTempChains` not specified in settings. Default value 10. 
+`onAdaptiveTemp` not specified in settings.  Default value TRUE. 
+`updatesAdaptiveTemp` not specified in settings.  Default value 10. 
+this->knownExpInd:0
+i: 0
+i: 1
+i: 2
+i: 3
+i: 4
+A boost: 
+Initiate class
+Initiate class2
+Initiate class2: 1
+Instance of the previous classes1
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+A get exposure function sample: 
+i: 5
+i: 6
+i: 7
+i: 8
+i: 9
+i: 10
+i: 11
+i: End: initiate functions12
+
+i: 13
+i: 14
+i: 15
+A boost: 
+A get exposure function sample: 
+i: 16
+i: 17
+i: 18
+i: 19
+i: 20
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+A boost: 
+A get exposure function sample: 
+i: 31
+A boost: 
+A get exposure function sample: 
+i: 32
+i: 33
+i: 34
+i: 35
+i: 36
+i: 37
+i: 38
+i: 39
+i: 40
+i: 41
+i: 42
+i: 43
+i: 44
+i: 45
+i: 46
+i: 47
+i: 48
+i: 49
+i: 50
+A boost: 
+A get exposure function sample: 
+i: 51
+A boost: 
+A get exposure function sample: 
+i: 52
+i: 53
+i: 54
+i: 55
+i: 56
+i: 57
+i: 58
+i: 59
+i: 60
+A boost: 
+A get exposure function sample: 
+i: 61
+i: 62
+A boost: 
+A get exposure function sample: 
+i: 63
+i: 64
+i: 65
+i: 66
+i: 67
+A boost: 
+A get exposure function sample: 
+i: 68
+i: 69
+i: 70
+i: 71
+i: 72
+A boost: 
+A get exposure function sample: 
+i: 73
+i: 74
+i: 75
+i: 76
+i: 77
+A boost: 
+A get exposure function sample: 
+i: 78
+i: 79
+i: 80
+i: 81
+i: 82
+i: 83
+i: 84
+i: 85
+i: 86
+A boost: 
+A get exposure function sample: 
+i: 87
+i: 88
+i: 89
+i: 90
+A boost: 
+A get exposure function sample: 
+i: 91
+i: 92
+A boost: 
+A get exposure function sample: 
+i: 93
+i: 94
+A boost: 
+A get exposure function sample: 
+i: 95
+i: 96
+i: 97
+i: 98
+i: 99
+A boost: 
+A get exposure function sample: 
+i: 100
+i: 101
+i: 102
+i: 103
+i: 104
+i: 105
+i: 106
+A boost: 
+A get exposure function sample: 
+i: 107
+i: 108
+i: 109
+i: 110
+i: 111
+i: 112
+i: 113
+i: 114
+i: 115
+i: 116
+i: 117
+i: 118
+i: 119
+i: 120
+i: 121
+i: 122
+i: 123
+i: 124
+i: 125
+i: 126
+i: 127
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+i: 133
+i: 134
+i: 135
+i: 136
+i: 137
+i: 138
+i: 139
+i: 140
+i: 141
+i: 142
+A boost: 
+A get exposure function sample: 
+i: 143
+i: 144
+i: 145
+i: 146
+i: 147
+i: 148
+i: 149
+i: 150
+i: 151
+i: 152
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+i: 159
+i: 160
+A boost: 
+this->knownExpInd:0
+A get exposure function sample: 
+i: 161
+i: 162
+i: 163
+A boost: 
+A get exposure function sample: 
+i: 164
+i: 165
+i: 166
+i: 167
+A boost: 
+A get exposure function sample: 
+i: 168
+i: 169
+i: 170
+i: 171
+i: 172
+i: 173
+i: 174
+A boost: 
+A get exposure function sample: 
+i: 175
+i: 176
+i: 177
+i: 178
+i: 179
+i: 180
+i: 181
+i: 182
+i: 183
+i: 184
+A boost: 
+A get exposure function sample: 
+i: 185
+A boost: 
+A get exposure function sample: 
+i: 186
+i: 187
+i: 188
+i: 189
+i: 190
+i: 191
+A boost: 
+A get exposure function sample: 
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200
+i: 201
+i: 202
+i: 203
+i: 204
+i: 205
+i: 206
+i: 207
+i: 208
+i: 209
+i: 210
+i: 211
+i: 212
+i: 213
+i: 214
+i: 215
+i: 216
+i: 217
+A boost: 
+A get exposure function sample: 
+i: 218
+i: 219
+i: 220
+i: 221
+i: 222
+i: 223
+A boost: 
+A get exposure function sample: 
+i: 224
+i: 225
+i: 226
+i: 227
+i: 228
+i: 229
+i: 230
+i: 231
+i: 232
+i: 233
+i: 234
+i: 235
+i: 236
+A boost: 
+A get exposure function sample: 
+i: 237
+A boost: 
+A get exposure function sample: 
+i: 238
+i: 239
+A boost: 
+A get exposure function sample: 
+i: 240
+i: 241
+i: 242
+A boost: 
+A get exposure function sample: 
+i: 243
+i: 244
+i: 245
+i: 246
+i: 247
+i: 248
+i: 249
+i: 250
+i: 251
+i: 252
+i: 253
+i: 254
+i: 255
+i: 256
+i: 257
+i: 258
+A boost: 
+A get exposure function sample: 
+i: 259
+i: 260
+A boost: 
+A get exposure function sample: 
+i: 261
+i: 262
+i: 263
+i: 264
+i: 265
+i: 266
+i: 267
+i: 268
+i: 269
+i: 270
+i: 271
+i: 272
+i: 273
+A boost: 
+A get exposure function sample: 
+i: 274
+i: 275
+i: 276
+i: 277
+i: 278
+i: 279
+i: 280
+i: 281
+i: 282
+i: 283
+i: 284
+i: 285
+i: 286
+i: 287
+i: 288
+i: 289
+i: 290
+i: 291
+i: 292
+i: 293
+i: 294
+i: 295
+i: 296
+i: 297
+i: 298
+i: 299
+A boost: 
+A get exposure function sample: 
+i: 300
+i: 301
+A boost: 
+A get exposure function sample: 
+i: 302
+A boost: 
+A get exposure function sample: 
+i: 303
+A boost: 
+A get exposure function sample: 
+i: 304
+i: 305
+i: 306
+i: 307
+i: 308
+i: 309
+i: 310
+i: 311
+i: 312
+i: 313
+i: 314
+i: 315
+i: 316
+i: 317
+i: 318
+i: 319
+A boost: 
+A get exposure function sample: 
+i: 320
+i: 321
+i: 322
+i: 323
+i: 324
+i: 325
+i: 326
+i: 327
+A boost: 
+A get exposure function sample: 
+i: 328
+i: 329
+i: 330
+i: 331
+i: 332
+i: 333
+i: 334
+i: 335
+i: 336
+A boost: 
+A get exposure function sample: 
+i: 337
+i: 338
+i: 339
+i: 340
+i: 341
+i: 342
+i: 343
+i: 344
+i: 345
+i: 346
+i: 347
+i: 348
+A boost: 
+A get exposure function sample: 
+i: 349
+i: 350
+i: 351
+i: 352
+A boost: 
+A get exposure function sample: 
+i: 353
+i: 354
+i: 355
+i: 356
+i: 357
+i: 358
+i: 359
+i: 360
+A boost: 
+A get exposure function sample: 
+i: 361
+i: 362
+i: 363
+A boost: 
+A get exposure function sample: 
+i: 364
+i: 365
+i: 366
+i: 367
+i: 368
+i: 369
+i: 370
+i: 371
+i: 372
+i: 373
+i: 374
+i: 375
+i: 376
+i: 377
+i: 378
+i: 379
+i: 380
+i: 381
+i: 382
+i: 383
+i: 384
+i: 385
+i: 386
+i: 387
+i: 388
+i: 389
+i: 390
+i: 391
+i: 392
+i: 393
+i: 394
+i: 395
+i: 396
+i: 397
+i: 398
+i: 399
+i: 400
+i: 401
+i: 402
+i: 403
+i: 404
+i: 405
+i: 406
+i: 407
+i: 408
+i: 409
+i: 410
+i: 411
+i: 412
+A boost: 
+A get exposure function sample: 
+i: 413
+A boost: 
+A get exposure function sample: 
+i: 414
+i: 415
+i: 416
+i: 417
+i: 418
+i: 419
+i: 420
+i: 421
+i: 422
+i: 423
+i: 424
+i: 425
+i: 426
+i: 427
+i: 428
+i: 429
+i: 430
+i: 431
+i: 432
+i: 433
+i: 434
+i: 435
+i: 436
+i: 437
+i: 438
+i: 439
+i: 440
+i: 441
+i: 442
+i: 443
+A boost: 
+A get exposure function sample: 
+i: 444
+A boost: 
+A get exposure function sample: 
+i: 445
+A boost: 
+A get exposure function sample: 
+i: 446
+i: 447
+i: 448
+i: 449
+i: 450
+A boost: 
+A get exposure function sample: 
+i: 451
+i: 452
+A boost: 
+A get exposure function sample: 
+i: 453
+i: 454
+i: 455
+i: 456
+i: 457
+i: 458
+i: 459
+i: 460
+A boost: 
+A get exposure function sample: 
+i: 461
+i: 462
+i: 463
+i: 464
+A boost: 
+A get exposure function sample: 
+i: 465
+i: 466
+i: 467
+i: 468
+i: 469
+i: 470
+A boost: 
+A get exposure function sample: 
+i: 471
+A boost: 
+A get exposure function sample: 
+i: 472
+A boost: 
+A get exposure function sample: 
+i: 473
+i: 474
+i: 475
+i: 476
+i: 477
+A boost: 
+A get exposure function sample: 
+i: 478
+i: 479
+i: 480
+i: 481
+i: 482
+i: 483
+i: 484
+i: 485
+i: 486
+i: 487
+i: 488
+i: 489
+i: 490
+i: 491
+i: 492
+i: 493
+i: 494
+i: 495
+i: 496
+i: 497
+i: 498
+i: 499
+A boost: 
+A get exposure function sample: 
+i: 500
+A boost: 
+A get exposure function sample: 
+i: 501
+i: 502
+i: 503
+i: 504
+i: 505
+i: 506
+i: 507
+i: 508
+i: 509
+i: 510
+i: 511
+i: 512
+i: 513
+i: 514
+A boost: 
+A get exposure function sample: 
+i: 515
+i: 516
+i: 517
+i: 518
+i: 519
+i: 520
+i: 521
+A boost: 
+A get exposure function sample: 
+i: 522
+i: 523
+i: 524
+A boost: 
+A get exposure function sample: 
+i: 525
+i: 526
+A boost: 
+A get exposure function sample: 
+i: 527
+i: 528
+i: 529
+i: 530
+i: 531
+i: 532
+i: 533
+i: 534
+A boost: 
+A get exposure function sample: 
+i: 535
+A boost: 
+A get exposure function sample: 
+i: 536
+i: 537
+A boost: 
+A get exposure function sample: 
+i: 538
+A boost: 
+A get exposure function sample: 
+i: 539
+A boost: 
+A get exposure function sample: 
+i: 540
+i: 541
+i: 542
+A boost: 
+A get exposure function sample: 
+i: 543
+i: 544
+i: 545
+i: 546
+i: 547
+i: 548
+i: 549
+A boost: 
+A get exposure function sample: 
+i: 550
+i: 551
+i: 552
+i: 553
+i: 554
+A boost: 
+A get exposure function sample: 
+i: 555
+i: 556
+i: 557
+A boost: 
+A get exposure function sample: 
+i: 558
+i: 559
+i: 560
+A boost: 
+A get exposure function sample: 
+i: 561
+i: 562
+i: 563
+i: 564
+i: 565
+i: 566
+i: 567
+A boost: 
+A get exposure function sample: 
+i: 568
+i: 569
+A boost: 
+A get exposure function sample: 
+i: 570
+i: 571
+A boost: 
+A get exposure function sample: 
+i: 572
+i: 573
+i: 574
+i: 575
+i: 576
+i: 577
+i: 578
+i: 579
+i: 580
+i: 581
+i: 582
+i: 583
+A boost: 
+A get exposure function sample: 
+i: 584
+i: 585
+i: 586
+i: 587
+A boost: 
+A get exposure function sample: 
+i: 588
+i: 589
+i: 590
+i: 591
+i: 592
+i: 593
+i: 594
+i: 595
+i: 596
+i: 597
+i: 598
+i: 599
+A boost: 
+A get exposure function sample: 
+i: 600
+i: 601
+i: 602
+i: 603
+i: 604
+i: 605
+i: 606
+i: 607
+i: 608
+A boost: 
+A get exposure function sample: 
+i: 609
+A boost: 
+A get exposure function sample: 
+i: 610
+i: 611
+i: 612
+i: 613
+i: 614
+i: 615
+i: 616
+i: 617
+i: 618
+i: 619
+i: 620
+i: 621
+i: 622
+i: 623
+i: 624
+i: 625
+i: 626
+A boost: 
+A get exposure function sample: 
+i: 627
+i: 628
+i: 629
+i: 630
+i: 631
+i: 632
+i: 633
+i: 634
+i: 635
+i: 636
+i: 637
+i: 638
+i: 639
+A boost: 
+A get exposure function sample: 
+i: 640
+A boost: 
+A get exposure function sample: 
+i: 641
+i: 642
+i: 643
+i: 644
+i: 645
+i: 646
+i: 647
+A boost: 
+A get exposure function sample: 
+i: 648
+i: 649
+A boost: 
+A get exposure function sample: 
+i: 650
+i: 651
+i: 652
+i: 653
+i: 654
+i: 655
+A boost: 
+A get exposure function sample: 
+i: 656
+i: 657
+i: 658
+i: 659
+i: 660
+i: 661
+i: 662
+i: 663
+A boost: 
+A get exposure function sample: 
+i: 664
+i: 665
+i: 666
+i: 667
+A boost: 
+A get exposure function sample: 
+i: 668
+i: 669
+i: 670
+A boost: 
+A get exposure function sample: 
+i: 671
+i: 672
+i: 673
+i: 674
+i: 675
+i: 676
+i: 677
+i: 678
+i: 679
+i: 680
+i: 681
+i: 682
+i: 683
+i: 684
+i: 685
+A boost: 
+A get exposure function sample: 
+i: 686
+i: 687
+i: 688
+i: 689
+i: 690
+i: 691
+i: 692
+i: 693
+i: 694
+i: 695
+i: 696
+i: 697
+i: 698
+i: 699
+i: 700
+i: 701
+i: 702
+i: 703
+i: 704
+i: 705
+i: 706
+i: 707
+i: 708
+i: 709
+i: 710
+i: 711
+i: 712
+i: 713
+i: 714
+i: 715
+i: 716
+i: 717
+i: 718
+i: 719
+A boost: 
+A get exposure function sample: 
+i: 720
+i: 721
+i: 722
+i: 723
+i: 724
+i: 725
+i: 726
+i: 727
+i: 728
+i: 729
+i: 730
+i: 731
+i: i: 732
+0i: 
+733
+i: i: 1734
+
+i: i: 2735
+
+i: i: 3736
+
+i: i: 4737
+
+A boost: i: 
+738
+i: 739
+i: 740
+i: 741
+i: 742
+i: 743
+i: 744
+A boost: 
+Initiate classA get exposure function sample: 
+i: 745
+
+i: 746
+i: Initiate class2747
+
+Initiate class2: i: 748
+A boost: 
+2
+Instance of the previous classes1
+Testing inA get exposure function sample: 
+
+i: 749
+Instance of the previous classesA boost: 
+
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functions
+A get exposure function sample: 
+i: 750
+i: 751
+i: 752
+i: 753
+i: 754
+i: 755
+i: End: initiate functions756
+Initiate class
+i: 757
+A boost: 
+
+Initiate class2
+Initiate class2: 3
+A get exposure function sample: 
+Instance of the previous classes1i: 
+758
+i: 759
+i: 760
+i: A get exposure function sample: 761
+
+i: i: 7625
+
+i: i: 7636
+
+i: i: 7647Testing in
+
+i: i: 
+7658
+
+i: i: 7669Instance of the previous classes
+
+
+i: i: 76710
+
+A boost: i: 
+Instance of the previous classes211
+
+End: Initiate classi: 
+12Start: initiate functions
+
+i: 13
+i: 14
+i: 15
+A boost: 
+A get exposure function sample: 
+i: 768
+i: 769
+i: 770
+i: 771
+i: 772
+i: 773
+i: 774
+End: initiate functionsi: 
+775
+i: A get exposure function sample: 776
+
+i: i: 16777
+
+i: i: 17778
+
+i: i: 18779
+
+i: i: 19780
+
+i: i: 20781
+
+i: i: 21782
+
+i: A boost: 22
+
+i: 23
+i: 24
+i: 25
+i: 26
+i: 27
+i: 28
+i: 29
+i: 30
+A boost: 
+A get exposure function sample: 
+i: 783
+A boost: 
+A get exposure function sample: 
+i: 31
+A boost: 
+A get exposure function sample: 
+i: 784
+A boost: 
+A get exposure function sample: 
+i: 32
+i: 33
+i: 34
+i: 35
+A get exposure function sample: i: 
+36
+i: i: 78537
+
+A boost: i: 
+38
+i: 39
+i: 40
+i: 41
+i: 42
+i: 43
+i: 44
+i: 45Initiate class
+i: 46
+i: A get exposure function sample: 47
+
+
+i: i: 78648
+
+Initiate class2i: i: 
+78749Initiate class2: 
+
+i: i: 78850
+
+i: A boost: 789
+2
+
+i: 790
+Instance of the previous classes1i: 
+791
+i: 792
+i: 793
+i: 794
+i: 795
+A boost: 
+Testing in
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functionsA get exposure function sample: 
+
+i: 51
+A boost: 
+A get exposure function sample: 
+i: 796
+i: 797
+i: 798
+i: 799
+i: 800
+i: 801
+i: 802
+i: 803
+i: 804End: initiate functions
+
+i: A get exposure function sample: 805
+
+i: i: 52806
+
+i: i: 53807
+
+i: i: 54808
+
+i: i: 55809
+
+i: A boost: 56
+
+i: 57
+i: 58
+i: 59
+i: 60
+A boost: 
+A get exposure function sample: 
+i: 810
+i: 811
+i: 812
+i: 813
+i: 814
+A get exposure function sample: i: 
+815i: 
+61i: 
+816i: 
+62i: 
+817A boost: 
+
+i: 818
+i: 819
+i: 820
+i: 821
+i: 822
+i: 823
+i: 824
+i: 825
+i: 826
+i: 827
+i: 828
+i: A get exposure function sample: 829
+
+i: i: 63830
+
+i: i: 64831
+
+i: A boost: 65
+
+i: 66
+i: 67
+A boost: 
+A get exposure function sample: 
+i: 832
+i: 833
+i: 834
+i: 835A get exposure function sample: 
+
+i: i: 83668
+
+i: i: 83769
+
+i: i: 83870
+
+i: i: 83971
+
+A boost: i: 
+72
+A boost: 
+A get exposure function sample: 
+A get exposure function sample: i: 
+840i: 
+73i: 
+841i: 
+74A boost: 
+
+i: 75
+i: 76
+i: 77
+A boost: 
+A get exposure function sample: 
+i: 842
+i: 843
+i: 844
+i: 845
+i: A get exposure function sample: 846
+
+i: i: 78847
+
+i: i: 79848
+
+i: i: 80849
+
+i: i: 81850
+
+i: i: 82851
+
+i: i: 83852
+
+i: i: 84853
+
+i: i: 85854
+
+i: i: 86855
+
+A boost: i: 
+856
+i: 857
+i: 858
+i: 859
+i: 860
+i: 861
+i: 862
+i: 863
+i: 864
+i: 865
+i: 866A get exposure function sample: 
+
+i: i: 86787
+
+i: i: 86888
+
+i: i: 86989
+
+i: i: 87090
+
+i: A boost: 871
+
+A boost: 
+A get exposure function sample: 
+A get exposure function sample: i: 
+91
+i: i: 87292
+
+A boost: A boost: 
+
+A get exposure function sample: A get exposure function sample: 
+
+i: i: 93873
+
+i: A boost: 94
+
+A boost: 
+A get exposure function sample: 
+i: 874
+A get exposure function sample: i: 
+875i: 
+95i: 
+876i: 
+96A boost: 
+
+i: 97
+i: 98
+i: 99
+A boost: 
+A get exposure function sample: 
+A get exposure function sample: i: 
+877i: 
+100i: 
+878i: 
+101i: 
+879i: 
+102i: 
+880i: 
+103i: 
+881i: 
+104i: 
+882i: 
+105i: 
+883i: 
+106i: 
+884A boost: 
+
+i: 885
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+i: i: 107886
+
+i: i: 108887
+
+i: i: 109888
+
+i: i: 110889
+
+i: i: 111890
+
+i: i: 112891
+
+i: i: 113892
+
+i: i: 114893
+
+i: i: 115894
+
+i: i: 116895
+
+i: i: 117896
+
+i: i: 118897
+
+i: i: 119898
+
+i: i: 120899
+
+i: i: 121900
+
+i: i: 122901
+
+i: i: 123902
+
+i: i: 124903
+
+i: A boost: 125
+
+i: 126
+i: 127
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+i: 133
+i: 134
+i: 135
+i: 136
+i: 137
+i: 138
+i: this->knownExpInd:139
+i: 140A get exposure function sample: 
+
+i: 141i: 0
+904
+i: 
+142i: 
+905A boost: 
+
+A boost: 
+A get exposure function sample: 
+i: 906
+i: 907
+i: 908A get exposure function sample: 
+
+i: i: 909143
+
+i: i: 910144
+
+i: i: 911145
+
+i: i: 912146
+
+i: i: 913147
+
+i: i: 914148
+
+A boost: i: 
+149
+i: 150
+i: 151
+i: 152
+i: 153
+i: 154
+i: 155
+i: 156
+i: 157
+i: 158
+i: 159A get exposure function sample: 
+
+i: 160i: 
+915A boost: 
+
+i: 916
+i: 917
+i: 918
+i: 919
+i: 920
+A boost: 
+A get exposure function sample: 
+this->knownExpInd:i: 161
+A get exposure function sample: i: 
+1620
+i: 
+i: 921163
+
+i: A boost: 922
+
+i: 923
+i: 924
+i: 925
+i: 926
+i: 927
+i: 928
+i: 929
+A boost: 
+A get exposure function sample: 
+i: 164
+i: 165
+i: 166
+i: 167
+A boost: 
+A get exposure function sample: 
+i: 930
+i: 931
+i: 932A get exposure function sample: 
+
+i: i: 933168
+
+i: i: 934169
+
+i: i: 935170
+
+i: i: 936171
+
+i: i: 937172
+
+i: i: 938173
+
+i: i: 939174
+
+i: A boost: 940
+
+i: 941
+i: 942
+i: 943
+i: 944
+i: 945
+i: 946
+i: 947
+i: 948
+i: 949
+i: 950
+i: 951
+A boost: 
+A get exposure function sample: 
+i: 175
+this->knownExpInd:i: 176
+i: 177
+0i: 
+178
+i: 179
+i: 180
+i: 181A get exposure function sample: 
+
+i: 182i: 
+952i: 
+183i: 
+953i: 
+184i: 
+954A boost: 
+
+i: 955
+i: 956
+i: 957
+i: 958
+i: 959
+i: 960
+i: 961
+i: 962
+i: 963
+i: 964
+A boost: 
+A get exposure function sample: 
+i: 185
+A boost: 
+A get exposure function sample: 
+i: 965A get exposure function sample: 
+
+i: i: 966186
+
+i: i: 967187
+
+i: i: 968188
+
+i: i: 969189
+
+i: i: 970190
+
+i: i: 971191
+
+A boost: A boost: 
+
+A get exposure function sample: 
+A get exposure function sample: i: 
+192i: 
+972i: 
+193i: 
+973i: 
+194i: 
+974i: 
+195i: 
+975i: 
+196i: 
+976i: 
+197i: 
+977i: 
+198i: 
+978i: 
+199i: 
+979i: 
+200i: 
+980i: 
+201i: 
+981i: 
+202i: 
+982i: 
+203i: 
+983i: 
+204i: 
+984i: 
+205i: 
+985i: 
+206A boost: 
+
+i: 207
+i: 208
+i: 209
+i: 210
+i: 211
+i: 212
+i: 213
+i: 214
+i: 215
+i: 216
+i: 217
+A boost: 
+A get exposure function sample: 
+i: 986
+i: 987
+i: 988
+i: 989
+i: 990
+i: 991
+i: 992
+i: 993
+A boost: 
+A get exposure function sample: 
+i: 218
+i: 219
+i: 220
+i: 221
+i: 222
+i: A get exposure function sample: 223
+
+A boost: i: 
+994
+i: 995
+i: 996
+i: 997
+i: 998
+i: 999
+i: 1000
+i: 1001
+i: 1002
+i: A get exposure function sample: 1003
+
+i: i: 2241004
+
+i: i: 2251005
+
+i: i: 2261006
+
+i: i: 2271007
+
+i: i: 2281008
+
+i: i: 2291009
+
+i: i: 2301010
+
+i: i: 2311011
+
+i: i: 2321012
+
+i: A boost: 233
+
+i: 234
+i: 235
+i: 236
+A boost: 
+A get exposure function sample: 
+i: 1013
+i: 1014
+i: 1015
+i: 1016
+i: 1017
+A get exposure function sample: i: 
+1018
+i: i: 2371019
+
+A boost: i: 
+1020
+i: 1021
+i: 1022
+i: 1023
+i: 1024
+i: 1025
+i: 1026
+i: 1027
+i: 1028
+i: 1029
+i: 1030
+i: 1031
+i: 1032
+i: A get exposure function sample: 1033
+
+i: i: 2381034
+
+i: i: 2391035
+
+A boost: i: 
+1036
+i: 1037
+i: 1038
+i: 1039
+i: 1040
+i: 1041
+i: 1042
+A boost: 
+A get exposure function sample: 
+i: 240
+i: 241
+i: 242
+A boost: 
+A get exposure function sample: 
+i: 1043
+i: 1044
+i: 1045
+i: 1046
+i: 1047
+i: 1048
+i: 1049A get exposure function sample: 
+
+i: i: 1050243
+
+i: i: 1051244
+
+i: i: 1052245
+
+i: i: 1053246
+
+i: i: 1054247
+
+A boost: i: 
+248
+i: 249
+i: 250
+i: 251
+i: 252
+i: 253
+i: 254
+i: 255
+i: 256
+i: 257
+A get exposure function sample: i: 
+258
+i: A boost: 1055
+
+i: 1056
+i: 1057
+i: 1058
+i: 1059
+i: 1060
+A get exposure function sample: 
+i: 259
+i: 260
+A boost: 
+A get exposure function sample: 
+i: 261
+i: 262
+i: 263
+i: 264
+i: 265
+i: 266
+i: 267
+i: 268
+i: 269
+i: 270
+i: 271
+i: 272
+i: 273
+A boost: 
+A get exposure function sample: 
+i: 274
+i: 275
+i: 276
+i: 277
+i: 278
+i: 279
+i: 280
+i: 281
+i: 282
+i: 283
+i: 284
+i: 285
+i: 286
+i: 287
+i: 288
+i: 289
+i: 290
+i: 291
+i: 292
+i: 293
+i: 294
+i: 295
+i: 296
+i: 297
+i: 298
+i: 299
+A boost: 
+A get exposure function sample: 
+i: 300
+i: 301
+A boost: 
+A get exposure function sample: 
+i: 302
+A boost: 
+A get exposure function sample: 
+i: 303
+A boost: 
+A get exposure function sample: 
+i: 304
+i: 305
+i: 306
+i: 307
+i: 308
+i: 309
+i: 310
+i: 311
+i: 312
+i: 313
+i: 314
+i: 315
+i: 316
+i: 317
+i: 318
+i: 319
+A boost: 
+A get exposure function sample: 
+i: 320
+i: 321
+i: 322
+i: 323
+i: 324
+i: 325
+i: 326
+i: 327
+A boost: 
+A get exposure function sample: 
+i: 328
+i: 329
+i: 330
+i: 331
+i: 332
+i: 333
+i: 334
+i: 335
+i: 336
+A boost: 
+A get exposure function sample: 
+i: 337
+i: 338
+i: 339
+i: 340
+i: 341
+i: 342
+i: 343
+i: 344
+i: 345
+i: 346
+i: 347
+i: 348
+A boost: 
+A get exposure function sample: 
+i: 349
+i: 350
+i: 351
+i: 352
+A boost: 
+A get exposure function sample: 
+i: 353
+i: 354
+i: 355
+i: 356
+i: 357
+i: 358
+i: 359
+i: 360
+A boost: 
+A get exposure function sample: 
+i: 361
+i: 362
+i: 363
+A boost: 
+A get exposure function sample: 
+i: 364
+i: 365
+i: 366
+i: 367
+i: 368
+i: 369
+i: 370
+i: 371
+i: 372
+i: 373
+i: 374
+i: 375
+i: 376
+i: 377
+i: 378
+i: 379
+i: 380
+i: 381
+i: 382
+i: 383
+i: 384
+i: 385
+i: 386
+i: 387
+i: 388
+i: 389
+i: 390
+i: 391
+i: 392
+i: 393
+i: 394
+i: 395
+i: 396
+i: 397
+i: 398
+i: 399
+i: 400
+i: 401
+i: 402
+i: 403
+i: 404
+i: 405
+i: 406
+i: 407
+i: 408
+i: 409
+i: 410
+i: 411
+i: 412
+A boost: 
+A get exposure function sample: 
+i: 413
+A boost: 
+A get exposure function sample: 
+i: 414
+i: 415
+i: 416
+i: 417
+i: 418
+i: 419
+i: 420
+i: 421
+i: 422
+i: 423
+i: 424
+i: 425
+i: 426
+i: 427
+i: 428
+i: 429
+i: 430
+i: 431
+i: 432
+i: 433
+i: 434
+i: 435
+i: 436
+i: 437
+i: 438
+i: 439
+i: 440
+i: 441
+i: 442
+i: 443
+A boost: 
+A get exposure function sample: 
+i: 444
+A boost: 
+A get exposure function sample: 
+i: 445
+A boost: 
+A get exposure function sample: 
+i: 446
+i: 447
+i: 448
+i: 449
+i: 450
+A boost: 
+A get exposure function sample: 
+i: 451
+i: 452
+A boost: 
+A get exposure function sample: 
+i: 453
+i: 454
+i: 455
+i: 456
+i: 457
+i: 458
+i: 459
+i: 460
+A boost: 
+A get exposure function sample: 
+i: 461
+i: 462
+i: 463
+i: 464
+A boost: 
+A get exposure function sample: 
+i: 465
+i: 466
+i: 467
+i: 468
+i: 469
+i: 470
+A boost: 
+A get exposure function sample: 
+i: 471
+A boost: 
+A get exposure function sample: 
+i: 472
+A boost: 
+A get exposure function sample: 
+i: 473
+i: 474
+i: 475
+i: 476
+i: 477
+A boost: 
+A get exposure function sample: 
+i: 478
+i: 479
+i: 480
+i: 481
+i: 482
+i: 483
+i: 484
+i: 485
+i: 486
+i: 487
+i: 488
+i: 489
+i: 490
+i: 491
+i: 492
+i: 493
+i: 494
+i: 495
+i: 496
+i: 497
+i: 498
+i: 499
+A boost: 
+A get exposure function sample: 
+i: 500
+A boost: 
+A get exposure function sample: 
+i: 501
+i: 502
+i: 503
+i: 504
+i: 505
+i: 506
+i: 507
+i: 508
+i: 509
+i: 510
+i: 511
+i: 512
+i: 513
+i: 514
+A boost: 
+A get exposure function sample: 
+i: 515
+i: 516
+i: 517
+i: 518
+i: 519
+i: 520
+i: 521
+A boost: 
+A get exposure function sample: 
+i: 522
+i: 523
+i: 524
+A boost: 
+A get exposure function sample: 
+i: 525
+i: 526
+A boost: 
+A get exposure function sample: 
+i: 527
+i: 528
+i: 529
+i: 530
+i: 531
+i: 532
+i: 533
+i: 534
+A boost: 
+A get exposure function sample: 
+i: 535
+A boost: 
+A get exposure function sample: 
+i: 536
+i: 537
+A boost: 
+A get exposure function sample: 
+i: 538
+A boost: 
+A get exposure function sample: 
+i: 539
+A boost: 
+A get exposure function sample: 
+i: 540
+i: 541
+i: 542
+A boost: 
+A get exposure function sample: 
+i: 543
+i: 544
+i: 545
+i: 546
+i: 547
+i: 548
+i: 549
+A boost: 
+A get exposure function sample: 
+i: 550
+i: 551
+i: 552
+i: 553
+i: 554
+A boost: 
+A get exposure function sample: 
+i: 555
+i: 556
+i: 557
+A boost: 
+A get exposure function sample: 
+i: 558
+i: 559
+i: 560
+A boost: 
+A get exposure function sample: 
+i: 561
+i: 562
+i: 563
+i: 564
+i: 565
+i: 566
+i: 567
+A boost: 
+A get exposure function sample: 
+i: 568
+i: 569
+A boost: 
+A get exposure function sample: 
+i: 570
+i: 571
+A boost: 
+A get exposure function sample: 
+i: 572
+i: 573
+i: 574
+i: 575
+i: 576
+i: 577
+i: 578
+i: 579
+i: 580
+i: 581
+i: 582
+i: 583
+A boost: 
+A get exposure function sample: 
+i: 584
+i: 585
+i: 586
+i: 587
+A boost: 
+A get exposure function sample: 
+i: 588
+i: 589
+i: 590
+i: 591
+i: 592
+i: 593
+i: 594
+i: 595
+i: 596
+i: 597
+i: 598
+i: 599
+A boost: 
+A get exposure function sample: 
+i: 600
+i: 601
+i: 602
+i: 603
+i: 604
+i: 605
+i: 606
+i: 607
+i: 608
+A boost: 
+A get exposure function sample: 
+i: 609
+A boost: 
+A get exposure function sample: 
+i: 610
+i: 611
+i: 612
+i: 613
+i: 614
+i: 615
+i: 616
+i: 617
+i: 618
+i: 619
+i: 620
+i: 621
+i: 622
+i: 623
+i: 624
+i: 625
+i: 626
+A boost: 
+A get exposure function sample: 
+i: 627
+i: 628
+i: 629
+i: 630
+i: 631
+i: 632
+i: 633
+i: 634
+i: 635
+i: 636
+i: 637
+i: 638
+i: 639
+A boost: 
+A get exposure function sample: 
+i: 640
+A boost: 
+A get exposure function sample: 
+i: 641
+i: 642
+i: 643
+i: 644
+i: 645
+i: 646
+i: 647
+A boost: 
+A get exposure function sample: 
+i: 648
+i: 649
+A boost: 
+A get exposure function sample: 
+i: 650
+i: 651
+i: 652
+i: 653
+i: 654
+i: 655
+A boost: 
+A get exposure function sample: 
+i: 656
+i: 657
+i: 658
+i: 659
+i: 660
+i: 661
+i: 662
+i: 663
+A boost: 
+A get exposure function sample: 
+i: 664
+i: 665
+i: 666
+i: 667
+A boost: 
+A get exposure function sample: 
+i: 668
+i: 669
+i: 670
+A boost: 
+A get exposure function sample: 
+i: 671
+i: 672
+i: 673
+i: 674
+i: 675
+i: 676
+i: 677
+i: 678
+i: 679
+i: 680
+i: 681
+i: 682
+i: 683
+i: 684
+i: 685
+A boost: 
+A get exposure function sample: 
+i: 686
+i: 687
+i: 688
+i: 689
+i: 690
+i: 691
+i: 692
+i: 693
+i: 694
+i: 695
+i: 696
+i: 697
+i: 698
+i: 699
+i: 700
+i: 701
+i: 702
+i: 703
+i: 704
+i: 705
+i: 706
+i: 707
+i: 708
+i: 709
+i: 710
+i: 711
+i: 712
+i: 713
+i: 714
+i: 715
+i: 716
+i: 717
+i: 718
+i: 719
+A boost: 
+A get exposure function sample: 
+i: 720
+i: 721
+i: 722
+i: 723
+i: 724
+i: 725
+i: 726
+i: 727
+i: 728
+i: 729
+i: 730
+i: 731
+i: 732
+i: 733
+i: 734
+i: 735
+i: 736
+i: 737
+i: 738
+i: 739
+i: 740
+i: 741
+i: 742
+i: 743
+i: 744
+A boost: 
+i: 0
+i: 1
+i: 2
+i: 3
+i: 4
+A boost: 
+A get exposure function sample: 
+i: 745
+i: 746
+i: 747
+i: 748
+A boost: 
+A get exposure function sample: 
+i: 749
+A boost: 
+A get exposure function sample: 
+i: 750
+i: 751
+i: 752
+i: 753
+i: 754
+i: 755
+i: 756
+i: 757
+A boost: 
+Initiate classA get exposure function sample: 
+i: 758
+i: 759
+
+i: 760
+i: 761
+Initiate class2i: 
+762Initiate class2: 
+i: 763
+i: 764
+i: 765
+i: 766
+i: 4767
+
+A boost: 
+Instance of the previous classes1
+Testing in
+Instance of the previous classesA get exposure function sample: 
+
+i: 768Instance of the previous classes2
+A get exposure function sample: 
+i: End: Initiate class
+769
+
+Start: initiate functionsi: i: 5
+770
+
+i: i: 6771
+
+i: i: 7772
+
+i: i: 8773
+
+i: i: 9774
+
+i: i: 10775
+
+i: i: 11776
+
+i: i: 12777
+
+i: i: 13778
+
+i: i: 14779
+
+i: i: 15780
+
+A boost: i: 
+781
+i: 782
+A boost: 
+End: initiate functions
+A get exposure function sample: 
+i: 16
+i: A get exposure function sample: 17
+
+i: i: 78318
+
+A boost: i: 
+19
+i: 20
+i: 21
+i: 22
+i: 23
+i: 24
+i: 25
+i: 26
+i: 27
+i: 28
+i: 29
+A get exposure function sample: i: 
+30i: 
+784A boost: 
+
+A boost: 
+A get exposure function sample: 
+A get exposure function sample: i: 
+785i: 
+31A boost: 
+
+A boost: 
+A get exposure function sample: 
+i: 786A get exposure function sample: 
+
+i: i: 78732
+
+i: i: 78833
+
+i: i: 78934
+Initiate class
+i: i: 79035
+
+i: i: 79136
+
+i: i: 79237
+
+
+i: i: 79338
+
+Initiate class2i: i: 
+794Initiate class2: 
+39i: 
+795i: 
+40A boost: 
+
+i: 41
+3i: 
+42
+i: 43Instance of the previous classes1
+
+i: 44
+i: 45
+i: 46
+i: 47
+i: 48
+i: 49
+i: Testing in50
+
+A get exposure function sample: A boost: 
+
+Instance of the previous classesi: 
+796
+i: 797Instance of the previous classes2
+
+i: End: Initiate class798
+
+Start: initiate functionsi: 
+799
+i: 800
+i: 801
+i: 802
+i: 803
+i: 804
+i: 805
+i: 806
+i: 807
+i: 808
+i: 809
+A boost: 
+A get exposure function sample: 
+i: 51
+A boost: 
+End: initiate functions
+A get exposure function sample: 
+i: 810
+i: 811
+i: 812
+i: 813A get exposure function sample: 
+
+i: i: 81452
+
+i: i: 81553
+
+i: i: 81654
+
+i: i: 81755
+
+i: i: 81856
+
+i: i: 81957
+
+i: i: 82058
+
+i: i: 82159
+
+i: i: 82260
+
+i: A boost: 823
+
+i: 824
+i: 825
+i: 826
+i: 827
+i: 828
+i: 829
+i: 830
+i: 831
+A boost: 
+A get exposure function sample: 
+i: 61
+i: 62
+A boost: 
+A get exposure function sample: 
+i: 832
+i: 833
+i: 834
+i: 835
+i: A get exposure function sample: 836
+
+i: i: 63837
+
+i: i: 64838
+
+i: i: 65839
+
+i: A boost: 66
+
+i: 67
+A boost: 
+A get exposure function sample: 
+i: 840
+i: 841
+A boost: 
+A get exposure function sample: 
+i: 68
+i: 69
+i: 70
+i: 71
+i: 72
+A boost: 
+A get exposure function sample: 
+i: 842
+i: 843
+i: 844
+i: 845
+i: 846
+i: 847
+i: 848A get exposure function sample: 
+
+i: i: 84973
+
+i: i: 85074
+
+i: i: 85175
+
+i: i: 85276
+
+i: i: 85377
+
+i: A boost: 854
+
+i: 855
+i: 856
+i: 857
+i: 858
+i: 859
+i: 860
+i: 861
+i: 862
+i: 863
+i: 864
+i: A get exposure function sample: 865
+
+i: i: 78866
+
+i: i: 79867
+
+i: i: 80868
+
+i: i: 81869
+
+i: i: 82870
+
+i: i: 83871
+
+i: A boost: 84
+
+i: 85
+i: 86
+A boost: 
+A get exposure function sample: 
+i: 872A get exposure function sample: 
+
+A boost: i: 
+87
+i: 88
+i: 89
+i: 90
+A boost: 
+A get exposure function sample: 
+i: 873
+A boost: 
+A get exposure function sample: 
+i: 91
+i: 92
+A boost: 
+A get exposure function sample: 
+i: 874
+i: 875
+i: 876
+A boost: 
+A get exposure function sample: 
+i: 93
+i: 94
+A boost: 
+A get exposure function sample: 
+i: 877
+i: 878
+i: 879
+i: 880
+i: 881
+i: 882
+i: 883A get exposure function sample: 
+
+i: i: 88495
+
+i: i: 88596
+i: 97
+
+i: 98A boost: 
+
+i: 99
+A boost: 
+A get exposure function sample: 
+i: 100
+i: 101
+i: A get exposure function sample: 102
+
+i: i: 886103
+
+i: i: 887104
+
+i: i: 888105
+
+i: i: 889106
+
+i: A boost: 890
+
+i: 891
+i: 892
+i: 893
+i: 894
+i: 895
+i: 896
+i: 897
+i: 898
+i: 899
+i: 900
+i: 901
+A get exposure function sample: i: 
+902
+i: i: 107903
+
+i: A boost: 108
+
+i: 109
+i: 110
+i: 111
+i: 112
+i: 113
+i: 114
+i: 115
+i: 116
+i: 117
+i: 118
+i: A get exposure function sample: 119
+
+i: i: 904120
+
+i: i: 905121
+
+A boost: i: 
+122
+i: 123
+i: 124
+i: 125
+i: 126
+i: 127
+i: 128
+i: 129
+i: 130
+i: 131
+i: 132
+A get exposure function sample: i: 
+133
+i: i: 906134
+
+i: i: 907135
+
+i: i: 908136
+
+i: i: 909137
+
+i: i: 910138
+
+i: i: 911139
+
+i: i: 912140
+
+i: i: 913141
+
+i: i: 914142
+
+A boost: A boost: 
+
+A get exposure function sample: 
+i: 915
+i: 916
+i: 917
+i: 918
+i: A get exposure function sample: 919
+
+i: i: 143920
+
+i: A boost: 144
+
+i: 145
+i: 146
+i: 147
+i: 148
+i: 149
+i: 150
+i: 151
+i: 152
+i: 153
+i: 154
+i: 155A get exposure function sample: 
+
+i: 156i: 
+921i: 
+157i: 
+922i: 
+158i: 
+923i: 
+159i: 
+924i: 
+160i: 
+925A boost: 
+
+i: 926
+i: 927
+i: 928
+i: 929
+A boost: 
+A get exposure function sample: 
+i: 161
+i: 162
+i: 163
+A boost: 
+A get exposure function sample: 
+i: 930
+i: 931
+i: 932
+i: 933A get exposure function sample: 
+
+i: i: 934164
+
+i: i: 935165
+
+i: i: 936166
+
+i: i: 937this->knownExpInd:167
+
+i: A boost: 938
+
+i: 939
+i: 0940
+
+i: 941
+i: 942
+i: 943
+i: 944
+i: 945
+i: 946
+i: 947
+i: 948
+A get exposure function sample: i: 
+949i: 
+168i: 
+950i: 
+169i: 
+951i: 
+170A boost: 
+
+i: 171
+i: 172
+i: 173
+i: 174
+A boost: 
+A get exposure function sample: 
+i: 952
+i: 953
+i: 954
+i: 955
+i: 956
+A get exposure function sample: i: 
+957
+i: i: 175958
+
+i: i: 176959
+
+i: i: 177960
+
+i: i: 178961
+
+i: i: 179962
+
+i: i: 180963
+
+i: i: 181964
+
+i: A boost: 182
+
+i: 183
+i: 184
+A boost: 
+A get exposure function sample: 
+this->knownExpInd:i: 965
+i: A get exposure function sample: 966
+
+0i: i: 
+967185
+
+i: A boost: 968
+
+i: 969
+i: 970
+i: 971
+A boost: 
+A get exposure function sample: 
+i: 186
+i: 187
+i: 188
+i: 189
+i: 190
+i: 191
+A boost: A get exposure function sample: 
+
+i: 972
+i: 973
+i: 974
+i: 975
+i: 976
+i: 977
+i: 978
+i: 979
+i: 980
+i: 981
+i: 982
+i: 983
+i: 984
+i: 985
+A boost: 
+A get exposure function sample: 
+i: 192
+i: 193
+i: 194
+i: 195
+i: 196
+i: 197
+i: 198
+i: 199
+i: 200A get exposure function sample: 
+
+i: i: 201986
+
+i: i: 202987
+
+i: i: 203988
+
+i: i: 204989
+
+i: i: 205990
+
+i: i: 206991
+
+i: i: 207992
+
+i: i: 208993
+
+i: A boost: 209
+
+i: 210
+i: 211
+i: 212
+i: 213
+i: 214
+i: 215
+i: 216
+i: 217
+A boost: 
+A get exposure function sample: 
+i: 994
+i: 995
+i: 996
+i: 997
+i: 998
+i: 999
+i: 1000
+i: 1001
+i: 1002
+i: A get exposure function sample: 1003
+
+i: i: 2181004
+
+i: i: 2191005
+
+i: i: 2201006
+
+i: i: 2211007
+
+i: i: 2221008
+
+i: i: 2231009
+
+A boost: i: 
+1010
+i: 1011
+i: 1012
+A boost: 
+A get exposure function sample: 
+i: 224
+i: 225
+i: 226A get exposure function sample: 
+
+i: i: 2271013
+
+i: i: 2281014
+
+i: i: 2291015
+
+i: i: 2301016
+
+i: i: 2311017
+
+i: i: 2321018
+
+i: i: 2331019
+
+i: i: 2341020
+
+i: i: 2351021
+
+i: i: 2361022
+
+A boost: i: 
+1023
+i: 1024
+i: 1025
+i: 1026
+i: 1027
+i: 1028
+i: 1029
+i: 1030
+i: 1031
+i: 1032
+i: 1033
+A get exposure function sample: i: 
+1034
+i: i: 2371035
+
+A boost: i: 
+1036
+i: 1037
+i: 1038
+i: 1039
+i: 1040
+i: 1041
+i: 1042
+A boost: 
+A get exposure function sample: 
+i: 238
+i: 239
+A boost: 
+A get exposure function sample: 
+i: 1043
+i: 1044
+i: 1045
+i: 1046
+i: 1047
+i: 1048
+i: 1049
+i: 1050A get exposure function sample: 
+
+i: i: 1051240
+
+i: i: 1052241
+
+i: i: 1053242
+
+i: A boost: 1054
+
+A boost: 
+A get exposure function sample: 
+i: 243
+i: 244
+i: 245
+A get exposure function sample: i: 
+246
+i: i: 1055247
+
+i: i: 1056248
+
+i: i: 1057249
+
+i: i: 1058250
+
+i: i: 1059251
+
+i: i: 1060252
+
+i: 253
+i: 254
+i: 255
+i: 256
+i: 257
+i: 258
+A boost: 
+A get exposure function sample: 
+i: 259
+i: 260
+A boost: 
+A get exposure function sample: 
+i: 261
+i: 262
+i: 263
+i: 264
+i: 265
+i: 266
+i: 267
+i: 268
+i: 269
+i: 270
+i: 271
+i: 272
+i: 273
+A boost: 
+A get exposure function sample: 
+i: 274
+i: 275
+i: 276
+i: 277
+i: 278
+i: 279
+i: 280
+i: 281
+i: 282
+i: 283
+i: 284
+i: 285
+i: 286
+i: 287
+i: i: 288
+0i: 
+289i: 
+i: i: 01290
+
+
+i: i: i: 21291
+
+i: 
+i: 3i: 2
+292
+i: 
+i: 4i: 3
+293
+A boost: i: 
+
+4i: 
+294A boost: 
+
+i: 295
+i: 296
+i: 297
+i: 298
+i: 299
+A boost: 
+A get exposure function sample: 
+i: 300
+i: 301
+A boost: 
+A get exposure function sample: 
+i: 302
+A boost: 
+A get exposure function sample: 
+i: 303
+A boost: 
+A get exposure function sample: 
+i: 304
+i: 305
+i: 306
+i: 307
+i: 308
+i: 309
+i: 310
+i: 311
+i: 312
+i: 313
+i: 314
+i: 315
+i: 316
+i: 317
+i: 318
+i: 319
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+A get exposure function sample: i: 
+i: 5i: 5
+320
+i: 
+i: 6i: 6
+321
+i: i: 
+7i: 7
+322
+i: i: 
+88
+i: 
+i: 323i: 99
+
+
+i: i: i: 3241010
+
+
+i: i: i: 1111325
+
+
+i: i: i: 1212326
+
+
+i: i: i: 1313327
+
+
+i: A boost: i: 1414
+
+
+i: i: 1515
+
+A boost: A boost: 
+
+A get exposure function sample: 
+i: 328
+i: 329
+i: 330
+A get exposure function sample: i: 
+331A get exposure function sample: i: 
+
+16i: i: 
+16332i: 
+17
+i: i: 
+17333i: 
+18i: 
+
+i: 18i: 334
+19
+i: i: 
+19335i: 
+20i: 
+
+20i: i: 
+33621i: 
+
+21A boost: i: 
+
+22i: 
+22i: 
+23i: 
+23i: 
+24i: 
+24i: 
+25i: 
+25i: 
+26i: 
+26i: 
+27i: 
+27i: 
+28i: 
+28i: 
+29i: 
+29i: 
+30A get exposure function sample: i: 
+30A boost: 
+
+
+i: A boost: 337
+
+i: 338
+i: 339
+i: 340
+i: 341
+i: 342
+i: 343
+i: 344
+i: 345
+i: 346A get exposure function sample: 
+
+A get exposure function sample: i: i: 
+34731i: 
+
+31i: A boost: 
+348
+A boost: 
+
+A boost: 
+A get exposure function sample: 
+A get exposure function sample: i: 
+32A get exposure function sample: i: 
+32
+i: 
+i: 33i: 349
+33
+i: 
+34i: i: 
+35034i: 
+
+35i: i: 
+35135i: 
+
+36i: i: 
+36i: 352
+37
+i: 
+A boost: 37i: 
+
+38i: 
+38i: 
+39i: 
+39i: 
+40i: 
+40i: 
+41i: 
+41i: 
+42i: 
+42i: 
+43i: 
+43i: 
+44i: 
+44i: 
+45i: 
+45i: 
+46i: 
+46i: A get exposure function sample: 
+47i: 
+
+47i: i: 
+48i: 353
+48i: 
+
+49i: i: 
+35449i: 
+
+i: 50i: 
+35550A boost: 
+
+i: 
+A boost: 356
+
+i: 357
+i: 358
+i: 359
+i: 360
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+A get exposure function sample: i: 
+
+51i: i: 
+51361A boost: 
+
+
+A boost: i: 
+362
+i: 363
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+i: i: 5252
+
+i: A get exposure function sample: i: 53
+53
+
+i: i: i: 5454364
+
+
+i: i: 55i: 55
+365
+i: 
+i: i: 5656366
+
+i: 
+i: 57i: 57
+367
+i: i: 
+58i: 58
+368
+i: 
+i: 59i: 59
+369
+i: 
+i: i: 6060
+370
+A boost: A boost: 
+
+
+i: 371
+i: 372
+i: 373
+i: 374
+i: 375
+i: 376
+i: 377
+i: 378
+i: 379
+i: 380
+A get exposure function sample: i: 
+A get exposure function sample: i: 381
+61
+i: i: 
+61i: 382
+62i: 
+
+i: 62A boost: 383
+
+A boost: 
+
+i: 384
+i: 385
+i: 386
+i: 387
+i: 388
+i: 389
+i: 390
+i: 391
+i: 392
+i: 393
+i: 394
+A get exposure function sample: i: A get exposure function sample: 
+
+395i: i: 
+6363i: 
+
+396i: i: 
+64i: 64
+397
+i: 
+i: 65i: 65
+
+i: i: 3986666
+
+i: i: 
+39967i: 
+
+i: A boost: 67400
+i: 
+401
+i: 
+402A boost: 
+
+i: 403
+i: 404
+i: 405
+i: 406
+i: 407
+i: 408
+i: 409
+i: 410
+i: 411
+i: 412
+A boost: 
+A get exposure function sample: 
+i: A get exposure function sample: 68
+
+i: i: 6869
+
+i: i: 6970
+
+i: i: 7071
+
+i: i: 7172
+
+i: A boost: 72
+
+A boost: 
+A get exposure function sample: 
+i: 413
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+i: i: 7373
+
+i: i: 7474
+
+i: i: 7575
+
+i: i: 7676
+
+i: A get exposure function sample: i: 77
+77
+i: 
+A boost: 414A boost: 
+
+
+i: 415
+i: 416
+i: 417
+i: 418
+i: 419
+i: 420
+i: 421
+i: 422
+i: 423
+i: 424
+i: 425
+A get exposure function sample: i: 
+A get exposure function sample: i: 426
+78
+i: 
+i: 78i: 427
+79
+i: i: 
+79428i: 
+
+i: i: 8080429
+
+
+i: i: i: 8181430
+
+
+i: i: i: 8282
+431i: 
+
+83i: i: 
+83432i: 
+
+84i: i: 
+84i: 433
+85i: 
+
+85i: i: 
+86i: 434
+86
+A boost: 
+i: 
+A boost: 435
+
+i: 436
+i: 437
+i: 438
+i: 439
+i: 440
+i: 441
+i: 442
+i: 443
+A boost: 
+A get exposure function sample: 
+A get exposure function sample: i: 
+87i: 
+87i: 
+88i: 
+88i: 
+89i: 
+89i: 
+90i: 
+90A boost: 
+
+A boost: 
+A get exposure function sample: 
+i: 444
+A boost: 
+A get exposure function sample: 
+A get exposure function sample: i: 
+91i: 
+91A get exposure function sample: i: 
+92
+i: 
+i: 92A boost: 445
+
+A boost: 
+
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+i: i: 9393
+
+i: i: 9494
+
+A boost: A boost: 
+A get exposure function sample: 
+
+i: 446
+i: 447
+i: 448
+i: 449
+i: 450
+A boost: 
+A get exposure function sample: 
+i: A get exposure function sample: 95
+
+i: i: 9596
+
+i: i: 9697
+A get exposure function sample: 
+i: i: 
+9798i: 
+
+i: 451i: 98
+99
+i: 
+i: 452A boost: 99
+
+
+A boost: A boost: 
+
+A get exposure function sample: 
+A get exposure function sample: i: 
+100i: 
+100i: A get exposure function sample: 
+101i: 
+
+101i: i: 
+102453i: 
+102i: 
+
+103i: i: 
+103454i: 
+104i: 
+
+104i: i: 
+105i: 455
+105
+i: 
+i: 106i: 456
+106
+A boost: 
+i: 
+A boost: 457
+
+i: 458
+i: 459
+i: 460
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+i: i: 107107
+
+i: i: A get exposure function sample: 108108
+
+
+i: i: i: 461109109
+
+
+i: i: i: 110462110
+
+
+i: i: i: 111463111
+
+
+i: i: i: 112464112
+
+
+i: A boost: i: 113113
+
+
+i: i: 114114
+
+i: i: 115115
+
+i: i: 116116
+
+i: i: 117117
+
+i: i: 118118
+
+i: i: 119119
+
+i: i: 120120
+
+i: i: 121121
+
+i: i: 122122
+
+i: i: 123123
+
+A get exposure function sample: i: 
+i: 124124i: 
+
+465i: i: 125
+125
+
+i: i: i: 126126466
+
+i: i: 
+127127i: 
+
+467i: i: 128
+128i: 
+
+468i: i: 
+129i: 129
+469
+i: 
+i: i: 130130470
+
+i: i: 
+131131A boost: 
+
+
+i: i: 132132
+
+i: i: 133133
+
+i: i: 134134
+
+i: i: 135135
+
+i: i: 136136
+
+i: i: 137137
+
+i: i: 138138
+
+i: i: A get exposure function sample: 139139
+
+
+i: i: i: 140140471
+
+
+i: i: 141A boost: 141
+
+
+i: i: 142142
+
+A boost: A boost: 
+
+A get exposure function sample: 
+i: 472
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+i: i: 143143
+
+i: i: 144144
+
+i: i: 145145
+
+i: i: 146146
+
+i: i: 147147
+
+i: i: 148A get exposure function sample: 148
+
+
+i: i: i: 149473149
+
+
+i: i: i: 150150474
+
+i: i: 
+151151i: 
+
+i: i: 475152152
+
+i: 
+i: 476i: 153
+153i: 
+
+477i: i: 154
+154
+A boost: 
+i: i: 
+155155
+
+i: i: 156156
+
+i: i: 157157
+
+i: i: 158158
+
+i: i: 159159
+
+i: i: 160160
+
+A boost: A boost: 
+
+A get exposure function sample: 
+i: 478
+i: 479
+i: 480
+i: 481
+i: 482
+i: 483
+i: 484
+i: 485
+i: 486
+A get exposure function sample: A get exposure function sample: i: 
+
+487i: i: 
+161i: 161
+488i: 
+
+162i: i: 
+162489i: 
+
+163i: i: 
+163490A boost: 
+
+
+i: A boost: 491
+
+i: 492
+i: 493
+i: 494
+i: 495
+i: 496
+i: 497
+i: 498
+i: 499
+A boost: 
+A get exposure function sample: 
+A get exposure function sample: i: 
+164i: 
+164i: 
+165i: 
+165i: 
+166i: 
+166i: 
+167i: 
+167A boost: 
+
+A boost: 
+A get exposure function sample: 
+i: 500
+A boost: 
+A get exposure function sample: 
+A get exposure function sample: i: 
+168i: 
+168i: 
+169i: 
+169i: 
+170i: 
+170i: 
+A get exposure function sample: 171i: 
+171
+
+i: i: i: 501172172
+
+
+i: i: i: 173502173
+
+
+i: i: i: 174503174
+
+
+A boost: A boost: i: 
+
+504
+i: 505
+i: 506
+i: 507
+i: 508
+i: 509
+i: 510
+i: 511
+i: 512
+i: 513
+i: 514
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+i: i: 175175
+
+i: i: 176176
+
+i: i: 177177
+
+i: i: 178178
+
+i: i: 179179
+
+i: i: 180180
+
+i: i: 181181
+
+i: i: 182182
+
+i: i: 183A get exposure function sample: 183
+
+
+i: i: i: 515184184
+
+i: A boost: 
+516
+A boost: 
+
+i: 517
+i: 518
+i: 519
+i: 520
+i: 521
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+i: i: 185185
+
+A boost: A boost: 
+
+A get exposure function sample: 
+i: 522
+i: 523
+i: 524
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+i: i: 186186
+
+i: i: 187187
+
+i: i: 188188
+
+i: i: 189189
+
+i: i: 190190
+
+i: i: 191191
+
+A boost: A boost: A get exposure function sample: 
+
+
+i: 525
+i: 526
+A boost: 
+A get exposure function sample: 
+i: 192
+A get exposure function sample: i: 
+193i: 
+527A get exposure function sample: i: 
+
+194i: i: 
+192528i: 
+
+195i: i: 
+193529i: 
+
+196i: i: 
+530194i: 
+
+197i: i: 
+531195i: 
+
+198i: i: 
+196i: 532
+199
+i: i: 
+197i: 533
+200
+i: 
+i: 198i: 
+534201i: 
+
+199i: A boost: 
+202
+i: 
+200i: 
+203i: 
+201i: 
+204i: 
+202i: 
+205i: 
+203i: 
+206i: 
+204i: 
+207i: 
+205i: 
+208i: 
+206i: 
+209i: 
+207i: 
+210i: 
+208i: 
+211i: 
+A get exposure function sample: 209i: 
+
+212i: i: 
+210535i: 
+
+i: 213A boost: 211
+
+
+i: i: 214212
+
+i: i: 215213
+
+i: i: 216214
+
+i: i: 217215
+
+A boost: i: 
+216
+i: 217
+A boost: 
+A get exposure function sample: 
+i: 536
+i: 537
+A boost: 
+A get exposure function sample: 
+A get exposure function sample: i: 
+218i: 
+218i: 
+219i: 
+219i: 
+220i: 
+220i: 
+221i: 
+221i: 
+222i: 
+222i: 
+A get exposure function sample: 223i: 
+
+223i: A boost: 
+538
+A boost: 
+
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+i: i: 224224A get exposure function sample: 
+
+
+i: i: 225i: 225539
+
+
+i: i: 226A boost: 226
+
+i: i: 
+227227
+
+i: i: 228228
+
+i: i: 229229
+
+i: i: 230230
+
+i: i: 231231
+
+i: i: 232232
+
+i: i: 233233
+
+i: i: 234234
+
+i: i: 235235
+
+i: i: 236A get exposure function sample: 236
+
+
+A boost: i: A boost: 540
+
+
+i: 541
+i: 542
+A boost: 
+A get exposure function sample: 
+i: A get exposure function sample: 237
+
+i: A boost: 237
+A get exposure function sample: 
+
+A boost: i: 
+543
+i: 544
+i: 545
+i: 546
+i: 547
+i: 548
+i: 549
+A boost: 
+A get exposure function sample: 
+i: 238
+i: 239
+A boost: 
+A get exposure function sample: 
+i: 238
+i: 239
+A boost: 
+A get exposure function sample: 
+i: 550
+i: 551
+i: 552
+A get exposure function sample: i: 
+553
+i: i: 240554
+
+A get exposure function sample: i: A boost: 
+241
+i: 
+240i: 
+242i: 
+241A boost: 
+
+i: 242
+A boost: 
+A get exposure function sample: 
+i: 555
+i: 556
+i: 557
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+i: i: 243243
+
+i: i: 244244
+
+i: i: 245245
+
+i: i: 246246
+
+i: i: 247247
+
+i: i: 248248
+
+A get exposure function sample: i: i: 
+249249i: 
+
+558i: i: 250
+250
+i: 
+i: i: 559251251
+
+
+i: i: i: 252560252
+
+i: 
+i: A boost: 253253
+
+
+i: i: 254254
+
+i: i: 255255
+
+i: i: 256256
+
+i: i: 257257
+
+i: i: 258258
+
+A boost: A boost: 
+
+A get exposure function sample: 
+i: 561
+i: 562
+i: 563
+i: 564
+i: 565
+i: 566
+i: 567
+A get exposure function sample: A boost: A get exposure function sample: 
+
+
+i: i: 259259
+
+i: i: 260260
+
+A boost: A boost: 
+
+A get exposure function sample: A get exposure function sample: 
+
+A get exposure function sample: i: i: 
+568261i: 
+
+261i: i: 
+262569i: 
+262
+i: A boost: 
+263i: 
+
+263i: 
+264i: 
+264i: 
+265i: 
+265i: 
+266i: 
+266i: 
+267i: 
+267i: 
+268i: 
+268i: 
+269i: 
+269i: 
+270i: 
+270i: 
+271i: 
+271i: 
+A get exposure function sample: 272i: 
+
+272i: i: 
+273i: 570
+273A boost: 
+
+
+A boost: i: 
+571
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+A get exposure function sample: i: i: 274274
+
+
+i: i: i: 572275275
+
+
+i: i: i: 276276573
+
+i: 
+i: i: 277277
+574
+i: 
+i: i: 278278575
+
+
+i: i: i: 279279576
+
+i: 
+i: 280i: 280
+
+577i: i: 281281
+
+
+i: i: i: 282282578
+
+
+i: i: 283283i: 
+
+579i: i: 
+284i: 284
+
+i: i: 580285285
+
+
+i: i: i: 581286286
+
+i: 
+i: 582i: 287287
+
+
+i: i: i: 288583288
+
+
+A boost: i: i: 289
+289
+
+i: i: 290290
+
+i: i: 291291
+
+i: i: 292292
+
+i: i: 293293
+
+i: i: 294294
+
+i: i: 295295
+
+i: i: 296296
+
+i: i: 297297
+
+i: i: 298A get exposure function sample: 298
+
+
+i: i: 299i: 299584
+
+
+A boost: A boost: i: 
+
+585
+i: 586
+i: 587
+A boost: 
+i: 0
+i: 1
+i: 2
+i: 3
+A get exposure function sample: A get exposure function sample: i: 
+
+4i: i: 
+300300A boost: 
+
+
+i: Initiate classi: 301301
+
+A boost: A boost: A get exposure function sample: 
+
+
+i: 588
+
+i: 589
+i: i: 590Initiate class2
+0
+i: 
+Initiate class2: 591i: 
+1i: 
+592i: 
+2i: 
+593i: 
+3A get exposure function sample: i: A get exposure function sample: 
+4i: 
+594i: 
+
+4
+302i: 
+302A boost: i: Instance of the previous classes1
+
+
+
+595A boost: A boost: 
+
+i: 
+596
+i: 597
+i: 598
+i: 599
+Testing inA boost: 
+
+Instance of the previous classes
+Instance of the previous classes2
+End: Initiate class
+Start: initiate functionsA get exposure function sample: 
+
+i: 303
+A boost: A get exposure function sample: 
+
+i: 303
+A boost: 
+A get exposure function sample: 
+i: 600
+i: 601
+i: 602
+i: 603
+i: 604
+i: 605
+A get exposure function sample: i: 
+606A get exposure function sample: i: 
+
+304i: i: 
+End: initiate functions607304i: 
+
+
+i: 305i: 608
+305
+i: 
+306A boost: i: 
+306i: 
+
+307i: 
+307i: 
+308i: 
+308i: 
+309i: 
+309i: 
+310i: 
+310i: 
+311i: 
+311i: 
+312i: 
+312i: 
+313i: 
+313i: 
+314i: 
+314i: A get exposure function sample: 
+315
+i: 
+i: 315609i: 
+
+316i: A boost: 
+316i: 
+
+317i: 
+317i: 
+318i: 
+318i: 
+319i: 
+319A boost: 
+
+A boost: 
+A get exposure function sample: 
+i: 5
+i: 6
+i: 7
+i: 8
+i: A get exposure function sample: 9
+
+i: i: 61010
+
+i: i: 61111
+A get exposure function sample: 
+
+A get exposure function sample: i: i: i: 
+32061212i: 
+
+
+320i: i: A get exposure function sample: i: 
+321i: 
+613i: 
+13321
+322
+i: 
+i: 
+i: 5i: 614i: 14
+322
+323
+i: 
+i: 
+i: 6i: 615i: 15324
+323
+
+
+i: 
+i: A boost: i: 7i: 616
+325
+324
+
+i: 
+i: i: 8i: 617326
+325
+
+i: 
+i: i: 9i: 618327
+326
+
+i: 
+i: A boost: 10i: 619
+
+327
+A get exposure function sample: i: 
+i: 
+11A boost: 620i: 
+
+
+16i: i: 12
+621
+i: 
+i: 17i: 13
+622i: 
+
+A get exposure function sample: 18
+i: i: 
+i: 14623i: 328
+
+i: 19A get exposure function sample: 
+
+i: 15
+i: i: 624
+i: 329328
+A boost: 20
+
+
+i: i: 
+i: i: 625329330
+21
+
+i: 
+i: i: 330i: 626331
+
+22
+i: A boost: i: 
+332331
+i: 
+
+23i: i: 
+333332i: 
+
+24i: i: 334
+333
+
+i: i: A get exposure function sample: i: 25335
+334
+
+i: i: i: 
+1626336
+
+i: A boost: 
+i: 335
+i: 27
+17
+i: i: 
+A get exposure function sample: 33628i: 
+
+
+18i: A boost: i: 
+
+62729i: 
+19
+i: 
+i: 628i: 30
+A get exposure function sample: 20
+i: 
+
+A boost: 629i: i: 
+
+33721A get exposure function sample: i: 
+
+
+630i: i: i: 
+33822337i: 
+
+
+631i: i: i: 
+33923338i: 
+
+
+632i: A get exposure function sample: i: i: 
+340
+24339i: 
+i: i: 31
+
+633i: 341
+i: A boost: 
+340i: 
+25
+
+634i: 
+i: 
+342i: 341i: 
+26
+635i: 
+i: 
+343i: 342i: 
+27
+636i: 
+i: 
+344i: 343i: 
+28
+A get exposure function sample: 637i: 
+i: 
+
+345i: 344i: i: 
+29
+32638i: 
+i: i: 
+
+34634530i: i: 
+
+i: i: 
+33639347346A boost: 
+
+
+A boost: 
+
+i: i: 
+i: 34347348
+
+
+i: i: 35A boost: 348
+
+
+i: A boost: 36
+
+i: 37
+i: 38
+i: 39
+i: 40
+i: 41
+i: 42
+i: A get exposure function sample: 43
+
+i: i: 640A get exposure function sample: 44
+
+
+A boost: A get exposure function sample: i: 
+31A get exposure function sample: i: 
+
+i: 
+45A boost: i: 349349
+
+
+
+i: i: 350i: 46350
+
+
+i: i: 351i: 35147
+
+
+i: i: i: 35248
+352
+A boost: 
+
+i: A boost: 49
+
+A get exposure function sample: i: 
+50i: 
+641A boost: 
+
+i: 642
+i: A get exposure function sample: 643
+
+i: i: 32644
+
+i: i: 33645
+
+i: i: 34646
+
+i: i: 35647
+A get exposure function sample: A get exposure function sample: 
+i: A boost: 
+
+36
+i: i: 
+353i: 353
+
+i: i: 37354A get exposure function sample: 354
+
+
+
+i: i: i: i: 3835551355
+
+i: 
+
+i: 39A boost: i: A get exposure function sample: 356
+
+356
+
+i: 
+i: i: 40i: 648357
+357
+
+i: 
+i: i: 41i: 649358
+358
+
+i: 
+A boost: i: 42i: A get exposure function sample: 
+359
+359
+
+i: 
+i: i: 43i: 52360360
+
+
+
+A boost: i: i: A boost: 53
+44
+
+
+i: i: 5445
+
+i: i: 5546
+
+i: A get exposure function sample: i: 
+5647i: 
+
+650i: i: 
+57i: 48
+651
+i: A get exposure function sample: A get exposure function sample: 
+i: 58
+
+i: 49
+i: i: 652361
+i: i: 361
+
+5950
+i: i: 
+362
+i: 653i: 
+A boost: 362
+60i: i: 
+
+
+654A boost: 363
+
+i: A boost: 
+363i: 
+
+655A boost: 
+
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+i: i: A get exposure function sample: 61
+51
+A get exposure function sample: A get exposure function sample: i: 
+i: 
+
+364A boost: 62i: i: 
+
+i: 
+364656365A boost: 
+
+
+
+i: i: i: 366365657
+
+
+i: i: 367i: 366
+658
+i: 
+i: i: 368367659
+
+
+i: A get exposure function sample: i: i: 369
+368i: 660A get exposure function sample: 
+
+52i: 
+
+i: 
+369i: i: 370i: 
+66163
+53i: 
+
+i: 
+370i: i: 371i: 
+66264
+54i: 
+
+i: i: 
+371i: i: 663372
+5565
+
+A boost: i: 
+
+i: i: 
+372i: 56373
+66
+
+i: 
+i: i: 373i: 57374
+67i: 
+
+
+i: 374i: A boost: 375
+
+58
+i: 
+i: 375376i: 
+
+i: 59A get exposure function sample: i: 376
+
+377
+i: i: 
+i: i: 60664377378
+
+A boost: 
+
+i: 
+i: i: 378379A get exposure function sample: 665
+
+
+
+i: i: i: i: 37968666380
+
+
+
+i: i: 380381i: i: 
+
+69667i: i: 381382
+
+
+
+i: A boost: i: A get exposure function sample: i: 382
+383
+70
+
+i: 
+61i: i: i: 
+38338471i: 
+
+
+62i: i: 384385
+i: 
+
+A boost: i: 72385i: 
+
+
+A boost: i: A get exposure function sample: 386
+386
+
+
+i: i: i: 387668387
+
+
+i: i: 388i: 669
+388
+i: i: 
+389i: 670
+389i: 
+
+390A boost: i: A get exposure function sample: 
+
+390
+i: A get exposure function sample: 
+
+i: 391i: i: 63
+39173
+i: 
+
+i: i: 392i: 39264
+74i: 
+
+
+393i: i: i: 
+7539365i: 
+394i: 
+A get exposure function sample: 
+
+76i: i: 
+i: 
+395394this->knownExpInd:i: 66i: 
+77
+671i: 
+i: 0
+
+395i: 396
+A boost: i: 
+67
+
+672i: 
+i: 
+396A boost: 397i: 
+
+
+673i: i: 397
+398i: 
+
+i: i: 674398399
+
+i: 
+i: i: 675399400
+
+
+i: i: i: 400A get exposure function sample: 676401A get exposure function sample: 
+
+i: 
+
+
+i: 401i: i: i: 78
+67740268
+i: 
+
+
+i: i: 402i: i: 7969
+678403
+
+i: 
+
+i: i: i: i: 4036794048070
+
+
+
+
+i: i: i: i: i: 4046804058171
+
+
+
+
+i: i: i: i: i: 4056814068272
+
+
+
+
+i: i: i: i: A boost: 40668240783
+
+
+
+
+i: i: i: i: 40840768384
+
+i: 
+
+i: 409i: i: 40885
+
+i: 684
+i: i: 41086409
+
+
+
+i: i: A boost: A get exposure function sample: i: 685411
+
+410
+
+i: 
+A boost: i: 73i: 
+412
+411
+i: 
+A boost: i: 74
+412
+
+i: A boost: 75
+
+i: 76
+i: 77A get exposure function sample: 
+
+A boost: i: 
+87
+A get exposure function sample: i: 
+88i: 
+686i: 
+89i: 
+687i: 
+90i: 
+688A boost: 
+
+i: A get exposure function sample: 689
+
+i: i: 413690
+A get exposure function sample: 
+A boost: 
+i: 
+i: 691A get exposure function sample: 413
+
+
+i: i: A boost: 78
+692
+
+i: i: 79693
+
+i: i: 80694A get exposure function sample: 
+
+
+i: i: i: 8169591
+
+i: 
+i: 82A get exposure function sample: i: 696
+
+i: 92
+A get exposure function sample: i: 83
+i: 
+414
+A boost: 697i: 
+i: 
+
+414i: i: 84
+698415
+i: 
+
+i: 415i: i: 85
+699416
+i: 
+
+i: 416i: i: 86
+A get exposure function sample: 700417
+i: A boost: 
+
+
+417i: 
+i: i: 
+41893701i: 
+418
+
+i: 
+419i: i: i: 
+41994702i: 
+420
+
+i: 
+420A boost: i: i: 
+421
+703i: 
+A get exposure function sample: 
+421i: 
+i: 
+422i: i: 70487
+422i: 
+
+i: 
+423i: i: 423
+88705
+i: 
+
+A get exposure function sample: i: 
+424i: i: 95i: 424
+89
+706
+i: 
+i: 
+i: i: 425i: 96425707
+90
+
+i: 
+i: 
+i: A boost: 97i: 426426
+
+708
+
+i: i: 427i: 
+427
+98i: 
+i: 
+709i: 428428
+
+i: 
+i: i: 99i: 429429
+710
+
+A boost: 
+i: i: 430430
+A get exposure function sample: i: 
+
+
+711i: i: i: 
+431431
+91i: i: 
+
+432712i: i: 
+
+43292i: i: 
+
+A get exposure function sample: 433713i: A boost: 
+
+
+433
+i: i: i: 
+100434714i: 
+434
+
+i: 
+101i: i: i: 
+435435715i: 
+
+
+102i: i: i: 
+716A get exposure function sample: 436436
+i: i: 
+
+
+103i: 
+437437i: i: i: 
+104i: 
+717i: 93
+438i: 
+438
+
+105i: 
+i: i: 
+718i: 94439i: 
+439
+
+106i: 
+A boost: i: 
+440A boost: 719i: 
+
+
+
+440i: A boost: 
+441
+i: 
+441i: 
+442i: 
+442i: 
+443i: 
+443A boost: 
+
+A boost: 
+A get exposure function sample: 
+i: 95
+A get exposure function sample: i: 
+96i: 
+A get exposure function sample: 107i: 
+
+97i: i: 
+720i: 108A get exposure function sample: A get exposure function sample: 
+98i: 
+
+
+
+721i: i: 109i: i: 444
+444i: 
+99
+
+722i: 
+A boost: A boost: A boost: 
+110
+
+
+i: 
+723i: 
+111i: 
+724i: 
+112i: 
+725i: 
+113i: 
+726i: 
+114i: 
+727i: 
+115i: A get exposure function sample: 
+
+728i: A get exposure function sample: A get exposure function sample: i: 
+116i: 
+
+445
+729i: i: 
+100i: 
+445i: A boost: 
+117i: 
+730
+
+101A boost: 
+i: 
+
+i: 118i: 731
+102
+i: 
+i: i: 119732103
+
+i: 
+i: 120i: 733104
+
+
+i: i: i: 734105121
+
+i: 
+i: i: 735A get exposure function sample: 106A get exposure function sample: 122
+
+i: 
+446
+
+i: i: 
+A boost: i: 736123446
+
+i: 
+
+i: i: 447i: 124447
+
+i: i: 737
+125448
+i: i: 
+
+448738i: i: 126449
+
+
+
+i: i: i: i: 449739127450
+
+
+A boost: i: 
+A get exposure function sample: i: 
+128450i: 
+
+
+740A boost: i: i: 
+
+107129i: 
+
+741i: i: 
+130108i: 
+
+742i: i: 
+A get exposure function sample: 109131i: 
+
+
+743i: i: i: 
+451110A get exposure function sample: 132i: 
+
+
+
+744i: i: i: i: 451
+452111133
+A boost: 
+
+
+i: 
+A boost: i: i: 452134
+112
+
+
+A boost: i: 
+i: 135113
+
+i: i: 136114
+
+i: i: 137115
+
+i: i: 138116
+
+i: i: A get exposure function sample: 139117
+
+
+i: i: i: A get exposure function sample: 140118745
+
+A get exposure function sample: 
+
+i: i: i: i: 
+119746453141
+i: 
+453
+
+i: i: i: 
+i: i: 747454120142454
+
+
+
+i: 
+i: i: A boost: 121i: 748455
+
+455
+
+i: 
+A boost: i: 122i: 
+456
+456
+i: i: 
+123457i: 
+
+457i: i: 
+458i: 124
+458
+i: i: 459
+
+i: i: 125A get exposure function sample: 459
+460
+
+i: 
+i: i: A boost: 143A get exposure function sample: 126460
+
+
+A boost: 
+
+i: 
+144i: i: 749
+127
+i: 
+A boost: i: 145
+128
+
+i: i: 146129
+
+i: i: 147130
+
+i: i: A get exposure function sample: 148
+131
+i: i: 
+A get exposure function sample: 461
+149i: 
+i: 
+132i: 461462
+
+i: 
+A get exposure function sample: i: i: 462463
+150i: i: 
+
+
+463133i: i: i: 464151
+
+
+
+750i: A boost: i: i: 
+134i: 
+152464
+751i: 
+
+i: A boost: 
+135i: 153
+
+752
+i: 
+i: 136i: 154
+753
+i: i: 
+137i: 155
+754i: 
+
+138i: A get exposure function sample: i: 
+
+156755i: i: 
+
+465139A get exposure function sample: i: 
+i: 
+
+157i: i: 756i: 
+466140465
+i: 
+
+
+i: 158i: i: i: 757
+467i: 141466
+
+159i: 
+
+A boost: 
+468i: i: i: 
+
+160i: 142467
+
+469
+A boost: i: 
+468i: A boost: 
+
+470i: 
+
+469A boost: 
+
+i: 470
+A boost: 
+A get exposure function sample: 
+i: 758
+i: 759
+i: 760
+i: 761A get exposure function sample: 
+
+i: i: 762471
+A get exposure function sample: 
+i: A get exposure function sample: 
+
+A boost: 763i: A get exposure function sample: i: 
+
+161
+471i: 
+i: 
+764i: 143A boost: 
+162
+
+i: 
+i: 765i: 144
+163
+i: 
+A get exposure function sample: i: 766A boost: 
+145
+
+i: 
+472i: i: 
+767146A boost: 
+
+A boost: i: 
+A get exposure function sample: 
+147
+
+i: i: 472148
+
+A boost: i: 
+149
+i: 150
+i: A get exposure function sample: 151
+
+i: i: 164152
+
+i: i: 165153
+
+A get exposure function sample: i: i: 
+A get exposure function sample: 166
+154i: 
+A get exposure function sample: i: 
+768i: 
+167473i: 
+i: 
+
+155i: 473A boost: 
+i: i: 
+474769
+474i: 
+
+
+156i: i: i: 
+475770475i: 
+
+
+157i: i: i: 
+476771476i: 
+
+
+158i: i: i: 
+A get exposure function sample: 477772477i: 
+
+
+
+159i: A boost: i: A boost: 
+168i: 
+773
+
+160
+i: 
+169i: A boost: 
+774i: 
+170
+
+i: i: 775171
+
+i: i: 776172
+
+i: i: 777173A get exposure function sample: 
+
+
+i: i: A get exposure function sample: i: 778174
+478
+
+i: 
+i: A get exposure function sample: A boost: 478i: 779
+
+
+479i: 
+i: 
+161479i: i: 
+
+780480i: i: 
+
+162480i: i: 
+
+781481i: i: 
+
+163481i: i: 
+
+782482A boost: i: A get exposure function sample: 
+
+
+482
+A boost: i: 
+483i: 
+i: 
+483175i: 
+484
+i: 
+i: 484176i: 
+485
+
+i: i: 485177
+
+i: i: 486486
+
+i: i: 178487i: 
+
+487A get exposure function sample: i: i: 
+
+179488i: i: A get exposure function sample: 
+
+i: i: 488164
+180489
+
+i: 
+
+i: i: 783165i: i: 181490489
+
+A boost: 
+
+
+i: i: 
+i: i: 182490491166
+
+
+
+i: i: i: i: 183491
+
+i: i: 492167184492
+
+i: 
+
+A boost: i: A boost: 493
+493
+
+
+i: i: 494494
+
+i: i: A get exposure function sample: 495495
+
+
+i: i: 784i: 496496
+
+
+i: A boost: i: 497
+497
+
+i: i: 498498
+
+i: i: 499499
+
+A get exposure function sample: A boost: 
+
+A boost: A get exposure function sample: i: 
+
+185i: 
+168A boost: 
+
+i: 169
+i: 170
+A get exposure function sample: i: 
+171
+i: i: 785172
+
+A boost: i: 
+173
+i: 174
+A boost: 
+A get exposure function sample: 
+A get exposure function sample: i: 
+500i: 
+500A boost: 
+
+A boost: 
+A get exposure function sample: 
+i: 186
+i: 187
+i: A get exposure function sample: 188
+
+i: i: 786189
+
+i: i: A get exposure function sample: 787
+190
+i: 
+A get exposure function sample: A get exposure function sample: i: 175i: 
+191
+788
+i: i: 
+i: 
+501176A boost: 501i: 
+
+
+
+789i: i: i: 
+502177502i: 
+
+
+790i: i: i: 
+503178503i: 
+
+
+791i: i: i: 
+504179504i: 
+
+
+792i: i: i: A get exposure function sample: 
+505i: 505180
+
+793
+
+i: i: i: 
+i: i: 192181506506794
+
+
+
+
+i: i: i: i: i: 193182507507795
+
+
+i: 
+
+i: i: 194183i: A boost: 508
+
+508
+
+i: i: 
+i: i: 509195184509
+
+
+
+i: i: i: A boost: 510510
+196
+
+i: 
+i: 511i: 511
+197
+i: 
+i: 512512
+
+i: i: i: A get exposure function sample: 198513513
+
+
+i: i: 
+i: 199514
+i: 796
+i: 514
+A boost: 200
+i: 
+A get exposure function sample: 
+A boost: i: 797
+
+201
+i: i: 185
+798i: 
+
+202A boost: i: 
+
+799i: 
+203i: 
+800i: 
+204i: 
+801i: 
+205i: 
+A get exposure function sample: 802i: 
+A get exposure function sample: 
+206i: i: 
+515
+803i: 
+i: 
+207i: A get exposure function sample: i: 515
+
+516i: 
+804i: 
+208516i: 
+186i: 
+517
+i: i: 
+i: i: 
+805i: 517209187
+
+518i: 
+
+i: i: 
+806i: 210188i: 
+518i: 
+
+519
+807i: i: 
+i: 
+211189i: 519i: 
+
+520
+808i: i: 
+i: i: 
+212190520521i: 
+
+
+
+809i: i: i: A boost: 
+213191521
+A boost: 
+
+
+
+i: A boost: A boost: 214
+
+
+i: 215
+i: 216
+i: 217
+A boost: 
+A get exposure function sample: 
+i: 522
+i: A get exposure function sample: 523A get exposure function sample: 
+
+
+i: i: i: 524810522
+
+A boost: i: 
+
+523i: A get exposure function sample: 
+811i: 
+A get exposure function sample: 
+524i: 
+i: 
+192A boost: i: 812
+
+218
+i: 
+i: 193i: 813
+219
+i: 
+i: 194A get exposure function sample: i: 814
+
+220i: 
+525i: 
+i: 
+195i: 815i: 
+221
+526i: 
+i: 
+A get exposure function sample: 196i: 816A boost: 
+
+i: 222
+
+i: 525
+i: 197
+i: 817
+
+i: 223i: i: 526
+198A boost: 818
+
+A boost: 
+
+i: 
+i: 199819
+
+A get exposure function sample: i: 
+i: 200820i: 
+527
+i: i: 
+201821i: 
+
+i: 528i: 202
+822
+i: 
+i: i: 529203A get exposure function sample: 823
+A get exposure function sample: 
+
+
+i: 
+i: i: i: 527224i: 530204
+
+824
+
+i: i: i: 
+i: 528205225i: 531
+
+
+825
+i: i: i: 
+i: 529206226i: 532
+
+
+
+826i: i: i: i: 
+530i: 533207227
+827
+
+
+i: i: 
+i: i: 208531i: 534228
+
+828i: 
+532
+i: 
+A boost: 
+
+i: 209i: i: 229533
+829i: 
+
+i: 
+210i: 230i: 
+534
+830i: i: 
+
+231211A boost: i: 
+
+
+831i: i: A get exposure function sample: 
+232212
+A boost: 
+
+i: 
+i: i: 535233
+213
+A boost: i: 
+
+i: 234214
+
+i: i: 235A get exposure function sample: 215
+
+i: 
+i: 236535i: 
+
+216A boost: A boost: 
+
+
+i: 217
+A boost: A get exposure function sample: 
+
+i: 832
+A get exposure function sample: i: 
+833i: 
+536i: 
+834i: 
+537i: 
+835A boost: 
+
+i: 836
+i: 837
+i: 838
+A get exposure function sample: i: 
+A get exposure function sample: 839i: 
+
+A get exposure function sample: 536i: A boost: 
+
+237i: 
+i: 
+218537A boost: 
+
+
+i: A boost: 219
+A get exposure function sample: 
+
+i: i: 220538
+
+i: A boost: 221
+
+i: 222
+i: 223
+A boost: 
+A get exposure function sample: 
+i: 840
+i: A get exposure function sample: 841
+
+i: A boost: 238
+
+i: 239A get exposure function sample: 
+
+A boost: A get exposure function sample: i: 
+
+538i: 
+539A boost: 
+
+A boost: A get exposure function sample: 
+
+i: 224
+i: 225
+i: A get exposure function sample: 226
+
+i: i: 842227
+
+i: i: 843228
+
+i: i: A get exposure function sample: 844A get exposure function sample: 229
+
+
+
+i: i: A get exposure function sample: i: i: 240845
+539230
+
+i: i: 
+
+A boost: i: 540846i: 
+241
+
+231
+i: i: i: 
+541242847i: 
+
+i: A boost: 
+232542
+i: 
+
+i: 848233A boost: 
+
+i: 
+i: 849234
+A get exposure function sample: 
+i: 
+i: 850235i: 
+
+540i: i: 851
+236
+i: 
+i: A boost: 541852
+
+
+A get exposure function sample: i: 
+i: 542i: A get exposure function sample: 853
+243
+
+A boost: 
+
+i: i: i: 543244854
+
+
+i: i: i: 544245855
+
+i: i: 
+545246A get exposure function sample: i: 
+
+
+856i: i: 546247
+A get exposure function sample: i: 
+237
+i: 
+i: 
+i: 547i: 857A boost: 248
+543
+
+i: 
+i: 
+858i: 548249i: 
+
+
+544i: i: i: 
+859549250i: 
+
+i: 
+545A boost: 860i: 
+251i: 
+
+A get exposure function sample: 
+546i: 
+i: 
+861i: 252i: 
+238
+547i: 
+i: 
+862i: i: 253
+548239
+i: 
+
+i: 863i: A boost: 254
+A get exposure function sample: 549
+
+i: 
+
+i: 864i: A boost: 550255
+
+
+
+i: i: i: 551865256
+
+
+i: i: i: 552866257
+
+
+i: i: i: 553258A get exposure function sample: 867
+
+i: A boost: 
+
+554
+
+i: i: A get exposure function sample: A boost: 
+
+240868i: 
+
+550i: i: 241
+869
+i: i: 551
+242
+i: i: 870
+i: A get exposure function sample: 
+871A get exposure function sample: 
+
+A boost: 552
+i: A boost: 
+
+i: 555
+i: 259
+553
+i: 
+556i: i: 
+554260i: 
+557
+A boost: 
+
+A boost: A boost: 
+
+A get exposure function sample: 
+A get exposure function sample: i: 
+872
+i: A boost: 243
+
+i: 244A get exposure function sample: 
+A get exposure function sample: 
+A get exposure function sample: i: 
+i: 
+558245i: i: 
+
+555261i: i: 
+
+559246i: i: 556262
+
+i: i: 557
+
+560
+i: i: 
+263A boost: 247A boost: 
+
+i: 
+A get exposure function sample: 
+264
+i: 
+i: 248i: 873
+265
+i: A boost: 
+249i: 
+266
+
+i: i: 250267
+
+i: i: 251268
+
+i: i: 252A get exposure function sample: A get exposure function sample: 269
+
+
+
+i: i: i: i: 253558561270
+A get exposure function sample: 
+
+
+i: 
+i: i: 559i: 254i: 562
+271i: 
+874i: 
+
+560
+255i: i: i: 563272
+
+A boost: 875
+
+i: i: i: 
+
+564273
+256i: i: 
+
+565876A boost: i: 
+
+
+257i: A boost: 
+566
+i: 
+258i: 
+567A boost: 
+
+A boost: 
+A get exposure function sample: 
+i: 561
+i: 562
+i: 563
+i: 564
+i: 565
+A get exposure function sample: i: 
+566
+i: i: 274567
+
+i: A boost: 275
+
+i: 276A get exposure function sample: 
+
+i: A get exposure function sample: i: 277877
+A get exposure function sample: 
+
+i: 
+i: i: 259i: 278568878
+
+
+i: i: 
+i: 279569i: 260
+
+879
+i: A boost: A get exposure function sample: A boost: 
+
+280
+
+i: i: 
+568i: 880
+281
+i: 
+i: 569i: 881
+282A boost: 
+
+
+i: i: 283882
+
+i: i: 284883
+
+A get exposure function sample: i: 
+A get exposure function sample: i: 285i: 
+570i: 
+884
+286i: 
+261i: 
+i: i: 
+571885287i: 
+
+A boost: A boost: A get exposure function sample: 
+
+262
+
+i: i: 
+288i: 570
+
+263i: i: 289
+571
+i: 
+i: 264A boost: 290
+
+
+i: i: 265291
+
+i: A get exposure function sample: i: 
+266i: 292572
+A get exposure function sample: 
+
+i: i: i: 
+293573267i: 
+
+i: 
+886i: A get exposure function sample: i: 
+294i: 
+572268574
+i: 
+
+
+i: 887i: i: i: 295
+573269575
+i: 
+
+
+i: 888i: i: i: 296576
+574270
+
+i: 
+
+i: i: i: 889i: 297271577
+575
+
+
+i: 
+i: i: i: 890i: 298272578
+576
+
+
+i: 
+i: i: i: 891i: 299273579
+577i: 
+
+A boost: 
+
+892A boost: 
+i: i: 
+578
+580i: 
+
+i: i: 893579581
+
+
+i: i: i: 580582894
+
+
+i: i: i: 581895583
+
+
+i: i: A get exposure function sample: A boost: 
+
+582896A get exposure function sample: i: 
+
+
+300i: i: i: 
+274583897i: 
+
+
+A boost: 301i: i: 275
+
+898A boost: 
+
+i: i: 
+A get exposure function sample: 276899
+
+
+i: i: i: 584277
+900
+
+i: i: i: 278901585
+
+i: 
+i: 279i: 902
+586i: 
+
+280i: A get exposure function sample: i: 
+
+A get exposure function sample: 903587i: i: 
+
+
+584281i: A boost: A boost: 
+
+i: i: 302
+
+585282
+
+
+A boost: i: i: 
+586283
+
+i: i: 587284
+
+A boost: i: 
+285
+i: 286
+i: 287
+i: 288
+i: A get exposure function sample: 289
+
+i: i: 904290
+
+A get exposure function sample: i: i: A get exposure function sample: 
+905291
+i: 
+
+A boost: i: i: 588A get exposure function sample: 
+292303
+
+
+
+i: A boost: 589i: i: 
+
+588293i: 
+
+590i: i: 
+589294i: 
+591i: 
+
+590i: i: 
+295592i: 
+
+i: i: 591A get exposure function sample: 296593
+A get exposure function sample: 
+
+
+i: i: 592594
+i: i: 
+
+i: i: 304906297i: 595593
+
+
+i: 
+
+i: i: 907i: i: 596305298
+594
+
+i: 
+i: i: 
+i: 597908299i: 306595
+
+i: i: 
+
+A boost: 
+598i: 
+909i: 
+596i: 
+307
+
+599i: i: i: 597308
+
+
+910i: i: 598309
+
+A boost: 
+i: i: 
+i: 599310911
+
+
+A boost: i: i: 
+912311
+
+A get exposure function sample: i: 
+i: 913i: 312
+300i: 
+
+914i: i: 
+301A boost: 313
+
+A boost: 
+
+A get exposure function sample: i: 
+314
+i: i: 600315A get exposure function sample: 
+
+
+i: i: i: 601316600
+
+
+i: i: 602317
+
+i: i: 601603
+
+i: i: 318i: 602604
+
+
+A get exposure function sample: i: i: i: 
+603605
+319i: i: A get exposure function sample: 
+
+i: 604915
+A boost: 606
+
+i: i: 
+
+i: 605302i: 916
+
+607
+i: A boost: 
+i: 606
+i: 917
+608
+i: i: 
+607A boost: 918
+
+i: 
+608i: A get exposure function sample: 
+919
+A boost: 
+
+i: i: 920320
+
+A boost: i: 
+A get exposure function sample: 321
+
+i: i: 303322
+
+A boost: i: 
+323A get exposure function sample: 
+
+i: i: 324609
+
+i: A boost: 325
+
+i: A get exposure function sample: 326
+
+i: i: 609327
+
+A boost: A boost: 
+
+A get exposure function sample: 
+i: A get exposure function sample: 921
+
+i: i: 304922
+
+i: i: 305923
+
+A get exposure function sample: i: i: 
+306924i: 
+610i: 
+
+A get exposure function sample: 307i: i: A get exposure function sample: 
+
+925i: 611
+i: 
+308i: 
+i: 328610
+926i: 
+612
+i: 
+i: 
+329i: 309i: i: 
+613611
+927i: i: 
+330
+
+310i: 
+614i: i: i: 
+928i: 
+331612
+311i: 
+615
+i: 
+i: 
+i: 929i: 332i: 
+616613
+312A boost: i: 
+333
+
+i: 
+i: 
+i: 614617i: 313
+
+i: 334
+i: i: 615
+
+618314i: i: 335616
+
+
+
+i: i: i: i: 336617
+619315
+A boost: i: A get exposure function sample: 
+
+
+618
+i: i: 
+i: 620316i: 930
+
+619
+i: i: 
+i: 621317i: 931
+
+620
+i: i: 
+i: A get exposure function sample: 622318i: 932
+
+
+621
+i: i: i: 
+i: 337623319i: 933
+
+i: i: 
+622A boost: 
+338i: 624934
+
+
+
+
+i: i: i: i: 623339
+625i: 935
+
+624
+i: i: 
+i: i: 340626936625
+
+
+
+i: i: A boost: i: 341626
+937A get exposure function sample: 
+
+i: A boost: 
+
+342
+i: i: 
+938i: 320
+343
+i: 
+i: 939i: 321
+344
+i: i: 
+940322i: 
+
+i: i: 345941323
+A get exposure function sample: 
+
+i: 
+i: i: 346A get exposure function sample: i: 942324
+
+627
+
+i: i: i: 347
+i: 943627
+
+i: i: 348628i: 325
+
+
+628
+i: i: A boost: i: 
+944i: 326
+629
+629i: 
+
+
+i: i: 945i: 630630
+327
+
+i: i: 
+i: 631946A boost: 631
+
+
+i: 
+i: i: 947632632
+
+
+i: A get exposure function sample: i: i: 633
+948633
+
+i: 
+i: i: 634634349i: 
+
+
+949i: i: 635635
+i: 
+
+A get exposure function sample: i: 350i: i: 
+636
+950i: 636i: 
+
+351
+328i: i: 
+i: i: 
+637951637352i: 
+
+
+A boost: i: 
+329i: 
+638A boost: 
+638
+
+i: 
+i: 330i: 639639
+
+i: A boost: 
+331A boost: 
+
+
+i: 332
+i: 333
+i: 334
+i: 335
+i: 336
+A boost: 
+A get exposure function sample: 
+i: A get exposure function sample: 952
+
+i: i: 353953A get exposure function sample: 
+
+A get exposure function sample: 
+i: i: 
+i: 354640
+i: 954i: 
+i: 640
+A boost: 3550A get exposure function sample: 
+i: 
+
+
+
+A boost: 955i: i: i: 
+
+3561337i: 
+
+i: i: 
+956i: 3572
+338
+
+i: i: i: 
+A get exposure function sample: 358
+3957i: 
+i: 
+641i: 
+339i: i: 
+3594
+A get exposure function sample: 958i: 
+642
+i: 
+
+i: 
+360A boost: 340i: i: i: 
+
+A boost: 
+641959643
+i: 
+
+
+341i: i: i: 
+642960644i: 
+
+
+342i: i: i: 
+643961645i: 
+
+
+343i: i: i: 
+A get exposure function sample: 644962646i: 
+
+
+
+344i: i: i: i: 
+361645963647i: 
+
+
+
+345i: i: i: A boost: 
+362646964
+i: 
+
+
+i: 346i: A boost: 647
+363
+
+i: 
+A boost: 347A boost: 
+
+
+i: 348
+A boost: 
+A get exposure function sample: 
+i: 648
+i: 649
+A boost: 
+A get exposure function sample: 
+i: 965
+i: 966A get exposure function sample: 
+
+i: A get exposure function sample: i: 967
+648
+A get exposure function sample: i: 
+i: 
+364i: 968
+i: 649
+i: 349
+i: A boost: 365
+
+A get exposure function sample: 
+969i: 
+i: 
+366i: i: 350
+970650
+i: 
+
+i: 367i: i: 351
+971651
+i: 
+
+i: 368A boost: A get exposure function sample: i: 
+352
+
+652i: 
+650i: 
+369i: A boost: 
+
+653
+i: i: 
+370651
+
+i: i: 654i: 371
+652
+i: 
+655i: 
+i: 372653A boost: 
+
+
+i: i: 373654
+
+i: i: 374A get exposure function sample: 655
+
+
+i: i: A boost: 972375
+
+
+A get exposure function sample: A get exposure function sample: i: 
+i: 
+973i: i: 376
+3535
+i: A get exposure function sample: 
+
+i: 974
+i: i: 377
+A get exposure function sample: i: 3546
+i: 
+656
+
+i: i: 975i: 
+i: 355378
+656i: i: 7657
+
+i: i: 
+976
+
+356379i: 
+i: i: 
+
+i: i: 357657i: 8658
+380
+
+977
+i: 
+i: i: 
+i: 9659i: 358658i: 
+
+i: i: 381
+
+97810660
+
+i: 
+i: i: 
+i: i: 11i: 359659661979
+382
+
+
+
+i: 
+i: i: i: i: 12i: 360660662980
+383
+
+
+
+i: 
+A boost: i: i: i: 13i: 
+661663981
+384
+
+
+i: 
+i: A boost: i: 14i: 
+662i: 
+982385
+
+15
+i: i: i: 
+386663983A boost: 
+
+
+
+i: A boost: i: A get exposure function sample: 387
+984
+
+
+i: i: 361i: 985
+388
+i: A boost: 
+362
+i: A get exposure function sample: 
+389
+i: 
+i: i: 363664390
+
+A boost: 
+i: 
+A get exposure function sample: i: 665A get exposure function sample: 
+
+391
+i: i: 
+i: 66416i: 666392
+
+
+
+i: i: A get exposure function sample: i: i: 17393667665
+
+
+
+
+i: i: i: A boost: i: 98618394
+
+i: 666A get exposure function sample: 
+
+19
+
+i: i: i: 
+i: 667987395i: 364
+
+
+20
+A boost: i: i: 
+396i: i: 
+A get exposure function sample: 988
+21i: 365
+
+
+397
+i: i: 668i: 
+22
+i: i: 989i: 
+366398
+669i: i: 
+
+i: 
+99023i: 367i: A get exposure function sample: 
+
+399
+670i: 
+i: i: 
+
+i: 368i: 99124A boost: 
+
+400
+668
+i: 
+i: 
+i: i: 25669
+i: 369992
+i: 401
+
+i: i: 26670
+i: 370
+
+i: i: 993
+A boost: i: 27402
+
+371A get exposure function sample: 
+
+i: 
+A boost: i: 
+i: 28671
+403i: 
+
+i: 
+372i: 29672i: 
+
+
+404i: i: i: 
+37330673i: 
+
+i: A boost: 
+
+405A get exposure function sample: 374i: 
+A get exposure function sample: 
+
+674i: 
+i: i: 
+406i: i: 671375
+675994
+
+i: i: i: 
+
+672376407i: i: 
+
+i: A get exposure function sample: 
+
+i: 676995i: 673408
+i: 
+
+i: 377
+i: 31i: 677
+i: i: 674
+996
+409i: 378
+A boost: 
+
+678
+i: i: 
+i: i: 
+410i: 675379997
+679i: 
+
+
+i: 
+411i: i: 380i: 
+680676998
+i: 
+412
+
+i: i: i: 
+i: 677381681A boost: A get exposure function sample: 999
+
+
+i: i: 
+682
+
+i: i: i: 382
+32i: 1000678
+
+683
+
+i: i: 
+i: i: 38333i: 1001679
+
+i: 684
+
+i: i: 384
+i: 34680
+i: 1002
+
+i: i: A get exposure function sample: 685
+i: 385681
+
+i: 35
+
+i: i: A boost: 4131003
+i: 386
+
+
+i: 682
+A boost: i: 36
+i: 
+1004
+i: i: 387
+683i: 37
+
+1005
+i: i: 
+i: 388684i: 38A get exposure function sample: 
+
+1006
+
+i: i: i: 
+i: 39389685i: A get exposure function sample: 686
+
+
+1007
+
+i: i: A boost: 
+i: i: i: 40390
+4141008687
+
+
+
+
+i: i: i: i: i: 415100941391688
+
+
+
+
+i: i: i: i: i: 416689101042392
+A get exposure function sample: 
+
+
+
+i: 
+i: i: i: i: 417i: 690686101143393
+
+i: i: 
+
+
+
+418691
+
+i: i: i: i: i: i: 419692687101244394
+
+
+
+
+
+i: i: i: A boost: i: i: 420693
+
+688
+45395i: i: 
+694
+
+421i: i: 
+i: 
+396689i: 46i: 
+
+695
+422i: i: i: 
+
+i: i: 47397690696
+
+423
+
+i: i: i: i: 
+697i: 48398A get exposure function sample: 691
+424i: 
+
+
+
+
+i: 698i: i: i: i: 692
+49i: 3991013425
+
+
+i: i: 699
+
+i: i: i: 42650
+400i: 1014693
+
+
+700
+
+i: i: A boost: i: 
+i: 1015427
+401i: 694
+
+
+701i: 
+i: i: 
+402i: 1016428i: 
+695
+
+702i: 
+i: i: 
+403i: 1017429i: 
+696
+
+i: 703i: 
+i: 1018
+404i: 430
+i: 
+697i: 
+A get exposure function sample: i: 704
+405i: 
+1019
+i: i: 
+431i: i: 
+698i: 705
+40651
+1020
+i: i: 
+
+i: i: 
+432i: 706A boost: 407699
+1021
+
+
+
+i: i: 
+i: i: i: 4084337071022700
+
+
+
+
+i: i: i: 434i: i: 409708
+1023701
+
+i: i: 
+
+i: A get exposure function sample: 410435i: i: 709702
+
+
+1024
+
+i: i: i: 
+i: i: 52411436i: 710703
+
+
+1025
+
+i: i: i: 
+i: i: i: 534124377111026704
+
+
+A boost: i: 
+
+
+i: i: 
+438i: i: 54705
+7121027
+
+i: 
+
+i: i: i: i: 439713102855706
+
+
+i: 
+
+i: i: 56440
+707i: i: 
+i: 
+7141029i: 57441i: 
+
+
+A get exposure function sample: 
+708i: i: i: 
+i: 
+442715103058i: i: 
+
+
+
+413709i: i: i: i: 
+
+443716103159A boost: i: 
+
+
+
+
+710A boost: i: i: i: 
+60
+7171032i: 
+
+
+711A boost: 
+i: i: i: 
+7187121033
+
+
+i: i: i: 7197131034
+
+
+A boost: i: i: A get exposure function sample: 
+7141035
+
+
+A get exposure function sample: i: i: i: 
+4147151036i: 
+444A get exposure function sample: 
+
+i: 
+
+i: i: 415A boost: i: 7161037
+
+61
+
+i: i: 
+i: i: 4161038A get exposure function sample: 71762
+
+i: 
+
+
+i: A boost: 417i: i: 1039
+
+720718
+i: A get exposure function sample: 
+
+i: i: 418
+i: 1040719
+i: i: 721
+
+445419
+i: i: A boost: 722
+
+
+
+A boost: 1041i: i: 
+
+723420
+i: i: A get exposure function sample: 
+1042i: 724
+
+421
+i: i: 63A boost: 
+725i: 
+
+
+422i: i: 72664A get exposure function sample: 
+
+
+i: 
+i: i: 72765i: 423
+A get exposure function sample: 
+720i: 
+i: 
+
+66i: i: 728i: 
+
+721424446i: 
+i: 
+
+i: 729i: 67i: 722
+447A get exposure function sample: 
+425
+i: i: 
+
+A boost: 
+730i: 723i: i: 
+
+426
+4481043i: 
+i: 
+724i: 
+731i: 
+449i: 
+427i: 
+7251044i: 
+i: i: 
+
+732i: 450428i: 
+7261045
+
+i: 
+
+A boost: i: A get exposure function sample: i: 733i: 
+1046
+429
+727
+i: 
+i: 
+i: 68i: 734i: 1047
+430
+728i: 
+i: 
+
+i: 735i: 69i: 
+729A get exposure function sample: 431
+1048i: 
+70
+
+i: 
+i: 
+i: i: i: 736i: 73045171432
+1049i: 
+
+
+i: 
+
+i: 737i: 
+i: i: 72738452i: 433731
+
+
+i: i: 
+1050
+A boost: i: 732739
+A boost: 
+
+434
+i: i: 733
+i: 
+740
+1051i: i: 
+
+734435i: i: 
+
+7411052i: i: 
+
+735436i: i: 
+
+7421053i: i: 
+
+736A get exposure function sample: 437i: A get exposure function sample: i: 
+
+
+743i: 
+1054i: i: 
+438i: 
+73773i: 
+453A boost: 
+
+744i: i: 
+
+i: 
+73874439i: A boost: 
+
+
+454
+i: i: i: 
+73975
+440i: 
+455i: i: 
+
+76i: 
+456740i: i: 
+77
+441i: 
+457i: 
+A boost: i: 
+A get exposure function sample: 741
+442i: 
+
+A get exposure function sample: 
+458i: i: i: 1055
+
+443742
+i: i: i: 
+
+7451056459A boost: i: 
+
+
+
+743i: i: i: 
+A get exposure function sample: 7461057460i: 
+744
+
+
+A boost: i: 
+i: i: 78747
+
+
+1058A boost: i: i: 
+748
+79i: 
+
+1059A boost: i: 
+
+A get exposure function sample: 80i: 
+
+1060i: i: 44481
+
+
+A boost: i: 
+A get exposure function sample: 82
+
+i: i: 46183
+
+i: i: 46284
+A get exposure function sample: 
+
+i: i: 463i: 85
+745
+
+i: i: i: 86746
+
+464A get exposure function sample: A boost: 
+i: 
+
+A get exposure function sample: i: 747A boost: 
+749
+
+i: 
+445i: A boost: 
+748
+A boost: 
+
+A boost: 
+A get exposure function sample: 
+i: 87
+i: 88
+i: A get exposure function sample: A get exposure function sample: 89
+
+
+i: A get exposure function sample: i: i: 750
+465A get exposure function sample: 90
+i: 
+
+
+i: 749751
+i: A boost: i: A boost: 
+
+466
+446i: 
+
+i: 752i: 467
+
+i: i: 447753468
+
+
+i: i: i: 448754469
+
+
+i: i: i: 755A get exposure function sample: 470449
+
+i: 
+A get exposure function sample: 
+i: i: 756A boost: 
+750450
+
+i: 
+
+i: i: 75191A boost: 757
+
+
+
+i: A boost: i: 752
+92
+
+i: A boost: 753
+
+i: 754
+i: 755
+i: 756
+i: 757
+A boost: A get exposure function sample: 
+
+i: 471
+A get exposure function sample: A boost: 
+
+i: 451
+i: 452
+A get exposure function sample: A get exposure function sample: A boost: 
+
+
+i: i: 75893
+
+i: i: 75994
+
+i: A boost: 760A get exposure function sample: 
+
+
+i: 761i: 
+758A get exposure function sample: i: 
+762
+i: 
+759i: i: 
+763472
+
+i: i: 760A boost: 764
+
+i: 
+761i: 
+765A get exposure function sample: i: 
+762i: 
+
+766i: i: 
+453763i: 
+767A get exposure function sample: 
+i: i: 
+
+454764A boost: 
+
+i: 
+i: i: A get exposure function sample: 95
+765455
+i: 
+
+i: 473i: i: 96
+
+766i: 456i: 
+474i: 97
+
+767i: 
+i: 
+A get exposure function sample: 475
+i: 457A boost: 
+
+i: 98768
+i: 
+476i: 
+i: 
+99i: 458i: 
+477769
+A boost: 
+
+A boost: i: 
+i: 
+459770
+
+i: i: 460771
+A get exposure function sample: 
+
+i: A boost: i: 772
+768
+
+i: i: 773769
+
+i: i: 774770
+
+i: i: 775771
+
+i: i: 776772
+
+A get exposure function sample: A get exposure function sample: i: i: 
+
+777773i: 
+i: 
+478100i: 
+i: 
+774i: 778101A get exposure function sample: i: 
+
+
+
+479i: 
+i: i: i: i: 775779480102461
+
+
+i: 
+
+i: i: 780481i: i: 776
+
+
+103462i: i: 781777
+
+i: i: 
+
+i: 482778
+
+i: i: 782i: i: 104463
+483779
+
+A boost: i: 
+
+i: i: 
+464i: 105484780
+
+
+
+i: i: A boost: i: 485106781
+
+
+
+i: A boost: i: 486
+782
+
+i: A boost: 487
+
+i: 488
+i: A get exposure function sample: 489
+
+i: i: 490783
+
+i: A boost: 491
+
+i: 492
+i: 493
+i: 494
+A get exposure function sample: i: 
+495i: 
+A get exposure function sample: 465i: 
+
+496A get exposure function sample: i: i: 107
+
+
+466i: i: 497108i: 
+
+i: i: 
+498783A get exposure function sample: 467i: 
+
+i: 
+
+109A boost: 
+499i: i: 
+i: 
+110784468A boost: 
+
+
+
+i: i: A boost: 111469
+
+
+i: i: 112470
+
+i: A boost: 113
+
+i: 114
+i: 115
+i: 116A get exposure function sample: 
+
+i: i: 117784
+
+i: A boost: 118
+
+A get exposure function sample: i: 
+119A get exposure function sample: i: 
+
+785i: i: 
+500120A boost: 
+
+
+A get exposure function sample: A boost: i: 
+
+121i: 
+471i: 
+122A boost: 
+
+i: 123A get exposure function sample: 
+
+i: i: 124785
+
+i: A boost: 125
+
+i: 126
+i: 127
+A get exposure function sample: i: 
+128i: 
+786i: 
+129i: A get exposure function sample: A get exposure function sample: 
+787i: 
+
+
+130A get exposure function sample: i: i: i: 472
+
+501788
+i: 
+i: 
+A boost: 131i: 786i: 
+
+502
+789i: 
+132i: 
+787i: 
+503i: 
+790i: 
+i: 
+133i: 788i: 
+504
+791i: 
+134i: 
+789i: 
+i: 
+505i: 792135
+i: 
+
+i: i: A get exposure function sample: 790i: 506793
+
+136
+
+i: i: 473
+i: i: 791
+i: 507794
+
+
+i: 137i: 
+i: i: 795138i: 474508
+
+
+i: i: 792
+A boost: i: 509139
+
+i: 
+475
+i: 510
+i: 793
+i: 140
+i: 476
+i: 511
+i: i: 794
+141i: 477
+
+i: 512
+i: 795
+A boost: i: 142513
+
+A boost: A boost: 
+A get exposure function sample: 
+
+i: 
+514
+
+i: A boost: 796
+
+i: 797
+i: 798
+i: 799
+i: 800
+i: 801
+i: 802
+A get exposure function sample: i: 
+803i: 
+478i: 
+804i: 
+479A get exposure function sample: i: 
+A get exposure function sample: 
+805i: 
+796i: 
+i: A get exposure function sample: 
+480i: 515
+i: 
+806
+i: 797i: 
+i: 143516
+
+i: i: 481i: 
+144798
+807i: i: 
+
+
+482517i: i: i: 
+
+145799808i: i: 
+
+i: i: 
+483i: 518146800
+809i: 
+
+
+
+i: A boost: 484i: i: 801
+
+519147
+i: 
+
+i: 485i: i: 802
+520i: 148
+
+i: 486
+i: 803
+i: 521
+i: 149
+i: 487
+A boost: 804
+i: A get exposure function sample: 
+
+i: 150
+i: 488
+i: 805
+i: 810
+
+i: i: i: 151806811489
+
+
+
+i: i: 152807i: i: 
+
+812490i: i: 153808
+
+A get exposure function sample: 
+
+i: i: i: 
+i: 154809813491i: 
+
+i: 
+
+522i: A boost: 155i: 
+492
+
+814i: i: 
+
+156523i: i: 
+815
+493i: 
+157i: 
+i: i: 
+524816494i: 
+158
+
+A boost: 
+
+i: i: i: A get exposure function sample: 817495159
+
+
+
+i: i: 496i: i: 160818
+810
+
+A boost: i: i: 
+
+819497i: 
+811i: 
+
+820i: i: 
+498812i: 
+
+i: A get exposure function sample: 821
+i: 499
+i: 813
+i: A boost: 525
+
+822i: 
+i: 
+814526
+i: 
+823i: A get exposure function sample: A boost: 
+815
+
+i: 
+824i: i: 
+816161i: 
+825
+i: 
+817i: i: 162
+826
+i: 
+818i: 
+i: 163827i: 
+
+819i: A boost: 828
+
+
+i: i: 820829
+
+A get exposure function sample: i: A get exposure function sample: i: 
+830821
+i: 
+
+i: i: i: 527831
+
+822A boost: 500i: 
+
+
+528i: A get exposure function sample: A boost: 
+823
+
+i: 
+i: i: 529824164
+
+
+i: i: i: 530825165
+
+
+i: i: i: 531166826
+
+
+i: i: i: 532827167
+
+
+i: i: A boost: 828533
+A get exposure function sample: 
+
+
+i: i: A get exposure function sample: i: 829832534
+
+
+
+i: i: i: A boost: 501830833
+
+
+
+i: i: i: 831834502
+
+
+i: i: A boost: 835
+503
+
+A get exposure function sample: i: 
+i: 836i: 504
+168
+i: 
+837i: i: 
+169i: 505A get exposure function sample: 
+
+i: 838
+i: 170535
+i: 
+
+i: A boost: 506i: A get exposure function sample: 839
+
+
+171i: 
+i: 
+507A boost: 832i: 
+
+
+172i: i: 
+833508i: 
+173i: 
+
+834i: i: 
+174509i: 
+835A boost: 
+
+
+i: i: A get exposure function sample: 510836
+
+
+i: i: i: 511A get exposure function sample: 536
+837
+
+i: 
+i: i: 840537
+i: i: 512
+838A boost: 841
+
+
+
+i: i: A boost: 839513
+
+
+A get exposure function sample: A boost: 
+i: 
+i: 514175
+
+A boost: i: 
+176
+i: 177
+i: 178
+i: 179
+i: 180
+i: 181
+i: 182
+A get exposure function sample: i: 
+183
+A get exposure function sample: i: 
+i: 538184i: 
+
+A boost: A get exposure function sample: 840A boost: 
+
+A get exposure function sample: 
+
+i: 
+i: 841i: 515
+842A boost: 
+
+i: 
+i: 516843
+
+i: i: 517844
+
+i: i: 518845
+
+i: i: 519846
+
+i: i: 520847A get exposure function sample: 
+
+
+i: i: i: 848A get exposure function sample: 521539
+
+
+
+A get exposure function sample: i: A boost: i: A boost: 
+849
+185
+i: 
+
+i: 842850
+A boost: 
+i: 
+i: 843851
+
+i: i: 844852
+
+i: i: 845853
+
+i: i: 846854
+
+i: i: 847855
+
+i: i: 848856
+
+i: 849i: 
+857i: 
+850i: A get exposure function sample: A get exposure function sample: 
+858
+
+i: 
+851A get exposure function sample: i: i: i: 
+
+522540859i: i: 
+
+
+852186i: i: i: 
+
+i: 523541860
+
+i: 853
+i: i: 187861
+i: i: 542
+
+i: i: 524854
+
+188862
+A boost: i: 
+855i: 
+A boost: 
+
+189i: 
+i: 
+856863i: 
+190
+i: 
+i: 857864
+i: i: 
+191858i: 
+865
+A boost: i: 
+859
+i: 
+866i: 
+860i: 
+867i: 
+861i: 
+868i: 
+862i: A get exposure function sample: 
+
+869i: 
+i: 863543
+i: A get exposure function sample: 
+i: 870
+i: 864
+i: i: 544
+525871
+i: 
+
+i: 865i: A boost: 545
+526
+
+i: A get exposure function sample: 
+
+A boost: i: 866546i: 
+
+
+192i: i: 
+867547
+i: 
+i: 193868i: 
+548
+i: 
+i: 194869
+i: 
+i: 549i: 195
+870A get exposure function sample: 
+A boost: 
+
+i: 
+196i: i: 871
+A get exposure function sample: 872
+i: A boost: 197
+
+
+
+i: A boost: i: 527
+
+198i: 
+528i: 
+199i: 
+529i: 
+200i: 
+530i: A get exposure function sample: 
+201i: 
+
+531i: i: 
+550i: 202
+
+i: 532i: 551203A get exposure function sample: 
+
+A get exposure function sample: 
+
+
+i: i: i: 552i: i: 533204
+873872
+
+i: i: i: 
+
+A boost: 534205553
+A boost: 
+
+
+A boost: i: 
+206i: 
+
+554i: 
+207A boost: 
+
+i: 208
+i: 209
+i: 210
+i: 211
+i: 212A get exposure function sample: 
+
+i: i: 213874
+
+i: i: 214875
+
+i: i: A get exposure function sample: A get exposure function sample: 215876
+
+
+
+i: A boost: i: i: 216A get exposure function sample: 
+535873
+
+
+A boost: 
+i: i: 
+A boost: 217555
+
+
+A boost: i: 
+556
+i: 557
+A boost: 
+A get exposure function sample: 
+i: 874
+i: 875
+A get exposure function sample: i: A get exposure function sample: 
+876
+i: 
+i: A boost: 877
+
+A get exposure function sample: 536i: 
+
+A get exposure function sample: 878i: i: 
+
+218537i: i: 
+
+558A boost: 879i: 
+
+
+219i: i: 559880
+
+
+i: i: 220i: 560
+A get exposure function sample: 881
+
+
+i: i: i: A boost: 221877882
+
+
+
+i: i: i: 878883
+222
+i: 
+879i: 
+884i: i: 
+880223
+i: 
+i: 885881A boost: 
+
+
+i: A boost: A get exposure function sample: 882
+
+
+i: i: 538883
+
+A boost: i: 
+884
+i: 885
+A boost: 
+A get exposure function sample: 
+i: 561
+A get exposure function sample: i: 
+562i: 
+224i: 
+563A get exposure function sample: i: 
+225
+
+i: i: i: 564886226A get exposure function sample: 
+
+
+
+i: i: 565i: i: 887539
+227
+
+i: 
+i: A get exposure function sample: A boost: 566i: 
+888i: 
+567
+
+228i: 
+
+i: 889i: A boost: 886
+
+229
+i: i: 
+890887i: 
+
+230i: i: 891
+888
+
+i: i: i: 892889
+231
+i: 
+i: 893890
+
+i: i: i: 894232891
+
+
+i: i: 895A get exposure function sample: i: 892
+
+233
+i: i: 
+i: 896A get exposure function sample: 540i: 893
+
+
+234
+i: i: i: 
+i: 897568541i: 894
+
+
+235
+i: i: i: 
+i: 898895
+
+569542i: i: i: 
+
+A boost: 236899896A boost: 
+
+
+
+
+A boost: i: i: 900
+
+897i: 
+901i: 
+898i: 
+902i: 
+899i: 
+903i: 
+900A boost: 
+
+i: 901
+i: 902
+i: 903
+A boost: A get exposure function sample: 
+
+i: A get exposure function sample: 570
+
+i: i: 543571
+
+A get exposure function sample: A boost: i: 
+
+544i: 
+237i: A get exposure function sample: 
+
+545A boost: i: 
+
+i: 904546
+
+i: i: A get exposure function sample: 905
+547
+i: 
+A boost: i: 904
+
+548i: 
+A get exposure function sample: 905i: 
+
+549i: A boost: 
+572A boost: 
+
+
+A get exposure function sample: i: 
+573
+i: i: 238574
+
+i: i: 239575
+
+A boost: i: 
+576
+i: 577
+i: 578
+A get exposure function sample: i: 
+579
+i: i: 906580
+
+i: A get exposure function sample: i: 907
+581
+
+i: i: i: 908582
+906i: A get exposure function sample: 
+
+909i: 
+
+i: 907i: 
+910A get exposure function sample: i: 583i: 
+908
+550
+i: 
+911i: 
+A boost: i: 
+909240i: 
+i: 
+912
+551i: 
+910i: 
+i: i: 
+241913552i: 
+911
+
+i: i: 
+i: 914242i: 553
+
+912A boost: 
+A boost: 
+
+i: 
+i: 554913
+
+A boost: i: 
+914
+A get exposure function sample: A boost: 
+
+i: 584
+i: 585
+i: 586
+i: 587
+A boost: 
+A get exposure function sample: 
+i: 915
+i: 916A get exposure function sample: 
+
+A get exposure function sample: i: A get exposure function sample: i: 
+243917
+i: 
+
+i: 915555i: i: 244918
+
+
+
+i: i: i: i: 245A get exposure function sample: 919
+
+916556
+i: i: 588
+
+i: i: 920
+i: 246557
+i: 917
+
+A boost: A boost: 589
+
+i: i: 247590
+
+i: 
+918
+
+i: i: i: 591248919
+
+
+i: i: 592i: 249920
+
+
+i: A boost: i: 250
+593
+
+i: i: 251594
+
+i: i: 252595
+
+i: i: 253596
+A get exposure function sample: 
+i: i: 
+254597i: 
+
+i: 558i: 255
+598A get exposure function sample: 
+i: 
+
+i: i: 559A get exposure function sample: i: 599921256
+
+
+
+A boost: 
+i: i: i: i: 921922
+
+560257
+
+i: 
+i: i: 922A boost: 923258
+
+
+
+i: A boost: 924i: 
+923
+
+i: i: 925924
+
+i: i: 926925
+
+i: i: 927926
+
+i: i: 928927
+
+i: i: 929A get exposure function sample: 928
+
+
+i: A boost: i: 
+600929
+
+i: A boost: 601
+
+i: 602
+i: 603
+i: 604
+i: 605
+i: A get exposure function sample: 606A get exposure function sample: 
+
+
+i: i: i: 607259561
+
+A get exposure function sample: 
+i: i: 
+i: 608260i: 562
+
+930
+A boost: i: A boost: 
+
+A get exposure function sample: 563
+i: 
+
+931i: i: 
+930i: 564
+932
+i: 
+i: 931i: 
+933i: 565
+932i: 
+
+i: 934i: 
+933i: 566
+A get exposure function sample: 935
+A get exposure function sample: i: 
+i: 
+
+i: 261i: 934i: 936
+567
+609
+i: 
+i: 
+i: 262A boost: 935A boost: 
+
+937
+
+i: 
+936i: i: 263938
+
+
+i: i: i: 937939
+
+264i: 
+i: 938i: 940
+265i: 
+
+939i: 
+266i: 
+941i: 
+940i: i: 267
+942
+i: 
+941i: A get exposure function sample: i: 
+268i: 
+942
+943A get exposure function sample: i: 
+i: i: 610
+
+269943
+i: i: 
+
+i: i: 944568i: 611944
+
+270
+
+i: i: i: 
+i: 945945569i: 612
+
+
+271
+i: i: A boost: 
+i: 946613
+946
+i: 
+i: 
+272i: 947614
+i: i: 947
+
+948
+i: i: 
+i: 273615i: 948949
+
+
+
+A boost: i: i: 616i: 
+950949
+
+
+i: i: i: 950951617
+
+
+A boost: i: A get exposure function sample: i: 
+618951
+
+
+i: i: 570A boost: 619
+
+
+i: i: 571620
+
+A boost: i: 
+621
+i: 622
+i: A get exposure function sample: 623
+
+i: i: 274624
+
+i: i: 275625
+
+A get exposure function sample: i: i: 276
+626
+i: 
+i: 952A boost: 277
+
+A get exposure function sample: 
+i: 
+i: 278953A get exposure function sample: i: 
+
+
+952i: i: i: 
+572279954
+
+i: 
+i: i: i: 953955280573
+
+i: i: 
+
+954956i: i: 
+
+i: 281574i: 955957
+
+i: i: 
+A get exposure function sample: 
+956282i: 
+i: 
+958
+575i: i: 
+i: 
+627957i: 
+959283i: 
+i: 
+
+576i: 958i: i: 
+628
+960284i: 
+i: 
+
+i: 577i: 959i: 961
+629
+
+285i: 
+i: i: 
+960630i: 578i: 
+
+962
+286i: i: 961631
+i: 
+
+
+i: i: 579i: i: 287962963
+632
+
+
+i: 
+i: i: 288963i: 580i: 
+
+964
+633i: i: i: 
+
+A boost: i: 581289964
+
+634
+
+i: A boost: 
+i: i: 582
+290635
+
+
+i: i: i: 291636583
+
+
+i: A boost: i: 292637
+
+
+i: i: 293A get exposure function sample: 638
+
+
+i: i: i: 965294639
+
+
+i: i: A boost: 966295A get exposure function sample: 
+
+
+
+i: i: i: 967296965
+
+
+i: i: 968297i: 
+966
+i: 
+969i: i: 298967
+
+
+i: i: i: 970A get exposure function sample: 299968
+
+A boost: i: 
+
+
+969i: 
+i: A get exposure function sample: 971i: 584
+
+970A boost: 
+i: 
+
+i: 640i: 
+585971A boost: 
+
+
+A boost: i: 
+586
+i: 587
+A boost: 
+A get exposure function sample: 
+i: 300
+i: 301
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+i: i: 641972
+
+i: i: 642A get exposure function sample: 973
+
+A get exposure function sample: 
+i: i: 
+i: 643974
+972i: 
+588i: 
+644i: 
+A get exposure function sample: i: 
+975i: 
+973i: 
+645
+589i: i: 
+i: 
+302974i: 
+976i: 
+646i: 
+590A boost: 
+975i: i: 
+
+i: 
+647977591i: 
+976
+
+A boost: 
+
+i: i: i: 978977592
+
+
+i: i: i: 979978593
+
+
+i: i: A get exposure function sample: i: 979594
+980
+
+i: i: 
+i: 303595i: 980
+
+981A get exposure function sample: 
+
+A boost: i: 
+i: i: 
+648596i: 981982
+
+
+i: 
+i: i: 597i: 649983982
+
+i: 
+
+A boost: i: 598i: 
+984983
+
+
+i: i: i: 985984599
+
+A get exposure function sample: 
+A boost: A boost: i: 
+
+
+985i: 
+304A boost: 
+
+i: 305
+i: 306
+i: 307
+i: 308
+i: 309
+i: A get exposure function sample: 310
+
+i: i: 650311
+
+i: i: 651312
+A get exposure function sample: 
+
+i: i: A get exposure function sample: 313i: A get exposure function sample: 652
+
+986i: 
+
+i: 
+314i: i: 600i: 
+986i: 653
+987
+315
+i: 
+i: 
+987i: 601i: i: 
+654
+988316i: 
+988
+i: 
+i: 
+i: i: 602i: 317655989
+989i: 
+
+
+A boost: 
+603i: i: 
+i: 
+318i: 990990
+604
+
+i: 
+i: i: i: 319991605991
+
+
+
+i: A boost: i: 
+992i: 606
+992
+i: 
+i: A get exposure function sample: 993
+i: 607
+i: 993
+A boost: i: 656
+
+
+608A boost: i: 
+
+657A boost: 
+
+i: 658
+i: 659
+A get exposure function sample: i: 
+660
+i: i: 320661
+
+i: i: 321662
+
+i: i: 322663
+
+i: A boost: 323
+
+A get exposure function sample: i: A get exposure function sample: 
+324
+i: 
+i: 994i: 994325A get exposure function sample: 
+
+
+i: i: 
+i: 995326i: 995609
+
+
+
+i: i: i: 327A boost: 996996
+
+
+
+A boost: A get exposure function sample: i: i: 
+
+997997i: 
+
+664i: i: 
+998998
+i: 
+665i: i: 999
+999
+
+i: i: i: 10001000
+
+666i: i: 1001
+
+1001i: 
+i: 667i: 1002A get exposure function sample: 
+1002
+
+A boost: 
+i: A get exposure function sample: i: 
+i: 1003
+6101003
+
+i: 
+i: i: 3281004i: 1004
+
+
+611i: i: 3291005i: 
+
+
+i: 1005i: i: A get exposure function sample: 330
+6121006
+
+
+i: i: i: 
+i: 10073311006i: 668
+
+i: i: 
+613
+1008332i: 
+i: 
+
+1007i: 669i: i: 1009
+614
+333
+i: 
+i: i: 
+i: 1008670615i: 1010
+
+
+334i: 
+i: A boost: 1009
+616i: 
+
+i: 
+1011i: 3351010i: 
+
+
+i: i: 617i: 3361011
+1012i: 
+
+
+618A boost: i: 
+1012A boost: 
+
+
+i: A boost: 619
+
+i: 620
+i: 621
+i: A get exposure function sample: 622
+
+i: i: 671623
+
+i: i: 672624
+
+i: i: 673625A get exposure function sample: 
+
+
+i: i: A get exposure function sample: i: 
+674626A get exposure function sample: 337
+i: 
+
+
+A boost: i: i: 3381013i: 
+1013
+
+675
+i: i: 339
+i: 1014
+i: 1014
+i: 676
+
+i: 340i: i: 1015
+1015677
+i: 
+
+i: i: 1016341i: 678
+
+1016
+i: i: 
+i: 1017342i: 679
+
+1017
+i: i: 
+i: 1018343A get exposure function sample: i: 680
+
+i: i: 
+1018
+
+1019i: 344i: i: 627
+1019
+681
+i: 
+i: 
+i: 1020i: 3451020i: 628
+
+
+i: 682
+i: i: 3461021
+i: 1021
+
+i: 629
+i: i: 683
+i: 3471022
+i: 1022
+
+i: i: i: 630
+3481023684
+i: i: 
+
+
+i: 1023631A boost: i: 
+6851024
+
+
+
+i: i: A boost: i: 
+10251024632
+
+i: 
+i: 10261025i: 
+
+633i: i: 1027
+1026
+i: 
+634i: i: 1028
+1027
+i: 
+i: i: 635A get exposure function sample: 1029A get exposure function sample: 1028
+
+
+
+i: 
+i: i: i: 1030349i: 636686
+
+
+1029i: 
+i: i: 
+350i: 1031687
+i: i: 
+637
+10301032i: 
+i: 
+
+351i: 688i: i: 10311033
+
+638
+
+i: i: 
+i: i: 1032352i: 6891034
+
+639
+
+i: i: 10331035A boost: 
+i: A boost: 
+
+
+690
+i: i: 1034
+1036
+i: 
+691i: i: 10351037
+
+
+i: i: 10361038i: 
+
+692i: i: 1037
+1039
+
+i: i: i: 10386931040
+
+
+i: i: 1039i: 694
+1041
+i: 
+1040i: A get exposure function sample: i: A get exposure function sample: 
+
+1042
+695i: i: 
+i: 
+1041353A boost: 640i: 
+696
+
+i: 
+i: 
+354A boost: 1042i: 
+
+A boost: i: 
+697
+355
+
+i: i: 698356
+
+i: i: 699357
+
+i: i: 700358
+
+i: i: 701359
+
+i: i: 702360
+
+i: A boost: 703
+
+i: 704
+A get exposure function sample: A get exposure function sample: i: 
+
+A get exposure function sample: 705
+i: i: 
+i: 6411043i: 1043
+
+706i: 
+i: i: 
+1044i: 
+7071044642i: 
+1045
+
+i: i: A get exposure function sample: 
+i: i: 708643
+10451046
+
+
+i: i: i: 
+i: 6441046361
+i: i: 709
+
+1047i: 
+3621047
+i: i: 
+
+i: i: 7106451048i: 
+1048
+
+363i: 
+1049i: i: 
+i: 
+711646A boost: 1049
+
+i: 
+
+i: i: 1050i: 1050647
+712
+
+i: A boost: 
+i: 1051
+i: 1051
+
+713i: i: 1052
+1052
+
+i: i: 714i: 1053
+1053
+
+i: i: 715i: 10541054
+
+
+i: A boost: A boost: 
+
+A get exposure function sample: 716
+
+i: i: 364717
+
+i: i: 365718
+
+i: i: A get exposure function sample: 366719
+
+
+i: A boost: i: 367648
+
+
+i: i: 368649
+
+i: A boost: 369
+
+A get exposure function sample: i: 
+370
+i: i: 1055371
+
+i: i: 1056372
+A get exposure function sample: 
+
+i: i: i: 10573731055
+
+
+i: i: i: 10581056374
+
+
+A get exposure function sample: i: i: 10591057i: 
+
+
+375i: i: i: 
+10601058720i: 
+A get exposure function sample: 
+
+376
+i: i: 1059721
+i: 
+650
+i: i: 
+i: 3771060i: 722
+
+
+651i: i: 378
+723i: 
+
+i: i: 652379724
+
+i: i: 
+653380i: 
+
+i: 725i: 654
+381
+i: i: 
+655726i: 
+
+A boost: 382i: 
+
+727i: 
+383i: 
+728i: 
+384i: 
+729i: 
+385i: 
+730i: 
+386i: 
+731i: 
+387i: 
+732i: 
+388i: 
+733i: 
+389i: 
+734i: 
+390A get exposure function sample: i: 
+
+735i: i: 
+391i: 656
+736
+i: 
+i: i: 392657737
+
+
+i: i: i: 658393738
+
+
+i: i: i: 394659739
+
+
+i: i: i: 395740660
+
+
+i: i: 396i: 741
+661
+i: i: 
+397i: 742
+662
+i: i: 
+398743i: 
+
+663i: i: 
+399A boost: 744
+
+
+i: A boost: 400
+
+i: 401
+i: 402
+i: 403
+i: 404
+i: 405
+i: 406
+i: 407
+i: 408
+i: 409A get exposure function sample: 
+
+i: i: 410664A get exposure function sample: 
+
+
+i: i: i: 411665745
+
+
+i: i: i: 412746666
+
+
+A boost: i: i: 
+667747
+
+A boost: i: 
+748
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+i: i: 668413
+
+i: A boost: 669
+
+i: A get exposure function sample: 670
+
+i: A boost: 749
+
+A boost: 
+A get exposure function sample: 
+i: 414
+i: 415A get exposure function sample: 
+
+i: i: 416750
+A get exposure function sample: 
+i: i: 
+417751i: 
+671
+i: 
+i: 418i: 752
+672
+i: 
+i: 419i: 753
+673
+i: i: 
+420754
+i: 
+i: i: 674421755
+
+i: 
+i: 675i: 422756
+
+
+i: i: i: 423676757
+
+
+i: i: A boost: 424677
+
+
+i: i: 425678
+
+i: i: 426679
+
+i: i: 427680
+
+i: i: 428681
+
+i: i: 429682
+
+i: i: 430683
+
+A get exposure function sample: i: i: 
+431684i: 
+758i: 
+
+432i: i: 
+759i: 685
+433i: 
+760
+A boost: 
+i: 
+i: 434761
+
+i: i: 435762
+
+i: i: 436763
+
+i: i: 437764
+
+i: i: 438765
+
+i: i: 439766
+
+i: i: 440767
+
+i: A boost: 441
+
+i: A get exposure function sample: 442
+
+i: i: 686443
+
+i: A boost: 687
+
+i: 688
+i: 689
+i: 690
+i: 691
+i: 692
+i: 693
+i: 694A get exposure function sample: 
+
+i: i: 695768
+
+i: i: 696769
+
+i: i: A get exposure function sample: 697770
+
+
+i: i: i: 444698771
+
+A boost: i: 
+
+699i: 
+772i: 
+700i: 
+773i: 
+701i: 
+774i: 
+702i: 
+775i: 
+703i: 
+776i: 
+704i: 
+777A get exposure function sample: i: 
+
+705i: i: 
+778445i: 
+
+706i: A boost: 
+779i: 
+
+707i: 
+780i: 
+708i: 
+781i: 
+709i: 
+782i: 
+710A boost: 
+
+i: 711
+i: 712
+i: 713
+i: 714
+i: 715
+i: 716
+i: 717
+i: A get exposure function sample: 718
+
+i: i: 446719
+
+i: A boost: 447
+
+i: 448
+i: 449A get exposure function sample: 
+
+i: 450i: 
+783A boost: 
+
+A boost: 
+A get exposure function sample: 
+i: A get exposure function sample: 720
+
+i: i: 451721
+
+i: i: A get exposure function sample: 452722
+
+
+i: A boost: 784i: 
+
+723A boost: 
+
+i: 724
+i: 725
+i: 726
+i: 727
+i: 728
+i: 729
+i: 730
+i: 731
+i: 732A get exposure function sample: 
+A get exposure function sample: 
+i: 
+i: 733i: 785
+453
+i: 
+A boost: 734i: 
+
+454i: 
+735i: 
+455i: 
+736i: 
+456i: 
+737i: 
+457i: 
+738i: 
+458i: 
+739i: 
+459i: 
+740i: 
+460i: 
+741A get exposure function sample: A boost: 
+
+
+i: i: 742786
+
+i: i: 743787
+
+i: i: 744788
+
+A boost: i: 
+789
+i: 790
+i: 791
+i: 792
+i: 793
+i: 794
+A get exposure function sample: i: 
+795
+i: A boost: 461
+
+i: 462
+i: 463
+A get exposure function sample: i: 
+464
+i: A boost: 745
+
+i: 746
+i: 747
+i: 748
+A boost: 
+A get exposure function sample: 
+i: 796
+i: 797
+A get exposure function sample: i: 
+798
+i: i: 465799
+
+i: i: 466800
+
+i: i: A get exposure function sample: 467801
+
+
+i: i: i: 749468802
+
+A boost: 
+i: 
+i: 469803
+
+i: i: 470804
+
+A boost: i: 
+805
+i: 806
+i: 807
+i: 808
+i: 809
+A boost: 
+A get exposure function sample: 
+i: 750
+i: 751
+i: 752A get exposure function sample: 
+
+i: i: 753471
+
+i: A boost: 754
+
+i: 755
+i: 756
+i: 757A get exposure function sample: 
+
+A boost: 
+i: 810
+i: 811
+i: 812
+i: 813
+i: A get exposure function sample: 814
+
+i: i: 472815
+
+A boost: i: 
+816
+i: 817
+i: A get exposure function sample: 818
+
+i: i: 758819
+
+i: i: 759820
+
+i: i: 760821
+
+i: i: 761822
+
+i: i: 762823
+A get exposure function sample: 
+
+i: i: i: 763473824
+
+
+i: i: i: 474825764
+
+i: 
+i: i: 475826765
+
+i: 
+i: 476827i: 
+
+i: i: 766477828
+
+i: A boost: 
+
+i: 767
+829A boost: 
+
+i: 830
+i: 831
+A boost: 
+A get exposure function sample: 
+i: 478
+i: 479
+i: A get exposure function sample: 480
+
+i: i: 768481
+
+i: A get exposure function sample: i: 769
+482
+i: 
+i: 832i: 770
+483
+i: 
+i: 833i: 771
+484i: 
+
+834i: i: 
+772485i: 
+
+i: 835i: 
+773486i: 
+
+836i: i: 
+487i: 774
+837i: 
+
+488i: i: 
+838i: 775
+489
+i: i: 
+839i: 776
+490
+A boost: 
+i: 
+i: 777491
+
+i: i: 778492
+
+i: i: 779493
+
+i: i: 780494
+
+i: i: 781495
+
+i: i: 782496
+
+A get exposure function sample: A boost: i: 
+497
+
+i: i: 840498
+
+i: i: 841499
+
+A boost: A boost: 
+
+A get exposure function sample: 
+i: 783
+A boost: 
+A get exposure function sample: 
+A get exposure function sample: i: 
+842i: 
+500i: 
+843A boost: 
+
+i: 844
+i: 845
+i: 846
+i: 847
+i: 848
+i: 849
+A get exposure function sample: i: 
+850i: 
+784i: 
+851A boost: 
+
+i: A get exposure function sample: 852
+
+i: i: 501853
+
+i: i: 502854
+
+i: i: 503855
+
+i: i: 504856
+
+i: i: 505857
+
+i: i: 506858
+
+i: i: A get exposure function sample: 507859
+
+
+i: i: i: 508785860
+
+
+i: A boost: i: 509861
+
+
+i: i: 510862
+
+i: i: 511863
+
+i: i: 512864
+
+i: i: 513865
+
+i: i: 514866
+
+A boost: i: 
+867
+i: 868
+i: 869
+i: A get exposure function sample: 870
+
+i: i: 786871
+
+i: A boost: 787
+
+i: 788
+i: 789
+i: 790
+i: 791A get exposure function sample: 
+
+i: 792i: 
+515i: 
+793i: 
+516i: 
+794i: 
+517i: 
+A get exposure function sample: 795i: 
+
+518i: A boost: 
+872i: 
+
+519A boost: 
+
+i: 520
+i: 521
+A boost: 
+A get exposure function sample: 
+A get exposure function sample: i: 
+873A get exposure function sample: i: 
+796
+A boost: 
+i: 
+i: 522797
+
+i: i: 523798
+
+i: i: 524799
+
+A boost: i: 
+800
+i: 801
+i: 802
+i: 803A get exposure function sample: 
+
+i: i: 804874
+
+i: i: 805875
+
+i: i: 806876
+
+i: A boost: 807
+
+i: A get exposure function sample: 808
+
+i: i: 525809
+
+i: A boost: 526
+
+A boost: 
+A get exposure function sample: A get exposure function sample: A get exposure function sample: 
+
+
+i: i: i: 527810877
+
+
+i: i: i: 528811878
+
+
+i: i: i: 529879812
+
+i: i: 
+530880i: 
+
+813i: i: 
+531i: 881
+
+i: 814i: 532882
+
+
+i: i: i: 533815883
+
+
+i: i: i: 534884
+816
+A boost: i: 
+
+i: 885817
+
+A boost: i: 
+818
+i: 819
+i: 820
+i: 821
+i: 822
+i: 823
+i: 824
+i: 825
+i: A get exposure function sample: 826
+
+i: i: 535827
+
+A boost: i: 
+828A get exposure function sample: 
+
+i: i: 829886
+
+i: i: 830887
+
+i: i: 831888
+
+A boost: i: 
+889
+i: 890
+i: 891
+i: 892
+i: A get exposure function sample: 893
+
+i: i: 536894
+
+i: i: 537895
+
+A boost: i: 
+896
+i: 897
+i: 898
+i: A get exposure function sample: 899
+
+i: i: 832900
+
+i: i: 833901
+
+i: i: 834902
+
+i: i: 835903
+
+i: A boost: 836
+
+i: 837A get exposure function sample: 
+
+i: 838i: 
+538i: 
+839A boost: 
+
+A boost: 
+A get exposure function sample: 
+i: 904
+i: 905
+A get exposure function sample: A boost: 
+
+i: 840
+A get exposure function sample: i: 
+841
+i: A boost: 539
+
+A boost: 
+A get exposure function sample: 
+i: 906
+i: 907
+i: 908
+i: A get exposure function sample: A get exposure function sample: 909
+
+
+i: i: i: 540910842
+
+i: 
+i: 541i: 911
+843i: 
+
+542i: i: 
+912844A boost: 
+
+
+i: i: 913845
+
+i: i: 914846
+
+A boost: i: 
+847
+i: 848
+i: 849
+i: 850
+i: 851
+i: 852
+i: 853
+i: 854A get exposure function sample: 
+
+i: i: 855A get exposure function sample: 543
+
+
+i: i: i: 915856544
+
+
+i: i: i: 916857545
+
+
+i: i: 917i: 858
+546
+i: 
+i: 918i: 859
+547
+i: i: 
+919i: 860
+548i: 
+
+920i: i: 
+549861A boost: 
+
+A boost: 
+
+i: 862
+i: 863
+i: 864
+i: 865
+i: 866
+i: 867
+i: 868
+i: 869
+i: 870
+i: 871
+A boost: 
+A get exposure function sample: 
+i: 550
+A get exposure function sample: i: 
+551
+i: i: 921552
+
+i: i: 922553
+
+i: i: 923554
+
+i: A boost: 924
+A get exposure function sample: 
+
+i: i: 925872
+
+i: A boost: 926
+
+i: 927
+i: 928
+i: 929
+A boost: 
+A get exposure function sample: 
+i: 555
+i: 556
+i: 557
+A boost: 
+A get exposure function sample: 
+i: 873
+A boost: A get exposure function sample: 
+
+i: 930
+i: 931
+i: 932
+i: 933
+i: 934
+i: 935
+i: 936
+i: 937A get exposure function sample: A get exposure function sample: 
+
+
+i: i: i: 938874558
+
+
+i: i: i: 875559939
+
+
+i: i: i: 560876940
+
+
+A boost: A boost: i: 
+
+941
+i: 942
+i: 943
+i: 944
+i: 945
+i: 946
+i: 947
+i: 948
+i: 949
+i: 950
+i: 951
+A boost: 
+A get exposure function sample: 
+i: A get exposure function sample: 561
+
+i: i: 877562
+
+i: i: 878563
+
+i: i: 879564
+
+i: i: 880565
+
+i: A get exposure function sample: i: 881
+566
+i: i: 
+952882i: 
+567
+i: 
+i: 953A boost: 883
+
+
+i: i: 954884
+
+i: i: 955885
+
+i: A boost: 956
+
+i: 957
+i: 958
+i: 959
+i: 960
+i: 961
+i: 962
+i: 963
+i: 964
+A get exposure function sample: A boost: 
+
+i: 568
+i: 569
+A boost: A get exposure function sample: 
+
+i: 886
+i: 887
+i: 888
+i: 889
+i: 890
+i: 891
+i: 892
+A get exposure function sample: i: 
+893i: 
+965i: 
+894i: 
+966A get exposure function sample: i: 
+
+895i: i: 
+967570i: 
+
+896i: i: 571
+968
+i: 
+A boost: 897i: 
+969
+
+i: i: 898970
+
+i: i: 899971
+
+i: A boost: 900
+
+i: 901
+i: 902
+i: 903
+A boost: 
+A get exposure function sample: 
+i: 572
+i: 573
+i: 574
+i: 575
+i: 576
+i: 577
+i: 578
+i: 579
+A get exposure function sample: i: 
+580
+i: i: A get exposure function sample: 972581
+
+
+i: i: 904i: 582973
+
+
+i: i: i: 583905974
+
+
+A boost: i: A boost: 
+975
+
+i: 976
+i: 977
+i: 978
+i: 979
+i: 980
+i: 981
+i: 982
+i: 983
+i: 984
+i: 985
+A boost: 
+A get exposure function sample: 
+i: 906A get exposure function sample: 
+
+i: i: 907584
+
+i: i: 908585
+
+i: i: 909586
+
+i: i: 910587
+
+i: A boost: 911
+
+i: A get exposure function sample: 912
+
+i: i: 986913
+
+i: i: 987914
+
+i: A boost: 988
+
+i: 989
+i: 990
+i: 991
+i: 992
+i: 993
+A get exposure function sample: A boost: 
+
+i: 588
+i: 589
+i: A get exposure function sample: 590
+
+i: i: 915591
+
+i: i: 916592
+
+i: i: 917593
+
+i: i: 918594A get exposure function sample: 
+
+i: i: 
+919595i: 
+
+994i: i: 
+596920i: 
+995i: 
+
+A boost: i: 597
+996
+
+i: i: 598997
+
+i: i: 599998
+
+A boost: i: 
+999
+i: 1000
+i: 1001
+i: 1002
+i: 1003
+i: 1004
+i: 1005
+i: 1006
+i: 1007
+i: 1008
+i: 1009
+A get exposure function sample: i: A get exposure function sample: 
+1010
+
+i: i: i: 6009211011
+
+
+i: i: i: 6011012922
+
+
+i: i: A boost: 602
+923
+
+i: i: 603924
+
+i: i: 604925
+
+i: i: 605926
+
+i: i: 606927
+
+i: i: 607928
+
+i: i: 608929
+
+A boost: A boost: 
+
+A get exposure function sample: 
+i: 1013
+i: 1014
+i: 1015
+i: 1016
+i: A get exposure function sample: A get exposure function sample: 1017
+
+
+i: i: i: 6091018930
+
+
+A boost: i: 
+i: 1019931
+
+i: i: 1020932
+
+i: i: 1021933
+
+i: i: 1022934
+
+i: i: 1023935
+
+i: i: 1024936
+
+i: i: 1025937
+A get exposure function sample: 
+i: 
+i: 1026i: 
+938610i: 
+
+i: 1027i: 
+939611i: 
+
+i: 1028i: 
+940612i: 
+
+1029i: i: 
+941613i: 
+
+1030i: i: 
+614i: 942
+1031
+i: 
+615i: i: 
+1032i: 943
+616i: 
+
+1033i: i: 
+617944i: 
+1034
+i: 
+i: 618i: 
+9451035i: 
+
+i: i: 6199461036
+
+
+i: i: i: 6209471037
+
+
+i: i: i: 6211038948
+
+i: i: 
+6221039i: 
+
+949i: i: 
+623i: 1040
+950
+i: 
+i: 6241041i: 
+
+951i: i: 625
+1042
+A boost: 
+i: 
+A boost: 626
+
+A boost: 
+A get exposure function sample: 
+A get exposure function sample: i: 
+1043i: 
+952i: 
+1044i: 
+953i: A get exposure function sample: 
+
+1045i: i: 
+627954i: 
+1046
+i: 
+628i: i: 
+1047955i: 
+629
+i: i: 
+1048956i: 
+630i: 
+
+1049i: i: 
+631i: 957
+1050
+i: 
+i: 632i: 958
+1051
+i: 
+633i: i: 
+1052959i: 
+634
+i: i: 
+1053960i: 
+635
+i: 
+i: 1054i: 961
+636
+A boost: 
+i: 
+i: 962637
+
+i: i: 963638
+
+i: i: 964639
+
+A boost: A boost: 
+
+A get exposure function sample: 
+i: 1055
+i: 1056
+i: 1057
+A get exposure function sample: i: 
+1058
+i: i: 965A get exposure function sample: 1059
+
+
+i: i: i: 6401060966
+
+
+A boost: i: 
+967
+i: 968
+i: 969
+i: 970
+i: 971
+A boost: 
+A get exposure function sample: 
+i: 641
+i: 642
+i: 643
+i: 644
+i: 645
+i: 646
+i: 647A get exposure function sample: 
+
+A boost: i: 
+972
+i: 973
+i: 974
+i: 975
+i: 976
+i: 977
+i: 978
+i: 979
+i: 980
+i: 981
+i: 982
+i: 983
+i: A get exposure function sample: 984
+
+i: i: 648985
+
+i: A boost: 649
+
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+i: i: 986650
+
+i: i: 987651
+
+i: i: 988652
+
+i: i: 989653
+
+i: i: 990654
+
+i: i: 991655
+
+i: A boost: 992
+
+i: 993
+A boost: 
+A get exposure function sample: A get exposure function sample: 
+
+i: i: 656994
+
+i: i: 657995
+
+i: i: 658996
+
+i: i: 659997
+
+i: i: 660998
+
+i: i: 661999
+
+i: i: 6621000
+
+i: i: 6631001
+
+A boost: i: 
+1002
+i: 1003
+i: 1004
+i: 1005
+i: 1006
+i: 1007
+i: 1008
+i: 1009
+i: 1010
+i: 1011
+i: 1012
+A get exposure function sample: A boost: 
+
+i: 664
+i: 665
+i: 666
+i: 667
+A boost: 
+A get exposure function sample: 
+i: 1013
+i: 1014
+i: 1015
+i: 1016
+A get exposure function sample: i: 
+1017i: 
+668i: 
+1018i: 
+669i: 
+1019i: 
+670i: 
+1020A boost: 
+
+i: 1021
+i: 1022
+i: 1023
+i: 1024
+i: 1025
+i: 1026
+i: 1027
+i: 1028
+i: 1029
+i: 1030
+i: 1031
+i: 1032
+i: 1033
+i: 1034
+i: 1035A get exposure function sample: 
+
+i: i: 1036671
+
+i: i: 1037672
+
+i: i: 1038673
+
+i: i: 1039674
+
+i: i: 1040675
+
+i: i: 1041676
+
+i: i: 1042677
+
+A boost: i: 
+678
+i: 679
+i: 680
+i: 681
+i: 682
+i: 683
+i: 684
+i: 685
+A boost: 
+A get exposure function sample: 
+i: 1043
+i: 1044
+i: 1045
+i: 1046
+i: A get exposure function sample: 1047
+
+i: i: 6861048
+
+i: i: 6871049
+
+i: i: 6881050
+
+i: i: 6891051
+
+i: i: 6901052
+
+i: i: 6911053
+
+i: i: 6921054
+
+i: A boost: 693
+
+i: 694
+i: 695
+i: 696
+i: 697
+i: 698
+i: 699
+i: 700
+i: 701
+i: 702
+i: 703
+i: 704
+A get exposure function sample: i: 
+705
+i: i: 1055706
+
+i: i: 1056707
+
+i: i: 1057708
+
+i: i: 1058709
+
+i: i: 1059710
+
+i: i: 1060711
+
+i: 712
+i: 713
+i: 714
+i: 715
+i: 716
+i: 717
+i: 718
+i: 719
+A boost: 
+A get exposure function sample: 
+i: 720
+i: 721
+i: 722
+i: 723
+i: 724
+i: 725
+i: 726
+i: 727
+i: 728
+i: 729
+i: 730
+i: 731
+i: 732
+i: 733
+i: 734
+i: 735
+i: 736
+i: 737
+i: 738
+i: 739
+i: 740
+i: 741
+i: 742
+i: 743
+i: 744
+A boost: 
+A get exposure function sample: 
+i: 745
+i: 746
+i: 747
+i: 748
+A boost: 
+A get exposure function sample: 
+i: 749
+A boost: 
+A get exposure function sample: 
+i: 750
+i: 751
+i: 752
+i: 753
+i: 754
+i: 755
+i: 756
+i: 757
+A boost: 
+A get exposure function sample: 
+i: 758
+i: 759
+i: 760
+i: 761
+i: 762
+i: 763
+i: 764
+i: 765
+i: 766
+i: 767
+A boost: 
+A get exposure function sample: 
+i: 768
+i: 769
+i: 770
+i: 771
+i: 772
+i: 773
+i: 774
+i: 775
+i: 776
+i: 777
+i: 778
+i: 779
+i: 780
+i: 781
+i: 782
+A boost: 
+A get exposure function sample: 
+i: 783
+A boost: 
+A get exposure function sample: 
+i: 784
+A boost: 
+A get exposure function sample: 
+i: 785
+A boost: 
+A get exposure function sample: 
+i: 786
+i: 787
+i: 788
+i: 789
+i: 790
+i: 791
+i: 792
+i: 793
+i: 794
+i: 795
+A boost: 
+A get exposure function sample: 
+i: 796
+i: 797
+i: 798
+i: 799
+i: 800
+i: 801
+i: 802
+i: 803
+i: 804
+i: 805
+i: 806
+i: 807
+i: 808
+i: 809
+A boost: 
+A get exposure function sample: 
+i: 810
+i: 811
+i: 812
+i: 813
+i: 814
+i: 815
+i: 816
+i: 817
+i: 818
+i: 819
+i: 820
+i: 821
+i: 822
+i: 823
+i: 824
+i: 825
+i: 826
+i: 827
+i: 828
+i: 829
+i: 830
+i: 831
+A boost: 
+A get exposure function sample: 
+i: 832
+i: 833
+i: 834
+i: 835
+i: 836
+i: 837
+i: 838
+i: 839
+A boost: 
+A get exposure function sample: 
+i: 840
+i: 841
+A boost: 
+A get exposure function sample: 
+i: 842
+i: 843
+i: 844
+i: 845
+i: 846
+i: 847
+i: 848
+i: 849
+i: 850
+i: 851
+i: 852
+i: 853
+i: 854
+i: 855
+i: 856
+i: 857
+i: 858
+i: 859
+i: 860
+i: 861
+i: 862
+i: 863
+i: 864
+i: 865
+i: 866
+i: 867
+i: 868
+i: 869
+i: 870
+i: 871
+A boost: 
+A get exposure function sample: 
+i: 872
+A boost: 
+A get exposure function sample: 
+i: 873
+A boost: 
+A get exposure function sample: 
+i: 874
+i: 875
+i: 876
+A boost: 
+A get exposure function sample: 
+i: 877
+i: 878
+i: 879
+i: 880
+i: 881
+i: 882
+i: 883
+i: 884
+i: 885
+A boost: 
+A get exposure function sample: 
+i: 886
+i: 887
+i: 888
+i: 889
+i: 890
+i: 891
+i: 892
+i: 893
+i: 894
+i: 895
+i: 896
+i: 897
+i: 898
+i: 899
+i: 900
+i: 901
+i: 902
+i: 903
+A boost: 
+A get exposure function sample: 
+i: 904
+i: 905
+A boost: 
+A get exposure function sample: 
+i: 906
+i: 907
+i: 908
+i: 909
+i: 910
+i: 911
+i: 912
+i: 913
+i: 914
+A boost: 
+A get exposure function sample: 
+i: 915
+i: 916
+i: 917
+i: 918
+i: 919
+i: 920
+A boost: 
+A get exposure function sample: 
+i: 921
+i: 922
+i: 923
+i: 924
+i: 925
+i: 926
+i: 927
+i: 928
+i: 929
+A boost: 
+A get exposure function sample: 
+i: 930
+i: 931
+i: 932
+i: 933
+i: 934
+i: 935
+i: 936
+i: 937
+i: 938
+i: 939
+i: 940
+i: 941
+i: 942
+i: 943
+i: 944
+i: 945
+i: 946
+i: 947
+i: 948
+i: 949
+i: 950
+i: 951
+A boost: 
+A get exposure function sample: 
+i: 952
+i: 953
+i: 954
+i: 955
+i: 956
+i: 957
+i: 958
+i: 959
+i: 960
+i: 961
+i: 962
+i: 963
+i: 964
+A boost: 
+A get exposure function sample: 
+i: 965
+i: 966
+i: 967
+i: 968
+i: 969
+i: 970
+i: 971
+A boost: 
+A get exposure function sample: 
+i: 972
+i: 973
+i: 974
+i: 975
+i: 976
+i: 977
+i: 978
+i: 979
+i: 980
+i: 981
+i: 982
+i: 983
+i: 984
+i: 985
+A boost: 
+A get exposure function sample: 
+i: 986
+i: 987
+i: 988
+i: 989
+i: 990
+i: 991
+i: 992
+i: 993
+A boost: 
+A get exposure function sample: 
+i: 994
+i: 995
+i: 996
+i: 997
+i: 998
+i: 999
+i: 1000
+i: 1001
+i: 1002
+i: 1003
+i: 1004
+i: 1005
+i: 1006
+i: 1007
+i: 1008
+i: 1009
+i: 1010
+i: 1011
+i: 1012
+A boost: 
+A get exposure function sample: 
+i: 1013
+i: 1014
+i: 1015
+i: 1016
+i: 1017
+i: 1018
+i: 1019
+i: 1020
+i: 1021
+i: 1022
+i: 1023
+i: 1024
+i: 1025
+i: 1026
+i: 1027
+i: 1028
+i: 1029
+i: 1030
+i: 1031
+i: 1032
+i: 1033
+i: 1034
+i: 1035
+i: 1036
+i: 1037
+i: 1038
+i: 1039
+i: 1040
+i: 1041
+i: 1042
+A boost: 
+A get exposure function sample: 
+i: 1043
+i: 1044
+i: 1045
+i: 1046
+i: 1047
+i: 1048
+i: 1049
+i: 1050
+i: 1051
+i: 1052
+i: 1053
+i: 1054
+A boost: 
+A get exposure function sample: 
+i: 1055
+i: 1056
+i: 1057
+i: 1058
+i: 1059
+i: 1060
+Running MCMC-PT iteration number: 0 of 400000. Chain number 1. Current logpost: -2155.44. No exp/inf: 128/40. 
+Running MCMC-PT iteration number: 0 of 400000. Chain number 3. Current logpost: -2503.6. No exp/inf: 128/40. 
+Running MCMC-PT iteration number: 0 of 400000. Chain number 2. Current logpost: -1900.97. No exp/inf: 128/40. 
+Running MCMC-PT iteration number: 0 of 400000. Chain number 4. Current logpost: -2650.4. No exp/inf: 128/40. 
+Running MCMC-PT iteration number: 0 of 400000. Chain number 3. Current logpost: -15428.1. No exp/inf: 128/40. 
+Running MCMC-PT iteration number: 0 of 400000. Chain number 1. Current logpost: -14989.2. No exp/inf: 127/40. 
+Running MCMC-PT iteration number: 0 of 400000. Chain number 2. Current logpost: -15824.2. No exp/inf: 127/40. 
+Running MCMC-PT iteration number: 0 of 400000. Chain number 4. Current logpost: -15299.6. No exp/inf: 128/40. 
+Running MCMC-PT iteration number: 100 of 400000. Chain number 3. Current logpost: -1732.05. No exp/inf: 111/40. 
+Running MCMC-PT iteration number: 100 of 400000. Chain number 1. Current logpost: -1792.98. No exp/inf: 122/40. 
+Running MCMC-PT iteration number: 100 of 400000. Chain number 2. Current logpost: -1302.25. No exp/inf: 89/40. 
+Running MCMC-PT iteration number: 100 of 400000. Chain number 4. Current logpost: -2063.18. No exp/inf: 100/40. 
+Running MCMC-PT iteration number: 100 of 400000. Chain number 4. Current logpost: -14691.7. No exp/inf: 90/40. 
+Running MCMC-PT iteration number: 100 of 400000. Chain number 2. Current logpost: -13043.7. No exp/inf: 124/40. 
+Running MCMC-PT iteration number: 100 of 400000. Chain number 3. Current logpost: -14516.3. No exp/inf: 122/40. 
+Running MCMC-PT iteration number: 100 of 400000. Chain number 1. Current logpost: -12782.1. No exp/inf: 120/40. 
+Running MCMC-PT iteration number: 200 of 400000. Chain number 3. Current logpost: -1257.53. No exp/inf: 87/40. 
+Running MCMC-PT iteration number: 200 of 400000. Chain number 1. Current logpost: -1485.47. No exp/inf: 100/40. 
+Running MCMC-PT iteration number: 200 of 400000. Chain number 2. Current logpost: -900.713. No exp/inf: 62/40. 
+Running MCMC-PT iteration number: 200 of 400000. Chain number 4. Current logpost: -1418.3. No exp/inf: 79/40. 
+Running MCMC-PT iteration number: 200 of 400000. Chain number 4. Current logpost: -14312.6. No exp/inf: 83/40. 
+Running MCMC-PT iteration number: 200 of 400000. Chain number 2. Current logpost: -12450.9. No exp/inf: 121/40. 
+Running MCMC-PT iteration number: 200 of 400000. Chain number 3. Current logpost: -12026.6. No exp/inf: 117/40. 
+Running MCMC-PT iteration number: 200 of 400000. Chain number 1. Current logpost: -11298.2. No exp/inf: 111/40. 
+Running MCMC-PT iteration number: 300 of 400000. Chain number 2. Current logpost: -552.574. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 300 of 400000. Chain number 3. Current logpost: -1088.77. No exp/inf: 75/40. 
+Running MCMC-PT iteration number: 300 of 400000. Chain number 1. Current logpost: -1226.77. No exp/inf: 83/40. 
+Running MCMC-PT iteration number: 300 of 400000. Chain number 4. Current logpost: -878.98. No exp/inf: 59/40. 
+Running MCMC-PT iteration number: 400 of 400000. Chain number 2. Current logpost: -548.849. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 400 of 400000. Chain number 4. Current logpost: -562.079. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 500 of 400000. Chain number 2. Current logpost: -547.852. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 400 of 400000. Chain number 1. Current logpost: -1080.39. No exp/inf: 73/40. 
+Running MCMC-PT iteration number: 400 of 400000. Chain number 3. Current logpost: -867.16. No exp/inf: 60/40. 
+Running MCMC-PT iteration number: 300 of 400000. Chain number 4. Current logpost: -13639.9. No exp/inf: 73/40. 
+Running MCMC-PT iteration number: 300 of 400000. Chain number 2. Current logpost: -12101. No exp/inf: 128/40. 
+Running MCMC-PT iteration number: 300 of 400000. Chain number 3. Current logpost: -10855.6. No exp/inf: 117/40. 
+Running MCMC-PT iteration number: 300 of 400000. Chain number 1. Current logpost: -11053.9. No exp/inf: 105/40. 
+Running MCMC-PT iteration number: 500 of 400000. Chain number 4. Current logpost: -560.85. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 600 of 400000. Chain number 2. Current logpost: -548.062. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 600 of 400000. Chain number 4. Current logpost: -561.777. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 500 of 400000. Chain number 3. Current logpost: -554.852. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 500 of 400000. Chain number 1. Current logpost: -957.13. No exp/inf: 65/40. 
+Running MCMC-PT iteration number: 700 of 400000. Chain number 2. Current logpost: -546.727. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 700 of 400000. Chain number 4. Current logpost: -564.109. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 600 of 400000. Chain number 3. Current logpost: -548.721. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 400 of 400000. Chain number 4. Current logpost: -12370.6. No exp/inf: 72/40. 
+Running MCMC-PT iteration number: 800 of 400000. Chain number 2. Current logpost: -547.101. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 400 of 400000. Chain number 2. Current logpost: -10931.9. No exp/inf: 129/40. 
+Running MCMC-PT iteration number: 400 of 400000. Chain number 3. Current logpost: -10753.5. No exp/inf: 117/40. 
+Running MCMC-PT iteration number: 400 of 400000. Chain number 1. Current logpost: -10259. No exp/inf: 101/40. 
+Running MCMC-PT iteration number: 800 of 400000. Chain number 4. Current logpost: -562.47. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 600 of 400000. Chain number 1. Current logpost: -792.262. No exp/inf: 55/40. 
+Running MCMC-PT iteration number: 700 of 400000. Chain number 3. Current logpost: -547.341. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 900 of 400000. Chain number 2. Current logpost: -549.067. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 900 of 400000. Chain number 4. Current logpost: -561.223. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 800 of 400000. Chain number 3. Current logpost: -547.334. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1000 of 400000. Chain number 2. Current logpost: -549.688. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1000 of 400000. Chain number 4. Current logpost: -562.614. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 500 of 400000. Chain number 4. Current logpost: -11140.1. No exp/inf: 61/40. 
+Running MCMC-PT iteration number: 500 of 400000. Chain number 2. Current logpost: -10785.6. No exp/inf: 128/40. 
+Running MCMC-PT iteration number: 700 of 400000. Chain number 1. Current logpost: -625.666. No exp/inf: 44/40. 
+Running MCMC-PT iteration number: 900 of 400000. Chain number 3. Current logpost: -549.14. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 500 of 400000. Chain number 3. Current logpost: -10470.1. No exp/inf: 111/40. 
+Running MCMC-PT iteration number: 500 of 400000. Chain number 1. Current logpost: -10154.7. No exp/inf: 98/40. 
+Running MCMC-PT iteration number: 1100 of 400000. Chain number 2. Current logpost: -549.695. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1100 of 400000. Chain number 4. Current logpost: -560.245. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1000 of 400000. Chain number 3. Current logpost: -545.958. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1200 of 400000. Chain number 2. Current logpost: -549.893. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 800 of 400000. Chain number 1. Current logpost: -556.438. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1200 of 400000. Chain number 4. Current logpost: -561.796. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1100 of 400000. Chain number 3. Current logpost: -546.683. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1300 of 400000. Chain number 2. Current logpost: -550.559. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 900 of 400000. Chain number 1. Current logpost: -553.747. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 600 of 400000. Chain number 4. Current logpost: -10477.9. No exp/inf: 62/40. 
+Running MCMC-PT iteration number: 600 of 400000. Chain number 2. Current logpost: -10640.2. No exp/inf: 121/40. 
+Running MCMC-PT iteration number: 1300 of 400000. Chain number 4. Current logpost: -561.067. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 600 of 400000. Chain number 3. Current logpost: -10266.6. No exp/inf: 110/40. 
+Running MCMC-PT iteration number: 600 of 400000. Chain number 1. Current logpost: -10092.1. No exp/inf: 94/40. 
+Running MCMC-PT iteration number: 1200 of 400000. Chain number 3. Current logpost: -545.18. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1000 of 400000. Chain number 1. Current logpost: -555.65. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1400 of 400000. Chain number 2. Current logpost: -549.523. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1400 of 400000. Chain number 4. Current logpost: -559.808. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1300 of 400000. Chain number 3. Current logpost: -545.873. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1100 of 400000. Chain number 1. Current logpost: -551.929. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1500 of 400000. Chain number 2. Current logpost: -549.596. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1500 of 400000. Chain number 4. Current logpost: -560.66. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1400 of 400000. Chain number 3. Current logpost: -544.925. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 700 of 400000. Chain number 4. Current logpost: -9625.5. No exp/inf: 60/40. 
+Running MCMC-PT iteration number: 1200 of 400000. Chain number 1. Current logpost: -553.185. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1600 of 400000. Chain number 2. Current logpost: -549.589. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 700 of 400000. Chain number 2. Current logpost: -10453.8. No exp/inf: 111/40. 
+Running MCMC-PT iteration number: 700 of 400000. Chain number 3. Current logpost: -10159.8. No exp/inf: 108/40. 
+Running MCMC-PT iteration number: 700 of 400000. Chain number 1. Current logpost: -10005.9. No exp/inf: 88/40. 
+Running MCMC-PT iteration number: 1600 of 400000. Chain number 4. Current logpost: -561.296. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1500 of 400000. Chain number 3. Current logpost: -544.624. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1300 of 400000. Chain number 1. Current logpost: -551.582. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1700 of 400000. Chain number 2. Current logpost: -550.292. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1700 of 400000. Chain number 4. Current logpost: -557.684. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1600 of 400000. Chain number 3. Current logpost: -545.127. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1400 of 400000. Chain number 1. Current logpost: -551.982. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1800 of 400000. Chain number 2. Current logpost: -550.734. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1800 of 400000. Chain number 4. Current logpost: -557.545. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 800 of 400000. Chain number 4. Current logpost: -9543.5. No exp/inf: 56/40. 
+Running MCMC-PT iteration number: 1700 of 400000. Chain number 3. Current logpost: -545.462. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 800 of 400000. Chain number 2. Current logpost: -10309.4. No exp/inf: 106/40. 
+Running MCMC-PT iteration number: 1500 of 400000. Chain number 1. Current logpost: -551.581. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1900 of 400000. Chain number 2. Current logpost: -550.409. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 800 of 400000. Chain number 1. Current logpost: -9854.96. No exp/inf: 78/40. 
+Running MCMC-PT iteration number: 800 of 400000. Chain number 3. Current logpost: -10116.9. No exp/inf: 105/40. 
+Running MCMC-PT iteration number: 1900 of 400000. Chain number 4. Current logpost: -559.206. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1600 of 400000. Chain number 1. Current logpost: -553.895. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1800 of 400000. Chain number 3. Current logpost: -542.874. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 2000 of 400000. Chain number 2. Current logpost: -550.23. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 2000 of 400000. Chain number 4. Current logpost: -558.827. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1700 of 400000. Chain number 1. Current logpost: -553.099. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1900 of 400000. Chain number 3. Current logpost: -544.962. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 2100 of 400000. Chain number 2. Current logpost: -550.115. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 900 of 400000. Chain number 4. Current logpost: -9489.67. No exp/inf: 52/40. 
+Running MCMC-PT iteration number: 900 of 400000. Chain number 2. Current logpost: -10206.9. No exp/inf: 99/40. 
+Running MCMC-PT iteration number: 2100 of 400000. Chain number 4. Current logpost: -558.333. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 1800 of 400000. Chain number 1. Current logpost: -554.099. No exp/inf: 40/40. 
+Running MCMC-PT iteration number: 2000 of 400000. Chain number 3. Current logpost: -542.966. No exp/inf: 40/40. 
+slurmstepd-c11: error: *** JOB 1592550 ON c11 CANCELLED AT 2024-08-05T09:30:57 ***
