@@ -2,7 +2,7 @@ library(devtools)
 library(Rcpp)
 
 devtools::load_all()
-i <- 3
+i <- 4
 seroW2_full <- readRDS(here::here("hpc", "transvir_w2_inf", "transvir_w23_model.RData"))
 prior_names <- c("p1", "p2", "p3", "p1", "p2", "p3")
 prior_names_wave <- c("w2", "w2", "w2", "w3", "w3", "w3")
@@ -24,7 +24,7 @@ settings <-  list(
     covarInitVal = 1e-2, # make very small if struggling to sample to beginning
     covarInitValAdapt = 1e-2, # make very small if struggling to sample to beginning
     covarMaxVal = 1, # decrease if struggling toc sample in the middle
-    runParallel = TRUE,
+    runParallel = FALSE,
     noGibbsSteps = 1,
     onDebug = FALSE
 )

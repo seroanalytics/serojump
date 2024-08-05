@@ -179,10 +179,10 @@ copModel_h1 <- list(
             addCopModel("A/Sydney/5/2021e", "h1_2023", c("beta0_e", "beta1_e", "mu_e"), copFuncForm, copLogLikelihood)
         ),
         prior = bind_rows(
-            add_par_df("beta0", 0, 10, "unif", 4.5, 2.5), # cop model (not used here)
+            add_par_df("beta0", 0, 10, "norm", 4.5, 2.5), # cop model (not used here)
             add_par_df("beta1", -5, 0, "unif", -5, 0),
             add_par_df("mu", 0.01, 0.5, "unif", 0.01, 0.5),
-            add_par_df("beta0_e", 0, 10, "unif",  4.5, 2.5), # cop model (not used here)
+            add_par_df("beta0_e", 0, 10, "norm",  4.5, 2.5), # cop model (not used here)
             add_par_df("beta1_e", -5, 0, "unif", -5, 0),
             add_par_df("mu_e", 0.01, 0.5, "unif", 0.01, 0.5),
         )

@@ -286,8 +286,8 @@ abkineticsModel <- list(
 
 copModel <- list( 
         model = makeModel(
-            addCopModel("sVNT", "omicron", c("bea0", "beta1", "mu"), copFuncForm, copLogLikelihood),
-            addCopModel("IgA", "omicron", c("bea0_a", "beta1_a", "mu_a"), copFuncForm, copLogLikelihood)
+            addCopModel("sVNT", "omicron", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
+            addCopModel("IgA", "omicron", c("beta0_a", "beta1_a", "mu_a"), copFuncForm, copLogLikelihood)
         ),
         prior = bind_rows(
             add_par_df("beta0", 0, 4, "norm", 1.76852, 1), # cop model (not used here)
