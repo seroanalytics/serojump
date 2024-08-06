@@ -352,7 +352,6 @@ modeldefinition_w3_p2$expInfPrior <- inf_prior_2
 modeldefinition_w3_p3 <- modeldefinition_w3_p1
 modeldefinition_w3_p3$expInfPrior <- inf_prior_3
 
-modelW3_p1$data$max_titre
 
 modelW3_p1 <- createSeroJumpModel(gambia_pvnt_w3, gambia_exp_w3, modeldefinition_w3_p1, TRUE)
 modelW3_p2 <- createSeroJumpModel(gambia_pvnt_w3, gambia_exp_w3, modeldefinition_w3_p2)
