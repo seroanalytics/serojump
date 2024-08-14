@@ -395,6 +395,7 @@ public:
 
             this->currentTitreExp = this->proposalTitreExp;
             this->currentObsTitre = this->proposalObsTitre;
+            this->currentCORPars = this->proposalCORPars;
 
             this->currentEventsFull = this->proposalEventsFull;
             this->currentTitreFull = this->proposalTitreFull;
@@ -410,6 +411,7 @@ public:
 
             this->proposalTitreExp = this->currentTitreExp;
             this->proposalObsTitre = this->currentObsTitre;
+            this->proposalCORPars = this->currentCORPars;
 
             this->proposalEventsFull = this->currentEventsFull;
             this->proposalTitreFull = this->currentTitreFull;
@@ -532,6 +534,7 @@ public:
             // Get the titre at exposure values and observational values
             this->posteriorTitreExp.push_back(this->currentTitreExp);
             this->posteriorObsTitre.push_back(this->currentObsTitre);
+            this->posteriorCORPars.push_back(this->currentCORPars);
 
             this->counterPosterior++;            
         }

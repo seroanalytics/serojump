@@ -24,6 +24,7 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
     List exposureInfo, knownInf; // List of exposure information and known infections
     int B; // Number of biomarkers
     bool priorPredFlag = false;
+    bool copFlag = false;
     /** 
      * @brief Constructor for the RJMC base class
      * @param infoModel_in The information model
@@ -58,6 +59,7 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
     // VectorXd currentInf, proposalInf;
     MatrixXd currentTitreExp, proposalTitreExp;
     MatrixXd currentObsTitre, proposalObsTitre;
+    MatrixXd currentCORPars, proposalCORPars;
 
     VectorXd historicJump;
     NumericVector max_titre;
@@ -67,7 +69,7 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
 
     // Outputs for posterior
     MatrixXd posteriorOut, posteriorJump, posteriorInf;
-    std::vector<MatrixXd> posteriorTitreExp, posteriorObsTitre;
+    std::vector<MatrixXd> posteriorTitreExp, posteriorObsTitre, posteriorCORPars;
 
     // Information extracted from the settingd
     int iPosterior;
@@ -173,16 +175,23 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
             this->evalLoglikelhoodObs[temp2] = temp3;
             this->parsObsN[temp2] = temp4;
         }
+        Rcpp::Rcout << "Testing in: " << this->copModel.size() << std::endl;
+        if (this->copModel.size() == 0) {
+            this->copFlag = false;
+        } else {
+            this->copFlag = true;
+        }
 
-
-        for (int i = 0; i < this->copModel.size(); i++) {
-            List temp1 = this->copModel[i];
-            string temp2 = temp1["biomarker"];
-            Function temp3 = temp1["logLikelihood"];
-            StringVector temp4 = temp1["pars"];
-            this->mapOfCOP[temp2] = i;
-            this->evalLoglikelhoodCOP[temp2] = temp3;
-            this->parsCOPN[temp2] = temp4;
+        if (this->copFlag) {
+            for (int i = 0; i < this->copModel.size(); i++) {
+                List temp1 = this->copModel[i];
+                string temp2 = temp1["biomarker"];
+                Function temp3 = temp1["logLikelihood"];
+                StringVector temp4 = temp1["pars"];
+                this->mapOfCOP[temp2] = i;
+                this->evalLoglikelhoodCOP[temp2] = temp3;
+                this->parsCOPN[temp2] = temp4;
+            }
         }
 
         // Extract the information from the abKinetics model, mainly the biomarker, logliklihood and the parameters for the loglikelihood and the map

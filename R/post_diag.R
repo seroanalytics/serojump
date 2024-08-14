@@ -19,10 +19,11 @@ NULL
 #' @param obs_er The observation error
 #' @param n_chains The number of chains
 #' @export 
-seroJumpPostDaig <- function(fitfull, filepathfig) {
+seroJumpPostDaig <- function(fitfull, outputfull, filepathfig) {
     df_smi_df <- calcScaleModelIndicator(fitfull)
     transDimConvPlot(df_smi_df, filepathfig) 
     invariantParamConvPlot(fitfull, filepathfig) 
+    invariantParamConvPriorPlot(fitfull, outputfull, filepathfig)
 }
 
 #https://www.tandfonline.com/doi/abs/10.1198/1061860031347
@@ -127,3 +128,26 @@ invariantParamConvPlot <- function(fitfull, filepathfig) {
     p1 / p2 / p3
     ggsave(here::here(filepathfig, "diag", "invariant_param_conv.png"), height = 20)
 }
+
+invariantParamConvPriorPlot <- function(fitfull, outputfull, filepathfig) {
+    model_outline <- fitfull$model
+    post <- fitfull$post
+
+    mcmc_combined <- post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame 
+    n_post <- nrow(mcmc_combined)
+
+    priorpost <- bind_rows(
+        mcmc_combined %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
+                        mutate(type = "Posterior distribution") ,
+        purrr::map_df(1:n_post,
+            ~model_outline$samplePriorDistributions(par_tab)
+        )  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%  mutate(type = "Prior distribution") 
+    )
+
+    priorpost %>% 
+        ggplot() + geom_histogram(aes(x = value, fill = type), position = "identity", alpha = 0.5) + facet_wrap(~param, scales = "free") +
+        theme_bw() + theme(legend.position = "top")
+    ggsave(here::here(filepathfig, "diag", "invariant_param_priorpost.png"), height = 15, width = 15)
+
+}
+           

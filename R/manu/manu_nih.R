@@ -10,7 +10,6 @@ data_titre_h1 <- data_exp_h1[[1]] #%>% check_titre
 data_exp_h3 <- get_data_titre_nih_2023_h3()
 data_titre_h3 <- data_exp_h3[[1]] #%>% check_titre 
 
-
 fitfull_h1 <- readRDS(here::here("outputs", "fits", filename, paste0("fit_", "h1", ".RDS")))
 outputfull_h1 <- readRDS(file = here::here("outputs", "fits", filename, paste0("pp_", "h1", ".RDS")))
 
@@ -115,3 +114,19 @@ summary_plot %>%
             aes(x = pid, y = h_diff, color = swab_virus), size = 5, alpha = 0.7) + 
             theme_bw() + facet_wrap(vars(swab_virus)) + 
             labs(x = "PID", y = "Differece in probability of infection (h1 - h3)")
+
+
+# For Alex
+
+df_hx_titre <- bind_rows(
+    data_titre_h1 %>% pivot_longer(!c(pid, id, time), names_to = "biomarker", values_to = "value") %>% mutate(exposure = "h1_2023"),
+    data_titre_h3 %>% pivot_longer(!c(pid, id, time), names_to = "biomarker", values_to = "value") %>% mutate(exposure = "h3_2023")
+)
+
+start_date <- "2023-03-23"
+
+nih_inf_pcr <- nih_inf_raw %>% filter(year == 2023) %>% left_join(pid_cols) %>% select(pid, id, samp_date, swab_virus, PCR_WHOFLU) %>% unique %>% 
+    mutate(day = as.numeric(difftime(samp_date, start_date, units = "days"))) %>% select(pid, day, swab_virus, PCR_WHOFLU)
+
+write.csv(df_hx_titre, here::here("data", "viz", "nih_2024_titre.csv"), row.names = FALSE)
+write.csv(nih_inf_pcr, here::here("data", "viz", "nih_2024_pcr.csv"), row.names = FALSE)

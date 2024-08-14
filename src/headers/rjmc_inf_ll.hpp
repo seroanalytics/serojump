@@ -129,34 +129,131 @@ public:
             
         // Evaluate the log likelihood of the model given the exposure times and titre values
         logLikelihood_ab = this->evaluateLogLikelihoodObs_cpp(init) + this->evaluateLogLikelihoodCOP_cpp(jump, init) ;
-
+       // this->fitCORfunction(jump, init); option to fit dynamically but very slow and a bit temperamental :(
         // Evaluate the log likelihood of the model given the titre values
         return logPriorPars + logPriorJump + logLikelihood_ab + logPriorExpTime;
     }
 
 private:
 
+    double copFuncFormGeneralised(double esttitreExp, double gamma, double beta, double alpha, double k) {
+        double r = beta * (esttitreExp - alpha);
+        double abs_r = std::abs(r);
+        double r_term = std::pow(abs_r, k);
+        double denominator = std::pow(1 + r_term, 1.0 / k);
+        double p = gamma * ((r / denominator) * 0.5 + 0.5);
+        return p;
+    }
 
-    /*double CORfunction(int y, double titre, NumericVector pars) {
+    // Define the objective function: Sum of squared errors
+    double objectiveFunction(const std::vector<double>& esttitreExp, const std::vector<double>& actualData,
+                            double gamma, double beta, double alpha, double k) {
+        double sum_sq_error = 0.0;
+        for (size_t i = 0; i < esttitreExp.size(); ++i) {
+            double predicted = copFuncFormGeneralised(esttitreExp[i], gamma, beta, alpha, k);
+            double error = actualData[i] - predicted;
+            sum_sq_error += error * error;
+        }
+        return sum_sq_error;
+    }
 
-        double ll = 0;
-        double beta0 = pars[0];
-        double beta1 = pars[1];
-        double mu = pars[2];
-        double max_titre = parent->max_titre[b];
+    // Gradient of the objective function (finite differences)
+    Eigen::VectorXd gradient(const std::vector<double>& esttitreExp, const std::vector<double>& actualData,
+                            const Eigen::VectorXd& params, double epsilon = 1e-5) {
+        Eigen::VectorXd grad(params.size());
+        for (int i = 0; i < params.size(); ++i) {
+            Eigen::VectorXd params_plus = params;
+            params_plus[i] += epsilon;
+            
+            double f_plus = objectiveFunction(esttitreExp, actualData, params_plus[0], params_plus[1], params_plus[2], params_plus[3]);
+            double f = objectiveFunction(esttitreExp, actualData, params[0], params[1], params[2], params[3]);
+            
+            grad[i] = (f_plus - f) / epsilon;
+        }
+        return grad;
+    }
 
+    // Project the parameters onto their bounds
+    Eigen::VectorXd projectOntoBounds(const Eigen::VectorXd& params, const Eigen::VectorXd& lb, const Eigen::VectorXd& ub) {
+        Eigen::VectorXd projected = params;
+        for (int i = 0; i < params.size(); ++i) {
+            projected[i] = std::max(lb[i], std::min(ub[i], params[i]));
+        }
+        return projected;
+    }
 
+    // Gradient Descent with Bounds
+    Eigen::VectorXd gradientDescentWithBounds(const std::vector<double>& esttitreExp, const std::vector<double>& actualData,
+                                            Eigen::VectorXd& params, const Eigen::VectorXd& lb, const Eigen::VectorXd& ub,
+                                            double learning_rate, int max_iters, double tol) {
+        for (int iter = 0; iter < max_iters; ++iter) {
+            Eigen::VectorXd grad = gradient(esttitreExp, actualData, params);
+            params = params - learning_rate * grad;
 
-        double p = mu / (1.0 + exp(- (beta0 + beta1 * titre) ) );
+            // Project onto bounds
+            params = projectOntoBounds(params, lb, ub);
 
-        ll = y * log(p) + (1 - y) * log(1 - p);
-        
-      //  Rcpp::Rcout << "beta0: " << beta0 << std::endl;
-       // Rcpp::Rcout << "beta1: " << beta1 << std::endl;
+            // Check for convergence
+            if (grad.norm() < tol) {
+                break;
+            }
+        }
+        return params;
+    }
 
-       // Rcpp::Rcout << "ll: " << ll << std::endl;
-        return ll;
-    }*/
+    void fitCORfunction(VectorXd jump, bool init) {
+        if (parent->onDebug) Rcpp::Rcout << "In: fitCORfunction" << std::endl;
+
+        MatrixXd FittedCOP(parent->B, 4);
+
+        Eigen::ArrayXd jumpb_in_array = (jump.array() > -1).cast<double>();
+
+        // Convert to std::vector<double>
+        std::vector<double> jumpb_in(jumpb_in_array.data(), jumpb_in_array.data() + jumpb_in_array.size());
+
+        // Gradient Descent parameters
+        double learning_rate = 0.01;
+        int max_iters = 1000;
+        double tol = 1e-6;
+
+        for (int i = 0; i < parent->B; i++) {
+            if (parent->onDebug) Rcpp::Rcout << "In: fitCORfunction" << i << std::endl;
+            string biomarker_b = parent->biomarkers[i];
+             //   Function evalLoglikelhoodCOP_i = parent->evalLoglikelhoodCOP[biomarker_b];    
+            double maxtitre_b = parent->max_titre[biomarker_b];
+            if (parent->onDebug) Rcpp::Rcout << "LOL1" << i << std::endl;
+             Eigen::VectorXd esttitreExp;
+            if (init) {
+                esttitreExp = parent->currentTitreExp.col(i);
+            } else {
+                esttitreExp = parent->proposalTitreExp.col(i);
+            }
+
+            std::vector<double> esttitreExpVec(esttitreExp.data(), esttitreExp.data() + esttitreExp.size());
+            if (parent->onDebug) Rcpp::Rcout << "LOL2" << i << std::endl;
+
+            // Initial guesses for parameters [gamma, beta, alpha, k]
+            Eigen::VectorXd params(4);
+            params << 1.0, -2.0, maxtitre_b / 2.0, 1.0;
+            Eigen::VectorXd lb(4);
+            lb << 0.0, -10.0, 0.0, 0.5;
+            Eigen::VectorXd ub(4);
+            ub << 5.0, 10.0, maxtitre_b, 5.0;
+
+            // Perform gradient descent
+            FittedCOP.row(i) = gradientDescentWithBounds(esttitreExpVec, jumpb_in, params, lb, ub, 
+                learning_rate, max_iters, tol);
+
+        }
+
+        if (init) {
+            parent->currentCORPars = FittedCOP;
+        } else {
+            parent->proposalCORPars = FittedCOP;
+        }
+        if (parent->onDebug) Rcpp::Rcout << "Out: fitCORfunction" << std::endl;
+
+    }
 
 /**
  * @brief Evaluate the log likelihood of the COP part of the model
@@ -178,9 +275,9 @@ private:
             std::vector<std::vector<DoubleWithString> > proposalTitreFull_i = parent->proposalTitreFull[i_idx]; 
             for (int bio = 0; bio < parent->B; bio++) {
                 string biomarker_b = parent->biomarkers[bio];
-                Function evalLoglikelhoodCOP_i = parent->evalLoglikelhoodCOP[biomarker_b];
+             //   Function evalLoglikelhoodCOP_i = parent->evalLoglikelhoodCOP[biomarker_b];
                 double maxtitre_b = parent->max_titre[biomarker_b];
-                NumericVector pars = parent->proposalParsCOP[biomarker_b];
+               // NumericVector pars = parent->proposalParsCOP[biomarker_b];
 
                 std::vector<DoubleWithString> proposalTitreFull_i_b = proposalTitreFull_i[bio];
                 if (jump[i_idx] == -1) {
@@ -192,7 +289,7 @@ private:
                                 titre_est = proposalTitreFull_i_b[j].value;
                             }
                         }
-                        ll += as<double>(evalLoglikelhoodCOP_i(0, titre_est, pars, maxtitre_b) );
+                     //   ll += as<double>(evalLoglikelhoodCOP_i(0, titre_est, pars, maxtitre_b) );
 
                        // ll += this->CORfunction(0, titre_est, pars, b );
                     }
@@ -204,7 +301,7 @@ private:
                             titre_est = proposalTitreFull_i_b[j].value;
                         }
                     }
-                    ll += as<double>(evalLoglikelhoodCOP_i(1, titre_est, pars, maxtitre_b) );
+                  //  ll += as<double>(evalLoglikelhoodCOP_i(1, titre_est, pars, maxtitre_b) );
                 }                    
                 titreExp(i_idx, bio) = titre_est;
             }

@@ -311,6 +311,11 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
     modelSeroJump$observationalModel <- modeldefinition$observationalModel$model
     modelSeroJump$abkineticsModel <- modeldefinition$abkineticsModel$model
     modelSeroJump$copModel <- modeldefinition$copModel$model
+
+    if (is.null(modelSeroJump$copModel)) {
+        modelSeroJump$copModel <- list()
+    }
+
    # id_ab <- modeldefinition$abkineticsModel$model %>% map(~.x$id) %>% unlist
    # names(modelSeroJump$abkineticsModel) <- id_ab
 

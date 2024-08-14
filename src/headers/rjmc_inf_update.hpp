@@ -182,14 +182,16 @@ private:
      * 
      */
     void updatePars(NumericVector paramsN) {
-        for (int i = 0; i < parent->B; ++i) {
-            NumericVector currentParsCOP_i;
-            int i_b = parent->mapOfCOP[parent->biomarkers[i]];
-            StringVector parnams = parent->parsCOPN[i_b];
-            for (int j = 0; j < parnams.size(); ++j) {
-                currentParsCOP_i.push_back(paramsN[as<string>(parnams[j])]);
-            } 
-            parent->proposalParsCOP[parent->biomarkers[i]] = currentParsCOP_i;
+        if (parent->copFlag) {
+            for (int i = 0; i < parent->B; ++i) {
+                NumericVector currentParsCOP_i;
+                int i_b = parent->mapOfCOP[parent->biomarkers[i]];
+                StringVector parnams = parent->parsCOPN[i_b];
+                for (int j = 0; j < parnams.size(); ++j) {
+                    currentParsCOP_i.push_back(paramsN[as<string>(parnams[j])]);
+                } 
+                parent->proposalParsCOP[parent->biomarkers[i]] = currentParsCOP_i;
+            }
         }
 
         for (int i = 0; i < parent->B; ++i) {
@@ -212,6 +214,7 @@ private:
             parent->currentParsAb[parent->abID[i]] = currentParsAb_i;
         }
     }
+
 
     /**
      * @brief Define the abinfo vector

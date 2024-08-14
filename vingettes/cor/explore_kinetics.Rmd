@@ -189,3 +189,46 @@ df_summary %>%
 
 
 ```
+
+
+```{r}
+
+copFuncFormGeneralised <- function(esttitreExp, gamma, beta, alpha, k) {
+
+    r <- beta * (esttitreExp - alpha)
+    p <- gamma * ((r / (1 + abs(r)^k)^(1 / k)) * 0.5 + 0.5)
+}
+
+N <- 1000
+gamma_vec <- runif(N, 0.5, 0.5)
+beta_vec <- runif(N, -1, -1)
+alpha_vec <- runif(N, 2, 2)
+k_vec <- runif(N, 1) # fixed
+
+df_summary <- map_df(1:N,
+    function(i) {
+        data.frame(
+            samle = i,
+            x = seq(0, 10, 0.1),
+            f = map_dbl(seq(0, 10, 0.1), copFuncFormGeneralised, gamma = gamma_vec[i], beta = beta_vec[i], alpha = alpha_vec[i], k = k_vec[i]) 
+        ) 
+    }
+) %>% group_by(x) %>% mean_qi(f, .width = c(0.1, 0.5, 0.75, 0.95))
+
+
+df_summary %>%
+    ggplot() +
+       geom_ribbon(data = df_summary %>% filter(.width == 0.1),
+        aes(x = x, ymin = .lower, ymax =  .upper), alpha = 0.5) +
+       geom_ribbon(data = df_summary %>% filter(.width == 0.5),
+        aes(x = x, ymin = .lower, ymax =  .upper), alpha = 0.5) +
+       geom_ribbon(data = df_summary %>% filter(.width == 0.75),
+        aes(x = x, ymin = .lower, ymax =  .upper), alpha = 0.5) +
+       geom_ribbon(data = df_summary %>% filter(.width == 0.95),
+        aes(x = x, ymin = .lower, ymax =  .upper), alpha = 0.5) +
+        geom_line(data = df_summary %>% filter(.width == 0.1), aes(x = x, y = f))
+
+
+
+
+```

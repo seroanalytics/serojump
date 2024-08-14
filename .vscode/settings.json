@@ -105,6 +105,11 @@
         "format": "cpp",
         "__memory": "cpp",
         "execution": "cpp",
-        "stdfloat": "cpp"
+        "stdfloat": "cpp",
+        "core": "cpp",
+        "fft": "cpp",
+        "kroneckerproduct": "cpp",
+        "numericaldiff": "cpp",
+        "splines": "cpp"
     }
 }

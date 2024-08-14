@@ -351,7 +351,94 @@ plot_inf_recInf <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
 }
 
 
-plot_cop_recInf <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
+
+plot_cop_recInf3 <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
+
+    fit_states <- outputfull$fit_states
+    filename <- outputfull$filename
+    modelname <- outputfull$modelname
+
+    post <- fitfull$post
+    data_t <- fitfull$data_t
+
+    n_chains <- outputfull$n_chains
+    n_post <- outputfull$n_post
+    n_length <- n_chains * n_post
+    chain_samples <- 1:n_chains %>% map(~c(rep(.x, n_post))) %>% unlist
+
+    model_outline <- fitfull$model
+
+    post_fit <- post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
+    biomarkers <- model_outline$infoModel$biomarkers
+
+    fit_states_edit <- fit_states %>% pivot_longer(all_of(biomarkers), names_to = "biomarker", values_to = "value")
+
+    # Titre at infection
+    df_mean_inf <- fit_states_edit %>% group_by(id, inf_ind, biomarker) %>%
+        summarise(value = mean(value), n = n(), prop = n() / n_length ) %>% 
+            ungroup 
+
+    df_mean_info <- map_df(biomarkers, 
+        function(biomarker_i) {
+            mean_data_b <- df_mean_inf %>% filter(biomarker == biomarker_i)
+
+            model <- glm(inf_ind ~ value, data = mean_data_b, family = binomial, weights = mean_data_b$n)
+            mean_data_b$predicted_prob <- predict(model, type = "response")
+            # Extract the coefficient for the predictor x
+            beta_1 <- coef(model)["value"]
+
+            # Compute the gradient (slope) at each point
+            mean_data_b$gradient <- beta_1 * mean_data_b$predicted_prob * (1 - mean_data_b$predicted_prob)
+            mean_data_b$deviance <- model$deviance       # Residual deviance
+            mean_data_b$null.deviance <- model$null.deviance  # Null deviance
+            mean_data_b$AIC <- AIC(model)  # AIC
+            mean_data_b$ll <- logLik(model)[1]  # AIC
+
+            mean_data_b
+        }
+    ) %>% mutate(infection_status = ifelse(inf_ind == 1, "At infection", "Over season"))
+
+
+    p1 <- df_mean_info %>% 
+        ggplot() + 
+        geom_boxplot(aes(x = infection_status, y = value)) + facet_wrap(vars(biomarker)) + 
+        labs(x = "Infection status", y = "Titre value") + theme_bw()
+
+            # Titre at infection
+    p2 <- df_mean_info %>% ggplot() + 
+            geom_point(aes(x = value, y = inf_ind ), alpha = 0.5) + 
+            geom_line(aes(x = value, y = predicted_prob, color = biomarker)) +
+                    facet_wrap(vars(biomarker)) + 
+            labs(x = "Titre value", y = "Infection status") + theme_bw()
+
+    min_point <- df_mean_info %>% group_by(biomarker) %>% filter(gradient == min(gradient))
+
+    p3 <- df_mean_info %>% 
+        ggplot() + 
+            geom_line(aes(x = value, y = gradient, color = biomarker), size = 2, alpha = 0.5) + 
+            geom_point(data = min_point, aes(x = value, y = gradient, color = biomarker), size = 4, alpha = 0.9) + 
+            labs(x = "Titre value", y = "Gradient of fitted logistic equation") + theme_bw() 
+
+    df_mean_info_gof <- df_mean_info %>% select(biomarker, deviance, null.deviance, AIC) %>% unique %>% 
+        pivot_longer(!biomarker, names_to = "gof", values_to = "value")
+
+
+    df_mean_info_ll <- df_mean_info %>% select(biomarker, ll) %>% unique %>% 
+        pivot_longer(!biomarker, names_to = "gof", values_to = "value")
+
+
+    p4 <- df_mean_info_ll %>% 
+        ggplot() + 
+            geom_col(aes(x = value, y = gof, fill = biomarker), position = "dodge") + 
+            labs(x = "Log likelihood", y = "Model fit metric") + theme_bw()
+
+    p1 / (p2 + p3 + p4) + plot_layout(guides = "collect")
+    ggsave(here::here("outputs", "fits", filename,  "figs", modelname, fig_folder, "cop_recov_3.png"), height = 10, width = 12)
+
+
+}
+
+plot_cop_recInf1 <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
 
     fit_states <- outputfull$fit_states
     filename <- outputfull$filename
@@ -452,6 +539,28 @@ plot_cop_recInf <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
     p1 / p2
     ggsave(here::here("outputs", "fits", filename,  "figs", modelname, fig_folder, "cop_recov_1.png"), height = 10, width = 10)
 
+}
+
+
+plot_cop_recInf2 <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
+
+
+
+    fit_states <- outputfull$fit_states
+    filename <- outputfull$filename
+    modelname <- outputfull$modelname
+
+    post <- fitfull$post
+    data_t <- fitfull$data_t
+
+    n_chains <- outputfull$n_chains
+    n_post <- outputfull$n_post
+    n_length <- n_chains * n_post
+    chain_samples <- 1:n_chains %>% map(~c(rep(.x, n_post))) %>% unlist
+
+    model_outline <- fitfull$model
+
+    post_fit <- post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
 
     n_post <- outputfull$n_post
     n_length <- n_chains * n_post
@@ -494,16 +603,6 @@ plot_cop_recInf <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
         figA <- figA + scale_x_continuous(breaks = scale_ab %>% as.numeric, labels = scale_ab %>% names)
     }
 
-
-   # nih_inf_raw <- read_excel(path = here::here("data", "nih_2024_XX", "2022_2023_Flu_Swabs.xlsx") )
-   # pid_cols <- data_titre %>% select(pid, id)
-   # swab_info <- nih_inf_raw %>% filter(year == 2023) %>% left_join(pid_cols) %>% select(pid, id, swab_virus) %>% unique
-   # swab_info %>% left_join(cop_exp_sum_plot_all %>% mutate(id = as.numeric(id)), by = "id" ) %>% 
-   #       ggplot() + 
-   #         geom_linerange( 
-   #         aes(y = prop, xmin = .lower, xmax = .upper, color = swab_virus), size = 1, alpha = 0.7) + 
-   #         geom_point(aes(x = titre_val, y = prop, color = swab_virus), alpha = 0.7, size = 3) + 
-   #         theme_bw() 
 
     ggsave(here::here("outputs", "fits", filename,  "figs", modelname, fig_folder, "cop_recov_2.png"), height = 10, width = 10)
 
@@ -597,7 +696,7 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
   # modelname <- "h3"
   # n_chains <- 4
    # filename <- "hpc/transvir_w2_inf/p3"
-   # modelname <- "w2"
+   # modelname <- "w3"
    # n_chains <- 4
    # scale_ab <- NULL
 
@@ -612,36 +711,36 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
     outputfull <- readRDS(file = here::here("outputs", "fits", filename, paste0("pp_", modelname, ".RDS")))
 
  #   scale_ab <- NULL
-    postconvergeFigs_Inf(fitfull_pp, filename, modelname, TRUE)
-    postconvergeFigs_Inf(fitfull, filename, modelname)
+    postconvergeFigs_Inf(fitfull_pp, outputfull_pp, filename, modelname, TRUE)
+    postconvergeFigs_Inf(fitfull, outputfull, filename, modelname)
 
    # postprocess_cop(fitfull, filename, modelname, n_chains)
 
     fig_folder <- "post"
     plot_titre_obsInf(outputfull, fitfull, fig_folder, scale_ab)
     plot_titre_expInf(outputfull, fitfull, fig_folder, scale_ab)
+    plot_cop_recInf3(outputfull, fitfull, fig_folder, scale_ab)
     plot_abkinetics_trajectoriesInf(outputfull, fitfull, fig_folder)
     plot_inf_recInf(outputfull,fitfull, fig_folder,  scale_ab)
     plot_exp_times_recInf(outputfull, fitfull, fig_folder)
-    plot_cop_recInf(outputfull, fitfull, fig_folder, scale_ab)
     plot_abkinetics_trajectories2Inf(outputfull, fitfull, fig_folder)
 
 
     fig_folder <- "pp"
     plot_titre_obsInf(outputfull_pp, fitfull_pp, fig_folder, scale_ab)
     plot_titre_expInf(outputfull_pp, fitfull_pp, fig_folder, scale_ab)
+    plot_cop_recInf3(outputfull_pp, fitfull_pp, fig_folder, scale_ab)
     plot_abkinetics_trajectoriesInf(outputfull_pp, fitfull_pp, fig_folder)
     #plot_abkinetics_trajectories2Inf(outputfull_pp, fitfull_pp, fig_folder)
     plot_inf_recInf(outputfull_pp, fitfull_pp, fig_folder,  scale_ab)
     plot_exp_times_recInf(outputfull_pp, fitfull_pp, fig_folder)
-    plot_cop_recInf(outputfull_pp, fitfull_pp, fig_folder, scale_ab)
 
 
 
 }
 
 
-postconvergeFigs_Inf <- function(fitfull, filename, modelname, priorPred = FALSE) {
+postconvergeFigs_Inf <- function(fitfull, outputfull, filename, modelname, priorPred = FALSE) {
 
     if (!priorPred) {
         filepath <- here::here("outputs", "fits", filename, "figs",  modelname, "post")
@@ -650,7 +749,7 @@ postconvergeFigs_Inf <- function(fitfull, filename, modelname, priorPred = FALSE
         filepath <- here::here("outputs", "fits", filename, "figs",  modelname, "pp")
         dir.create(filepath, showWarnings = FALSE, recursive = TRUE)
     }
-    seroJumpPostDaig(fitfull, filepath)
+    seroJumpPostDaig(fitfull, outputfull, filepath)
 
 }
 

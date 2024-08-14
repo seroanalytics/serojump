@@ -220,7 +220,7 @@ modeldefinition_h1_p1 <- list(
     exposureFitted = exposureFitted_h1,
     observationalModel = observationalModel_h1,
     abkineticsModel = abkineticsModel_h1,
-    copModel = copModel_h1,
+    copModel = NULL,
     expInfPrior = inf_prior_1,
     exposurePrior = exp_prior,
     exposurePriorType = "empirical"
@@ -348,7 +348,7 @@ modeldefinition_h3_p1 <- list(
     exposureFitted = exposureFitted_h3,
     observationalModel = observationalModel_h3,
     abkineticsModel = abkineticsModel_h3,
-    copModel = copModel_h3,
+    copModel = NULL,
     expInfPrior = inf_prior_1,
     exposurePrior = exp_prior,
     exposurePriorType = "empirical"
