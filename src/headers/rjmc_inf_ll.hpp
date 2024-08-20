@@ -141,7 +141,7 @@ private:
         double abs_r = std::abs(r);
         double r_term = std::pow(abs_r, k);
         double denominator = std::pow(1 + r_term, 1.0 / k);
-        double p = gamma * ((r / denominator) * 0.5 + 0.5);
+        double p = gamma * ((r / denominator) * 0.5 + 0.5); 
         return p;
     }
 
@@ -219,7 +219,7 @@ private:
         for (int i = 0; i < parent->B; i++) {
             if (parent->onDebug) Rcpp::Rcout << "In: fitCORfunction" << i << std::endl;
             string biomarker_b = parent->biomarkers[i];
-             //   Function evalLoglikelhoodCOP_i = parent->evalLoglikelhoodCOP[biomarker_b];    
+            //Function evalLoglikelhoodCOP_i = parent->evalLoglikelhoodCOP[biomarker_b];    
             double maxtitre_b = parent->max_titre[biomarker_b];
             if (parent->onDebug) Rcpp::Rcout << "LOL1" << i << std::endl;
              Eigen::VectorXd esttitreExp;
@@ -275,9 +275,9 @@ private:
             std::vector<std::vector<DoubleWithString> > proposalTitreFull_i = parent->proposalTitreFull[i_idx]; 
             for (int bio = 0; bio < parent->B; bio++) {
                 string biomarker_b = parent->biomarkers[bio];
-             //   Function evalLoglikelhoodCOP_i = parent->evalLoglikelhoodCOP[biomarker_b];
+                Function evalLoglikelhoodCOP_i = parent->evalLoglikelhoodCOP[biomarker_b];
                 double maxtitre_b = parent->max_titre[biomarker_b];
-               // NumericVector pars = parent->proposalParsCOP[biomarker_b];
+                NumericVector pars = parent->proposalParsCOP[biomarker_b];
 
                 std::vector<DoubleWithString> proposalTitreFull_i_b = proposalTitreFull_i[bio];
                 if (jump[i_idx] == -1) {
@@ -289,7 +289,7 @@ private:
                                 titre_est = proposalTitreFull_i_b[j].value;
                             }
                         }
-                     //   ll += as<double>(evalLoglikelhoodCOP_i(0, titre_est, pars, maxtitre_b) );
+                       ll += as<double>(evalLoglikelhoodCOP_i(0, titre_est, pars, maxtitre_b) );
 
                        // ll += this->CORfunction(0, titre_est, pars, b );
                     }
@@ -301,7 +301,7 @@ private:
                             titre_est = proposalTitreFull_i_b[j].value;
                         }
                     }
-                  //  ll += as<double>(evalLoglikelhoodCOP_i(1, titre_est, pars, maxtitre_b) );
+                    ll += as<double>(evalLoglikelhoodCOP_i(1, titre_est, pars, maxtitre_b) );
                 }                    
                 titreExp(i_idx, bio) = titre_est;
             }

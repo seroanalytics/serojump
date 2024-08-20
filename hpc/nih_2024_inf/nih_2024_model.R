@@ -69,37 +69,77 @@ infSerumKinetics_titredep <- function(titre_est, timeSince, pars) {
     titre_est
 }
 
-copFuncForm <- function(inf_status, esttitreExp, params, maxtitre) {
-    beta0 <- params[1]
-    beta1 <- params[2]
-    mu <- params[3]
+#copFuncForm <- function(inf_status, esttitreExp, params, maxtitre) {
+#    beta0 <- params[1]
+#    beta1 <- params[2]
+#    mu <- params[3]
 
-    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
-}
-
-
-copFuncFormInformed <- function(inf_status, esttitreExp, params, maxtitre) {
-    ep <- params[1]
-    beta1 <- params[2]
-    mu <- params[3]
-
-    beta0 <- log(0.1) - beta1 * maxtitre - ep
-    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
-}
+#    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+#}
 
 
-copLogLikelihood <- function(inf_status, esttitreExp, params, maxtitre) {
+#copFuncFormInformed <- function(inf_status, esttitreExp, params, maxtitre) {
+#    ep <- params[1]
+#    beta1 <- params[2]
+#    mu <- params[3]
+
+#    beta0 <- log(0.1) - beta1 * maxtitre - ep
+#    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+#}
+
+
+#copLogLikelihood <- function(inf_status, esttitreExp, params, maxtitre) {
     # COP parameters
-    ep <- params[1]
-    beta1 <- params[2]
-    mu <- params[3]
+#    ep <- params[1]
+#    beta1 <- params[2]
+#    mu <- params[3]
 
-    beta0 <- log(0.1) - beta1 * maxtitre - ep
-    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+#    beta0 <- log(0.1) - beta1 * maxtitre - ep
+#    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
 
+ #   ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
+#    ll
+#}
+
+copFuncFormGeneralised <- function(inf_status, esttitreExp, params, maxtitre ) {
+
+    gamma <- params[1]
+    k <- params[2]
+    beta_mean <- params[3]
+    beta_z <- params[4]
+    beta_sigma <- params[5]
+    alpha_mean <- params[6]
+    alpha_z <- params[7]
+    alpha_sigma <- params[8]
+
+    beta <- inv.logit(beta_mean + beta_z * beta_sigma) * -3
+    alpha <- inv.logit(alpha_mean + alpha_z * alpha_sigma) * (maxtitre * 0.75)
+
+    r <- beta * (esttitreExp - alpha)
+    p <- gamma * ((r / (1 + abs(r)^k)^(1 / k)) * 0.5 + 0.5)
+    p
+}
+
+copLogLikelihood <- function(inf_status, esttitreExp, params, maxtitre ) {
+
+    gamma <- params[1]
+    k <- params[2]
+    beta_mean <- params[3]
+    beta_z <- params[4]
+    beta_sigma <- params[5]
+    alpha_mean <- params[6]
+    alpha_z <- params[7]
+    alpha_sigma <- params[8]
+
+    beta <- inv.logit(beta_mean + beta_z * beta_sigma) * - 3
+    alpha <- inv.logit(alpha_mean + alpha_z * alpha_sigma) * (maxtitre * 0.75)
+
+    r <- beta * (esttitreExp - alpha)
+    p <- gamma * ((r / (1 + abs(r)^k)^(1 / k)) * 0.5 + 0.5)
     ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
     ll
 }
+
 
 
 ########################################################################
@@ -173,20 +213,22 @@ abkineticsModel_h1 <- list(
     )
 )
 
+
 copModel_h1 <- list( 
         model = makeModel(
-            addCopModel("A/Sydney/5/2021", "h1_2023", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
-            addCopModel("A/Sydney/5/2021e", "h1_2023", c("beta0_e", "beta1_e", "mu_e"), copFuncForm, copLogLikelihood)
+            addCopModel("A/Sydney/5/2021", "h1_2023", c("gamma", "k", "beta", "beta_z_1", "beta_sigma", "alpha", "alpha_z_1", "alpha_sigma"), copFuncFormGeneralised, copLogLikelihood),
+            addCopModel("A/Sydney/5/2021e", "h1_2023", c("gamma", "k", "beta", "beta_z_2", "beta_sigma", "alpha", "alpha_z_2", "alpha_sigma"), copFuncFormGeneralised, copLogLikelihood)
         ),
         prior = bind_rows(
-            add_par_df("beta0", 0, 10, "norm", 4.5, 2.5), # cop model (not used here)
-            add_par_df("beta1", -5, 0, "unif", -5, 0),
-            add_par_df("mu", 0.01, 0.5, "unif", 0.01, 0.5),
-            add_par_df("beta0_e", 0, 10, "norm",  4.5, 2.5), # cop model (not used here)
-            add_par_df("beta1_e", -5, 0, "unif", -5, 0),
-            add_par_df("mu_e", 0.01, 0.5, "unif", 0.01, 0.5),
+            add_par_df("gamma", 0, 1, "unif", 0, 1),
+            add_par_df("k", 1, 3, "unif", 1, 3),
+            add_par_df("beta", 0, 10, "norm", 0, 1),
+            add_par_pool_df_non_centered("beta_z", 2, 0, "beta_sigma", "exp", 2, NA),
+            add_par_df("alpha", -10, 10, "norm", 0, 1.5),
+            add_par_pool_df_non_centered("alpha_z", 2, 0, "alpha_sigma", "exp", 2, NA)
         )
 )
+
 
           #  add_par_df("beta0", 0, 10, "norm", 5, 2.5), # cop model (not used here)
            # add_par_df("beta1", -5, 0, "unif", -5, 0),
@@ -220,7 +262,7 @@ modeldefinition_h1_p1 <- list(
     exposureFitted = exposureFitted_h1,
     observationalModel = observationalModel_h1,
     abkineticsModel = abkineticsModel_h1,
-    copModel = NULL,
+    copModel = copModel_h1,
     expInfPrior = inf_prior_1,
     exposurePrior = exp_prior,
     exposurePriorType = "empirical"
@@ -310,19 +352,18 @@ abkineticsModel_h3 <- list(
 
 copModel_h3 <- list( 
         model = makeModel(
-            addCopModel("A/Darwin/06/2021", "h3_2023", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
-            addCopModel("A/Darwin/09/2021e", "h3_2023", c("beta0_e", "beta1_e", "mu_e"), copFuncForm, copLogLikelihood)
+            addCopModel("A/Darwin/06/2021", "h3_2023", c("gamma", "k", "beta", "beta_z_1", "beta_sigma", "alpha", "alpha_z_1", "alpha_sigma"), copFuncFormGeneralised, copLogLikelihood),
+            addCopModel("A/Darwin/09/2021e", "h3_2023", c("gamma", "k", "beta", "beta_z_2", "beta_sigma", "alpha", "alpha_z_2", "alpha_sigma"), copFuncFormGeneralised, copLogLikelihood)
         ),
         prior = bind_rows(
-            add_par_df("beta0", 0, 10, "norm", 4, 2.5), # cop model (not used here)
-            add_par_df("beta1", -5, 0, "unif", -5, 0),
-            add_par_df("mu", 0.01, 0.5, "unif", 0.01, 0.5),
-            add_par_df("beta0_e", 0, 10, "norm",  5, 2.5), # cop model (not used here)
-            add_par_df("beta1_e", -5, 0, "unif", -5, 0),
-            add_par_df("mu_e", 0.01, 0.5, "unif", 0.01, 0.5),
+            add_par_df("gamma", 0, 1, "unif", 0, 1),
+            add_par_df("k", 1, 3, "unif", 1, 3),
+            add_par_df("beta", 0, 1.5, "norm", 0, 1),
+            add_par_pool_df_non_centered("beta_z", 2, 0, "beta_sigma", "exp", 2, NA),
+            add_par_df("alpha", -10, 10, "norm", 0, 1.5),
+            add_par_pool_df_non_centered("alpha_z", 2, 0, "alpha_sigma", "exp", 2, NA)
         )
 )
-
 
 inf_prior_1 <- function(N, E, I, K) {
     0
@@ -348,7 +389,7 @@ modeldefinition_h3_p1 <- list(
     exposureFitted = exposureFitted_h3,
     observationalModel = observationalModel_h3,
     abkineticsModel = abkineticsModel_h3,
-    copModel = NULL,
+    copModel = copModel_h3,
     expInfPrior = inf_prior_1,
     exposurePrior = exp_prior,
     exposurePriorType = "empirical"
@@ -365,7 +406,6 @@ seroModel_nih_h3_p1 <- createSeroJumpModel(data_titre_h3, known_exposure_h3, mod
 seroModel_nih_h3_p2 <- createSeroJumpModel(data_titre_h3, known_exposure_h3, modeldefinition_h3_p2)
 seroModel_nih_h3_p3 <- createSeroJumpModel(data_titre_h3, known_exposure_h3, modeldefinition_h3_p3)
 
-seroModel_nih_h3_p1$data$max_titre
 
 ##########################################
 ############ Make models

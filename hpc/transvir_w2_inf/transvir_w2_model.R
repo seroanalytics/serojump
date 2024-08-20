@@ -18,9 +18,6 @@ sero_confirmed <-  gambia_pvnt_w2 %>% group_by(id) %>% mutate(r = row_number(), 
         filter(is.na(type))
 
 
-log10((10^1.64) / (10^0.801))
-
-
 rate_inf_w2 <- (sero_confirmed %>% nrow) / (gambia_pvnt_w2$id %>% unique %>% length)
 
 
@@ -46,33 +43,72 @@ noInfSerumKinetics <- function(titre_est, timeSince, pars) {
 }
 
 
-copFuncForm <- function(inf_status, esttitreExp, params, maxtitre) {
-    beta0 <- params[1]
-    beta1 <- params[2]
-    mu <- params[3]
+#copFuncForm <- function(inf_status, esttitreExp, params, maxtitre) {
+#    beta0 <- params[1]
+#    mu <- params[3]
+#    beta1 <- params[2]
 
-    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
-}
+#    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+#}
 
-copFuncFormInformed <- function(inf_status, esttitreExp, params, maxtitre) {
-    ep <- params[1]
-    beta1 <- params[2]
-    mu <- params[3]
+#copFuncFormInformed <- function(inf_status, esttitreExp, params, maxtitre) {
+#    ep <- params[1]
+#    beta1 <- params[2]
+#    mu <- params[3]
 
-    beta0 <- log(0.1) - beta1 * maxtitre - ep
-    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
-}
+#    beta0 <- log(0.1) - beta1 * maxtitre - ep
+#    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+#}
 
 
-copLogLikelihood <- function(inf_status, esttitreExp, params, maxtitre) {
+#copLogLikelihood <- function(inf_status, esttitreExp, params, maxtitre) {
     # COP parameters
-    ep <- params[1]
-    beta1 <- params[2]
-    mu <- params[3]
+#    ep <- params[1]
+#    beta1 <- params[2]
+#    mu <- params[3]
 
-    beta0 <- log(0.1) - beta1 * maxtitre - ep
-    p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
+#    beta0 <- log(0.1) - beta1 * maxtitre - ep
+ #   p <- mu / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
 
+ #   ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
+ #   ll
+#}
+
+copFuncFormGeneralised <- function(inf_status, esttitreExp, params, maxtitre ) {
+
+    gamma <- params[1]
+    k <- params[2]
+    beta_mean <- params[3]
+    beta_z <- params[4]
+    beta_sigma <- params[5]
+    alpha_mean <- params[6]
+    alpha_z <- params[7]
+    alpha_sigma <- params[8]
+
+    beta <- inv.logit(beta_mean + beta_z * beta_sigma) * -3
+    alpha <- inv.logit(alpha_mean + alpha_z * alpha_sigma) * (maxtitre * 0.75)
+
+    r <- beta * (esttitreExp - alpha)
+    p <- gamma * ((r / (1 + abs(r)^k)^(1 / k)) * 0.5 + 0.5)
+    p
+}
+
+copLogLikelihood <- function(inf_status, esttitreExp, params, maxtitre ) {
+
+    gamma <- params[1]
+    k <- params[2]
+    beta_mean <- params[3]
+    beta_z <- params[4]
+    beta_sigma <- params[5]
+    alpha_mean <- params[6]
+    alpha_z <- params[7]
+    alpha_sigma <- params[8]
+
+    beta <- inv.logit(beta_mean + beta_z * beta_sigma) * - 3
+    alpha <- inv.logit(alpha_mean + alpha_z * alpha_sigma) * (maxtitre * 0.75)
+
+    r <- beta * (esttitreExp - alpha)
+    p <- gamma * ((r / (1 + abs(r)^k)^(1 / k)) * 0.5 + 0.5)
     ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
     ll
 }
@@ -157,20 +193,38 @@ abkineticsModel <- list(
 )
 
 
+# modelW2_p1$data$max_titre
+max_titre <- 3.72153 / 2
+
 copModel <- list( 
         model = makeModel(
-            addCopModel("sVNT", "delta", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
-            addCopModel("IgA", "delta", c("beta0_a", "beta1_a", "mu_a"), copFuncForm, copLogLikelihood)
+            addCopModel("sVNT", "delta", c("gamma", "k", "beta", "beta_z_1", "beta_sigma", "alpha", "alpha_z_1", "alpha_sigma"), copFuncFormGeneralised, copLogLikelihood),
+            addCopModel("IgA", "delta", c("gamma", "k", "beta", "beta_z_2", "beta_sigma", "alpha", "alpha_z_2", "alpha_sigma"), copFuncFormGeneralised, copLogLikelihood)
         ),
         prior = bind_rows(
-            add_par_df("beta0", 0, 4, "norm", 1.76852, 1), # cop model (not used here)
-            add_par_df("beta1", -5, 0, "unif", -5, 0),
-            add_par_df("mu", 0.01, 1, "unif", 0.01, 1),
-            add_par_df("beta0_a", 0, 4, "norm", 1.76852, 1), # cop model (not used here)
-            add_par_df("beta1_a", -5, 0, "unif", -5, 0),
-            add_par_df("mu_a", 0.01, 1, "unif", 0.01, 1),
+            add_par_df("gamma", 0, 1, "unif", 0, 1),
+            add_par_df("k", 1, 3, "unif", 1, 3),
+            add_par_df("beta", 0, 10, "norm", 0, 1.5),
+            add_par_pool_df_non_centered("beta_z", 2, 0, "beta_sigma", "exp", 2, NA),
+            add_par_df("alpha", -10, 10, "norm", 0, 1),
+            add_par_pool_df_non_centered("alpha_z", 2, 0, "alpha_sigma", "exp", 2, NA)
         )
 )
+
+#copModel_old <- list( 
+#        model = makeModel(
+#            addCopModel("sVNT", "delta", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
+#            addCopModel("IgA", "delta", c("beta0_a", "beta1_a", "mu_a"), copFuncForm, copLogLikelihood)
+#        ),
+#        prior = bind_rows(
+#            add_par_df("beta0", 0, 4, "norm", 1.76852, 1), # cop model (not used here)
+#            add_par_df("beta1", -5, 0, "unif", -5, 0),
+#            add_par_df("mu", 0.01, 1, "unif", 0.01, 1),
+#            add_par_df("beta0_a", 0, 4, "norm", 1.76852, 1), # cop model (not used here)
+#            add_par_df("beta1_a", -5, 0, "unif", -5, 0),
+#            add_par_df("mu_a", 0.01, 1, "unif", 0.01, 1),
+#        )
+#)
 
 
 
@@ -199,11 +253,14 @@ modeldefinition_w2_p1 <- list(
     exposureFitted = exposureFitted,
     observationalModel = observationalModel,
     abkineticsModel = abkineticsModel,
- #   copModel = copModel,
+    copModel = copModel,
     exposurePrior = exp_prior_w2,
     exposurePriorType = "empirical",
     expInfPrior = inf_prior_1
 )
+
+
+
 
 modeldefinition_w2_p2 <- modeldefinition_w2_p1
 modeldefinition_w2_p2$expInfPrior <- inf_prior_2
@@ -284,20 +341,35 @@ abkineticsModel <- list(
 
 
 
+
 copModel <- list( 
         model = makeModel(
-            addCopModel("sVNT", "omicron", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
-            addCopModel("IgA", "omicron", c("beta0_a", "beta1_a", "mu_a"), copFuncForm, copLogLikelihood)
+            addCopModel("sVNT", "delta", c("gamma", "k", "beta", "beta_z_1", "beta_sigma", "alpha", "alpha_z_1", "alpha_sigma"), copFuncFormGeneralised, copLogLikelihood),
+            addCopModel("IgA", "delta", c("gamma", "k", "beta", "beta_z_2", "beta_sigma", "alpha", "alpha_z_2", "alpha_sigma"), copFuncFormGeneralised, copLogLikelihood)
         ),
         prior = bind_rows(
-            add_par_df("beta0", 0, 4, "norm", 1.76852, 1), # cop model (not used here)
-            add_par_df("beta1", -5, 0, "unif", -5, 0),
-            add_par_df("mu", 0.01, 1, "unif", 0.01, 1),
-            add_par_df("beta0_a", 0, 4, "norm", 1.76852, 1), # cop model (not used here)
-            add_par_df("beta1_a", -5, 0, "unif", -5, 0),
-            add_par_df("mu_a", 0.01, 1, "unif", 0.01, 1),
+            add_par_df("gamma", 0, 1, "unif", 0, 1),
+            add_par_df("k", 1, 3, "unif", 1, 3),
+            add_par_df("beta", 0, 10, "norm", 0, 1.5),
+            add_par_pool_df_non_centered("beta_z", 2, 0, "beta_sigma", "exp", 2, NA),
+            add_par_df("alpha", -10, 10, "norm", 0, 1),
+            add_par_pool_df_non_centered("alpha_z", 2, 0, "alpha_sigma", "exp", 2, NA)
         )
 )
+#copModel <- list( 
+ #       model = makeModel(
+  #          addCopModel("sVNT", "omicron", c("beta0", "beta1", "mu"), copFuncFormGeneralised, copLogLikelihood),
+  #          addCopModel("IgA", "omicron", c("beta0_a", "beta1_a", "mu_a"), copFuncFormGeneralised, copLogLikelihood)
+  #      ),
+#        prior = bind_rows(
+ #           add_par_df("beta0", 0, 4, "norm", 1.76852, 1), # cop model (not used here)
+  #          add_par_df("beta1", -5, 0, "unif", -5, 0),
+  #          add_par_df("mu", 0.01, 1, "unif", 0.01, 1),
+   #         add_par_df("beta0_a", 0, 4, "norm", 1.76852, 1), # cop model (not used here)
+#            add_par_df("beta1_a", -5, 0, "unif", -5, 0),
+ #           add_par_df("mu_a", 0.01, 1, "unif", 0.01, 1),
+  #      )
+#)
 
 
 
@@ -340,7 +412,7 @@ modeldefinition_w3_p1 <- list(
     exposureFitted = exposureFitted,
     observationalModel = observationalModel,
     abkineticsModel = abkineticsModel,
-  #  copModel = copModel,
+    copModel = copModel,
     exposurePrior = exp_prior_w3,
     exposurePriorType = "empirical",
     expInfPrior = inf_prior_1

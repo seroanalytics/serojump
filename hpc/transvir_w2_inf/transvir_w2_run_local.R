@@ -1,5 +1,7 @@
 library(devtools)
 library(Rcpp)
+library(boot)
+
 
 devtools::load_all()
 i <- 6
@@ -14,9 +16,9 @@ prior_names_wave <- c("w2", "w2", "w2", "w3", "w3", "w3")
 settings <-  list(
     numberChainRuns = 4, 
     numberCores = 4,
-   iterations = 400,
-    burninPosterior = 200,
-    thin = 1,
+    iterations = 400000,
+    burninPosterior = 200000,
+    thin = 1000,
     consoleUpdates = 100,
     onAdaptiveCov = TRUE,
     updatesAdaptiveCov = 10,

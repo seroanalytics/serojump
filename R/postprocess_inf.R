@@ -496,6 +496,11 @@ plot_cop_recInf1 <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
         }
     )
 
+    require(boot)
+
+    cal_gradient <- function(pars) {
+        inv.logit(pars[, 3] + pars[, 4] * pars[,5]) * -3
+    }
 
     df_gradient <- 
     map_df(1:length(model_outline$copModel), 
@@ -516,7 +521,7 @@ plot_cop_recInf1 <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
                 }   
             }
 
-            gradient <- post_par[, 2] / 4
+            gradient <- cal_gradient(post_par)
             data.frame(
                 grad = gradient
             ) %>% mutate(biomarker = biomarker)
@@ -719,7 +724,8 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
     fig_folder <- "post"
     plot_titre_obsInf(outputfull, fitfull, fig_folder, scale_ab)
     plot_titre_expInf(outputfull, fitfull, fig_folder, scale_ab)
-    plot_cop_recInf3(outputfull, fitfull, fig_folder, scale_ab)
+    plot_cop_recInf1(outputfull, fitfull, fig_folder, scale_ab)
+    plot_cop_recInf2(outputfull, fitfull, fig_folder, scale_ab)
     plot_abkinetics_trajectoriesInf(outputfull, fitfull, fig_folder)
     plot_inf_recInf(outputfull,fitfull, fig_folder,  scale_ab)
     plot_exp_times_recInf(outputfull, fitfull, fig_folder)
@@ -729,7 +735,8 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
     fig_folder <- "pp"
     plot_titre_obsInf(outputfull_pp, fitfull_pp, fig_folder, scale_ab)
     plot_titre_expInf(outputfull_pp, fitfull_pp, fig_folder, scale_ab)
-    plot_cop_recInf3(outputfull_pp, fitfull_pp, fig_folder, scale_ab)
+    plot_cop_recInf1(outputfull_pp, fitfull_pp, fig_folder, scale_ab)    
+    plot_cop_recInf2(outputfull, fitfull, fig_folder, scale_ab)
     plot_abkinetics_trajectoriesInf(outputfull_pp, fitfull_pp, fig_folder)
     #plot_abkinetics_trajectories2Inf(outputfull_pp, fitfull_pp, fig_folder)
     plot_inf_recInf(outputfull_pp, fitfull_pp, fig_folder,  scale_ab)

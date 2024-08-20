@@ -4,7 +4,7 @@ library(data.table)
 
 devtools::load_all()
 
-i <- 1
+i <- 6
 seroModel_full <- readRDS(here::here("hpc", "nih_2024_inf", "nih_2024_model.RData"))
 name_vec <- names(seroModel_full)
 name_vec_spl <- str_split(name_vec, "_")
