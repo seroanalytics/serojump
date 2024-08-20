@@ -1,6 +1,7 @@
 library(devtools)
 library(Rcpp)
 library(data.table)
+library(boot)
 
 devtools::load_all()
 
