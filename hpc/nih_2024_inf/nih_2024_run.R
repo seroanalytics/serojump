@@ -1,5 +1,6 @@
 library(devtools)
 
+library(boot)
 library(Rcpp)
 devtools::load_all()
 i <- Sys.getenv("SLURM_ARRAY_TASK_ID")
