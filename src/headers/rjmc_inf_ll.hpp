@@ -297,6 +297,7 @@ private:
                             }
                         }
                         if (parent->copFlag) {
+                            Rcpp::Rcout << "HERE" << std::endl;
                             ll += as<double>(evalLoglikelhoodCOP_i(0, titre_est, pars, maxtitre_b) );
                         }
                        // ll += this->CORfunction(0, titre_est, pars, b );
