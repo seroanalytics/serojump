@@ -255,9 +255,16 @@ private:
             double anchor_time = initTime; // intiial time
             string anchor_func = orderedEvents[0].name; // initial event function
             // Extract 
+
             bio = parent->biomarkers[b]; // biomarker
             double initTitre = parent->initialTitreValue(i_idx, b); // start titre
             double anchor_titre = initTitre; //Anchot this
+
+           // Rcpp::Rcout << "i_idx: " << i_idx << std::endl;
+          // Rcpp::Rcout << "bio: " << bio << std::endl;
+           // Rcpp::Rcout << "original orderedEvents[0].name: " << orderedEvents[0].name << std::endl;
+           // Rcpp::Rcout << "original orderedEvents[0].value: " << orderedEvents[0].value << std::endl;  
+           // Rcpp::Rcout << "original initTitre: " << initTitre << std::endl;  
 
             // Define state with anchor func and start titre
             df_order_titre_b.clear();
@@ -265,10 +272,39 @@ private:
 
             // For all events
             for (int i = 1; i < orderedEvents.size(); i++) {
+
                 // Update time since last event
                 time_since = orderedEvents[i].value - anchor_time;
                 titre_obs = abkineticsFunction(anchor_titre, bio, anchor_func, time_since ); // Calcualte titre at new event
                 df_order_titre_b.emplace_back(orderedEvents[i].name, titre_obs); // add to vector
+            /*    if (i == 1) {
+                    Rcpp::Rcout << "1" << std::endl;
+                    Rcpp::Rcout << "1 orderedEvents[i].name: " << orderedEvents[i].name << std::endl;
+                    Rcpp::Rcout << "1 orderedEvents[i].value: " << orderedEvents[i].value << std::endl;
+                    Rcpp::Rcout << "1 time_since: " << time_since << std::endl;
+                    Rcpp::Rcout << "1 titre_obs: " << titre_obs << std::endl;
+                }
+                if (i == 2) {
+                    Rcpp::Rcout << "2" << std::endl;
+                    Rcpp::Rcout << "2 orderedEvents[i].name: " << orderedEvents[i].name << std::endl;
+                    Rcpp::Rcout << "2 orderedEvents[i].value: " << orderedEvents[i].value << std::endl;
+                    Rcpp::Rcout << "2 time_since: " << time_since << std::endl;
+                    Rcpp::Rcout << "2 titre_obs: " << titre_obs << std::endl;
+                }
+                if (i == 3) {
+                    Rcpp::Rcout << "3" << std::endl;
+                    Rcpp::Rcout << "3 orderedEvents[i].name: " << orderedEvents[i].name << std::endl;
+                    Rcpp::Rcout << "3 orderedEvents[i].value: " << orderedEvents[i].value << std::endl;
+                    Rcpp::Rcout << "3 time_since: " << time_since << std::endl;
+                    Rcpp::Rcout << "3 titre_obs: " << titre_obs << std::endl;
+                }
+                if (i == 4) {
+                    Rcpp::Rcout << "4" << std::endl;
+                    Rcpp::Rcout << "4 orderedEvents[i].name: " << orderedEvents[i].name << std::endl;
+                    Rcpp::Rcout << "4 orderedEvents[i].value: " << orderedEvents[i].value << std::endl;
+                    Rcpp::Rcout << "4 time_since: " << time_since << std::endl;
+                    Rcpp::Rcout << "4 titre_obs: " << titre_obs << std::endl;
+                }*/
                 // Only update the anchors if the event is not a bleed, as bleeds don't affect titre trajectory
                 if ((orderedEvents[i].name != "bleed") && (orderedEvents[i].name != "random")) {
                     // Update the anchor time, titre and function if the event is the fitted exposure

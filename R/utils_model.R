@@ -436,28 +436,30 @@ runInfRJMCMC <- function(seroModel, settings, filename, modelname, priorPred = T
     } else {
         seroModel_pp <- seroModel
         seroModel_pp$data$priorPredFlag <- TRUE
-
+        
         if(settings$runParallel) {
-            out_pp_full <- mclapply(list(seroModel_pp, seroModel), 
+            out_pp_full <- mclapply(list(seroModel, seroModel_pp), 
             function(i) { 
                 rjmc_sero_func(model = i$model, data = i$data, settings = settings)
             },
             mc.cores = 8
             )
         } else {
-            out_pp_full <- lapply(list(seroModel_pp, seroModel), 
+            out_pp_full <- lapply(list(seroModel, seroModel_pp), 
             function(i) { 
                 rjmc_sero_func(model = i$model, data = i$data, settings = settings)
             }
             )
         }
 
-        fitfull_pp <- list(post = out_pp_full[[1]],  model = seroModel_pp$model, data_t = seroModel_pp$data)
-        fitfull <- list(post = out_pp_full[[2]],  model = seroModel$model, data_t = seroModel$data)
+       # fitfull <- list(post = out_pp_full[[1]],  model = seroModel$model, data_t = seroModel$data)
+        fitfull <- list(post = out_pp_full[[1]],  model = seroModel$model, data_t = seroModel$data)
+        fitfull_pp <- list(post = out_pp_full[[2]],  model = seroModel_pp$model, data_t = seroModel_pp$data)
 
         dir.create(here::here("outputs", "fits", filename, "figs", modelname), recursive = TRUE, showWarnings = FALSE)
         saveRDS(fitfull_pp, here::here("outputs", "fits", filename, paste0("fit_prior_", modelname, ".RDS")))
         saveRDS(fitfull, here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
+       # saveRDS(fitfull, here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
     }
 }
 

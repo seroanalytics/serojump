@@ -176,11 +176,11 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
             this->parsObsN[temp2] = temp4;
         }
         Rcpp::Rcout << "Testing in: " << this->copModel.size() << std::endl;
-        if (this->copModel.size() == 0) {
+       /* if (this->copModel.size() == 0) {
             this->copFlag = false;
         } else {
             this->copFlag = true;
-        }
+        }*/
 
         if (this->copFlag) {
             for (int i = 0; i < this->copModel.size(); i++) {

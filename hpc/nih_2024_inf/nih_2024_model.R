@@ -17,9 +17,11 @@ obsLogLikelihood <- function(titre_val, titre_est, pars) {
 }
 
 noInfSerumKinetics <- function(titre_est, timeSince, pars) {
-    titre_est <- titre_est - pars[1] * (timeSince)
-    titre_est <- max(titre_est, 0)
-    titre_est
+    titre_est_new <- titre_est - pars[1] * (timeSince)
+    titre_est_new <- max(titre_est_new, 0)
+   # cat("titre_est", titre_est, "\n")
+   # cat("titre_est_new", titre_est_new, "\n")
+    titre_est_new
 }
 
 infSerumKinetics <- function(titre_est, timeSince, pars) {

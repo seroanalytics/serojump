@@ -131,6 +131,9 @@ public:
         logLikelihood_ab = this->evaluateLogLikelihoodObs_cpp(init) + this->evaluateLogLikelihoodCOP_cpp(jump, init) ;
        // this->fitCORfunction(jump, init); option to fit dynamically but very slow and a bit temperamental :(
         // Evaluate the log likelihood of the model given the titre values
+//          Rcpp::Rcout << "logPriorPars: " << logPriorPars << std::endl;
+     //   Rcpp::Rcout << "logPriorJump: " << logPriorJump << std::endl;
+      //  Rcpp::Rcout << "logPriorExpTime: " << logPriorExpTime << std::endl;
         return logPriorPars + logPriorJump + logLikelihood_ab + logPriorExpTime;
     }
 
@@ -270,14 +273,18 @@ private:
         double titre_est;
 
         double ll = 0;
+        NumericVector pars;
+        Function evalLoglikelhoodCOP_i = parent->evalLoglikelhoodObs[0];
         // Evaluate the titre values for all individuals given the new exposure times
         for (int i_idx = 0; i_idx < parent->N; ++i_idx) {
             std::vector<std::vector<DoubleWithString> > proposalTitreFull_i = parent->proposalTitreFull[i_idx]; 
             for (int bio = 0; bio < parent->B; bio++) {
                 string biomarker_b = parent->biomarkers[bio];
-                Function evalLoglikelhoodCOP_i = parent->evalLoglikelhoodCOP[biomarker_b];
+                if (parent->copFlag) {
+                    evalLoglikelhoodCOP_i = parent->evalLoglikelhoodCOP[biomarker_b];
+                    pars = parent->proposalParsCOP[biomarker_b];
+                }
                 double maxtitre_b = parent->max_titre[biomarker_b];
-                NumericVector pars = parent->proposalParsCOP[biomarker_b];
 
                 std::vector<DoubleWithString> proposalTitreFull_i_b = proposalTitreFull_i[bio];
                 if (jump[i_idx] == -1) {
@@ -289,9 +296,12 @@ private:
                                 titre_est = proposalTitreFull_i_b[j].value;
                             }
                         }
-                       ll += as<double>(evalLoglikelhoodCOP_i(0, titre_est, pars, maxtitre_b) );
-
+                        if (parent->copFlag) {
+                            ll += as<double>(evalLoglikelhoodCOP_i(0, titre_est, pars, maxtitre_b) );
+                        }
                        // ll += this->CORfunction(0, titre_est, pars, b );
+                    } else{
+                        //Rcpp::Rcout << "CAN THIS HAPPEN?" << std::endl;
                     }
                 } else {
                     // 
@@ -301,7 +311,9 @@ private:
                             titre_est = proposalTitreFull_i_b[j].value;
                         }
                     }
-                    ll += as<double>(evalLoglikelhoodCOP_i(1, titre_est, pars, maxtitre_b) );
+                    if (parent->copFlag) {
+                        ll += as<double>(evalLoglikelhoodCOP_i(1, titre_est, pars, maxtitre_b) );\
+                    }
                 }                    
                 titreExp(i_idx, bio) = titre_est;
             }
@@ -311,6 +323,7 @@ private:
         } else {
             parent->proposalTitreExp = titreExp;
         }
+      //  Rcpp::Rcout << "COP: ll: " << ll << std::endl;
         return ll;
     }
         
@@ -332,6 +345,7 @@ private:
         double titre_val;
         double ll = 0;
 
+        NumericVector pars;
 
         int k_idx = 0, k_count = 0;
         for (int i_idx = 0; i_idx < parent->N; ++i_idx) {
@@ -342,21 +356,31 @@ private:
                 k_count = 0;
                 string biomarker_b = parent->biomarkers[bio];
                 Function evalLoglikelhoodObs_i = parent->evalLoglikelhoodObs[biomarker_b];
-                NumericVector pars = parent->currentParsObs[biomarker_b];
+                pars = parent->currentParsObs[biomarker_b];
 
                 NumericVector titre_val_i_b = titre_list_i[bio]; 
                 int j_data = 0;
                 std::vector<DoubleWithString> proposalTitreFull_i_b = proposalTitreFull_i[bio];
                 for (int j = 0; j < proposalTitreFull_i_b.size(); j++) {
+                  //  Rcpp::Rcout << "i_idx: " << i_idx << std::endl;
+                  //  Rcpp::Rcout << "biomarker_b: " << biomarker_b << std::endl;
+                 //   Rcpp::Rcout << "j: j: " << j << std::endl;
+                   //Rcpp::Rcout << "proposalTitreFull_i_b[j].name: " << proposalTitreFull_i_b[j].name << std::endl;
 
                     if(proposalTitreFull_i_b[j].name == "bleed") {
+                       // Rcpp::Rcout << "" << std::endl;
                         titre_est = proposalTitreFull_i_b[j].value;
                         obsTitre(k_idx + k_count, bio) = titre_est; 
 
                         k_count++;
                         titre_val = titre_val_i_b[j_data];
+
+                      //  Rcpp::Rcout << "COP: titre_est: " << titre_est << std::endl;
+                     //   Rcpp::Rcout << "COP: titre_val: " << titre_val << std::endl;
+
                         j_data ++;
                         if (!parent->priorPredFlag) {
+                          //  Rcpp::Rcout << "as<double>(evalLoglikelhoodObs_i(titre_val, titre_est, pars) ): " << as<double>(evalLoglikelhoodObs_i(titre_val, titre_est, pars) ) << std::endl;
                             ll += as<double>(evalLoglikelhoodObs_i(titre_val, titre_est, pars) );
                         }
                     }
@@ -369,6 +393,9 @@ private:
         } else {
             parent->proposalObsTitre = obsTitre;
         }
+       // Rcpp::Rcout << "Obs: ll: " << ll << std::endl;
+       // Rcpp::Rcout << "pars: " << pars[0] << std::endl;
+
         return ll;
     }
 

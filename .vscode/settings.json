@@ -110,6 +110,8 @@
         "fft": "cpp",
         "kroneckerproduct": "cpp",
         "numericaldiff": "cpp",
-        "splines": "cpp"
+        "splines": "cpp",
+        "any": "cpp",
+        "csignal": "cpp"
     }
 }

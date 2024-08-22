@@ -21,16 +21,20 @@ sero_confirmed <-  gambia_pvnt_w2 %>% group_by(id) %>% mutate(r = row_number(), 
 rate_inf_w2 <- (sero_confirmed %>% nrow) / (gambia_pvnt_w2$id %>% unique %>% length)
 
 
-obsLogLikelihoodSerum = function(titre_val, titre_est, pars) {
+obsLogLikelihoodSerum <- function(titre_val, titre_est, pars) {
+ #   cat(pars[1], "\n")
+ #   cat("titre_val: ", titre_val, "\n")
+ #   cat("titre_est: ", titre_est, "\n")
+ #   cat("dnorm(titre_val, titre_est, pars[1], log = TRUE): ", dnorm(titre_val, titre_est, pars[1], log = TRUE), "\n")
     if (titre_val <= log10(40)) {
-        ll <- pnorm(log10(40), titre_est, pars[1], log.p = TRUE)
+        ll <- dnorm(titre_val, titre_est, pars[1], log = TRUE)#pnorm(log10(40), titre_est, pars[1], log.p = TRUE)
     } else {
         ll <- dnorm(titre_val, titre_est, pars[1], log = TRUE)
     }
     ll
 }
 
-obsLogLikelihoodIgA = function(titre_val, titre_est, pars) {
+obsLogLikelihoodIgA <- function(titre_val, titre_est, pars) {
 
     ll <- dnorm(titre_val, titre_est, pars[1], log = TRUE)
 
@@ -38,8 +42,11 @@ obsLogLikelihoodIgA = function(titre_val, titre_est, pars) {
 
 
 noInfSerumKinetics <- function(titre_est, timeSince, pars) {
-    titre_est <- titre_est - pars[1] * (timeSince)
-    titre_est <- max(0, titre_est)
+    titre_est_log <- titre_est - pars[1] * (timeSince)
+    titre_est_log <- max(0, titre_est_log)
+   # cat("titre_est: ", titre_est, "\n")
+    #cat("titre_est_log: ", titre_est_log, "\n")
+    titre_est_log
 }
 
 
@@ -84,12 +91,13 @@ copFuncFormGeneralised <- function(inf_status, esttitreExp, params, maxtitre ) {
     alpha_mean <- params[6]
     alpha_z <- params[7]
     alpha_sigma <- params[8]
+    p_base <- params[9]
 
-    beta <- inv.logit(beta_mean + beta_z * beta_sigma) * -3
+    beta <- inv.logit(beta_mean + beta_z * beta_sigma) * 6 - 3
     alpha <- inv.logit(alpha_mean + alpha_z * alpha_sigma) * (maxtitre * 0.75)
 
     r <- beta * (esttitreExp - alpha)
-    p <- gamma * ((r / (1 + abs(r)^k)^(1 / k)) * 0.5 + 0.5)
+    p <- gamma * ((r / (1 + abs(r)^k)^(1 / k)) * 0.5 + 0.5) + p_base
     p
 }
 
@@ -103,13 +111,14 @@ copLogLikelihood <- function(inf_status, esttitreExp, params, maxtitre ) {
     alpha_mean <- params[6]
     alpha_z <- params[7]
     alpha_sigma <- params[8]
+    p_base <- params[9]
 
-    beta <- inv.logit(beta_mean + beta_z * beta_sigma) * - 3
+    beta <- inv.logit(beta_mean + beta_z * beta_sigma) * 6 - 3
     alpha <- inv.logit(alpha_mean + alpha_z * alpha_sigma) * (maxtitre * 0.75)
 
     r <- beta * (esttitreExp - alpha)
-    p <- gamma * ((r / (1 + abs(r)^k)^(1 / k)) * 0.5 + 0.5)
-    ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
+    p <- gamma * ((r / (1 + abs(r)^k)^(1 / k)) * 0.5 + 0.5) + p_base
+    ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p) 
     ll
 }
 
@@ -130,7 +139,9 @@ infTuenisPower2016 <- function(titre_est, timeSince, pars) {
         titre_est_boost <- exp(y1) * (1 + (r - 1) * exp(y1)^{r - 1} * v * (timeSince - t1)) ^ {-1 / (r - 1)}
     }
 
-    titre_est_log <- titre_est + log(titre_est_boost)  * max(0, 1 - titre_est * alpha)
+    titre_est_log <- titre_est + log(titre_est_boost) * max(0, 1 - titre_est * alpha)
+    #cat("titre_est: ", titre_est, "\n")
+    #cat("titre_est_log: ", titre_est_log, "\n")
     titre_est_log
 }
 
@@ -149,8 +160,8 @@ observationalModel <- list(
         addObservationalModel("sVNT", c("sigma"), obsLogLikelihoodSerum),
         addObservationalModel("IgA", c("sigma_a"), obsLogLikelihoodIgA)),
     prior = bind_rows(
-        add_par_df("sigma", 0.0001, 4, "unif", 0.0001, 4),
-        add_par_df("sigma_a", 0.0001, 4, "unif", 0.0001, 4),
+        add_par_df("sigma", 0.0001, 2, "exp", 1, NA),
+        add_par_df("sigma_a", 0.0001, 2, "exp", 1, NA)
         ) # observational model,
 )
 
@@ -194,20 +205,20 @@ abkineticsModel <- list(
 
 
 # modelW2_p1$data$max_titre
-max_titre <- 3.72153 / 2
 
 copModel <- list( 
         model = makeModel(
-            addCopModel("sVNT", "delta", c("gamma", "k", "beta", "beta_z_1", "beta_sigma", "alpha", "alpha_z_1", "alpha_sigma"), copFuncFormGeneralised, copLogLikelihood),
-            addCopModel("IgA", "delta", c("gamma", "k", "beta", "beta_z_2", "beta_sigma", "alpha", "alpha_z_2", "alpha_sigma"), copFuncFormGeneralised, copLogLikelihood)
+            addCopModel("sVNT", "delta", c("gamma", "k", "beta", "beta_z_1", "beta_sigma", "alpha", "alpha_z_1", "alpha_sigma", "p_base"), copFuncFormGeneralised, copLogLikelihood),
+            addCopModel("IgA", "delta", c("gamma", "k", "beta", "beta_z_2", "beta_sigma", "alpha", "alpha_z_2", "alpha_sigma", "p_base"), copFuncFormGeneralised, copLogLikelihood)
         ),
         prior = bind_rows(
             add_par_df("gamma", 0, 1, "unif", 0, 1),
             add_par_df("k", 1, 3, "unif", 1, 3),
-            add_par_df("beta", 0, 10, "norm", 0, 1.5),
+            add_par_df("beta", -10, 10, "norm", 0, 1.5),
             add_par_pool_df_non_centered("beta_z", 2, 0, "beta_sigma", "exp", 2, NA),
             add_par_df("alpha", -10, 10, "norm", 0, 1),
-            add_par_pool_df_non_centered("alpha_z", 2, 0, "alpha_sigma", "exp", 2, NA)
+            add_par_pool_df_non_centered("alpha_z", 2, 0, "alpha_sigma", "exp", 2, NA),
+            add_par_df("p_base", 0, 0.5, "unif", 0, 0.5)
         )
 )
 
@@ -244,6 +255,7 @@ inf_prior_3 <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K
     logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.137931, log = TRUE)
+   # cat(logPriorExpInf, "\n")
     logPriorExpInf
 }
 
@@ -260,8 +272,6 @@ modeldefinition_w2_p1 <- list(
 )
 
 
-
-
 modeldefinition_w2_p2 <- modeldefinition_w2_p1
 modeldefinition_w2_p2$expInfPrior <- inf_prior_2
 
@@ -275,8 +285,6 @@ modelW2_p3 <- createSeroJumpModel(gambia_pvnt_w2, gambia_exp_w2, modeldefinition
 
 #seroW2 <- list(p1 = modelW2_p1, p2 = modelW2_p2, p3 = modelW2_p3)
 #saveRDS(seroW2, file = here::here("hpc", "transvir_w2_inf", "transvir_w2_model.RData"))
-
-
 
 gambia_pvnt_w3 <- get_data_titre_model_wave3_pvnt_iga()# This is the empirical prior for the exposure time
 gambia_exp_w3 <- get_exposures_wave3() # This is the empirical prior for the exposure time
@@ -303,9 +311,10 @@ observationalModel <- list(
     model = makeModel(
         addObservationalModel("sVNT", c("sigma"), obsLogLikelihoodSerum),
         addObservationalModel("IgA", c("sigma_a"), obsLogLikelihoodIgA)),
+
     prior = bind_rows(
-        add_par_df("sigma", 0.0001, 4, "unif", 0.0001, 4),
-        add_par_df("sigma_a", 0.0001, 4, "unif", 0.0001, 4)
+        add_par_df("sigma", 0.0001, 2, "exp", 1, NA),
+        add_par_df("sigma_a", 0.0001, 2, "exp", 1, NA)
         ) # observational model,
 )
 
@@ -340,20 +349,19 @@ abkineticsModel <- list(
 )
 
 
-
-
 copModel <- list( 
         model = makeModel(
-            addCopModel("sVNT", "delta", c("gamma", "k", "beta", "beta_z_1", "beta_sigma", "alpha", "alpha_z_1", "alpha_sigma"), copFuncFormGeneralised, copLogLikelihood),
-            addCopModel("IgA", "delta", c("gamma", "k", "beta", "beta_z_2", "beta_sigma", "alpha", "alpha_z_2", "alpha_sigma"), copFuncFormGeneralised, copLogLikelihood)
+            addCopModel("sVNT", "delta", c("gamma", "k", "beta", "beta_z_1", "beta_sigma", "alpha", "alpha_z_1", "alpha_sigma", "p_base"), copFuncFormGeneralised, copLogLikelihood),
+            addCopModel("IgA", "delta", c("gamma", "k", "beta", "beta_z_2", "beta_sigma", "alpha", "alpha_z_2", "alpha_sigma", "p_base"), copFuncFormGeneralised, copLogLikelihood)
         ),
         prior = bind_rows(
             add_par_df("gamma", 0, 1, "unif", 0, 1),
             add_par_df("k", 1, 3, "unif", 1, 3),
-            add_par_df("beta", 0, 10, "norm", 0, 1.5),
+            add_par_df("beta", -10, 10, "norm", 0, 1.5),
             add_par_pool_df_non_centered("beta_z", 2, 0, "beta_sigma", "exp", 2, NA),
             add_par_df("alpha", -10, 10, "norm", 0, 1),
-            add_par_pool_df_non_centered("alpha_z", 2, 0, "alpha_sigma", "exp", 2, NA)
+            add_par_pool_df_non_centered("alpha_z", 2, 0, "alpha_sigma", "exp", 2, NA),
+            add_par_df("p_base", 0, 0.5, "unif", 0, 0.5)
         )
 )
 #copModel <- list( 
@@ -402,6 +410,8 @@ inf_prior_3 <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K
     logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.1395349, log = TRUE)
+    N_adj <- N - K
+  #  cat(logPriorExpInf, "\n")
     logPriorExpInf
 }
 
@@ -431,3 +441,42 @@ modelW3_p3 <- createSeroJumpModel(gambia_pvnt_w3, gambia_exp_w3, modeldefinition
 
 seroW2W3 <- list(w2_p1 = modelW2_p1, w2_p2 = modelW2_p2, w2_p3 = modelW2_p3, w3_p1 = modelW3_p1, w3_p2 = modelW3_p2, w3_p3 = modelW3_p3)
 saveRDS(seroW2W3, file = here::here("hpc", "transvir_w2_inf", "transvir_w23_model.RData"))
+
+# Figure that useful to show the models works 
+
+model_i <- modelW3_p3
+
+df_titres_sVNT <- model_i$data$titre_full %>% as.data.frame %>%
+    mutate(row = 1:model_i$data$N_data, id = model_i$data$id_full, times = model_i$data$times_full)  %>% group_by(id) %>% mutate(diff = sVNT - lag(sVNT)) %>% 
+    mutate(type = if_else(diff > 0, "Boost", "Wane")) %>% ungroup %>% tidyr::fill(type, .direction = "up")
+
+p1 <- df_titres_sVNT %>% ggplot() + 
+    geom_line(aes(x = times, y = sVNT, group = id, color = type)) 
+
+
+df_titres_IgA <- model_i$data$titre_full %>% as.data.frame %>%
+    mutate(row = 1:model_i$data$N_data, id = model_i$data$id_full, times = model_i$data$times_full)  %>% group_by(id) %>% 
+    mutate(diff = IgA - lag(IgA)) %>% 
+    mutate(type = if_else(diff > 0, "Boost", "Wane")) %>% ungroup %>% tidyr::fill(type, .direction = "up")
+p2 <- df_titres_IgA %>% ggplot() + 
+    geom_line(aes(x = times, y = IgA, group = id, color = type)) 
+
+p1 / p2
+
+
+
+exp_ind <- map_df(1:4, #modelW3_p1$data$N,
+    ~data.frame(
+        id = .x,
+        time = 1:length(modelW3_p1$data$exp_list[[.x]]),
+        prop = modelW3_p1$data$exp_list[[.x]]
+    )
+)
+
+exp_ind %>% 
+    ggplot() + 
+        geom_tile(aes(x = time, y = id, fill = prop), color = NA)  +
+  theme_minimal()
+
+modelW3_p1$data$exp_list %>% unlist %>% matrix(nrow = 258) %>% as.data.frame %>% pivot
+
