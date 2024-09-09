@@ -106,8 +106,13 @@ get_exp_prior_wave1 <- function() {
 get_data_titre_model_wave2_pvnt <- function() {
     odd_people <- c("17-197B", "07-077B", "41-481E", "43-509K", "34-399H", "41-483J", "43-512H")
     gambia_pvn_raw <- read.csv(file = here::here("data", "transvir", "Pseudovirus_data_V1_V2_V3.csv") ) %>% filter(!Participant_ID %in% odd_people)
-
     gambia_iga_raw <- read.csv(file = here::here("data", "transvir", "IgA_data_V1_V2_V3.csv") ) %>% filter(!Participant_ID %in% odd_people)
+    gambia_binding_raw <- read.csv(file = here::here("data", "transvir_rhys", "All_visits_serology.csv") ) %>% filter(!Participant_ID %in% odd_people)
+
+
+    gambia_pvn_raw %>% head
+    gambia_iga_raw %>% head
+    gambia_binding_raw %>% head
 
 
     start_date <- gambia_pvn_raw %>% dplyr::select(Participant_ID, V1_date, contains("ptna_B.1.617.2_V1")) %>% pull(V1_date) %>% dmy %>% min  #"2021-03-02"

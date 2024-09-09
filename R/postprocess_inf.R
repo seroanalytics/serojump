@@ -574,10 +574,22 @@ plot_cop_recInf2 <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
         function(i) {
         biomarker <- model_outline$observationalModel[[i]]$biomarker
 
-        titre_cop_sum <- fit_states %>% filter(!!sym(biomarker) != -1) %>%
-            group_by(id) %>% mean_qi(!!sym(biomarker) ) %>% arrange(!!biomarker) %>%
-            rename(titre_val = !!(biomarker))
-        u_ids <- titre_cop_sum$id
+        df_full_info <- fit_states %>% mutate(titre_type = case_when(
+            inf_time == -1 ~ "No inf",
+            inf_time != -1 ~ "Inf")
+        ) %>%  group_by(id, titre_type) %>% add_count(name = "n_rows") %>% 
+        group_by(id, titre_type, n_rows) %>% mutate(prop = n_rows / (n_length)) %>%
+         group_by(id, titre_type, prop) %>%
+        mean_qi(!!sym(biomarker) ) %>% 
+        complete(id = 1:data_t$N, titre_type, fill = list(prop = 0)) %>%
+        arrange(!!biomarker) %>% as.data.frame 
+
+        # Get response for each individual
+        df_full_info_res <- df_full_info %>% filter(titre_type == "Inf") %>% select(id, prop)
+
+        # Get covariate for each individual
+        df_full_info_x <- df_full_info %>% group_by(id) %>% mutate(!!sym(biomarker) := weighted.mean(x = !!sym(biomarker), w = prop)) %>% 
+         select(id, !!sym(biomarker))
 
         df_data <- data.frame(
             id = 1:data_t$N,
@@ -585,33 +597,44 @@ plot_cop_recInf2 <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
             known_inf = data_t$knownInfsVec
         ) %>% mutate(known_inf = ifelse(known_inf == 0, "Not known", "Known"))
 
-        df_data_post <- fit_states %>% filter(inf_ind == 1) %>% select(id, inf_ind) %>%
-                 summarise(inf_post = mean(inf_ind), n = n(), .by = "id") %>%
-                left_join(df_data) %>% mutate(prop = n / n_length)
 
-        cop_exp_sum_plot <- titre_cop_sum %>% left_join(df_data_post) %>% mutate(id = factor(id, levels = u_ids)) %>%
-            filter(!is.na(n)) %>% mutate(biomarker = !!biomarker)
+        df_cor_info <- df_full_info_res %>% left_join(df_full_info_x) %>% left_join(df_data)  %>%
+            rename(titre_val = !!(biomarker)) %>% mutate(biomarker = !!biomarker) 
 
+
+        ## here
+        #titre_cop_sum <- fit_states %>% filter(!!sym(biomarker) != -1) %>%
+        #    group_by(id) %>% mean_qi(!!sym(biomarker) ) %>% arrange(!!biomarker) %>%
+        #    rename(titre_val = !!(biomarker))
+        #u_ids <- titre_cop_sum$id
+
+        #df_data_post <- fit_states %>% filter(inf_ind == 1) %>% select(id, inf_ind) %>%
+        #         summarise(inf_post = mean(inf_ind), n = n(), .by = "id") %>%
+        #        left_join(df_data) %>% mutate(prop = n / n_length)
+
+        #cop_exp_sum_plot <- titre_cop_sum %>% left_join(df_data_post) %>% mutate(id = factor(id, levels = u_ids)) %>%
+         #   filter(!is.na(n)) %>% mutate(biomarker = !!biomarker)
+        # here
         })
 
-    figA <- cop_exp_sum_plot_all %>% 
-        ggplot() + 
-        geom_linerange(data = cop_exp_sum_plot_all, 
-            aes(y = prop, xmin = .lower, xmax = .upper, alpha = prop), size = 1) + 
-        geom_point(data = cop_exp_sum_plot_all, aes(x = titre_val, y = prop, alpha = prop)) + 
-        theme_bw() + 
+
+
+   figA <- cop_exp_sum_plot_all %>%
+            ggplot() + geom_point(aes(x = titre_val, y = prop)) + theme_bw() + 
+            geom_smooth(method = "lm", aes(x = titre_val, y = prop)) +
         ylim(0, 1) +
         facet_wrap(vars(biomarker)) + 
-        labs(x = expression("Titre at exposure"), y = expression("Posterior probability of infection for correlate of protection, f"[cop]*"(Y"[j]^0*", "*theta[cop]*")"), color = "Curve type")
-
+        labs(x = expression("Titre at exposure"), y = expression("Posterior probability of infection"))
     if (!is.null(scale_ab)) {
-        figA <- figA + scale_x_continuous(breaks = scale_ab %>% as.numeric, labels = scale_ab %>% names)
-    }
-
-
+            figA <- figA + scale_x_continuous(breaks = scale_ab %>% as.numeric, labels = scale_ab %>% names)
+        }
     ggsave(here::here("outputs", "fits", filename,  "figs", modelname, fig_folder, "cop_recov_2.png"), height = 10, width = 10)
 
+
+
 }
+
+
 
 
 plot_titre_expInf <- function(outputfull, fitfull, fig_folder, scale_ab = NULL) {
@@ -695,15 +718,15 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
    # filename <- "test/nih_2024"
    # modelname <- "h3_profile"
    # n_chains <- 4
-   #filename <- "hpc/nih_2024"
+  # filename <- "hpc/nih_2024_inf/p3"
   # modelname <- "h3"
    #filename <-  "local/nih_2024_inf/test"
   # modelname <- "h3"
-  # n_chains <- 4
+   #n_chains <- 4
    # filename <- "hpc/transvir_w2_inf/p3"
-   # modelname <- "w3"
+   # modelname <- "w2"
    # n_chains <- 4
-   # scale_ab <- NULL
+    #scale_ab <- NULL
 
     dir.create(here::here("outputs", "fits", filename,  "figs", modelname), recursive = TRUE, showWarnings = FALSE)
     fitfull_pp <- readRDS(here::here("outputs", "fits", filename, paste0("fit_prior_", modelname, ".RDS")))
@@ -721,15 +744,17 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
 
    # postprocess_cop(fitfull, filename, modelname, n_chains)
 
+    source(here::here("R", "postprocess_cor.R"))
+
     fig_folder <- "post"
     plot_titre_obsInf(outputfull, fitfull, fig_folder, scale_ab)
     plot_titre_expInf(outputfull, fitfull, fig_folder, scale_ab)
-    plot_cop_recInf3(outputfull, fitfull, fig_folder, scale_ab)
+    plot_cop_recInfstan(outputfull, fitfull, fig_folder, scale_ab)
     plot_cop_recInf2(outputfull, fitfull, fig_folder, scale_ab)
-    plot_abkinetics_trajectoriesInf(outputfull, fitfull, fig_folder)
+  #  plot_abkinetics_trajectoriesInf(outputfull, fitfull, fig_folder)
     plot_inf_recInf(outputfull,fitfull, fig_folder,  scale_ab)
     plot_exp_times_recInf(outputfull, fitfull, fig_folder)
-    plot_abkinetics_trajectories2Inf(outputfull, fitfull, fig_folder)
+   # plot_abkinetics_trajectories2Inf(outputfull, fitfull, fig_folder)
 
 
     fig_folder <- "pp"
@@ -737,12 +762,10 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
     plot_titre_expInf(outputfull_pp, fitfull_pp, fig_folder, scale_ab)
     plot_cop_recInf3(outputfull_pp, fitfull_pp, fig_folder, scale_ab)    
     plot_cop_recInf2(outputfull, fitfull, fig_folder, scale_ab)
-    plot_abkinetics_trajectoriesInf(outputfull_pp, fitfull_pp, fig_folder)
+   # plot_abkinetics_trajectoriesInf(outputfull_pp, fitfull_pp, fig_folder)
     #plot_abkinetics_trajectories2Inf(outputfull_pp, fitfull_pp, fig_folder)
     plot_inf_recInf(outputfull_pp, fitfull_pp, fig_folder,  scale_ab)
     plot_exp_times_recInf(outputfull_pp, fitfull_pp, fig_folder)
-
-
 
 }
 
