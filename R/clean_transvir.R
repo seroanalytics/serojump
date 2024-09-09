@@ -62,7 +62,6 @@ get_data_titre_model_wave1 <- function() {
             titre < 1 ~ 1,
             TRUE ~ titre
         )) %>% mutate(titre = log10(titre))
-    log10(20)
     gambia_pvnt <- gambia_pvnt %>% mutate(pid = factor(id), id = as.numeric(factor(pid)))
     gambia_pvnt
 
@@ -178,7 +177,7 @@ get_data_titre_model_wave2_pvnt_iga <- function() {
         V1_date = as.numeric(ymd(Baseline_sample_date) - start_date + 1)) %>% rename(pid = Participant_ID, time = V1_date, titre = abunits_spike) %>% 
         filter(!is.na(titre)) %>% select(pid, time, titre)
 
-    ids <- gambia_binding_b1 %>% pull(pid)
+    ids <- gambia_pvnt_b1 %>% pull(pid)
 
     gambia_binding <- bind_rows(gambia_binding_b0, gambia_binding_b1) %>% filter(pid %in% ids) %>% mutate(id = as.numeric(factor(pid))) %>%
         mutate(titre = as.numeric(titre)) %>%
@@ -295,13 +294,11 @@ get_data_titre_model_wave3_pvnt_iga <- function() {
         V1_date = as.numeric(ymd(Baseline_sample_date) - start_date + 1)) %>% rename(pid = Participant_ID, time = V1_date, titre = abunits_spike) %>% 
         filter(!is.na(titre)) %>% select(pid, time, titre)
 
-    ids <- gambia_binding_b1 %>% pull(pid)
+    ids <- gambia_pvnt_b1 %>% pull(pid)
 
     gambia_binding <- bind_rows(gambia_binding_b0, gambia_binding_b1) %>% filter(pid %in% ids) %>% mutate(id = as.numeric(factor(pid))) %>%
         mutate(titre = as.numeric(titre)) %>%
         arrange(id, time)  %>% mutate(titre = pmax(log10(titre), 0))  %>% rename(spike = titre)   
-
-
 
     gambia_pvnt_both <- gambia_pvnt %>% left_join(gambia_iga) %>% left_join(gambia_binding)
     full_ids <- gambia_pvnt_both$pid[!complete.cases(gambia_pvnt_both)]

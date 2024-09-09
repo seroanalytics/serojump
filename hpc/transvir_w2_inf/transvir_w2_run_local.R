@@ -14,7 +14,7 @@ prior_names_wave <- c("w2", "w2", "w2", "w3", "w3", "w3")
 #seroModel$data$titre_list #id, bio, t
 
 
-6 %>% 
+3 %>% 
 map(
     function(i) {
 

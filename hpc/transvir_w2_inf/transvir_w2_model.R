@@ -420,7 +420,6 @@ inf_prior_3 <- function(N, E, I, K) {
     logPriorExpInf
 }
 
-
 modeldefinition_w3_p1 <- list(
     biomarkers = biomarkers,
     exposureTypes = exposureTypes,
