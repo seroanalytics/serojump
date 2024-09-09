@@ -107,12 +107,7 @@ get_data_titre_model_wave2_pvnt <- function() {
     odd_people <- c("17-197B", "07-077B", "41-481E", "43-509K", "34-399H", "41-483J", "43-512H")
     gambia_pvn_raw <- read.csv(file = here::here("data", "transvir", "Pseudovirus_data_V1_V2_V3.csv") ) %>% filter(!Participant_ID %in% odd_people)
     gambia_iga_raw <- read.csv(file = here::here("data", "transvir", "IgA_data_V1_V2_V3.csv") ) %>% filter(!Participant_ID %in% odd_people)
-    gambia_binding_raw <- read.csv(file = here::here("data", "transvir_rhys", "All_visits_serology.csv") ) %>% filter(!Participant_ID %in% odd_people)
 
-
-    gambia_pvn_raw %>% head
-    gambia_iga_raw %>% head
-    gambia_binding_raw %>% head
 
 
     start_date <- gambia_pvn_raw %>% dplyr::select(Participant_ID, V1_date, contains("ptna_B.1.617.2_V1")) %>% pull(V1_date) %>% dmy %>% min  #"2021-03-02"
@@ -172,9 +167,27 @@ get_data_titre_model_wave2_pvnt_iga <- function() {
     gambia_iga <- bind_rows(gambia_iga_b0, gambia_iga_b1) %>% filter(pid %in% ids) %>% mutate(id = as.numeric(factor(pid))) %>%
         arrange(id, time)  %>% mutate(titre = pmax(log10(titre), 0))  %>% rename(IgA = titre)   
 
-    gambia_pvnt_both <- gambia_pvnt %>% left_join(gambia_iga)
+
+    gambia_binding_raw <- read.csv(file = here::here("data", "transvir_rhys", "All_visits_serology.csv") ) %>% filter(!Participant_ID %in% odd_people)
+
+    gambia_binding_b0 <- gambia_binding_raw %>% select(Participant_ID, Visits, Baseline_sample_date, abunits_spike) %>% filter(Visits == "V1") %>% mutate(
+        V1_date = as.numeric(ymd(Baseline_sample_date) - start_date + 1)) %>% rename(pid = Participant_ID, time = V1_date, titre = abunits_spike) %>% 
+        filter(!is.na(titre)) %>% select(pid, time, titre)
+
+    gambia_binding_b1 <- gambia_binding_raw %>% select(Participant_ID, Visits, Baseline_sample_date, abunits_spike) %>% filter(Visits == "V2") %>% mutate(
+        V1_date = as.numeric(ymd(Baseline_sample_date) - start_date + 1)) %>% rename(pid = Participant_ID, time = V1_date, titre = abunits_spike) %>% 
+        filter(!is.na(titre)) %>% select(pid, time, titre)
+
+    ids <- gambia_binding_b1 %>% pull(pid)
+
+    gambia_binding <- bind_rows(gambia_binding_b0, gambia_binding_b1) %>% filter(pid %in% ids) %>% mutate(id = as.numeric(factor(pid))) %>%
+        mutate(titre = as.numeric(titre)) %>%
+        arrange(id, time)  %>% mutate(titre = pmax(log10(titre), 0))  %>% rename(spike = titre)   
+
+    gambia_pvnt_both <- gambia_pvnt %>% left_join(gambia_iga) %>% left_join(gambia_binding)
     full_ids <- gambia_pvnt_both$pid[!complete.cases(gambia_pvnt_both)]
     gambia_pvnt_both_clean <- gambia_pvnt_both %>% filter(!pid %in% full_ids) %>% mutate(id = as.numeric(factor(pid, levels = unique(pid))))
+
     gambia_pvnt_both_clean
 }
 
@@ -272,7 +285,25 @@ get_data_titre_model_wave3_pvnt_iga <- function() {
     gambia_iga <- bind_rows(gambia_iga_b0, gambia_iga_b1) %>% filter(pid %in% ids) %>% mutate(id = as.numeric(factor(pid))) %>%
         arrange(id, time)  %>% mutate(titre = pmax(log10(titre), 0))  %>% rename(IgA = titre)   
 
-    gambia_pvnt_both <- gambia_pvnt %>% left_join(gambia_iga)
+    gambia_binding_raw <- read.csv(file = here::here("data", "transvir_rhys", "All_visits_serology.csv") ) %>% filter(!Participant_ID %in% odd_people)
+
+    gambia_binding_b0 <- gambia_binding_raw %>% select(Participant_ID, Visits, Baseline_sample_date, abunits_spike) %>% filter(Visits == "V2") %>% mutate(
+        V1_date = as.numeric(ymd(Baseline_sample_date) - start_date + 1)) %>% rename(pid = Participant_ID, time = V1_date, titre = abunits_spike) %>% 
+        filter(!is.na(titre)) %>% select(pid, time, titre)
+
+    gambia_binding_b1 <- gambia_binding_raw %>% select(Participant_ID, Visits, Baseline_sample_date, abunits_spike) %>% filter(Visits == "V3") %>% mutate(
+        V1_date = as.numeric(ymd(Baseline_sample_date) - start_date + 1)) %>% rename(pid = Participant_ID, time = V1_date, titre = abunits_spike) %>% 
+        filter(!is.na(titre)) %>% select(pid, time, titre)
+
+    ids <- gambia_binding_b1 %>% pull(pid)
+
+    gambia_binding <- bind_rows(gambia_binding_b0, gambia_binding_b1) %>% filter(pid %in% ids) %>% mutate(id = as.numeric(factor(pid))) %>%
+        mutate(titre = as.numeric(titre)) %>%
+        arrange(id, time)  %>% mutate(titre = pmax(log10(titre), 0))  %>% rename(spike = titre)   
+
+
+
+    gambia_pvnt_both <- gambia_pvnt %>% left_join(gambia_iga) %>% left_join(gambia_binding)
     full_ids <- gambia_pvnt_both$pid[!complete.cases(gambia_pvnt_both)]
 
     gambia_pvnt_both_clean <- gambia_pvnt_both %>% filter(!pid %in% full_ids) %>% mutate(id = as.numeric(factor(pid, levels = unique(pid))))

@@ -751,10 +751,10 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
     plot_titre_expInf(outputfull, fitfull, fig_folder, scale_ab)
     plot_cop_recInfstan(outputfull, fitfull, fig_folder, scale_ab)
     plot_cop_recInf2(outputfull, fitfull, fig_folder, scale_ab)
-  #  plot_abkinetics_trajectoriesInf(outputfull, fitfull, fig_folder)
+    plot_abkinetics_trajectoriesInf(outputfull, fitfull, fig_folder)
     plot_inf_recInf(outputfull,fitfull, fig_folder,  scale_ab)
     plot_exp_times_recInf(outputfull, fitfull, fig_folder)
-   # plot_abkinetics_trajectories2Inf(outputfull, fitfull, fig_folder)
+    plot_abkinetics_trajectories2Inf(outputfull, fitfull, fig_folder)
 
 
     fig_folder <- "pp"
@@ -762,8 +762,8 @@ postprocessFigsInf <- function(filename, modelname, n_chains, scale_ab = NULL) {
     plot_titre_expInf(outputfull_pp, fitfull_pp, fig_folder, scale_ab)
     plot_cop_recInf3(outputfull_pp, fitfull_pp, fig_folder, scale_ab)    
     plot_cop_recInf2(outputfull, fitfull, fig_folder, scale_ab)
-   # plot_abkinetics_trajectoriesInf(outputfull_pp, fitfull_pp, fig_folder)
-    #plot_abkinetics_trajectories2Inf(outputfull_pp, fitfull_pp, fig_folder)
+    plot_abkinetics_trajectoriesInf(outputfull_pp, fitfull_pp, fig_folder)
+    plot_abkinetics_trajectories2Inf(outputfull_pp, fitfull_pp, fig_folder)
     plot_inf_recInf(outputfull_pp, fitfull_pp, fig_folder,  scale_ab)
     plot_exp_times_recInf(outputfull_pp, fitfull_pp, fig_folder)
 

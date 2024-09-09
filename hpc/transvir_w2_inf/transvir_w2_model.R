@@ -13,10 +13,13 @@ exp_prior_w2 <- get_exp_prior_wave2() # This is the empirical prior for the expo
 
 known_exposure_gambia_exp_w2_add <- gambia_exp_w2 %>% mutate(type = "known")
 sero_confirmed <-  gambia_pvnt_w2 %>% group_by(id) %>% mutate(r = row_number(), r_max = max(r)) %>% filter(r_max >=2) %>%
-        select(!c(IgA, time )) %>% pivot_wider(names_from = r, values_from = sVNT) %>% 
-        mutate(diff = `1` - `2`) %>% filter(diff < -0.903) %>% left_join(known_exposure_gambia_exp_w2_add) %>% 
-        filter(is.na(type))
+        select(!c(IgA, sVNT, time )) %>% pivot_wider(names_from = r, values_from = spike) %>% 
+        mutate(diff = `1` - `2`) %>% filter(diff < -0.602) %>% left_join(known_exposure_gambia_exp_w2_add) %>% 
+        filter(is.na(type)) 
+# -0.602 4-fold rise
+# -0.903 8-fold rise
 
+log10(4)
 
 rate_inf_w2 <- (sero_confirmed %>% nrow) / (gambia_pvnt_w2$id %>% unique %>% length)
 
@@ -149,15 +152,15 @@ infTuenisPower2016 <- function(titre_est, timeSince, pars) {
 
 
 # Define the biomarkers and exposure types in the model
-biomarkers <- c("sVNT", "IgA")
+biomarkers <- c("spike", "IgA")
 exposureTypes <- c("none", "delta", "vax", "predelta")
 exposureFitted <- "delta"
 
 # Define the observational model
 observationalModel <- list(
-    names = c("sVNT", "IgA"),
+    names = c("spike", "IgA"),
     model = makeModel(
-        addObservationalModel("sVNT", c("sigma"), obsLogLikelihoodSerum),
+        addObservationalModel("spike", c("sigma"), obsLogLikelihoodSerum),
         addObservationalModel("IgA", c("sigma_a"), obsLogLikelihoodIgA)),
     prior = bind_rows(
         add_par_df("sigma", 0.0001, 2, "exp", 1, NA),
@@ -168,10 +171,10 @@ observationalModel <- list(
 # Define the antibody kinetics model
 abkineticsModel <- list(
     model = makeModel(
-            addAbkineticsModel("none", "sVNT", "none",  c("wane"), noInfSerumKinetics),
-            addAbkineticsModel("delta", "sVNT", "delta", c("y1_d", "t1_d", "r_d", "s"), infTuenisPower2016),
-            addAbkineticsModel("vax", "sVNT", "vax", c("y1_vax", "t1_vax", "r_vax", "s"), infTuenisPower2016),
-            addAbkineticsModel("predelta", "sVNT", "predelta", c("y1_pd", "t1_pd", "r_pd", "s"), infTuenisPower2016),
+            addAbkineticsModel("none", "spike", "none",  c("wane"), noInfSerumKinetics),
+            addAbkineticsModel("delta", "spike", "delta", c("y1_d", "t1_d", "r_d", "s"), infTuenisPower2016),
+            addAbkineticsModel("vax", "spike", "vax", c("y1_vax", "t1_vax", "r_vax", "s"), infTuenisPower2016),
+            addAbkineticsModel("predelta", "spike", "predelta", c("y1_pd", "t1_pd", "r_pd", "s"), infTuenisPower2016),
             addAbkineticsModel("none_a", "IgA", "none",  c("wane_a"), noInfSerumKinetics),
             addAbkineticsModel("delta_a", "IgA", "delta", c("y1_d_a", "t1_d_a", "r_d_a", "s_a"), infTuenisPower2016),
             addAbkineticsModel("vax_a", "IgA", "vax", c("y1_vax_a", "t1_vax_a", "r_vax_a", "s_a"), infTuenisPower2016),
@@ -208,7 +211,7 @@ abkineticsModel <- list(
 
 copModel <- list( 
         model = makeModel(
-            addCopModel("sVNT", "delta", c("gamma", "k", "beta", "beta_z_1", "beta_sigma", "alpha", "alpha_z_1", "alpha_sigma", "p_base"), copFuncFormGeneralised, copLogLikelihood),
+            addCopModel("spike", "delta", c("gamma", "k", "beta", "beta_z_1", "beta_sigma", "alpha", "alpha_z_1", "alpha_sigma", "p_base"), copFuncFormGeneralised, copLogLikelihood),
             addCopModel("IgA", "delta", c("gamma", "k", "beta", "beta_z_2", "beta_sigma", "alpha", "alpha_z_2", "alpha_sigma", "p_base"), copFuncFormGeneralised, copLogLikelihood)
         ),
         prior = bind_rows(
@@ -224,7 +227,7 @@ copModel <- list(
 
 #copModel_old <- list( 
 #        model = makeModel(
-#            addCopModel("sVNT", "delta", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
+#            addCopModel("spike", "delta", c("beta0", "beta1", "mu"), copFuncForm, copLogLikelihood),
 #            addCopModel("IgA", "delta", c("beta0_a", "beta1_a", "mu_a"), copFuncForm, copLogLikelihood)
 #        ),
 #        prior = bind_rows(
@@ -254,7 +257,7 @@ inf_prior_2 <- function(N, E, I, K) {
 inf_prior_3 <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K
-    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.137931, log = TRUE)
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.117, log = TRUE)
    # cat(logPriorExpInf, "\n")
     logPriorExpInf
 }
@@ -293,23 +296,25 @@ exp_prior_w3 <- get_exp_prior_wave3() # This is the empirical prior for the expo
 
 known_exposure_gambia_exp_w3_add <- gambia_exp_w3 %>% mutate(type = "known")
 sero_confirmed <-  gambia_pvnt_w3 %>% group_by(id) %>% mutate(r = row_number(), r_max = max(r)) %>% filter(r_max >=2) %>%
-        select(!c(IgA, time )) %>% pivot_wider(names_from = r, values_from = sVNT) %>% 
-        mutate(diff = `1` - `2`) %>% filter(diff < -0.903) %>% left_join(known_exposure_gambia_exp_w3_add) %>% 
+        select(!c(IgA, time, sVNT )) %>% pivot_wider(names_from = r, values_from = spike) %>% 
+        mutate(diff = `1` - `2`) %>% filter(diff < -0.602) %>% left_join(known_exposure_gambia_exp_w3_add) %>% 
         filter(is.na(type))
+# -0.602 4-fold rise
+# -0.903 8-fold rise
 
 rate_inf_w3 <- (sero_confirmed %>% nrow) / (gambia_pvnt_w3$id %>% unique %>% length)
 
 
 # Define the biomarkers and exposure types in the model
-biomarkers <- c("sVNT", "IgA")
+biomarkers <- c("spike", "IgA")
 exposureTypes <- c("none", "omicron", "vax")
 exposureFitted <- "omicron"
 
 # Define the observational model
 observationalModel <- list(
-    names = c("sVNT", "IgA"),
+    names = c("spike", "IgA"),
     model = makeModel(
-        addObservationalModel("sVNT", c("sigma"), obsLogLikelihoodSerum),
+        addObservationalModel("spike", c("sigma"), obsLogLikelihoodSerum),
         addObservationalModel("IgA", c("sigma_a"), obsLogLikelihoodIgA)),
 
     prior = bind_rows(
@@ -321,9 +326,9 @@ observationalModel <- list(
 # Define the antibody kinetics model
 abkineticsModel <- list(
     model = makeModel(
-            addAbkineticsModel("none", "sVNT", "none",  c("wane"), noInfSerumKinetics),
-            addAbkineticsModel("omicron", "sVNT", "omicron", c("y1_o", "t1_o", "r_o", "s"), infTuenisPower2016),
-            addAbkineticsModel("vax", "sVNT", "vax", c("y1_vax", "t1_vax", "r_vax", "s"), infTuenisPower2016),
+            addAbkineticsModel("none", "spike", "none",  c("wane"), noInfSerumKinetics),
+            addAbkineticsModel("omicron", "spike", "omicron", c("y1_o", "t1_o", "r_o", "s"), infTuenisPower2016),
+            addAbkineticsModel("vax", "spike", "vax", c("y1_vax", "t1_vax", "r_vax", "s"), infTuenisPower2016),
             addAbkineticsModel("none_a", "IgA", "none",  c("wane_a"), noInfSerumKinetics),
             addAbkineticsModel("omicron_a", "IgA", "omicron", c("y1_o_a", "t1_o_a", "r_o_a", "s_a"), infTuenisPower2016),
             addAbkineticsModel("vax_a", "IgA", "vax", c("y1_vax_a", "t1_vax_a", "r_vax_a", "s_a"), infTuenisPower2016)
@@ -351,7 +356,7 @@ abkineticsModel <- list(
 
 copModel <- list( 
         model = makeModel(
-            addCopModel("sVNT", "delta", c("gamma", "k", "beta", "beta_z_1", "beta_sigma", "alpha", "alpha_z_1", "alpha_sigma", "p_base"), copFuncFormGeneralised, copLogLikelihood),
+            addCopModel("spike", "delta", c("gamma", "k", "beta", "beta_z_1", "beta_sigma", "alpha", "alpha_z_1", "alpha_sigma", "p_base"), copFuncFormGeneralised, copLogLikelihood),
             addCopModel("IgA", "delta", c("gamma", "k", "beta", "beta_z_2", "beta_sigma", "alpha", "alpha_z_2", "alpha_sigma", "p_base"), copFuncFormGeneralised, copLogLikelihood)
         ),
         prior = bind_rows(
@@ -366,7 +371,7 @@ copModel <- list(
 )
 #copModel <- list( 
  #       model = makeModel(
-  #          addCopModel("sVNT", "omicron", c("beta0", "beta1", "mu"), copFuncFormGeneralised, copLogLikelihood),
+  #          addCopModel("spike", "omicron", c("beta0", "beta1", "mu"), copFuncFormGeneralised, copLogLikelihood),
   #          addCopModel("IgA", "omicron", c("beta0_a", "beta1_a", "mu_a"), copFuncFormGeneralised, copLogLikelihood)
   #      ),
 #        prior = bind_rows(
@@ -409,7 +414,7 @@ inf_prior_2 <- function(N, E, I, K) {
 inf_prior_3 <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K
-    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj, 0.1395349, log = TRUE)
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) + dbinom(E_adj, N_adj,  0.122807, log = TRUE)
     N_adj <- N - K
   #  cat(logPriorExpInf, "\n")
     logPriorExpInf
@@ -446,12 +451,12 @@ saveRDS(seroW2W3, file = here::here("hpc", "transvir_w2_inf", "transvir_w23_mode
 
 model_i <- modelW3_p3
 
-df_titres_sVNT <- model_i$data$titre_full %>% as.data.frame %>%
-    mutate(row = 1:model_i$data$N_data, id = model_i$data$id_full, times = model_i$data$times_full)  %>% group_by(id) %>% mutate(diff = sVNT - lag(sVNT)) %>% 
+df_titres_spike <- model_i$data$titre_full %>% as.data.frame %>%
+    mutate(row = 1:model_i$data$N_data, id = model_i$data$id_full, times = model_i$data$times_full)  %>% group_by(id) %>% mutate(diff = spike - lag(spike)) %>% 
     mutate(type = if_else(diff > 0, "Boost", "Wane")) %>% ungroup %>% tidyr::fill(type, .direction = "up")
 
-p1 <- df_titres_sVNT %>% ggplot() + 
-    geom_line(aes(x = times, y = sVNT, group = id, color = type)) 
+p1 <- df_titres_spike %>% ggplot() + 
+    geom_line(aes(x = times, y = spike, group = id, color = type)) 
 
 
 df_titres_IgA <- model_i$data$titre_full %>% as.data.frame %>%
