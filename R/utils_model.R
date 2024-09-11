@@ -406,6 +406,8 @@ runRJMCMC <- function(seroModel, settings, filename, modelname) {
     post <- rjmc_full_func(model = seroModel$model, data = seroModel$data, settings = settings)
     fitfull <- list(post = post,  model = seroModel$model, data_t = seroModel$data)
 
+
+
     dir.create(here::here("outputs", "fits", filename, modelname, "figs"), recursive = TRUE, showWarnings = FALSE)
     saveRDS(fitfull, here::here("outputs", "fits", filename, modelname, paste0("fit_", modelname, ".RDS")))
 }
@@ -419,7 +421,7 @@ runRJMCMC <- function(seroModel, settings, filename, modelname) {
 #' @param modelname Name of the model outputs (in outputs/fits/filename)
 #' @return A list with the posterior samples, the model and the data.
 #' @export
-runInfRJMCMC <- function(seroModel, settings, filename, modelname, priorPred = TRUE) {
+runInfRJMCMCold <- function(seroModel, settings, filename, modelname, priorPred = TRUE) {
 
     settings <- settings
     settings$numberFittedPar <- seroModel$model$namesOfParameters %>% length
@@ -463,6 +465,81 @@ runInfRJMCMC <- function(seroModel, settings, filename, modelname, priorPred = T
     }
 }
 
+
+#' @title run the RJMCMC algorithm
+#' @name runRJMCMC
+#' @description This function runs the RJMCMC algorithm given a defined seroModel, settings and filepaths for output
+#' @param seroModel The seroModel previously defined.
+#' @param settings Settings used for the calibration
+#' @param filename Filepath of where the outputs are saved (outputs/fits/filename)
+#' @param modelname Name of the model outputs (in outputs/fits/filename)
+#' @return A list with the posterior samples, the model and the data.
+#' @export
+runInfRJMCMC <- function(seroModel, settings, priorPred = FALSE, save_info = NULL) {
+
+    settings <- settings
+    settings$numberFittedPar <- seroModel$model$namesOfParameters %>% length
+    settings$lowerParBounds <- seroModel$model$lowerParSupport_fitted
+    settings$upperParBounds <- seroModel$model$upperParSupport_fitted
+    settings$lengthJumpVec <- seroModel$data$N
+    settings <- check_settings_sero(settings)
+
+    if (!is.null(save_info)) {
+        dir.create(here::here("outputs", "fits"), recursive = TRUE, showWarnings = FALSE)
+        check_save_info(save_info)
+    }
+    #dir.create(here::here("outputs", "fits", filename, "figs", modelname), recursive = TRUE, showWarnings = FALSE)
+
+    if (priorPred) {
+        seroModel$data$priorPredFlag <- TRUE
+    }
+    
+    if(is.null(settings$runParallel)) {
+        settings$runParallel <- TRUE
+         cat("`runParallel` not specified in settings.  Default value TRUE. \n")
+    }
+
+    if(settings$runParallel) {
+        out_pp_full <- mclapply(list(seroModel), 
+        function(i) { 
+            rjmc_sero_func(model = i$model, data = i$data, settings = settings)
+        },
+        mc.cores = 8
+        )
+    } else {
+        out_pp_full <- lapply(list(seroModel), 
+            function(i) { 
+                rjmc_sero_func(model = i$model, data = i$data, settings = settings)
+            }
+        )
+    }
+
+    model_fit <- list(post = out_pp_full[[1]],  model = seroModel$model, data_t = seroModel$data, settings = settings)
+    model_post <- postprocess_fit(model_fit)
+
+    model_summary <- list(fit = model_fit, post = model_post)
+
+    if (!is.null(save_info)) {
+        dir.create(here::here("outputs", "fits", save_info$file_name, save_info$model_name), recursive = TRUE, showWarnings = FALSE)
+        if (seroModel$data$priorPredFlag) {
+            saveRDS(model_summary, here::here("outputs", "fits", save_info$file_name, save_info$model_name, paste0("model_summary_pp.RDS")))
+        } else {
+            saveRDS(model_summary, here::here("outputs", "fits", save_info$file_name, save_info$model_name, paste0("model_summary.RDS")))
+        }
+    }
+    model_summary
+}
+
+check_save_info <- function(save_info) {
+    cat("--CHECKING SAVE_INFO DATA--\n")
+    if (is.null(save_info[["file_name"]])) {
+        stop("`file_name` must be specified in `save_info`.\n")
+    } 
+    if (is.null(save_info[["model_name"]])) {
+        stop("`model_name` must be specified in `model_name`.\n")
+    } 
+    cat("Saving model outputs to: ", here::here("outputs", "fits", save_info[["file_name"]] , save_info[["model_name"]]), "\n")
+}
 
 
 #' @title Define the Log Likelihood function for the observational model

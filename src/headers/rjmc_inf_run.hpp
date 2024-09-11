@@ -38,10 +38,8 @@ public:
     */
     static std::shared_ptr<SeroJumpRun> create(Rcpp::List infoModel, Rcpp::List observationalModel, Rcpp::List abkineticsModel, Rcpp::List copModel) {
         // Use shared_ptr to create the instance
-        Rcpp::Rcout << "Instance of the previous classes1" << std::endl;
         std::shared_ptr<SeroJumpRun> instance(new SeroJumpRun(infoModel, observationalModel, abkineticsModel, copModel));
         instance->initialize(instance);
-        Rcpp::Rcout << "Instance of the previous classes2" << std::endl;
         return instance;
     }
 
@@ -53,7 +51,6 @@ public:
      * 
      */
     void initialize(std::shared_ptr<SeroJumpRun> self) {
-        Rcpp::Rcout << "Instance of the previous classes" << std::endl;
         auto base = this->shared_from_this();  // Safe to use here
         recalInit = std::make_unique<RecalculateTitres>(base);
         loglikInit = std::make_unique<EvaluateLogLikelihood>(base);
@@ -98,14 +95,11 @@ public:
 
         if (this->onDebug) Rcpp::Rcout << "In: Check 7ii" << std::endl;
         for (int i = 0; i < this->N; i++) {
-            Rcpp::Rcout << "i: " << i << std::endl;
             if (this->knownInfsVec(i) == 0) {
                 if (this->endTitreValue(i, 0) - this->initialTitreValue(i, 0) > 1) {
-                    Rcpp::Rcout << "A boost: " << std::endl;
                     if (!this->knownExpInd) {
                         int j = 0;
                         initialJump(i) = this->exposureFunctionSample(i + 1); 
-                        Rcpp::Rcout << "A get exposure function sample: " << std::endl;
                         if ((this->endTitreTime(i) - 7)  - (this->initialTitreTime(i) + 7) <= 0) {
                             initialJump(i) = -1;
                         } else {
@@ -428,33 +422,31 @@ public:
     void updateTiming() {
         if (this->onDebug) Rcpp::Rcout << "In: updateTiming" << std::endl;
 
-            this->currJumpType = 1;
-            //this->proposalJump = this->currentJump;
+        this->currJumpType = 1;
+        // Calcuate the number of samples to resample
+        int NoSample = roundDown( this->adaptiveResampleNo);
+        int adaptiveGibbStep = min(max(NoSample, 1), this->N);
+    //  Rcpp::Rcout << "adaptiveGibbStep: " << adaptiveGibbStep << std::endl;
+        vector<int> resampleIdx;
+    //  for (int i = 0; i < this->noGibbsSteps; i++) { 
+    // Rcpp::Rcout << "adaptiveGibbStep: " << adaptiveGibbStep << std::endl;
+        for (int i = 0; i < 1; i++) { 
+            this->gibbsIdx = this->sampleExposed(); // stuck here
+            resampleIdx.push_back(this->gibbsIdx);
+            resampleTime(this->gibbsIdx);
+        }
 
-            // Calcuate the number of samples to resample
-            int NoSample = roundDown( this->adaptiveResampleNo);
-            int adaptiveGibbStep = min(max(NoSample, 1), this->N);
-          //  Rcpp::Rcout << "adaptiveGibbStep: " << adaptiveGibbStep << std::endl;
-            vector<int> resampleIdx;
-          //  for (int i = 0; i < this->noGibbsSteps; i++) { 
-           // Rcpp::Rcout << "adaptiveGibbStep: " << adaptiveGibbStep << std::endl;
-            for (int i = 0; i < 1; i++) { 
-                this->gibbsIdx = this->sampleExposed(); // stuck here
-                resampleIdx.push_back(this->gibbsIdx);
-                resampleTime(this->gibbsIdx);
-            }
+    // fixedProposalDist(false);
 
-           // fixedProposalDist(false);
+        recalInit->updateEventsFull();
+        recalInit->updateAbKineticParams(this->currentSample);
+        recalInit->recalculateTitreAll();    
 
-            recalInit->updateEventsFull();
-            recalInit->updateAbKineticParams(this->currentSample);
-            recalInit->recalculateTitreAll();    
+        this->proposedLogPosterior = loglikInit->evalLogPosterior(this->currentSample, this->proposalJump, this->currentCovarianceMatrix, this->dataList);
 
-            this->proposedLogPosterior = loglikInit->evalLogPosterior(this->currentSample, this->proposalJump, this->currentCovarianceMatrix, this->dataList);
-
-            this->evaluateMetropolisRatio();
-            this->updateJumpHistoric();
-            this->updateProposalGibbs(resampleIdx);
+        this->evaluateMetropolisRatio();
+        this->updateJumpHistoric();
+        this->updateProposalGibbs(resampleIdx);
     }
 
     /**
@@ -757,17 +749,18 @@ public:
                 // check this
                 this->proposalJump(t) = this->exposureFunctionSample(t + 1); 
             }
-            // proposeInfection(t);
-
         // An exisiting sample time is updated 95% of the time for an individual.
         } else {
           //  Rcpp::Rcout << "this->adaptiveGibbsSD(t): " << this->adaptiveGibbsSD(t) << std::endl;
+         // Rcpp::Rcout << "this->currentJump(t): " << this->currentJump(t) << std::endl;
+
             double temp = this->currentJump(t) + normalDistSample(0, exp(this->adaptiveGibbsSD(t)));
             if (temp >= this->endTitreTime(t) - 7) {
                 temp = this->endTitreTime(t) - 7; 
             } else if (temp < this->initialTitreTime(t) + 7) {
                 temp = this->initialTitreTime(t) + 7; 
             }
+        //  Rcpp::Rcout << "temp: " << temp << std::endl;
             this->proposalJump(t) = temp;
         }
         this->bookKeepingSize();

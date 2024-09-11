@@ -33,7 +33,7 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
      * 
      */
     SeroJumpBase(Rcpp::List infoModel_in, Rcpp::List observationalModel_in, Rcpp::List abkineticsModel_in, Rcpp::List copModel_in) : infoModel(infoModel_in), observationalModel(observationalModel_in), abkineticsModel(abkineticsModel_in), copModel(copModel_in) {
-        Rcpp::Rcout << "Testing in" << std::endl;
+
     }    
     
     // Virtual destructor
@@ -175,7 +175,6 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
             this->evalLoglikelhoodObs[temp2] = temp3;
             this->parsObsN[temp2] = temp4;
         }
-        Rcpp::Rcout << "Testing in: " << this->copModel.size() << std::endl;
        /* if (this->copModel.size() == 0) {
             this->copFlag = false;
         } else {
@@ -305,7 +304,6 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
 
         this->currInferredInfN = this->knownInfsN;
         this->propInferredInfN = this->knownInfsN;
-        Rcpp::Rcout << "this->knownExpInd:" << this->knownExpInd << std::endl;
         if (this->knownExpInd) {
             this->currInferredExpN = this->knownExpVec.sum();
             this->propInferredExpN = this->knownExpVec.sum();

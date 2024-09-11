@@ -14,7 +14,7 @@ prior_names_wave <- c("w2", "w2", "w2", "w3", "w3", "w3")
 #seroModel$data$titre_list #id, bio, t
 
 
-3 %>% 
+1:6 %>% 
 map(
     function(i) {
 
@@ -36,7 +36,7 @@ map(
         onDebug = FALSE
     )
 
-    runInfRJMCMC(seroW2_full[[i]], settings, paste0("hpc/transvir_w2_inf/", prior_names[i]), prior_names_wave[i])
+    #runInfRJMCMC(seroW2_full[[i]], settings, paste0("hpc/transvir_w2_inf/", prior_names[i]), prior_names_wave[i])
     postprocessFigsInf(paste0("hpc/transvir_w2_inf/",  prior_names[i]), prior_names_wave[i], 4)
     }
 )

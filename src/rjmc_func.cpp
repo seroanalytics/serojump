@@ -59,25 +59,19 @@ List run_rjmc_sero(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings
   List abkineticsModel = model["abkineticsModel"];
   List copModel = model["copModel"];
 
-  Rcpp::Rcout << "Initiate class" << std::endl;
-  Rcpp::Rcout << "Initiate class2" << std::endl;
-    Rcpp::Rcout << "Initiate class2: " << i << std::endl;
 
   auto SeroJumpRunInst = SeroJumpRun::create(exposureInfo, observationalModel, abkineticsModel, copModel);
-  Rcpp::Rcout << "End: Initiate class" << std::endl;
 
   List output_full;
   MatrixXd output, jump, inf;
   RObject titreexp, obstitre;
 
-  Rcpp::Rcout << "Start: initiate functions" << std::endl;
   init_samplePriorDistributions(SeroJumpRunInst.get(), model["samplePriorDistributions"]);
   init_evaluateLogPrior(SeroJumpRunInst.get(), model["evaluateLogPrior"]);
   init_evaluateLogPriorInfExp(SeroJumpRunInst.get(), model["evaluateLogPriorInfExp"]);
   init_initialiseJump(SeroJumpRunInst.get(), model["initialiseJump"]);
   init_exposureFunctionSample(SeroJumpRunInst.get(), model["exposureFunctionSample"]);
   init_exposureFunctionDensity(SeroJumpRunInst.get(), model["exposureFunctionDensity"]);
-  Rcpp::Rcout << "End: initiate functions" << std::endl;
 
   
   output_full = SeroJumpRunInst->runRJMCC(settings, dataList, i);
@@ -86,8 +80,6 @@ List run_rjmc_sero(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings
   jump = output_full[1];
   titreexp = output_full[2];
   obstitre = output_full[3];
-
-  Rcpp::Rcout << "End: run_rjmc_sero" << std::endl;
 
   return Rcpp::List::create(_["output"] = output, _["jump"] = jump, _["titreexp"] = titreexp, _["obstitre"] = obstitre, _["RJMCpar"] = RJMCpar);
 

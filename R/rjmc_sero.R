@@ -93,6 +93,7 @@ get_output_sero <- function(model, data_list, settings, update_ind, par) {
 }
 
 check_settings_sero <- function(settings) {
+    cat("--CHECKING SETTINGS LIST--\n")
 
   if (is.null(settings[["numberChainRuns"]])) {
     settings[["numberChainRuns"]] <- 4
@@ -104,10 +105,6 @@ check_settings_sero <- function(settings) {
     cat("`numberCores` not specified in settings. Default value equal to `numberChainRuns`. \n")
   }
 
-  if (is.null(settings[["numberTempChains"]])) {
-    settings[["numberTempChains"]] <- 10
-    cat("`numberTempChains` not specified in settings. Default value 10. \n")
-  }  
   if (is.null(settings[["iterations"]])) {
     settings[["iterations"]] <- 20000
     cat("`iterations` not specified in settings. Default value 20,000. \n")
@@ -136,8 +133,8 @@ check_settings_sero <- function(settings) {
     cat("`updatesAdaptiveCov` not specified in settings. Default value 100. \n")
   }
   if (is.null(settings[["burninAdaptiveCov"]])) {
-        settings[["burninAdaptiveCov"]] <- 2000
-    cat("`burninAdaptiveCov` not specified in settings. Default value 2000. \n")
+        settings[["burninAdaptiveCov"]] <- 1000
+    cat("`burninAdaptiveCov` not specified in settings. Default value 1000. \n")
   }
   if (is.null(settings[["onAdaptiveTemp"]])) {
         settings[["onAdaptiveTemp"]] <- TRUE
@@ -157,17 +154,21 @@ check_settings_sero <- function(settings) {
     stop("`upperParBounds` not specified in settings. MUST be specified. \n")
   }
   if (is.null(settings[["covarInitVal"]])) {
-        settings[["covarInitVal"]] <- 1e-10
+        settings[["covarInitVal"]] <- 1e-2
     cat("`covarInitVal` not specified in settings.  Default value 1e-10. \n")
   }
   if (is.null(settings[["covarInitValAdapt"]])) {
-        settings[["covarInitValAdapt"]] <- 1e-10
+        settings[["covarInitValAdapt"]] <- 1e-2
     cat("`covarInitValAdapt` not specified in settings.  Default value 1e-10. \n")
   }
   if (is.null(settings[["covarMaxVal"]])) {
         settings[["covarMaxVal"]] <- 1
     cat("`covarMaxVal` not specified in settings. Default value 1. \n")
   }
+  if (is.null(settings[["noGibbsSteps"]])) {
+    settings[["noGibbsSteps"]] <- 1
+    cat("`noGibbsSteps` not specified in settings. Default value 1. \n")
+  }  
   if (is.null(settings[["runParallel"]])) {
         settings[["runParallel"]] <- TRUE
     cat("`runParallel` not specified in settings. Default value TRUE. \n")

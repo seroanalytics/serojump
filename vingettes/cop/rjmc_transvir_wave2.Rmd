@@ -191,6 +191,10 @@ settings <-  list(
 
 runRJMCMC(modelW2, settings, "local/transvir/test", "wave2")
 
+postprocess_fit()
+
+
+
 postprocessFigs("local/transvir/test", "wave2", 4)
 
 ```

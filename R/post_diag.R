@@ -19,20 +19,80 @@ NULL
 #' @param obs_er The observation error
 #' @param n_chains The number of chains
 #' @export 
-seroJumpPostDaig <- function(fitfull, outputfull, filepathfig) {
-    df_smi_df <- calcScaleModelIndicator(fitfull)
-    transDimConvPlot(df_smi_df, filepathfig) 
-    invariantParamConvPlot(fitfull, filepathfig) 
-    invariantParamConvPriorPlot(fitfull, outputfull, filepathfig)
+plotMCMCDiagnosis <- function(model_summary, save_info) {
+    check_save_info(save_info)
+
+    if (model_summary$fit$data$priorPredFlag) {
+        dir.create(here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs_pp", "diag"), showWarnings = FALSE, recursive = TRUE)
+        file_path <- here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs_pp", "diag")
+    } else{
+        dir.create(here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs", "diag"), showWarnings = FALSE, recursive = TRUE)
+        file_path <- here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs", "diag")
+    }
+
+    df_smi_df <- calcScaleModelIndicator(model_summary)
+    transDimConvPlot(df_smi_df, file_path) 
+    invariantParamConvPlot(model_summary, file_path) 
+    invariantParamConvPriorPlot(model_summary, file_path)
+    plotRhatTime(model_summary, file_path)
+}
+
+
+plotRhatTime <- function(model_summary, file_path) {
+
+    model_summary_p3_w3$post$fit_states
+
+    require(data.table)
+    model_summary <- model_summary_p3_w3
+    outputfull <- model_summary$post
+
+    model_outline <- model_summary$fit$model
+    bio_all <- model_outline$infoModel$biomarkers
+
+    fit_states_dt <- as.data.table(outputfull$fit_states)
+    S <- fit_states_dt %>% filter(id == 1) %>% nrow
+
+    ids <- fit_states_dt %>% group_by(id) %>% summarise(prob = sum(inf_ind) / S) %>% filter(prob > 0.5) %>% pull(id) %>% unique
+
+    # extract values here
+    df_mcmc_time <- fit_states_dt %>% filter(id %in% ids) %>% filter(inf_ind == 1) %>% 
+        select(id, chain_no, sample, inf_time, !!bio_all) %>% rename(chain = chain_no) 
+
+    df_mcmc_time_wide <- df_mcmc_time %>% 
+        select(id, sample, chain, inf_time) %>% unique %>%
+        pivot_wider(!chain, names_from = "id", values_from = "inf_time") 
+
+    cols <- ncol(df_mcmc_time_wide)
+
+    df_summary_disc <- 
+            map_df(2:cols,
+        ~df_mcmc_time_wide %>% select(sample, .x) %>% drop_na %>% summarise_draws() %>% .[2, ]
+    )
+
+    p1 <- df_mcmc_time %>% 
+        ggplot() +
+            stat_pointinterval(aes(x = inf_time, y = as.character(id), color = as.character(chain)), 
+                position = position_dodge(0.4)) + theme_bw() + 
+                labs(x = "Time in study", y = "ID", color = "Chain number") 
+
+    p2 <- df_summary_disc %>% ggplot() + geom_col(aes(x = rhat, y = as.character(variable))) + theme_bw() + 
+        geom_vline(xintercept = 1, color = "red", linetype = "dashed") + 
+        labs(x = "Rhat", y = "ID")
+
+    p1 + p2
+    ggsave(here::here(file_path, "timing_convergence.png"), height = 10, width = 10)
+
 }
 
 #https://www.tandfonline.com/doi/abs/10.1198/1061860031347
 #https://www.semanticscholar.org/reader/c5a24c1fcafcc80ec6fd22489585b13a0c3643de#
-calcScaleModelIndicator <- function(fitfull, filepathfig) {
+calcScaleModelIndicator <- function(model_summary) {
 
-    C <- length(fitfull$post$jump)
-    dims <- dim(fitfull$post$jump[[1]])
-    cat(str(fitfull$post$jump[[1]]))
+    fit <- model_summary$fit
+
+    C <- length(fit$post$jump)
+    dims <- dim(fit$post$jump[[1]])
+    cat(str(fit$post$jump[[1]]))
     M <- dims[1]
     N <- dims[2]
 
@@ -43,7 +103,7 @@ calcScaleModelIndicator <- function(fitfull, filepathfig) {
         {
             sMI <- map_dbl(1:M, 
                 function(i) {
-                    theta_i <- fitfull$post$jump[[c]][i, ]
+                    theta_i <- fit$post$jump[[c]][i, ]
                     theta_i_D <- sum(theta_i > -1)
                     theta_i_trim <- theta_i[theta_i > -1]
                     # Compute the terms vector
@@ -54,7 +114,7 @@ calcScaleModelIndicator <- function(fitfull, filepathfig) {
             )
         dims <- map_dbl(1:M, 
                 function(i) {
-                    theta_i <- fitfull$post$jump[[c]][i, ]
+                    theta_i <- fit$post$jump[[c]][i, ]
                     theta_i_D <- sum(theta_i > -1)
                 }
             )
@@ -70,7 +130,7 @@ calcScaleModelIndicator <- function(fitfull, filepathfig) {
 }
 
 
-transDimConvPlot <- function(df_smi_df, filepathfig) {
+transDimConvPlot <- function(df_smi_df, file_path) {
 
 
     pdims_trace <- df_smi_df %>% 
@@ -111,27 +171,31 @@ transDimConvPlot <- function(df_smi_df, filepathfig) {
 
     p1 / p2 / p3 +
         plot_annotation(title = "Transdimensional convergence: dimensions/SMI of chain")
-    ggsave(here::here(filepathfig, "diag", "transdim_conv.png"), height = 20)
+
+    ggsave(here::here(file_path, "transdim_conv.png"), height = 20)
 }
 
-invariantParamConvPlot <- function(fitfull, filepathfig) {
+invariantParamConvPlot <- function(model_summary, file_path) {
 
-    p1 <- fitfull$post$mcmc  %>% mcmc_trace + theme_minimal() + theme(legend.position = "top")
-    p2 <- fitfull$post$lpost %>% ggplot() + geom_line(aes(x = sample_no, y = lpost, color = chain_no))  + theme_minimal() + theme(legend.position = "top")
+    fit <- model_summary$fit
 
-    p3 <- df_conver_stat <- summarise_draws(fitfull$post$mcmc ) %>% select(variable, rhat, ess_bulk, ess_tail) %>% 
+    p1 <- fit$post$mcmc  %>% mcmc_trace + theme_minimal() + theme(legend.position = "top")
+    p2 <- fit$post$lpost %>% ggplot() + geom_line(aes(x = sample_no, y = lpost, color = chain_no))  + theme_minimal() + theme(legend.position = "top")
+
+    p3 <- df_conver_stat <- summarise_draws(fit$post$mcmc ) %>% select(variable, rhat, ess_bulk, ess_tail) %>% 
         pivot_longer(!variable, names_to = "stat", values_to = "value") %>%
         ggplot() + 
             geom_col(aes(y = variable, x = value)) +
             facet_wrap(~stat, scales = "free") + theme_minimal()
 
     p1 / p2 / p3
-    ggsave(here::here(filepathfig, "diag", "invariant_param_conv.png"), height = 20)
+    ggsave(here::here(file_path, "invariant_param_conv.png"), height = 20)
 }
 
-invariantParamConvPriorPlot <- function(fitfull, outputfull, filepathfig) {
-    model_outline <- fitfull$model
-    post <- fitfull$post
+invariantParamConvPriorPlot <- function(model_summary, file_path) {
+    fit <- model_summary$fit 
+    model_outline <- fit$model
+    post <- fit$post
 
     mcmc_combined <- post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame 
     n_post <- nrow(mcmc_combined)
@@ -147,7 +211,8 @@ invariantParamConvPriorPlot <- function(fitfull, outputfull, filepathfig) {
     priorpost %>% 
         ggplot() + geom_histogram(aes(x = value, fill = type), position = "identity", alpha = 0.5) + facet_wrap(~param, scales = "free") +
         theme_bw() + theme(legend.position = "top")
-    ggsave(here::here(filepathfig, "diag", "invariant_param_priorpost.png"), height = 15, width = 15)
+    
+    ggsave(here::here(file_path, "invariant_param_priorpost.png"), height = 15, width = 15)
 
 }
            
