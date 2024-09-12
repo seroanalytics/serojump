@@ -246,7 +246,7 @@ check_priors <- function(modeldefinition) {
 #' @param data_known The known exposure data.
 #' @param modeldefinition The model definition.
 #' @return A list with the data and the model.
-#' @exports
+#' @export
 createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_exp_bool = NULL) {
     cat("OUTLINE OF INPUTTED MODEL\n")
    # check_inputs(data_sero, data_known, modeldefinition)

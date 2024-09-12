@@ -8,8 +8,9 @@ extract_post <- function(mcmc_out, ...) {
         dplyr::select(...) 
 }
 
-
-
+#' @title add_par_df
+#' @description This function adds information about the prior parameter to the rjmc model 
+#' @export
 add_par_df <- function(...) {
     # Convert the ellipsis arguments to a list
     args_list <- list(...)
@@ -21,6 +22,7 @@ add_par_df <- function(...) {
   return(df)
 }
 
+#' @export
 cal_lprior_non_centered <- function(par_tab, params) {
     p <- 0
     P <- nrow(par_tab)
@@ -37,6 +39,7 @@ cal_lprior_non_centered <- function(par_tab, params) {
     p
 }
 
+#' @export
 add_par_pool_df <- function(...) {
     # Convert the ellipsis arguments to a list
     args_list <- list(...)
@@ -62,6 +65,7 @@ add_par_pool_df <- function(...) {
 # Can add heirarchical priors with the functions below 
 # add_par_pool_df_non_centered("boost_naive_pvnt", length = 5, 0, "boost_naive_sigma_pvnt", "exp", 5, NA)
 
+#' @export
 add_par_pool_df_non_centered <- function(...) {
     # Convert the ellipsis arguments to a list
     args_list <- list(...)
@@ -84,7 +88,7 @@ add_par_pool_df_non_centered <- function(...) {
     return(df)
 }
 
-
+#' @export
 get_sample_non_centered <- function(par_tab) {
     P <- nrow(par_tab)
     s <- vector(mode = "numeric", length = P)
@@ -107,11 +111,12 @@ get_sample_non_centered <- function(par_tab) {
     s
 }
 
+#' @export
 check_boundaries <- function(x, lb, ub) {
     (x < lb) | (x > ub);
 }
 
-
+#' @export
 generate_data_alt <- function(data_titre_model, biomarkers, known_exp_bool = NULL) {
 
     #data_titre_model <- data_sero
@@ -178,9 +183,9 @@ generate_data_alt <- function(data_titre_model, biomarkers, known_exp_bool = NUL
     data_t
 }
 
-#' @brief This function creates data_t, which is a list of data to use in the rjmc model
+#' @title This function creates data_t, which is a list of data to use in the rjmc model
 #' 
-#' This function requires a `data_titre_model` data.frame from the user, which is the observed titre data, and a `data_inf_model` data.frame from the user, which is the observed infection data. The function will then create a list of data to use in the rjmc model.
+#' @description This function requires a `data_titre_model` data.frame from the user, which is the observed titre data, and a `data_inf_model` data.frame from the user, which is the observed infection data. The function will then create a list of data to use in the rjmc model.
 #' @param data_titre_model is a data.frame with column headings ['id', 'titre', 'time'] where 'id' is the individual, 'titre' is the titre value and 'time' is the time of the titre. If not defined correctly it will throw an error.
 #' @param data_inf_model is a data.frame with column headings ['id', 'inf_time'] where 'id' is the individual and 'inf_time' is the time of infection. If not defined it will assume no known infection
 #' @param known_exp add a known exposure vector to the model. If not defined it will assume no known exposure
@@ -259,16 +264,16 @@ generate_data_t <- function(data_titre_model, data_inf_model = NULL, known_exp =
 }
 
 
-#' @brief This function create the rjmc model.
+#' @title This function create the rjmc model.
 #' 
-#' By taking the defined prior distributions, this creates the rjmc model including the support, names of parameters, prior pdf, prior smapling function, the intial conditions for the exposure timings and adds the correlate of protection.
+#' @description By taking the defined prior distributions, this creates the rjmc model including the support, names of parameters, prior pdf, prior smapling function, the intial conditions for the exposure timings and adds the correlate of protection.
 #' 
 #' @param ab_ll the likelihood functions define by a function called `evaluateLogLikelihood`
 #' @param par_tab a data.frame describing the prior distributions
 #' @param cop_func a function for the correlate of protection
 #' @return returns a rjmc model
 #' 
-#' @see createModelRJCMCFull() and generate_data_t()
+#' @seealso createModelRJCMCFull() and generate_data_t()
 createModelRJCMCFull <- function(ab_ll, par_tab) {
     model_type <- list()
     
@@ -374,9 +379,9 @@ calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
     data_t
 }
 
-#' @brief This function adds the exposure prior to the rjmc model.
+#' @title This function adds the exposure prior to the rjmc model.
 #' 
-#' This function takes two types of priors. Either a functional prior or an empirical prior.
+#' @description This function takes two types of priors. Either a functional prior or an empirical prior.
 #' 
 #' @param model_type rjmc_model created from createModelRJCMCFull()
 #' @param data_t data included in the model created from generate_data_t()
@@ -384,7 +389,7 @@ calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
 #' @param type define a type of exposure prior, `func` for functional and 'empirical' for empirical. If blank it will assume a uniform distribution between 1 and T.
 #' @return returns a rjmc model
 #' 
-#' @see createModelRJCMCFull() and generate_data_t()
+#' @seealso createModelRJCMCFull() and generate_data_t()
 addExposurePrior <- function(model_type, data_t, exp_prior, type = NULL) {
 
     model_type <- modelSeroJump

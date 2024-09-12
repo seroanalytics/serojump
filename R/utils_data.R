@@ -1,5 +1,5 @@
 #' @title Input the serological data
-#' @name data_titre
+#' @name data_titre_ex
 #'
 #' @description This data format represents the serological data used by the rjmcmc model
 #'
@@ -30,10 +30,17 @@
 #' @keywords data format data_titre
 #' @export
 NULL
+data_titre_ex <- data.frame(
+        id = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+        time = c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+        titre = c(1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4),
+        biomarker = rep("IgG", 10)
+)
+
 
 
 #' @title Input the known exposures
-#' @name data_known_exposures
+#' @name data_known_exposures_ex1
 #'
 #' @description This data format represents the serological data used by the rjmcmc model
 #'
@@ -51,7 +58,7 @@ NULL
 #' @examples
 #' # Example usage. For example if you have some information on known vaccinatoins, you can define:
 #' 
-#' data_titre <- data.frame(
+#' data_known_exposures_ex1 <- data.frame(
 #'      id = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
 #'      time = c(10, 4, 100, 40, 20, 23, 26, 70, 40, 10),
 #'      exposure_type = rep("vax", 10)
@@ -62,39 +69,11 @@ NULL
 #' @keywords data format data_known_exposures
 #' @export
 NULL
-
-
-#' @title Input the known exposures
-#' @name data_known_exposures
-#'
-#' @description This data format represents the serological data used by the rjmcmc model
-#'
-#' @format A list with the following columns:
-#' \describe{
-#'   \item{id}{Unique identifier for each biomarker.}
-#'   \item{time}{Time at which the known exposure occurred}
-#'   \item{exposure_type}{Key for the type of exposure experienced}
-#' }
-#' 
-#' @details Add more data about this model here.
-#'
-#' @seealso Add related functions
-#' 
-#' @examples
-#' # Example usage. For example if you have some information on known vaccinatoins, you can define:
-#' 
-#' data_titre <- data.frame(
-#'      id = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
-#'      time = c(10, 4, 100, 40, 20, 23, 26, 70, 40, 10),
-#'      exposure_type = rep("vax", 10)
-#' )
-#'
-#' 
-#' @author David Hodgson
-#' @keywords data format data_known_exposures
-#' @export
-NULL
-
+data_known_exposures_ex1 <- data.frame(
+      id = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+      time = c(10, 4, 100, 40, 20, 23, 26, 70, 40, 10),
+      exposure_type = rep("vax", 10)
+ )
 
 
 
@@ -189,34 +168,6 @@ NULL
 #' 
 NULL
 
-#' @title Define correlate of protection model
-#' @name copModel
-#'
-#' @description This data format represents information about the model for the correlate of protection (probability of infection given exposure) given the titre of a biomarker for a predefined exposure type
-#'
-#' @format A list with the following columns:
-#' \describe{
-#'   \item{names}{Unique identifier for each biomarker.}
-#'   \item{model}{Description of the model using the \code{makeModel} and \code{addObservationalModel} functions.}
-#'   \item{prior}{Description of the prior distribution using the \code{add_par_df} function.}
-#' }
-#' 
-#' @details Add more data about this model here.
-#'
-#' @seealso \code{\link{makeModel}}, \code{\link{addObservationalModel}}, \code{\link{add_par_df}},  for related functions.
-#' 
-#' @examples
-#' # Example usage. This describes the observation model for a SARS-CoV-2 delta wave using IgG data. First define the COP log likelihood function, for example if the COP is a logistic function of the titre of the biomarker IgG (see \ref{obsLogLikelihood} for format):
-#' 
-#' copLogLikelihood <- function(ll, inf_status, esttitreExp, params) {
-#'    # COP parameters
-#'    beta0 <- params[1]
-#'    beta1 <- params[2]
-#'    p <- 1.0 / (1.0 + exp(- (beta0 + beta1 * esttitreExp) ) )
-#'    ll <- inf_status * log(p) + (1 - inf_status) * log(1 - p)
-#'    ll
-#'}
-#'
 #' 
 #' @author David Hodgson
 #' @keywords data format COP model

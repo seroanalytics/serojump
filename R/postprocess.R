@@ -1,4 +1,4 @@
-#' @useDynLib rjmc
+#' @useDynLib serojump
 #' @importFrom Rcpp sourceCpp
 #' @import ggplot2
 #' @import purrr
@@ -9,6 +9,8 @@
 #' @import tidybayes
 #' @importFrom magrittr %>% %<>%
 NULL
+
+#' @export
 plotPostFigs <- function(model_summary, save_info) {
     check_save_info(save_info)
     

@@ -1,4 +1,4 @@
-#' @useDynLib rjmc
+#' @useDynLib serojump
 #' @importFrom Rcpp sourceCpp
 #' @import ggplot2
 #' @import purrr
@@ -40,10 +40,7 @@ plotMCMCDiagnosis <- function(model_summary, save_info) {
 
 plotRhatTime <- function(model_summary, file_path) {
 
-    model_summary_p3_w3$post$fit_states
-
     require(data.table)
-    model_summary <- model_summary_p3_w3
     outputfull <- model_summary$post
 
     model_outline <- model_summary$fit$model
@@ -132,7 +129,6 @@ calcScaleModelIndicator <- function(model_summary) {
 
 transDimConvPlot <- function(df_smi_df, file_path) {
 
-
     pdims_trace <- df_smi_df %>% 
         ggplot() + 
             geom_line(aes(x = .iteration, y = dims, color = as.character(.chain))) + 
@@ -179,7 +175,10 @@ invariantParamConvPlot <- function(model_summary, file_path) {
 
     fit <- model_summary$fit
 
-    p1 <- fit$post$mcmc  %>% mcmc_trace + theme_minimal() + theme(legend.position = "top")
+    require(bayesplot)
+    require(posterior)
+
+    p1 <- (fit$post$mcmc  %>% mcmc_trace) + theme_minimal() + theme(legend.position = "top")
     p2 <- fit$post$lpost %>% ggplot() + geom_line(aes(x = sample_no, y = lpost, color = chain_no))  + theme_minimal() + theme(legend.position = "top")
 
     p3 <- df_conver_stat <- summarise_draws(fit$post$mcmc ) %>% select(variable, rhat, ess_bulk, ess_tail) %>% 

@@ -1,4 +1,4 @@
-#' @useDynLib rjmc
+#' @useDynLib serojump
 #' @importFrom Rcpp sourceCpp
 #' @import ggplot2
 #' @import purrr

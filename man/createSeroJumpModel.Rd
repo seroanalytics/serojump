@@ -4,7 +4,12 @@
 \alias{createSeroJumpModel}
 \title{createSeroJumpModel}
 \usage{
-createSeroJumpModel(data_sero, data_known, modeldefinition, known_exp = NULL)
+createSeroJumpModel(
+  data_sero,
+  data_known,
+  modeldefinition,
+  known_exp_bool = NULL
+)
 }
 \arguments{
 \item{data_sero}{The serology data.}

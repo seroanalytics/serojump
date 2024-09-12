@@ -1,4 +1,7 @@
-/data
+outputs/
+hpc/
+data/
+old/
 /src/rjmc_func.o
 /src/serojump.so
 /src/RcppExports.o
