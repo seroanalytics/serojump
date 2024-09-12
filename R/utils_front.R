@@ -301,18 +301,7 @@ createModelRJCMCFull <- function(ab_ll, par_tab) {
 
 
 calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
-  #  model_type <- modelSeroJump
-   # data_t
- #  exp_prior_i <- modeldefinition$exposurePrior
- #   type <- modeldefinition$exposurePriorType
-    #model_type <- modelSeroJump
-    #data_t
-    #exp_prior_i <- modeldefinition$exposurePrior
-    # type = modeldefinition$exposurePriorType
-
-  # modelSeroJump, data_t, modeldefinition$exposurePrior, type = modeldefinition$exposurePriorTyp
-
-    #addExposurePrior_checkempirical(exp_prior_i, data_t)
+ 
 
     if (is.null(type)) {
         cat("Exposure rate is not defined over the time period. Defaulting to uniform distribution between 1 and ", data_t$T, ". \n")
@@ -360,8 +349,6 @@ calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
 
         # Add other known exposures into the mix 
         if (data_t$knownInfsVec[i] == 1) {
-            cat("I: ", i, " has known infection. \n")
-            cat("I: ", data_t$knownInfsTimeVec[i], " date. \n")
             exp_i[data_t$knownInfsTimeVec[i]] <- 1
         }
 
@@ -372,8 +359,8 @@ calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
         } else {
             exp_list[[i]] <- exp_i / sum(exp_i)
         }
-
     }
+
     data_t$knownInfsN <- sum(data_t$knownInfsVec)
     data_t$exp_list <- exp_list
     data_t

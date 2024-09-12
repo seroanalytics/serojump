@@ -577,8 +577,6 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
 
     fit_states_dt <- as.data.table(outputfull$fit_states)
 
-    outputfull$fit_states %>% filter(id == 2)
-
     df_know_exp <- map_df(1:length(exposures),
         function(e) { 
             exp <- exposures[e]
@@ -591,7 +589,6 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
         }
     )
     known_types <- df_know_exp$type
-
 
     S <- 100
     sample_s <- sample(1:M, S)
@@ -641,9 +638,9 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
                         )
                     })
                     fit_i_s_long <- rbindlist(c(list(fit_i_s_long), new_rows_list), fill = TRUE)
+                    fit_i_s_long <- fit_i_s_long %>% arrange(time)
                 }
 
-                fit_i_s_long <- fit_i_s_long %>% arrange(time)
                 fit_i_s_long
             }
         ) %>% rbindlist
@@ -696,16 +693,22 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
             if (length(ids_take) > 20) {
                 ids_take <- sample(ids_take, 20)
             }
-            df_ids_plot <- data.frame(
-                id = ids_take,
-                type = exposures_know[i]
-            )
+            if (length(ids_take) > 0) {
+                df_ids_plot <- data.frame(
+                    id = ids_take,
+                    type = exposures_know[i]
+                )
+            } else {
+                df_ids_plot <- data.frame(
+                    id = NULL,
+                    type = NULL
+                )
+            }
         }
     )
 
     id_skip <- df_ids_plot_known$id
     cat("Get exposure ids1, \n")
-
 
     df_exposure_order_intense <- df_exposure_order %>% filter(!id %in% id_skip) %>% select(!biomarker) %>% filter(exp_type %in% exposures_fit) %>%
         ungroup %>%
@@ -734,17 +737,7 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
         ~df_mcmc_time_wide %>% select(sample, .x) %>% drop_na %>% summarise_draws() %>% .[2, ]
     )
 
-    p1 <- df_mcmc_time %>% 
-        ggplot() +
-            stat_pointinterval(aes(x = inf_time, y = as.character(id), color = as.character(chain)), 
-                position = position_dodge(0.4)) + theme_bw() + 
-                labs(x = "Time in study", y = "ID", color = "Chain number") 
 
-    p2 <- df_summary_disc %>% ggplot() + geom_col(aes(x = rhat, y = as.character(variable))) + theme_bw() + 
-        geom_vline(xintercept = 1, color = "red", linetype = "dashed") + 
-        labs(x = "Rhat", y = "ID")
-
-    p1 + p2
     cat("Get exposure ids3, \n")
 
     type_infer <- df_exposure_order_intense$type %>% unique
@@ -793,12 +786,7 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
         function(name_i) {
         cat("Calculate trajectories for for subsets of ", name_i, " \n")
         df_ids_plot_i <- df_ids_plot %>% filter(type == name_i)
-
-       # i <- 1
-       # s <- sample_s[1]
-      #  bio_i <- bio_all[1]
-       # j <- 1
-        #lol %>% ggplot() + geom_line(aes(x = t, y = titre_traj, group = id))
+         
         df_traj_post_ind <- map(
             df_ids_plot_i$id,
             function(i) {
@@ -823,6 +811,9 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
                                     #   cat(par_in)
                                         titre_start <- data_fit_list[[i]] %>% filter(row_num == 1, bio == bio_i) %>% pull(titre)
 
+                                        if (nrow(df_exposure_order_i) == 0) {
+                                            df_exposure_order_i
+                                        }
                                         if ((df_exposure_order_i[j, ] %>% pull(row_id)) == 1) {
 
                                             time_anchor <- 1
@@ -837,11 +828,6 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
                                             time_anchor <- length(titre_traj)
                                         } else {
                                                 
-                                           #ab_func(titre_anchor, 1, par_in)
-                                           # mu <- 1 / (1.0572397 * 11.4044389)
-                                           # titre_est_boost <- exp(mu * 1)
-                                           # titre_anchor + titre_est_boost * max(0, 1 - titre_anchor * 0.1544596)
-
                                             vector_titre <- unlist(lapply(seq_len(timesince_vec[j]), function(t) ab_func(titre_anchor, t, par_in)))
                                             titre_traj <- c(titre_traj, vector_titre)
                                             traj_type <- c(traj_type, rep(exp_type_i, length(vector_titre)))
@@ -863,8 +849,6 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
                     )  %>% rbindlist
             }
         ) %>% rbindlist
-
-      #  df_traj_post_ind %>% filter(id == 332, biomarker == "A/Sydney/5/2021") %>%  ggplot() + geom_line(aes(x = t, y = titre_traj, group = sample)) + facet_wrap(vars(id)) 
 
         data_fit_b <- data_fit %>% rename(biomarker = bio)
 

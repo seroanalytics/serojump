@@ -251,30 +251,7 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
     cat("OUTLINE OF INPUTTED MODEL\n")
    # check_inputs(data_sero, data_known, modeldefinition)
     check_priors(modeldefinition)
-
-   # data_sero <- gambia_pvnt_w2
-   # data_known <- gambia_exp_w2
-   # modeldefinition <- modeldefinition_p1
-   # known_exp <- NULL
-   # data_sero <- data_titre_h1
-   # data_known <- known_exposure_h1
-   # modeldefinition <- modeldefinition_h1_p1
-   # known_exp_bool <- NULL
-
-    #data_sero <- gambia_pvnt_w2
-#    data_known <- known_exposure
-    #data_sero <- data_titre
-   # data_sero <- data_titre_model
-   # data_known
-   #modeldefinition
-   # known_exp_bool <- NULL
-
-
-   # data_sero <- data_titre_h1
-  #  data_known <- known_exposure_h1
-  #  modeldefinition <- modeldefinition_h1_p1
-  #  known_exp_bool <- NULL
-
+  #  data_titre_model, known_inf, modeldefinition_cop
     modelSeroJump <- list()
 
     cat("GER PRIORS\n")
@@ -318,7 +295,7 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
 
    # id_ab <- modeldefinition$abkineticsModel$model %>% map(~.x$id) %>% unlist
    # names(modelSeroJump$abkineticsModel) <- id_ab
-
+    known_exp_bool <- NULL
     data_t <- generate_data_alt(data_sero, modeldefinition$biomarkers, known_exp_bool)
     data_t$par_names <- priors[, 1]
     data_t$priorPredFlag <- FALSE
@@ -331,32 +308,44 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
 
     modelSeroJump$infoModel$exposureInfo <- list()
 
-    know_inf <- list()
-    for (i in 1:length(modeldefinition$exposureTypes)) {
-        modelSeroJump$infoModel$exposureInfo[[i]] <- list()
-        exposureType <- modeldefinition$exposureTypes[i]
 
-        if (i == 1 & (exposureType != modeldefinition$exposureFitted)) {
-            know_inf <- data_t$initialTitreTime
-        } else {
-            if (is.null(data_known)) {
-                know_inf <- rep(-1, data_t$N)
-            } else{
-                know_inf <- data_known %>% filter(exposure_type == exposureType) %>%
-                    complete(id = 1:data_t$N, fill = list(time = -1)) %>% 
-                    mutate(start = data_t$initialTitreTime, end = data_t$endTitreTime) %>%
-                    mutate(time = case_when(time >= start & time <= end ~ time, TRUE ~ -1)) %>% pull(time)
+        know_inf <- list()
+        for (i in 1:length(modeldefinition$exposureTypes)) {
+            modelSeroJump$infoModel$exposureInfo[[i]] <- list()
+            exposureType <- modeldefinition$exposureTypes[i]
+
+            if (i == 1 & (exposureType != modeldefinition$exposureFitted)) {
+                know_inf <- data_t$initialTitreTime
+            } else {
+                if (is.null(data_known)) {
+                    know_inf <- rep(-1, data_t$N)
+                } else{
+                    know_inf <- data_known %>% filter(exposure_type == exposureType) %>%
+                        complete(id = 1:data_t$N, fill = list(time = -1)) %>% 
+                        mutate(start = data_t$initialTitreTime, end = data_t$endTitreTime) %>%
+                        mutate(time = case_when(time >= start & time <= end ~ time, TRUE ~ -1)) %>% pull(time)
+                }
+            }
+            modelSeroJump$infoModel$exposureInfo[[i]]$exposureType <- exposureType
+            modelSeroJump$infoModel$exposureInfo[[i]]$known_inf <- know_inf
+
+            if (exposureType == modeldefinition$exposureFitted) {
+                data_t$knownInfsTimeVec = know_inf
+                data_t$knownInfsVec = as.numeric(know_inf > -1)
+                data_t$knownInfsN = length(know_inf[know_inf > -1])
             }
         }
-        modelSeroJump$infoModel$exposureInfo[[i]]$exposureType <- exposureType
-        modelSeroJump$infoModel$exposureInfo[[i]]$known_inf <- know_inf
-
-        if (exposureType == modeldefinition$exposureFitted) {
-            data_t$knownInfsTimeVec = know_inf
-            data_t$knownInfsVec = as.numeric(know_inf > -1)
-            data_t$knownInfsN = length(know_inf[know_inf > -1])
-        }
-    }
+   # } #else {
+ #       know_inf <- rep(-1, data_t$N)
+ #       data_t$knownInfsTimeVec = know_inf
+ #       data_t$knownInfsVec = as.numeric(know_inf > -1)
+ #       data_t$knownInfsN = length(know_inf[know_inf > -1])
+ #       for (i in 1:length(modeldefinition$exposureTypes)) {
+ #           modelSeroJump$infoModel$exposureInfo[[i]] <- list()
+ #           modelSeroJump$infoModel$exposureInfo[[i]]$exposureType <- modeldefinition$exposureTypes[i]
+ #           modelSeroJump$infoModel$exposureInfo[[i]]$known_inf <- know_inf
+ #       }
+ #   }
 
     if (!is.null(known_exp_bool)) {
         data_t$knownExpVec <- data_t$knownInfsTimeVec
@@ -364,8 +353,7 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
 
     data_t <- calculateIndExposure(modelSeroJump, data_t, modeldefinition$exposurePrior, type = modeldefinition$exposurePriorType)
 
-
-            # Code to check form of exp_prior
+    # Code to check form of exp_prior
     modelSeroJump$exposureFunctionSample <- function(i) {
         sample(1:length(data_t$exp_list[[i]]), 1, prob = data_t$exp_list[[i]]) 
     }
