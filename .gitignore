@@ -1,4 +1,6 @@
-outputs/
+outputs/fits
+outputs/prior_pred
+outputs/test
 hpc/
 data/
 old/
