@@ -71,7 +71,7 @@ observationalModel <- list(
         addObservationalModel("sVNT", c("sigma"), obsLogLikelihood)
         ), # observational model,
     prior = bind_rows(
-            add_par_df("sigma", 0.0001, 2, "exp", 1, NA)
+            add_par_df("sigma", 0.0001, 4, "unif", 0.0001, 4)
     )
 )
 
@@ -95,8 +95,6 @@ inf_prior <- function(N, E, I, K) {
     logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) 
     logPriorExpInf
 }
-
-
 
 modeldefinition_cop <- list(
     biomarkers = biomarkers,
@@ -216,9 +214,9 @@ model_no_cop <- createSeroJumpModel(data_titre_model, NULL, modeldefinition_no_c
 
 rj_settings <- list(
         numberChainRuns = 4, 
-        iterations = 100000,
-        burninPosterior = 50000,
-        thin = 100
+        iterations = 400000,
+        burninPosterior = 200000,
+        thin = 1000
     )
 
 save_info_cop <- list(
@@ -235,10 +233,18 @@ model_summary_cop <- runInfRJMCMC(model_cop, rj_settings, save_info = save_info_
 model_summary_no_cop <- runInfRJMCMC(model_no_cop, rj_settings, save_info = save_info_no_cop)
 
 # Need to have save_info defined to run these
+modelname_sim <- "cesCOP_notd"
+sim_model_cop <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
+sim_res_cop <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", "0.5", ".rds")))
+
 plotMCMCDiagnosis(model_summary_cop, save_info = save_info_cop)
-plotPostFigs(model_summary_cop, save_info = save_info_cop)
+plotPostFigsInf(model_summary_cop, sim_model_cop, sim_res_cop, save_info = save_info_cop)
+
+modelname_sim <- "cesNoCOP_notd"
+sim_model_no_cop <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
+sim_res_no_cop <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", "0.5", ".rds")))
 
 plotMCMCDiagnosis(model_summary_no_cop, save_info = save_info_no_cop)
-plotPostFigs(model_summary_no_cop, save_info = save_info_no_cop)
+plotPostFigsInf(model_summary_no_cop, sim_model_no_cop, sim_res_no_cop, save_info = save_info_no_cop)
 
 ```

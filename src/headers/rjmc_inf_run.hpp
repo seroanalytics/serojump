@@ -355,7 +355,6 @@ public:
                 // in DEATH want to evaluate current state to the proposed parameters
                 double N_adj = this->N - this->knownInfsN;
                 double curr_adj = this->propInferredExpN - this->knownInfsN;
-
                 rjadjustmentFactor = log(curr_adj + 1) - log((N_adj - curr_adj) ) +
                     this->exposureFunctionDensity(this->currentJump(this->currJumpIdx), this->currJumpIdx + 1); 
                     //  rjadjustmentFactor2;

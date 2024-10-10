@@ -464,6 +464,7 @@ runInfRJMCMCold <- function(seroModel, settings, filename, modelname, priorPred 
 #' @return A list with the posterior samples, the model and the data.
 #' @export
 runInfRJMCMC <- function(seroModel, settings, priorPred = FALSE, save_info = NULL) {
+   
 
     settings <- settings
     settings$numberFittedPar <- seroModel$model$namesOfParameters %>% length
@@ -476,7 +477,7 @@ runInfRJMCMC <- function(seroModel, settings, priorPred = FALSE, save_info = NUL
         dir.create(here::here("outputs", "fits"), recursive = TRUE, showWarnings = FALSE)
         check_save_info(save_info)
     }
-    #dir.create(here::here("outputs", "fits", filename, "figs", modelname), recursive = TRUE, showWarnings = FALSE)
+   # dir.create(here::here("outputs", "fits", filename, "figs", modelname), recursive = TRUE, showWarnings = FALSE)
 
     if (priorPred) {
         seroModel$data$priorPredFlag <- TRUE

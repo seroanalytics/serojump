@@ -20,6 +20,7 @@ NULL
 #' @param n_chains The number of chains
 #' @export 
 plotMCMCDiagnosis <- function(model_summary, save_info) {
+    
     check_save_info(save_info)
 
     if (model_summary$fit$data$priorPredFlag) {
@@ -51,33 +52,38 @@ plotRhatTime <- function(model_summary, file_path) {
 
     ids <- fit_states_dt %>% group_by(id) %>% summarise(prob = sum(inf_ind) / S) %>% filter(prob > 0.5) %>% pull(id) %>% unique
 
-    # extract values here
-    df_mcmc_time <- fit_states_dt %>% filter(id %in% ids) %>% filter(inf_ind == 1) %>% 
-        select(id, chain_no, sample, inf_time, !!bio_all) %>% rename(chain = chain_no) 
+    if (length(ids) == 0) {
+        cat("No individuals have posterior prob of infection > 0.5")
+    } else {
+        # extract values here
+        df_mcmc_time <- fit_states_dt %>% filter(id %in% ids) %>% filter(inf_ind == 1) %>% 
+            select(id, chain_no, sample, inf_time, !!bio_all) %>% rename(chain = chain_no) 
 
-    df_mcmc_time_wide <- df_mcmc_time %>% 
-        select(id, sample, chain, inf_time) %>% unique %>%
-        pivot_wider(!chain, names_from = "id", values_from = "inf_time") 
+        df_mcmc_time_wide <- df_mcmc_time %>% 
+            select(id, sample, chain, inf_time) %>% unique %>%
+            pivot_wider(!chain, names_from = "id", values_from = "inf_time") 
 
-    cols <- ncol(df_mcmc_time_wide)
+        cols <- ncol(df_mcmc_time_wide)
 
-    df_summary_disc <- 
-            map_df(2:cols,
-        ~df_mcmc_time_wide %>% select(sample, .x) %>% drop_na %>% summarise_draws() %>% .[2, ]
-    )
+        df_summary_disc <- 
+                map_df(2:cols,
+            ~df_mcmc_time_wide %>% select(sample, .x) %>% drop_na %>% summarise_draws() %>% .[2, ]
+        )
 
-    p1 <- df_mcmc_time %>% 
-        ggplot() +
-            stat_pointinterval(aes(x = inf_time, y = as.character(id), color = as.character(chain)), 
-                position = position_dodge(0.4)) + theme_bw() + 
-                labs(x = "Time in study", y = "ID", color = "Chain number") 
+        p1 <- df_mcmc_time %>% 
+            ggplot() +
+                stat_pointinterval(aes(x = inf_time, y = as.character(id), color = as.character(chain)), 
+                    position = position_dodge(0.4)) + theme_bw() + 
+                    labs(x = "Time in study", y = "ID", color = "Chain number") 
 
-    p2 <- df_summary_disc %>% ggplot() + geom_col(aes(x = rhat, y = as.character(variable))) + theme_bw() + 
-        geom_vline(xintercept = 1, color = "red", linetype = "dashed") + 
-        labs(x = "Rhat", y = "ID")
+        p2 <- df_summary_disc %>% ggplot() + geom_col(aes(x = rhat, y = as.character(variable))) + theme_bw() + 
+            geom_vline(xintercept = 1.1, color = "red", linetype = "dashed") + 
+            labs(x = "Rhat", y = "ID")
 
-    p1 + p2
-    ggsave(here::here(file_path, "timing_convergence.png"), height = 10, width = 10)
+        p1 + p2
+        ggsave(here::here(file_path, "timing_convergence.png"), height = 10, width = 10)
+
+    }
 
 }
 

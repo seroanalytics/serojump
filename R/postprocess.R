@@ -461,6 +461,7 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
 
     data_t <- fitfull$data_t
     N <- data_t$N
+    T_max <- (data_t$endTitreTime %>% max) + 10
 
     post <- fitfull$post
     par_tab <- fitfull$par_tab
@@ -494,7 +495,7 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
                 }   
             }
 
-            T <- 300
+            T <- T_max
             traj_post <- 1:(100) %>% purrr::map_df(
                 ~data.frame(
                     time = 1:T,
@@ -538,6 +539,8 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
     data_t <- fitfull$data_t
     N <- data_t$N
 
+
+    T_max <- (data_t$endTitreTime %>% max) + 10
 
     post <- fitfull$post
     par_tab <- fitfull$par_tab
@@ -719,24 +722,28 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
 
     # Plot the timings for each inferred point
     df_exposure_order_high <- df_exposure_order_intense %>% filter(type == "High") 
+
     id_high <- df_exposure_order_high$id
 
-    df_mcmc_time <- fit_states_dt %>% filter(id %in% id_high) %>% filter(inf_ind == 1) %>% 
-        select(id, chain_no, sample, inf_time, !!bio_all) %>% rename(chain = chain_no) 
+    if (length(id_high) != 0) {
 
-    df_mcmc_time_wide <- df_mcmc_time %>% 
-        select(id, sample, chain, inf_time) %>% unique %>%
-        pivot_wider(!chain, names_from = "id", values_from = "inf_time") 
-
-    cat("Get exposure ids3, \n")
+        df_mcmc_time <- fit_states_dt %>% filter(id %in% id_high) %>% filter(inf_ind == 1) %>% 
+            select(id, chain_no, sample, inf_time, !!bio_all) %>% rename(chain = chain_no) 
 
 
-    cols <- ncol(df_mcmc_time_wide)
-    df_summary_disc <- 
-            map_df(2:cols,
-        ~df_mcmc_time_wide %>% select(sample, .x) %>% drop_na %>% summarise_draws() %>% .[2, ]
-    )
+        df_mcmc_time_wide <- df_mcmc_time %>% 
+            select(id, sample, chain, inf_time) %>% unique %>%
+            pivot_wider(!chain, names_from = "id", values_from = "inf_time") 
 
+        cat("Get exposure ids3, \n")
+
+
+        cols <- ncol(df_mcmc_time_wide)
+        df_summary_disc <- 
+                map_df(2:cols,
+            ~df_mcmc_time_wide %>% select(sample, .x) %>% drop_na %>% summarise_draws() %>% .[2, ]
+        )
+    }
 
     cat("Get exposure ids3, \n")
 
@@ -796,7 +803,7 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
                                 function(s) {
                                     df_exposure_order_i <- as.data.table(df_exposure_order) %>% filter(id == i, sample == s, biomarker == bio_i) %>% arrange(time, .by_group = TRUE)
                             
-                                    times <- c(df_exposure_order_i[["time"]], 365)
+                                    times <- c(df_exposure_order_i[["time"]], T_max)
                                     timesince_vec <- times %>% diff
 
                                     titre_traj <- NULL
@@ -838,7 +845,7 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
                                     data.table(
                                         id = i,
                                         sample = s,
-                                        t = 1:365,
+                                        t = 1:T_max,
                                         biomarker = bio_i,
                                         type = traj_type,
                                         titre_traj = titre_traj#
