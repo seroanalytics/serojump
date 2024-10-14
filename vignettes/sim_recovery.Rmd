@@ -13,7 +13,7 @@ This document describes the steps and components of the provided R code for crea
 ---
 
 ## Step 1: Load Required Libraries
-```{r}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 
 library(devtools)
 library(tidyr)
@@ -224,7 +224,7 @@ model_no_cop <- createSeroJumpModel(data_titre_model, NULL, modeldefinition_no_c
 ```
 
 
-```{r}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 
 rj_settings <- list(
         numberChainRuns = 4, 

@@ -1,6 +1,6 @@
 # serojump
 
-![plot](./images/schematic_A.png)
+![Schematic of the methods behind the `serojump` package](./images/schematic_A.png)
 
 ## Overview
 
@@ -8,11 +8,11 @@ The `serojump` package provides tools for fitting serological models to antibody
 
 This package is ideal for researchers looking to:
 
-- Model antibody kinetics over time.
-- Estimate infection rates and antibody waning using serological data.
-- Perform MCMC inference on serological models.
+- Model antibody kinetics over time
+- Estimate infection rates and antibody waning using serological data
+- Perform MCMC inference on serological models
 
-The best place to get started with serojump is our preprint. In this repo, ceveral model templates are provided to simplify usage, while also allowing users to customize models for specific research questions.
+The best place to get started with serojump is our preprint (coming soon). In this repo, ceveral model templates are provided to simplify usage, while also allowing users to customize models for specific research questions.
 
 ## Installation
 
@@ -26,7 +26,8 @@ Make sure you have R installed on your system. You can download R from [https://
 
 You can install the development version of `serojump` from GitHub using the `devtools` package. If you don't already have `devtools` installed, you can install it with:
 
-```{r}
+
+```
 
 install.packages("devtools")
 devtools::install_github("seroanalytics/serojump")
@@ -36,7 +37,8 @@ devtools::install_github("seroanalytics/serojump")
 ### Step 3: Load `serojump` from GitHub
 After installation, you can load the serojump package into your R session with:
 
-```{r}
+
+```
 
 library(serojump)
 
@@ -46,12 +48,12 @@ library(serojump)
 
 For detailed usage instructions, please refer to the package vignettes and examples. These vignettes explain:
 
-- The format of the data require for serojump to work, click [here](vignette("data_format.Rmd")).
-- How to define observational models and antibody kinetics models and run the serojump sampler, click [here](vignette("model_define")).
+- The format of the data require for serojump to work, click [here](https://seroanalytics.org/serojump/articles/data_format.html).
+- How to define observational models and antibody kinetics models and run the serojump sampler, click [here](https://seroanalytics.org/serojump/articles/model_define.html).
 - Specify priors for your models and integrate empirical data [coming soon]
 
 In addition we have several worked examples of `serojump` on:
-- Simulated data [here](vignette("sim_recovery")).
+- Simulated data click [here](https://seroanalytics.org/serojump/articles/sim_recovery.html).
 
 ---
 

@@ -16,7 +16,7 @@ This document explains two critical parts of the model defined in the provided R
 
 ## 0. The Observational Model
 
-```{r}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 
 library(devtools)
 library(tidyr)
@@ -204,7 +204,7 @@ seroModel <- createSeroJumpModel(data_sero, NULL, modeldefinition)
 
 ## 4. Run the model!
 
-```{r}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 
 save_info <- list(
     file_name = "simple",
@@ -224,7 +224,7 @@ model_summary <- runInfRJMCMC(seroModel, rj_settings, save_info = save_info)
 
 ## 5. Plot the outputs
 
-```{r}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 
 # Need to have save_info model_summary to run these
 plotMCMCDiagnosis(model_summary, save_info = save_info) # plots the convergence diagnosis
