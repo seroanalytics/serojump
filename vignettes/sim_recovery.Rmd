@@ -243,7 +243,7 @@ save_info_no_cop <- list(
     model_name = "no_cop"
 )
 
-# Run these 
+# Run these but take a while
 #model_summary_cop <- runInfRJMCMC(model_cop, rj_settings, save_info = save_info_cop)
 #model_summary_no_cop <- runInfRJMCMC(model_no_cop, rj_settings, save_info = save_info_no_cop)
 
