@@ -1,4 +1,11 @@
-outputs/fits
+outputs/fits/*
+
+# Except for the simulate_data directory
+!outputs/fits/simulate_data/
+
+# Ensure the contents of simulate_data are tracked
+!outputs/fits/simulate_data/*
+
 outputs/prior_pred
 outputs/test
 hpc/
