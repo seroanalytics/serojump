@@ -1,19 +1,27 @@
+---
+title: "Case Study 1: Simulation Recovery"
+author: "David Hodgson"
+date: "`r Sys.Date()`"
+output: html_document
+---
 
+
+# R Code Description
+
+This document describes the steps and components of the provided R code for creating and running serological models using simulated data. The code defines observational models, antibody kinetics models, and runs inference using MCMC methods.
+
+---
+
+## Step 1: Load Required Libraries
 ```{r}
 
-#install.packages("devtools")
 library(devtools)
-#install(here::here("..", "serojump")) # install working version of this package 
-library(serojump)
-#library(lubridate)
-#library(patchwork)
-#library(tidybayes)
-#library(ggdist)
-
 library(tidyverse)
+library(serojump)
 
 ```
 
+## Step 2: Read Simulated Data
 
 ```{r}
 
@@ -28,6 +36,8 @@ data_titre_model <- data_titre_model %>% mutate(biomarker = "sVNT") %>% as.data.
 
 
 ```
+
+## Step 3: Define Likelihood and Kinetics Functions
 
 ```{r}
 
@@ -55,6 +65,7 @@ noInfSerumKinetics <- function(titre_est, timeSince, pars) {
 
 ```
 
+## Step 4: Define the Observational and Kinetics Models
 
 ```{r}
 
@@ -110,6 +121,7 @@ model_cop <- createSeroJumpModel(data_titre_model, NULL, modeldefinition_cop)
 
 ```
 
+## Step 5: Define the Complete Model
 
 
 ```{r}
@@ -229,8 +241,12 @@ save_info_no_cop <- list(
     model_name = "no_cop"
 )
 
-model_summary_cop <- runInfRJMCMC(model_cop, rj_settings, save_info = save_info_cop)
-model_summary_no_cop <- runInfRJMCMC(model_no_cop, rj_settings, save_info = save_info_no_cop)
+# Run these 
+#model_summary_cop <- runInfRJMCMC(model_cop, rj_settings, save_info = save_info_cop)
+#model_summary_no_cop <- runInfRJMCMC(model_no_cop, rj_settings, save_info = save_info_no_cop)
+
+model_summary_cop <-  readRDS(here::here("outputs", "fits", save_info_cop$file_name, save_info_cop$model_name, paste0("model_summary.RDS")))
+model_summary_no_cop <-  readRDS(here::here("outputs", "fits", save_info_no_cop$file_name, save_info_no_cop$model_name, paste0("model_summary.RDS")))
 
 # Need to have save_info defined to run these
 modelname_sim <- "cesCOP_notd"
@@ -238,13 +254,13 @@ sim_model_cop <- readRDS(here::here("outputs", "sim_data", modelname_sim, "input
 sim_res_cop <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", "0.5", ".rds")))
 
 plotMCMCDiagnosis(model_summary_cop, save_info = save_info_cop)
-plotPostFigsInf(model_summary_cop, sim_model_cop, sim_res_cop, save_info = save_info_cop)
+plotPostFigsSim(model_summary_cop, sim_model_cop, sim_res_cop, save_info = save_info_cop)
 
 modelname_sim <- "cesNoCOP_notd"
 sim_model_no_cop <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
 sim_res_no_cop <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", "0.5", ".rds")))
 
 plotMCMCDiagnosis(model_summary_no_cop, save_info = save_info_no_cop)
-plotPostFigsInf(model_summary_no_cop, sim_model_no_cop, sim_res_no_cop, save_info = save_info_no_cop)
+plotPostFigsSim(model_summary_no_cop, sim_model_no_cop, sim_res_no_cop, save_info = save_info_no_cop)
 
 ```

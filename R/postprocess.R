@@ -710,7 +710,11 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
         }
     )
 
-    id_skip <- df_ids_plot_known$id
+    if (length(df_ids_plot_known$id) < 20) {
+        id_skip <- vector()
+    } else {
+        id_skip <- df_ids_plot_known$id
+    }
     cat("Get exposure ids1, \n")
 
     df_exposure_order_intense <- df_exposure_order %>% filter(!id %in% id_skip) %>% select(!biomarker) %>% filter(exp_type %in% exposures_fit) %>%

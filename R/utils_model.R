@@ -128,117 +128,13 @@ prior_predictive_ab <- function(seroModel) {
 }
 
 
-
-check_inputs <- function(data_sero, data_known, modeldefinition) {
-    # CHECK inputs of modeldefinition are present
-    if(is.null(modeldefinition$biomarkers)) {
-        stop("Please define the `biomarkers` variable in `modeldefinition`")
-    }
-    if(is.null(modeldefinition$exposureTypes)) {
-        stop("Please define the `exposureTypes` variable in `modeldefinition`")
-    }
-    if(is.null(modeldefinition$exposureFitted)) {
-        stop("Please define the `exposureFitted` variable in `modeldefinition`")
-    }
-    if(is.null(modeldefinition$observationalModel)) {
-        stop("Please define the `observationalModel` structure in `modeldefinition`")
-    }
-    if(is.null(modeldefinition$abkineticsModel)) {
-        stop("Please define the `abkineticsModel` structure in `modeldefinition`")
-    }
-   # if(is.null(modeldefinition$copModel)) {
-  #      stop("Please define the `copModel` structure in `modeldefinition`")
-  #  }
-    if(is.null(modeldefinition$exposurePrior)) {
-        stop("Please define the `exposurePrior` data in `modeldefinition`")
-    } 
-    if(is.null(modeldefinition$exposurePriorType)) {
-        stop("Please define the `exposurePriorType` flag (func or empirical) in `modeldefinition`")
-    } 
- 
-    # CHECK BIOMARKERS ARE WELL DEFINED
-    # Check columns of data_sero match model definition 
-    data_sero_name <- data_sero %>% names
-    biomarkers_md <- modeldefinition$biomarkers
-    biomarkers_cop <- modeldefinition$copModel$model %>% map(~.x$biomarker) %>% unlist
-    biomarkers_obs <- modeldefinition$observationalModel$model %>% map(~.x$biomarker) %>% unlist
-    biomarkers_abkin <- modeldefinition$abkineticsModel$model %>% map(~.x$biomarker) %>% unlist %>% unique
-
-    for(b in biomarkers_md) {
-        if(!b %in% data_sero_name) {
-            stop("Biomarker, ", b, ", in `modeldefinition$biomarkers` is not a column of serological data; `",
-                paste(data_sero_name, collapse = ", "), "`")
-        }
-    }
-    if(!identical(biomarkers_md, biomarkers_cop) ) {
-        stop("Biomarkers in copModel (", paste(biomarkers_cop, collapse = ", "), ") do not match biomarkers in `modeldefinition$biomarkers` (", paste(biomarkers_md, collapse = ", "), ")")
-    }
-     if(!identical(biomarkers_md, biomarkers_obs) ) {
-        stop("Biomarkers in observationalModel (", paste(biomarkers_obs, collapse = ", "), ") do not match biomarkers in `modeldefinition$biomarkers` (", paste(biomarkers_md, collapse = ", "), ")")
-    }
-    if(!identical(biomarkers_md, biomarkers_abkin) ) {
-        stop("Biomarkers in abkineticsModel (", paste(biomarkers_abkin, collapse = ", "), ") do not match biomarkers in `modeldefinition$biomarkers` (", paste(biomarkers_md, collapse = ", "), ")")
-    }  
-
-    # CHECK EXPSURETYPES ARE WELL DEFINED
-    exposure_type_names <- data_known$exposure_type %>% unique
-    exposures_md <- modeldefinition$exposureTypes
-    exposures_obs <- modeldefinition$abkineticsModel$model %>% map(~.x$exposureType) %>% unlist %>% unique
-    if (!is.null(data_known)) {
-        exposure_type_names <- data_known$exposure_type %>% unique
-        for(e in exposure_type_names) {
-            if(!e %in% exposures_md) {
-                stop("Exposure type, ", e, ", in known exposure data.frame column 'exposure_type' (", paste(exposure_type_names, collapse = ", "),
-                    "is not defined in `modeldefinition$exposureTypes` (", paste(exposures_md, collapse = ", "), ")")
-            }
-        }
-    }
-    if(!identical(exposures_md, exposures_obs) ) {
-        stop("Exposure types in abkineticsModel (", paste(exposures_obs, collapse = ", "), ") do not match exposure types in `modeldefinition$exposureTypes` (", paste(exposures_md, collapse = ", "), ")")
-    }
-    if(is.null(modeldefinition$exposureFitted)) {
-        stop("`modeldefinition$exposureFitted` is NULL, please define a biomarker to fit.")
-    }
-    exposure_fitted <- modeldefinition$exposureFitted
-    if(!exposure_fitted %in% exposures_md) {
-        stop("The fitted exposure type, ", exposure_fitted, ", is not defined in, `modeldefinition$exposureTypes`: ", paste(exposures_md, collapse = ", "))
-    }
-
-    names_cop <- modeldefinition$copModel$model %>% map(~.x$name) %>% unlist
-    names_obs <- modeldefinition$observationalModel$model %>% map(~.x$name) %>% unlist
-    names_abkin <- modeldefinition$abkineticsModel$model %>% map(~.x$name) %>% unlist %>% unique
-    # Read out into console
-    cat("There are ", length(biomarkers_md), " measured biomarkers: ", paste(biomarkers_md, collapse = ", "), "\n")
-    cat("There are ", length(exposures_md), " exposure types in the study period: ", paste(exposures_md, collapse = ", "), "\n")
-    cat("The fitted exposure type is ", modeldefinition$exposureFitted, "\n")
-
+inf_prior_base <- function(N, E, I, K) {
+    N_adj <- N - K
+    E_adj <- E - K 
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) 
+    logPriorExpInf
 }
 
-check_priors <- function(modeldefinition) {
-    priors <- bind_rows(
-        modeldefinition$observationalModel$prior,
-        modeldefinition$abkineticsModel$prior,
-        modeldefinition$copModel$prior
-    )
-    if(any(duplicated(priors$par_name))) {
-        stop("Priors: ", paste0(priors$par_name[duplicated(priors$par_name)], collapse = ", "), " are duplicated, please assign original names to each prior")
-    }
-    if(any(priors$lb >= priors$ub)) {
-        stop("Priors: ", paste(priors$par_name[any(priors$lb < priors$ub)], collapse = ", "), " have their lower bound greater than or equal to upper bound, please change.")
-    }
-    for (i in 1:nrow(priors)) {
-        func <- paste("r", priors$dist[[i]], sep = "") 
-        if(!exists( func ) ){
-            stop("Prior function `",  priors$dist[[i]], "` for `", priors$par_name[[i]], "` is not defined in R environment.")
-        }
-    }
-
-    cat("PRIOR DISTRIBUTIONS", "\n")
-    cat("Prior parameters of observationalModel are: ", paste(modeldefinition$observationalModel$prior$par_name, collapse = ", "), "\n")
-    cat("Prior parameters of abkineticsModel are: ", paste(modeldefinition$abkineticsModel$prior$par_name, collapse = ", "), "\n")
-    cat("Prior parameters of copModel are: ", paste(modeldefinition$copModel$prior$par_name, collapse = ", "), "\n")
-
-}
 
 #' @title createSeroJumpModel
 #' @description This function creates a model for the serology jump model.
@@ -249,12 +145,10 @@ check_priors <- function(modeldefinition) {
 #' @export
 createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_exp_bool = NULL) {
     cat("OUTLINE OF INPUTTED MODEL\n")
-   # check_inputs(data_sero, data_known, modeldefinition)
+    check_inputs(data_sero, data_known, modeldefinition)
     check_priors(modeldefinition)
-  #  data_titre_model, known_inf, modeldefinition_cop
-    modelSeroJump <- list()
 
-    cat("GER PRIORS\n")
+    modelSeroJump <- list()
 
     # Generate data for model
     # 1. Extract priors and defined define distributions for model 
@@ -280,8 +174,11 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
     modelSeroJump$initialiseJump <- function(datalist) {
     }
 
-    modelSeroJump$evaluateLogPriorInfExp <- modeldefinition$expInfPrior
-
+    if(is.null(modeldefinition$expInfPrior)) {
+        modelSeroJump$evaluateLogPriorInfExp <- inf_prior_base
+    } else {
+        modelSeroJump$evaluateLogPriorInfExp <- modeldefinition$expInfPrior
+    } 
 
 
     # 2. Define the models for the likelihoods

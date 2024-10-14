@@ -13,7 +13,7 @@ NULL
 
 
 #' @export
-plotPostFigsInf <- function(model_summary, sim_model, sim_res, save_info) {
+plotPostFigsSim <- function(model_summary, sim_model, sim_res, save_info) {
     #model_summary <- model_summary_cop
     #sim_model <- sim_model_cop
     #sim_res <- sim_res_cop
@@ -725,7 +725,17 @@ plot_inf_rec_sim <- function(model_summary,  sim_model, sim_res, file_path) {
     fitfull <- model_summary$fit    
     outputfull <- model_summary$post
 
-        sim_states <- data.frame(
+    sim_time <- vector()
+    for (i in 1:200) {
+        sim_time_i <- which(sim_res$immune_histories[i, ] == 1)
+        if (length(sim_time_i) == 0) {
+            sim_time[i] = -1
+        } else {
+            sim_time[i] <- sim_time_i
+        }
+    }
+
+    sim_states <- data.frame(
         id = 1:200,
         inf_num = sim_res$immune_histories %>% apply(1, sum),
         inf_time_sim = sim_time

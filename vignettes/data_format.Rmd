@@ -1,0 +1,99 @@
+---
+title: "Data format for input files `data_sero`, `exposure_data`, and `attack_rate_data`"
+author: "David Hodgspon"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+## Introduction
+
+This document explains the format and structure of three important data frames used in serological studies:
+
+1. **data_sero**: A required data frame containing individual biomarker readings over the study period.
+2. **exposure_data**: An optional data frame that stores known exposure information for individuals over the study period.
+3. **attack_rate_data**: A required data frame representing the empirical probability density function (PDF) of the attack rate over the study period.
+
+Each section explains the required and optional columns for the data frames and provides an example.
+
+---
+
+## 1. Main data frame: `data_sero`
+
+The primary data frame `data_sero` must contain the following columns:
+
+- **id**: An integer representing the unique identifier for each individual.
+- **time**: A numeric (real) value representing the time at which the biomarker measurement was taken.
+- **biomarker_column**: A dynamically named column that stores the biomarker measurement for the individual. The name of this column is defined by the variable `biomarkers`.
+
+### Example for `data_sero`
+
+Note: you can have multiple biomarkers for each individual, simply provide more columns of data and name the column header the name of the biomarkers.
+
+```{r}
+
+# Define the biomarker name
+biomarkers <- "IgG"
+
+# Create the data_sero dataframe
+data_sero <- data.frame(
+  id = c(1, 1, 2, 2, 3, 3),
+  time = c(1, 5, 1, 5, 1, 5),
+  IgG = c(1.2, 2.4, 1.2, 2.4, 3.0, 3.0),
+)
+
+data_sero
+```
+
+## 2. Optional Data Frame: `exposure_data`
+
+The `exposure_data` is an optional data frame used to track known exposure events and the timing for each individual. The exposure types must match those defined in the variable `exposureTypes`. An exposure is something that is known in the study that would have an effect on the biomarker being measured. Usually this is a known vaccination date, or a known date of infection from PCR.
+
+### Required Columns
+
+- **id**: An integer representing the unique identifier for each individual.
+- **time**: A numeric value representing the time at which the exposure is recorded.
+- **exposure_Type**: A factor or character representing the type of exposure the individual experienced. The exposure types must match those defined in `exposureTypes`.
+
+### Example for `exposure_data`
+Note: if not defined will assume there are no known exposures in the study.
+
+```{r}
+# Define possible exposure types
+exposureTypes <- c("inf")
+
+# Create the exposure_data dataframe
+exposure_data <- data.frame(
+  id = c(1),
+  time = c(3),
+  exposure_type = c("inf")
+)
+
+exposure_data
+
+```
+
+## 3. Required Data Frame: `attack_rate_data`
+
+The `attack_rate_data` data frame represents the empirical probability density function (PDF) of the attack rate over the study period. It contains information about the likelihood of an event (such as an infection or outbreak) occurring at different time points during the study.
+
+### Required Columns
+
+- **time**: A numeric value representing the time point during the study period.
+- **prob**: A numeric value representing the probability density at that specific time point, indicating the likelihood of an attack or event at that time.
+
+### Example for `attack_rate_data`
+Note this is applied to the fitted exposure type. If not defined will assume a uniform probability of infection over the whole study period.
+
+```{r}
+
+exposureFitted <- "inf"
+
+# Create the attack_rate_data dataframe
+attack_rate_data <- data.frame(
+  time = c(1, 2, 3, 4, 5),
+  prob = c(0.0, 0.33, 0.33, 0.33, 0.0)
+)
+
+attack_rate_data
+
+```

@@ -301,7 +301,6 @@ createModelRJCMCFull <- function(ab_ll, par_tab) {
 
 
 calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
- 
 
     if (is.null(type)) {
         cat("Exposure rate is not defined over the time period. Defaulting to uniform distribution between 1 and ", data_t$T, ". \n")
@@ -311,6 +310,7 @@ calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
             prob = dunif(1:data_t$T, 1, data_t$T)
         )
     } else if (type == "func") {
+        addExposurePrior_checkfunction(exp_prior_i)
         dist_name <- paste0("d", exp_prior_i[1, 3])
         my_dist_name <- get(dist_name)
 
@@ -322,6 +322,7 @@ calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
         )
     } else if (type == "empirical") {
         exp_prior <- exp_prior_i
+        addExposurePrior_checkempirical(exp_prior, data_t)
     } else {
         cat("'type' argument must be either NULL, 'func' or 'empirical'. \n")
     }
@@ -379,10 +380,10 @@ calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
 #' @seealso createModelRJCMCFull() and generate_data_t()
 addExposurePrior <- function(model_type, data_t, exp_prior, type = NULL) {
 
-    model_type <- modelSeroJump
-    data_t
-    exp_prior <- modeldefinition$exposurePrior
-    type <- modeldefinition$exposurePriorType
+    #model_type <- modelSeroJump
+    #data_t
+    ##exp_prior <- modeldefinition$exposurePrior
+    #type <- modeldefinition$exposurePriorType
 
 
     if (is.null(type)) {
@@ -494,19 +495,19 @@ clean_simulated_rjmcmc <- function(modelname_sim, obs_er) {
     data_titre_model
 }
 
-check_priors <- function(exp_prior_w2, gambia_exp_w2) {
-    p1 <- exp_prior_w2 %>% 
-        ggplot() + 
-            geom_col(aes(x = day, y = prob), color = "red") + 
-            theme_bw() + 
-            labs(x = "Day of study", y = "Prior exposure probability")
-    p2 <- gambia_exp_w2 %>% filter(inf_d_time > -1) %>% 
-        ggplot() + 
-            geom_histogram(aes(x = inf_d_time)) + 
-            theme_bw() + 
-            labs(x = "Day of study", y = "Known infection times ")
-    p1 / p2 + plot_annotation(tag_levels = "A")
-    ggsave(here::here("outputs", "fits", "test", "transvir", "figs", "wave2", "prior_comp.png"))
-}
+#check_priors <- function(exp_prior_w2, gambia_exp_w2) {
+#    p1 <- exp_prior_w2 %>% 
+#        ggplot() + 
+#            geom_col(aes(x = day, y = prob), color = "red") + 
+#            theme_bw() + 
+#            labs(x = "Day of study", y = "Prior exposure probability")
+#    p2 <- gambia_exp_w2 %>% filter(inf_d_time > -1) %>% 
+#        ggplot() + 
+#            geom_histogram(aes(x = inf_d_time)) + 
+#            theme_bw() + 
+#            labs(x = "Day of study", y = "Known infection times ")
+#    p1 / p2 + plot_annotation(tag_levels = "A")
+#    ggsave(here::here("outputs", "fits", "test", "transvir", "figs", "wave2", "prior_comp.png"))
+#}
 
 
