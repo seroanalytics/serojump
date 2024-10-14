@@ -31,11 +31,6 @@ jobs:
         run: |
           cat("\noptions(repos=c(ropensci='https://ropensci.r-universe.dev',CRAN ='https://cloud.r-project.org', stan = 'https://stan-dev.r-universe.dev'))\n", file = "~/.Rprofile", append = TRUE)
         shell: Rscript {0}
-        
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::pkgdown, local::.
-          needs: website
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)

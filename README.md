@@ -46,7 +46,7 @@ library(serojump)
 
 For detailed usage instructions, please refer to the package vignettes and examples. These vignettes explain:
 
-- The format of the data require for serojump to work, click [here](vignette("data_format")).
+- The format of the data require for serojump to work, click [here](vignette("data_format.Rmd")).
 - How to define observational models and antibody kinetics models and run the serojump sampler, click [here](vignette("model_define")).
 - Specify priors for your models and integrate empirical data [coming soon]
 
