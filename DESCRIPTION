@@ -8,6 +8,6 @@ License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Imports: Rcpp (>= 1.0.3), devtools, magrittr, coda, tidyr, dplyr, brms, purrr, furrr, patchwork, here, ggplot2, doParallel, foreach, parallel, coda, data.table, lubridate, stringr, patchwork, tidybayes, bayesplot, ggdist, data.table, boot
+Imports: Rcpp (>= 1.0.3), devtools, magrittr, coda, tidyr, dplyr, brms, purrr, furrr, patchwork, here, ggplot2, doParallel, foreach, parallel, coda, data.table, lubridate, stringr, patchwork, tidybayes, bayesplot, ggdist, data.table, boot, dtplyr, future
 LinkingTo: Rcpp, RcppEigen, BH
 SystemRequirements: C++14

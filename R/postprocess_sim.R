@@ -94,7 +94,6 @@ plot_abkinetics_trajectories_ind_sim <- function(model_summary, sim_model, sim_r
 
     exposures <- model_outline$infoModel$exposureInfo %>% map(~.x$exposureType) %>% unlist
 
-    library(data.table)
     library(dtplyr)
 
     fit_states_dt <- as.data.table(outputfull$fit_states)
