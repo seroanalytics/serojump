@@ -250,7 +250,6 @@ save_info_no_cop <- list(
 model_summary_cop <-  readRDS(here::here("outputs", "fits", save_info_cop$file_name, save_info_cop$model_name, paste0("model_summary.RDS")))
 model_summary_no_cop <-  readRDS(here::here("outputs", "fits", save_info_no_cop$file_name, save_info_no_cop$model_name, paste0("model_summary.RDS")))
 
-# Need to have save_info defined to run these
 modelname_sim <- "cesCOP_notd"
 sim_model_cop <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
 sim_res_cop <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", "0.5", ".rds")))
