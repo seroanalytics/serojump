@@ -38,10 +38,11 @@ biomarkers <- "IgG"
 data_sero <- data.frame(
   id = c(1, 1, 2, 2, 3, 3),
   time = c(1, 5, 1, 5, 1, 5),
-  IgG = c(1.2, 2.4, 1.2, 2.4, 3.0, 3.0),
+  IgG = c(1.2, 2.4, 1.2, 2.4, 3.0, 3.0)
 )
 
 data_sero
+
 ```
 
 ## 2. Optional Data Frame: `exposure_data`
