@@ -24,6 +24,7 @@ library(serojump)
 ```
 
 ## Step 2: Read Simulated Data
+This data has been generated using `serosim`.
 
 ```{r}
 
