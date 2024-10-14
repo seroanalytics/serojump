@@ -16,7 +16,9 @@ This document describes the steps and components of the provided R code for crea
 ```{r}
 
 library(devtools)
-library(tidyverse)
+library(tidyr)
+library(dplyr)
+library(magrittr)
 library(serojump)
 
 ```

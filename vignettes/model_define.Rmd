@@ -19,10 +19,9 @@ This document explains two critical parts of the model defined in the provided R
 ```{r}
 
 library(devtools)
-library(tidyverse)
-devtools::load_all()
-#library(serojump)
-
+library(tidyr)
+library(dplyr)
+library(serojump)
 
 ```
 
@@ -196,8 +195,6 @@ modeldefinition <- list(
     exposureFitted = exposureFitted,
     observationalModel = observationalModel,
     abkineticsModel = abkineticsModel
-  #  exposurePrior = attack_rate_data,
-   # exposurePriorType = "empirical"
 )
 
 seroModel <- createSeroJumpModel(data_sero, NULL, modeldefinition)
@@ -219,8 +216,6 @@ rj_settings <- list(
         iterations = 2000,
         burninPosterior = 1000,
         thin = 1
-      #  runParallel = FALSE,
-      #  onDebug = TRUE
 )
 
 model_summary <- runInfRJMCMC(seroModel, rj_settings, save_info = save_info)
