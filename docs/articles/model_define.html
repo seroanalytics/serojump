@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Explanation of Observational and Antibody Kinetics Models • serojump</title>
+<title>Intro 2: Explanation of observational and antibody kinetics models • serojump</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Explanation of Observational and Antibody Kinetics Models">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Intro 2: Explanation of observational and antibody kinetics models">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">serojump</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,8 +33,8 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/data_format.html">Data format for input files `data_sero`, `exposure_data`, and `attack_rate_data`</a></li>
-    <li><a class="dropdown-item" href="../articles/model_define.html">Explanation of Observational and Antibody Kinetics Models</a></li>
+<li><a class="dropdown-item" href="../articles/data_format.html">Intro 1: Data format for input files</a></li>
+    <li><a class="dropdown-item" href="../articles/model_define.html">Intro 2: Explanation of observational and antibody kinetics models</a></li>
     <li><a class="dropdown-item" href="../articles/sim_recovery.html">Case Study 1: Simulation Recovery</a></li>
   </ul>
 </li>
@@ -56,7 +56,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Explanation of Observational and Antibody Kinetics Models</h1>
+      <h1>Intro 2: Explanation of observational and antibody kinetics models</h1>
                         <h4 data-toc-skip class="author">David
 Hodgson</h4>
             
@@ -411,7 +411,7 @@ serological model for data analysis
 <span><span class="fu"><a href="../reference/plotMCMCDiagnosis.html">plotMCMCDiagnosis</a></span><span class="op">(</span><span class="va">model_summary</span>, save_info <span class="op">=</span> <span class="va">save_info</span><span class="op">)</span> <span class="co"># plots the convergence diagnosis</span></span></code></pre></div>
 <pre><code><span><span class="co">## --CHECKING SAVE_INFO DATA--</span></span>
 <span><span class="co">## Saving model outputs to:  /Users/lshdh2/Dropbox/Mac (3)/Documents/research/rjmcmc/Rpackage/serojump/outputs/fits/simple/ex1 </span></span>
-<span><span class="co">##  num [1:1000, 1:3] 42.5 42.5 42.5 42.5 42.5 ...</span></span></code></pre>
+<span><span class="co">##  num [1:1000, 1:3] 24.5 24.5 24.5 24.5 24.5 ...</span></span></code></pre>
 <pre><code><span><span class="co">## Saving 7.29 x 20 in image</span></span>
 <span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span>
 <span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span>
@@ -492,8 +492,8 @@ serological model for data analysis
 <span><span class="co">## Joining with `by = join_by(id)`</span></span>
 <span><span class="co">## Joining with `by = join_by(id)`</span></span>
 <span><span class="co">## `geom_smooth()` using formula = 'y ~ x'</span></span></code></pre>
-<pre><code><span><span class="co">## Warning: Removed 1 row containing missing values or values outside the scale range</span></span>
-<span><span class="co">## (`geom_smooth()`).</span></span></code></pre>
+<pre><code><span><span class="co">## Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning</span></span>
+<span><span class="co">## -Inf</span></span></code></pre>
 <pre><code><span><span class="co">## waney1_h1 t1_h1 r_h1 s</span></span></code></pre>
 <pre><code><span><span class="co">## Joining with `by = join_by(id)`</span></span>
 <span><span class="co">## Joining with `by = join_by(id)`</span></span>

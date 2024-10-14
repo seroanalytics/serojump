@@ -171,7 +171,6 @@ plot_exp_rec <- function(model_summary, file_path) {
 
 plot_exp_times_rec <- function(model_summary, file_path) {
 
-
     fitfull <- model_summary$fit    
     outputfull <- model_summary$post
 
