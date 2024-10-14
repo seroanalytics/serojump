@@ -1,12 +1,10 @@
 Package: serojump
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: A serological inference package using reversible jump mcmc
+Version: 0.1.0
 Authors@R: 
-    person("David", "Hodgson", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("David", "Hodgson", , "david.hodgson@lshtm.ac.uk", role = c("aut", "cre"))
+Description: The `serojump` package provides tools for fitting serological models to antibody kinetics data using reversible-jump Markov Chain Monte Carlo (RJ-MCMC). It enables researchers to model the dynamics of antibody levels in response to infections, incorporating both observational and antibody kinetics models. The package supports the inclusion of priors and various exposure scenarios, making it highly flexible for serological data analysis.
+License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2

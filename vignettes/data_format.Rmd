@@ -1,5 +1,5 @@
 ---
-title: "Data format for input files `data_sero`, `exposure_data`, and `attack_rate_data`"
+title: "Intro 1: Data format for input files"
 author: "David Hodgspon"
 date: "`r Sys.Date()`"
 output: html_document

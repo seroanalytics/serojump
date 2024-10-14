@@ -1,5 +1,7 @@
 # serojump
 
+![plot](./images/schematic_A.png)
+
 ## Overview
 
 The `serojump` package provides tools for fitting serological models to antibody kinetics data using reversible-jump Markov Chain Monte Carlo (RJ-MCMC). It enables researchers to model the dynamics of antibody levels in response to infections, incorporating both observational and antibody kinetics models. The package supports the inclusion of priors and various exposure scenarios, making it highly flexible for serological data analysis.

@@ -1,5 +1,5 @@
 ---
-title: "Explanation of Observational and Antibody Kinetics Models"
+title: "Intro 2: Explanation of observational and antibody kinetics models"
 author: "David Hodgson"
 date: "`r Sys.Date()`"
 output: html_document
