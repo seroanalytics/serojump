@@ -1,14 +1,13 @@
 #' @title A plotting function for the serological data
-#' @name plotSero
 #' @param seroModel A serological model object
 #' @return A ggplot object with the plotted data
 #' @description This function takes a serological model object and plots the serological data. The plot gives an overview of the data across individuals
 #' @export
-plotSero <- function(seroModel){
+plotSero <- function(seroModel, N_max = 100){
     N <- seroModel$data$N
 
-    if (N > 100) {
-        sero_plot <- seroModel$data$raw_sero %>% filter(id <= 100)  %>% mutate(id = factor(id, levels = unique(id))) 
+    if (N > N_max) {
+        sero_plot <- seroModel$data$raw_sero %>% filter(id <= N_max)  %>% mutate(id = factor(id, levels = unique(id))) 
     } else {
         sero_plot <- seroModel$data$raw_sero %>% mutate(id = factor(id, levels = unique(id))) 
     }
@@ -31,7 +30,6 @@ plotSero <- function(seroModel){
 }
 
 #' @title A plotting function for the prior predictive distribution of the antibody kinetics
-#' @name plotPriorPredictive
 #' @param seroModel A serological model object
 #' @return A ggplot object with the plotted data
 #' @description This function takes a serological model object and plots the prior predictive distribution of the antibody kinetics. The plot gives an overview of the prior predictive distribution of the antibody kinetics
@@ -73,4 +71,35 @@ plotPriorPredictive <- function(seroModel) {
             facet_wrap(vars(name)) + 
             theme_minimal() + theme(text = element_text(size = 20)) + 
             labs(x = "Time post exposure", y = "Biomarker value")
+}
+
+#' @title A plotting function for the prior on the infection rate
+#' @param seroModel A serological model object
+#' @return A ggplot object with the plotted data
+#' @description This function takes a serological model object and plots the prior distribution of the exposure rate both on the population-level and individual-level.
+#' @export
+plotPriorInfection <- function(seroModel) {
+
+    p1 <- seroModel$data$exp_prior %>% 
+        ggplot2::ggplot() + 
+            geom_line(aes(x = time, prob), size = 3) + 
+            theme_minimal() + theme(text = element_text(size = 20)) + 
+            labs(x = "Time in study", y = "PDF of infection") + 
+            ylim(0, NA)
+
+    exp_full_df <- map_df(1:length(seroModel$data$exp_list), 
+        function(i) {
+            data.frame(
+                time = 1:length(seroModel$data$exp_list[[i]]),
+                prob = seroModel$data$exp_list[[i]],
+                id = i
+            )
+        }
+    ) 
+    p2 <- exp_full_df %>% 
+        ggplot() + 
+            geom_tile(aes(x = time, y = id, fill = prob), alpha = 0.9) 
+
+    library(patchwork)
+    p1 / p2
 }

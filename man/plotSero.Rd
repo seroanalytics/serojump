@@ -4,7 +4,7 @@
 \alias{plotSero}
 \title{A plotting function for the serological data}
 \usage{
-plotSero(seroModel)
+plotSero(seroModel, N_max = 100)
 }
 \arguments{
 \item{seroModel}{A serological model object}

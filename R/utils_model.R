@@ -152,8 +152,6 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
         modelSeroJump$copModel <- list()
     }
 
-   # id_ab <- modeldefinition$abkineticsModel$model %>% map(~.x$id) %>% unlist
-   # names(modelSeroJump$abkineticsModel) <- id_ab
     known_exp_bool <- NULL
     data_t <- generate_data_alt(data_sero, modeldefinition$biomarkers, known_exp_bool)
     data_t$par_names <- priors[, 1]
@@ -225,7 +223,6 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
 
 
 #' @title run the RJMCMC algorithm
-#' @name runSeroJump
 #' @description This function runs the RJMCMC algorithm given a defined seroModel, settings and filepaths for output
 #' @param seroModel The seroModel previously defined.
 #' @param settings Settings used for the calibration

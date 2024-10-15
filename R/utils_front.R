@@ -190,7 +190,7 @@ calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
         cat("Exposure rate is not defined over the time period. Defaulting to uniform distribution between 1 and ", data_t$T, ". \n")
 
         exp_prior <- data.frame(
-            day = 1:data_t$T,
+            time = 1:data_t$T,
             prob = dunif(1:data_t$T, 1, data_t$T)
         )
     } else if (type == "func") {
@@ -201,7 +201,7 @@ calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
         s <- do.call(my_dist_name, list(1:data_t$T, as.numeric(exp_prior_i[1, 4]),  as.numeric(exp_prior_i[1, 5])) )
 
         exp_prior <- data.frame(
-            day = 1:data_t$T,
+            time = 1:data_t$T,
             prob = s
         )
     } else if (type == "empirical") {
@@ -212,7 +212,7 @@ calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
     }
 
     # Get the inidividual level exposure probabilities 
-    T <- exp_prior$day %>% length
+    T <- exp_prior$time %>% length
     exp_list <- list()
     for (i in 1:data_t$N) {
         exp_i <- exp_prior$prob
@@ -238,7 +238,6 @@ calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
         }
 
         if ( sum(exp_i) == 0) {
-            #cat("Individual number: ", i, " has no exposure times. \n")
             exp_list[[i]] <- rep(0, T)
             data_t$knownInfsVec[i] <- 1
         } else {
@@ -248,6 +247,7 @@ calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
 
     data_t$knownInfsN <- sum(data_t$knownInfsVec)
     data_t$exp_list <- exp_list
+    data_t$exp_prior <- exp_prior
     data_t
 }
 
@@ -300,7 +300,7 @@ addExposurePrior <- function(model_type, data_t, exp_prior, type = NULL) {
             
         addExposurePrior_checkempirical(exp_prior, data_t)
 
-        T <- exp_prior$day %>% length
+        T <- exp_prior$time %>% length
         exp_prior$prob
         exp_list <- list()
         for (i in 1:data_t$N) {
@@ -320,7 +320,7 @@ addExposurePrior <- function(model_type, data_t, exp_prior, type = NULL) {
 
         # Code to check form of exp_prior
         model_type$exposureFunctionSample <- function(i) {
-            sample(exp_list[[i]]$day, 1, prob = exp_prior[[i]]$prob) 
+            sample(exp_list[[i]]$time, 1, prob = exp_prior[[i]]$prob) 
         }
 
         model_type$exposureFunctionDensity <- function(jump_i, i) {
@@ -378,20 +378,3 @@ clean_simulated_rjmcmc <- function(modelname_sim, obs_er) {
     data_titre_model <- res$observed_biomarker_states %>% select(i, t, value) %>% rename(id = i, time = t, titre = value) 
     data_titre_model
 }
-
-#check_priors <- function(exp_prior_w2, gambia_exp_w2) {
-#    p1 <- exp_prior_w2 %>% 
-#        ggplot() + 
-#            geom_col(aes(x = day, y = prob), color = "red") + 
-#            theme_bw() + 
-#            labs(x = "Day of study", y = "Prior exposure probability")
-#    p2 <- gambia_exp_w2 %>% filter(inf_d_time > -1) %>% 
-#        ggplot() + 
-#            geom_histogram(aes(x = inf_d_time)) + 
-#            theme_bw() + 
-#            labs(x = "Day of study", y = "Known infection times ")
-#    p1 / p2 + plot_annotation(tag_levels = "A")
-#    ggsave(here::here("outputs", "fits", "test", "transvir", "figs", "wave2", "prior_comp.png"))
-#}
-
-

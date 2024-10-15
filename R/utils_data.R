@@ -1,8 +1,6 @@
-#' @title Input the serological data
 #' @name data_titre_ex
-#'
+#' @title Input the serological data
 #' @description This data format represents the serological data used by the rjmcmc model
-#'
 #' @format A list with the following columns:
 #' \describe{
 #'   \item{id}{Unique identifier for each biomarker.}

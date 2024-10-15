@@ -19,8 +19,9 @@ library(devtools)
 library(tidyr)
 library(dplyr)
 library(magrittr)
-library(serojump)
- library(patchwork)
+#library(serojump)
+devtools::load_all()
+library(patchwork)
 
 ```
 
@@ -135,8 +136,9 @@ Before running the whole model it is good to check the data and the priors. This
 
 p1 <- plotSero(model_cop)
 p2 <- plotPriorPredictive(model_cop)
-
+p3 <- plotPriorInfection(model_cop)
 p1 / p2
+p3
 
 ```
 
