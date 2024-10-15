@@ -15,17 +15,17 @@
 <url><loc>/reference/addObservationalModel.html</loc></url>
 <url><loc>/reference/add_par_df.html</loc></url>
 <url><loc>/reference/copLogLikelihood.html</loc></url>
-<url><loc>/reference/createModelRJCMCFull.html</loc></url>
 <url><loc>/reference/createSeroJumpModel.html</loc></url>
 <url><loc>/reference/data_known_exposures_ex1.html</loc></url>
 <url><loc>/reference/data_titre_ex.html</loc></url>
-<url><loc>/reference/generate_data_t.html</loc></url>
 <url><loc>/reference/index.html</loc></url>
 <url><loc>/reference/makeModel.html</loc></url>
 <url><loc>/reference/obsLogLikelihood.html</loc></url>
 <url><loc>/reference/observationalModel.html</loc></url>
 <url><loc>/reference/plotMCMCDiagnosis.html</loc></url>
+<url><loc>/reference/plotPriorPredictive.html</loc></url>
+<url><loc>/reference/plotSero.html</loc></url>
 <url><loc>/reference/rjmc_sero_func.html</loc></url>
-<url><loc>/reference/runRJMCMC.html</loc></url>
+<url><loc>/reference/runSeroJump.html</loc></url>
 </urlset>
 

@@ -78,7 +78,7 @@ antibody kinetics models</h1>
                         <h4 data-toc-skip class="author">David
 Hodgson</h4>
             
-            <h4 data-toc-skip class="date">2024-10-14</h4>
+            <h4 data-toc-skip class="date">2024-10-15</h4>
       
 
       <div class="hidden name"><code>model_define.Rmd</code></div>
@@ -103,24 +103,31 @@ decay (waning) and infection-induced changes.</li>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="the-observational-model">0. The Observational Model<a class="anchor" aria-label="anchor" href="#the-observational-model"></a>
+<h2 id="load-the-necessary-packages">0. Load the necessary packages<a class="anchor" aria-label="anchor" href="#load-the-necessary-packages"></a>
 </h2>
+<p>Install these if they are not already installed.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">serojump</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="the-observational-model-1">1. The Observational Model<a class="anchor" aria-label="anchor" href="#the-observational-model-1"></a>
+<h2 id="the-observational-model">1. The Observational Model<a class="anchor" aria-label="anchor" href="#the-observational-model"></a>
 </h2>
 <div class="section level3">
 <h3 id="definition">Definition<a class="anchor" aria-label="anchor" href="#definition"></a>
 </h3>
 <p>The observational model captures the process by which observed data
-(<code>PreF</code> in this case) is generated from the underlying
-system. It defines the relationship between the true (latent) variables
-and the observed data.</p>
+(<code>IgG</code> in this case) is generated from the underlying system.
+It defines the relationship between the true (latent) variables and the
+observed data.</p>
 </div>
 <div class="section level3">
 <h3 id="code-breakdown">Code Breakdown<a class="anchor" aria-label="anchor" href="#code-breakdown"></a>
 </h3>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obsLogLikelihood</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">titre_val</span>, <span class="va">titre_est</span>, <span class="va">pars</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">ll</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">dnorm</a></span><span class="op">(</span><span class="va">titre_val</span>, <span class="va">titre_est</span>, <span class="va">pars</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>    <span class="va">ll</span></span>
@@ -131,7 +138,7 @@ and the observed data.</p>
 <span>    model <span class="op">=</span> <span class="fu"><a href="../reference/makeModel.html">makeModel</a></span><span class="op">(</span></span>
 <span>        <span class="fu"><a href="../reference/addObservationalModel.html">addObservationalModel</a></span><span class="op">(</span><span class="st">"IgG"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sigma"</span><span class="op">)</span>, <span class="va">obsLogLikelihood</span><span class="op">)</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    prior <span class="op">=</span> <span class="fu">bind_rows</span><span class="op">(</span></span>
+<span>    prior <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
 <span>        <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"sigma"</span>, <span class="fl">0.0001</span>, <span class="fl">4</span>, <span class="st">"unif"</span>, <span class="fl">0.0001</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span>    <span class="op">)</span> <span class="co"># observational model,</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -183,7 +190,7 @@ and changes due to infection.</p>
 <h3 id="code-breakdown-1">Code Breakdown<a class="anchor" aria-label="anchor" href="#code-breakdown-1"></a>
 </h3>
 <p>Define the antibody kinetic functions</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">noInfSerumKinetics</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">titre_est</span>, <span class="va">timeSince</span>, <span class="va">pars</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">titre_est_new</span> <span class="op">&lt;-</span> <span class="va">titre_est</span> <span class="op">-</span> <span class="op">(</span><span class="va">pars</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">*</span> <span class="va">titre_est</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="va">timeSince</span><span class="op">)</span></span>
 <span>    <span class="va">titre_est_new</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">titre_est_new</span>, <span class="fl">0</span><span class="op">)</span></span>
@@ -210,13 +217,13 @@ and changes due to infection.</p>
 <span>    <span class="va">titre_est_log</span> </span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Create the antibody kinetics model</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">abkineticsModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    model <span class="op">=</span> <span class="fu"><a href="../reference/makeModel.html">makeModel</a></span><span class="op">(</span></span>
 <span>        <span class="fu"><a href="../reference/addAbkineticsModel.html">addAbkineticsModel</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"IgG"</span>, <span class="st">"none"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wane"</span><span class="op">)</span>, <span class="va">noInfSerumKinetics</span><span class="op">)</span>,</span>
 <span>        <span class="fu"><a href="../reference/addAbkineticsModel.html">addAbkineticsModel</a></span><span class="op">(</span><span class="st">"inf"</span>, <span class="st">"IgG"</span>, <span class="st">"inf"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1_h1"</span>, <span class="st">"t1_h1"</span>, <span class="st">"r_h1"</span>, <span class="st">"s"</span><span class="op">)</span>, <span class="va">infTuenisPower2016</span><span class="op">)</span></span>
 <span>    <span class="op">)</span>,</span>
-<span>    prior <span class="op">=</span> <span class="fu">bind_rows</span><span class="op">(</span></span>
+<span>    prior <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
 <span>        <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"y1_h1"</span>, <span class="fl">1</span>, <span class="fl">6</span>, <span class="st">"unif"</span>,  <span class="fl">1</span>, <span class="fl">6</span><span class="op">)</span>,</span>
 <span>        <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"t1_h1"</span>, <span class="fl">3</span>, <span class="fl">14</span>, <span class="st">"unif"</span>, <span class="fl">3</span>, <span class="fl">14</span><span class="op">)</span>,</span>
 <span>        <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"r_h1"</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="st">"unif"</span>, <span class="fl">1</span>, <span class="fl">5</span><span class="op">)</span>,</span>
@@ -300,9 +307,8 @@ priors to specify reasonable ranges for these parameters.</p>
 <p>This R code defines a serological model using different components
 such as biomarkers, exposure types, observational and antibody kinetics
 models, and priors. The code creates a model definitions
-(<code>modeldefinition_e1_p1</code>) and uses these to create a
-serological model for data analysis
-(<code>seroModel_phirst_e1_p1</code>).</p>
+(<code>modeldefinition</code>) and uses these to create a serological
+model for data analysis (<code>seroModel</code>).</p>
 </div>
 <div class="section level2">
 <h2 id="step-by-step-breakdown">Step-by-Step Breakdown<a class="anchor" aria-label="anchor" href="#step-by-step-breakdown"></a>
@@ -310,7 +316,12 @@ serological model for data analysis
 <div class="section level3">
 <h3 id="step-1-define-the-first-model-modeldefinition">Step 1: Define the First Model <code>modeldefinition</code><a class="anchor" aria-label="anchor" href="#step-1-define-the-first-model-modeldefinition"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>Once all the data is loaded in, the first step is to define the
+model. This includes the biomarkers, exposure types, exposure fitted,
+observational model, and antibody kinetics model. Then, once the list is
+created, the <code>createSeroJumpModel</code> function is used to create
+the serojump model.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># See data_format.Rmd vignette about data input types </span></span>
 <span></span>
 <span><span class="va">biomarkers</span> <span class="op">&lt;-</span> <span class="st">"IgG"</span></span>
@@ -360,12 +371,47 @@ serological model for data analysis
 </div>
 </div>
 <div class="section level2">
+<h2 id="pre-run-sanity-plots">4.Pre run sanity plots<a class="anchor" aria-label="anchor" href="#pre-run-sanity-plots"></a>
+</h2>
+<p>Before running the whoel model it is good to check the data and the
+priors. This can be done using a suit of functions
+<code>plotPriors</code> function.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotSero.html">plotSero</a></span><span class="op">(</span><span class="va">seroModel</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotPriorPredictive.html">plotPriorPredictive</a></span><span class="op">(</span><span class="va">seroModel</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p1</span> <span class="op">/</span> <span class="va">p2</span></span></code></pre></div>
+<p><img src="model_define_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+</div>
+<div class="section level2">
 <h2 id="run-the-model">4. Run the model!<a class="anchor" aria-label="anchor" href="#run-the-model"></a>
 </h2>
+<p>Once seroModel is defined, the user can run the model using the
+<code>runSeroJump</code> function. This function requires the seroModel,
+settings for the RJ-MCMC algorithm, and information about saving the
+model outputs.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">save_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    file_name <span class="op">=</span> <span class="st">"simple"</span>,</span>
+<span>    model_name <span class="op">=</span> <span class="st">"ex1"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">rj_settings</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        numberChainRuns <span class="op">=</span> <span class="fl">4</span>, </span>
+<span>        iterations <span class="op">=</span> <span class="fl">2000</span>,</span>
+<span>        burninPosterior <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>        thin <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">model_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runSeroJump.html">runSeroJump</a></span><span class="op">(</span><span class="va">seroModel</span>, <span class="va">rj_settings</span>, save_info <span class="op">=</span> <span class="va">save_info</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="plot-the-outputs">5. Plot the outputs<a class="anchor" aria-label="anchor" href="#plot-the-outputs"></a>
 </h2>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Need to have save_info model_summary to run these</span></span>
+<span><span class="fu"><a href="../reference/plotMCMCDiagnosis.html">plotMCMCDiagnosis</a></span><span class="op">(</span><span class="va">model_summary</span>, save_info <span class="op">=</span> <span class="va">save_info</span><span class="op">)</span> <span class="co"># plots the convergence diagnosis</span></span>
+<span><span class="fu">plotPostFigs</span><span class="op">(</span><span class="va">model_summary</span>, save_info <span class="op">=</span> <span class="va">save_info</span><span class="op">)</span> <span class="co">#plots some plots of the posteriors</span></span></code></pre></div>
 <p><code>model_summary$post</code> has all the posterior distributions
 which the user can extract and plot themselves!</p>
 </div>

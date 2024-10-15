@@ -77,7 +77,7 @@
                         <h4 data-toc-skip class="author">David
 Hodgson</h4>
             
-            <h4 data-toc-skip class="date">2024-10-14</h4>
+            <h4 data-toc-skip class="date">2024-10-15</h4>
       
 
       <div class="hidden name"><code>sim_recovery.Rmd</code></div>
@@ -97,25 +97,32 @@ runs inference using MCMC methods.</p>
 <div class="section level3">
 <h3 id="step-1-load-required-libraries">Step 1: Load Required Libraries<a class="anchor" aria-label="anchor" href="#step-1-load-required-libraries"></a>
 </h3>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">serojump</span><span class="op">)</span></span>
+<span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step-2-read-simulated-data">Step 2: Read Simulated Data<a class="anchor" aria-label="anchor" href="#step-2-read-simulated-data"></a>
 </h3>
 <p>This data has been generated using <code>serosim</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">modelname_sim</span> <span class="op">&lt;-</span> <span class="st">"cesCOP_notd"</span></span>
 <span><span class="va">obs_er</span> <span class="op">&lt;-</span> <span class="st">"0.5"</span></span>
 <span></span>
 <span><span class="va">modeli</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"outputs"</span>, <span class="st">"sim_data"</span>, <span class="va">modelname_sim</span>, <span class="st">"inputs.RDS"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"outputs"</span>, <span class="st">"sim_data"</span>, <span class="va">modelname_sim</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"sim_data_"</span>, <span class="va">obs_er</span>, <span class="st">".rds"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">data_titre_model</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">observed_biomarker_states</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">i</span>, <span class="va">t</span>, <span class="va">value</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">rename</span><span class="op">(</span>id <span class="op">=</span> <span class="va">i</span>, time <span class="op">=</span> <span class="va">t</span>, titre <span class="op">=</span> <span class="va">value</span><span class="op">)</span> </span>
+<span><span class="va">data_titre_model</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">observed_biomarker_states</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">t</span>, <span class="va">value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">i</span>, time <span class="op">=</span> <span class="va">t</span>, titre <span class="op">=</span> <span class="va">value</span><span class="op">)</span> </span>
 <span></span>
-<span><span class="va">data_titre_model</span> <span class="op">&lt;-</span> <span class="va">data_titre_model</span> <span class="op">%&gt;%</span> <span class="fu">mutate</span><span class="op">(</span>biomarker <span class="op">=</span> <span class="st">"sVNT"</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="va">as.data.frame</span> <span class="op">%&gt;%</span> <span class="fu">rename</span><span class="op">(</span>sVNT <span class="op">=</span> <span class="va">titre</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">data_titre_model</span> <span class="op">&lt;-</span> <span class="va">data_titre_model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>biomarker <span class="op">=</span> <span class="st">"sVNT"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">as.data.frame</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>sVNT <span class="op">=</span> <span class="va">titre</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step-3-define-likelihood-and-kinetics-functions">Step 3: Define Likelihood and Kinetics Functions<a class="anchor" aria-label="anchor" href="#step-3-define-likelihood-and-kinetics-functions"></a>
 </h3>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obsLogLikelihood</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">titre_val</span>, <span class="va">titre_est</span>, <span class="va">pars</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">ll</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">dnorm</a></span><span class="op">(</span><span class="va">titre_val</span>, <span class="va">titre_est</span>, <span class="va">pars</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -141,7 +148,7 @@ runs inference using MCMC methods.</p>
 <div class="section level3">
 <h3 id="step-4-define-the-observational-and-kinetics-models">Step 4: Define the Observational and Kinetics Models<a class="anchor" aria-label="anchor" href="#step-4-define-the-observational-and-kinetics-models"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define the biomarkers and exposure types in the model</span></span>
 <span><span class="va">biomarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sVNT"</span><span class="op">)</span></span>
 <span><span class="va">exposureTypes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"inf"</span><span class="op">)</span></span>
@@ -153,7 +160,7 @@ runs inference using MCMC methods.</p>
 <span>    model <span class="op">=</span> <span class="fu"><a href="../reference/makeModel.html">makeModel</a></span><span class="op">(</span></span>
 <span>        <span class="fu"><a href="../reference/addObservationalModel.html">addObservationalModel</a></span><span class="op">(</span><span class="st">"sVNT"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sigma"</span><span class="op">)</span>, <span class="va">obsLogLikelihood</span><span class="op">)</span></span>
 <span>        <span class="op">)</span>, <span class="co"># observational model,</span></span>
-<span>    prior <span class="op">=</span> <span class="fu">bind_rows</span><span class="op">(</span></span>
+<span>    prior <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
 <span>            <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"sigma"</span>, <span class="fl">0.0001</span>, <span class="fl">4</span>, <span class="st">"unif"</span>, <span class="fl">0.0001</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -164,7 +171,7 @@ runs inference using MCMC methods.</p>
 <span>            <span class="fu"><a href="../reference/addAbkineticsModel.html">addAbkineticsModel</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"sVNT"</span>, <span class="st">"none"</span>,  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wane"</span><span class="op">)</span>, <span class="va">noInfSerumKinetics</span><span class="op">)</span>,</span>
 <span>            <span class="fu"><a href="../reference/addAbkineticsModel.html">addAbkineticsModel</a></span><span class="op">(</span><span class="st">"inf"</span>, <span class="st">"sVNT"</span>, <span class="st">"inf"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span><span class="op">)</span>, <span class="va">infSerumKinetics</span><span class="op">)</span></span>
 <span>        <span class="op">)</span>,</span>
-<span>    prior <span class="op">=</span> <span class="fu">bind_rows</span><span class="op">(</span></span>
+<span>    prior <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
 <span>        <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"wane"</span>, <span class="fl">0.0</span>, <span class="fl">0.01</span>, <span class="st">"unif"</span>, <span class="fl">0.0</span>, <span class="fl">0.01</span><span class="op">)</span>, <span class="co"># observational model</span></span>
 <span>        <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="op">-</span><span class="fl">6</span>, <span class="fl">6</span>, <span class="st">"norm"</span>,  <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, <span class="co"># ab kinetics</span></span>
 <span>        <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"b"</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="st">"norm"</span>,  <span class="fl">0.3</span>, <span class="fl">0.05</span><span class="op">)</span>, <span class="co"># ab kinetics</span></span>
@@ -199,18 +206,31 @@ runs inference using MCMC methods.</p>
 <span><span class="co">## Exposure rate is not defined over the time period. Defaulting to uniform distribution between 1 and  119 .</span></span></code></pre>
 </div>
 <div class="section level3">
+<h3 id="step-4b-prerun-sanity-plots">Step 4B: Prerun sanity plots<a class="anchor" aria-label="anchor" href="#step-4b-prerun-sanity-plots"></a>
+</h3>
+<p>Before running the whole model it is good to check the data and the
+priors. This can be done using a suit of functions
+<code>plotPriors</code> function.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotSero.html">plotSero</a></span><span class="op">(</span><span class="va">model_cop</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotPriorPredictive.html">plotPriorPredictive</a></span><span class="op">(</span><span class="va">model_cop</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p1</span> <span class="op">/</span> <span class="va">p2</span></span></code></pre></div>
+<p><img src="sim_recovery_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+</div>
+<div class="section level3">
 <h3 id="step-5-define-the-complete-model">Step 5: Define the Complete Model<a class="anchor" aria-label="anchor" href="#step-5-define-the-complete-model"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">modelname_sim</span> <span class="op">&lt;-</span> <span class="st">"cesNoCOP_notd"</span></span>
 <span><span class="va">obs_er</span> <span class="op">&lt;-</span> <span class="st">"0.5"</span></span>
 <span></span>
 <span><span class="va">modeli</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"outputs"</span>, <span class="st">"sim_data"</span>, <span class="va">modelname_sim</span>, <span class="st">"inputs.RDS"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"outputs"</span>, <span class="st">"sim_data"</span>, <span class="va">modelname_sim</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"sim_data_"</span>, <span class="va">obs_er</span>, <span class="st">".rds"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">data_titre_model</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">observed_biomarker_states</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">i</span>, <span class="va">t</span>, <span class="va">value</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">rename</span><span class="op">(</span>id <span class="op">=</span> <span class="va">i</span>, time <span class="op">=</span> <span class="va">t</span>, titre <span class="op">=</span> <span class="va">value</span><span class="op">)</span> </span>
+<span><span class="va">data_titre_model</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">observed_biomarker_states</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">t</span>, <span class="va">value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">i</span>, time <span class="op">=</span> <span class="va">t</span>, titre <span class="op">=</span> <span class="va">value</span><span class="op">)</span> </span>
 <span></span>
-<span><span class="va">data_titre_model</span> <span class="op">&lt;-</span> <span class="va">data_titre_model</span> <span class="op">%&gt;%</span> <span class="fu">mutate</span><span class="op">(</span>biomarker <span class="op">=</span> <span class="st">"sVNT"</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="va">as.data.frame</span> <span class="op">%&gt;%</span> <span class="fu">rename</span><span class="op">(</span>sVNT <span class="op">=</span> <span class="va">titre</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<span><span class="va">data_titre_model</span> <span class="op">&lt;-</span> <span class="va">data_titre_model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>biomarker <span class="op">=</span> <span class="st">"sVNT"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">as.data.frame</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>sVNT <span class="op">=</span> <span class="va">titre</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obsLogLikelihood</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">titre_val</span>, <span class="va">titre_est</span>, <span class="va">pars</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">ll</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">dnorm</a></span><span class="op">(</span><span class="va">titre_val</span>, <span class="va">titre_est</span>, <span class="va">pars</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -232,7 +252,7 @@ runs inference using MCMC methods.</p>
 <span>    <span class="va">titre_est_log</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">titre_est_log</span><span class="op">)</span></span>
 <span>    <span class="va">titre_est_log</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define the biomarkers and exposure types in the model</span></span>
 <span><span class="va">biomarkers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sVNT"</span><span class="op">)</span></span>
 <span><span class="va">exposureTypes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"inf"</span><span class="op">)</span></span>
@@ -244,7 +264,7 @@ runs inference using MCMC methods.</p>
 <span>    model <span class="op">=</span> <span class="fu"><a href="../reference/makeModel.html">makeModel</a></span><span class="op">(</span></span>
 <span>        <span class="fu"><a href="../reference/addObservationalModel.html">addObservationalModel</a></span><span class="op">(</span><span class="st">"sVNT"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sigma"</span><span class="op">)</span>, <span class="va">obsLogLikelihood</span><span class="op">)</span></span>
 <span>        <span class="op">)</span>, <span class="co"># observational model,</span></span>
-<span>    prior <span class="op">=</span> <span class="fu">bind_rows</span><span class="op">(</span></span>
+<span>    prior <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
 <span>            <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"sigma"</span>, <span class="fl">0.0001</span>, <span class="fl">2</span>, <span class="st">"exp"</span>, <span class="fl">1</span>, <span class="cn">NA</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -255,7 +275,7 @@ runs inference using MCMC methods.</p>
 <span>            <span class="fu"><a href="../reference/addAbkineticsModel.html">addAbkineticsModel</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"sVNT"</span>, <span class="st">"none"</span>,  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wane"</span><span class="op">)</span>, <span class="va">noInfSerumKinetics</span><span class="op">)</span>,</span>
 <span>            <span class="fu"><a href="../reference/addAbkineticsModel.html">addAbkineticsModel</a></span><span class="op">(</span><span class="st">"inf"</span>, <span class="st">"sVNT"</span>, <span class="st">"inf"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span><span class="op">)</span>, <span class="va">infSerumKinetics</span><span class="op">)</span></span>
 <span>        <span class="op">)</span>,</span>
-<span>    prior <span class="op">=</span> <span class="fu">bind_rows</span><span class="op">(</span></span>
+<span>    prior <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
 <span>        <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"wane"</span>, <span class="fl">0.0</span>, <span class="fl">0.01</span>, <span class="st">"unif"</span>, <span class="fl">0.0</span>, <span class="fl">0.01</span><span class="op">)</span>, <span class="co"># observational model</span></span>
 <span>        <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="op">-</span><span class="fl">6</span>, <span class="fl">6</span>, <span class="st">"norm"</span>,  <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, <span class="co"># ab kinetics</span></span>
 <span>        <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"b"</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="st">"norm"</span>,  <span class="fl">0.3</span>, <span class="fl">0.05</span><span class="op">)</span>, <span class="co"># ab kinetics</span></span>
@@ -290,6 +310,57 @@ runs inference using MCMC methods.</p>
 <span><span class="co">## Prior parameters of observationalModel are:  sigma </span></span>
 <span><span class="co">## Prior parameters of abkineticsModel are:  wane, a, b, c </span></span>
 <span><span class="co">## Exposure rate is not defined over the time period. Defaulting to uniform distribution between 1 and  119 .</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="step-5b-prerun-sanity-plots">Step 5B: Prerun sanity plots<a class="anchor" aria-label="anchor" href="#step-5b-prerun-sanity-plots"></a>
+</h3>
+<p>Before running the whole model it is good to check the data and the
+priors. This can be done using a suit of functions
+<code>plotPriors</code> function.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotSero.html">plotSero</a></span><span class="op">(</span><span class="va">model_no_cop</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotPriorPredictive.html">plotPriorPredictive</a></span><span class="op">(</span><span class="va">model_no_cop</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p1</span> <span class="op">/</span> <span class="va">p2</span></span></code></pre></div>
+<p><img src="sim_recovery_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rj_settings</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        numberChainRuns <span class="op">=</span> <span class="fl">4</span>, </span>
+<span>        iterations <span class="op">=</span> <span class="fl">400000</span>,</span>
+<span>        burninPosterior <span class="op">=</span> <span class="fl">200000</span>,</span>
+<span>        thin <span class="op">=</span> <span class="fl">1000</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span><span class="va">save_info_cop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    file_name <span class="op">=</span> <span class="st">"simulated_data"</span>,</span>
+<span>    model_name <span class="op">=</span> <span class="st">"cop"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">save_info_no_cop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    file_name <span class="op">=</span> <span class="st">"simulated_data"</span>,</span>
+<span>    model_name <span class="op">=</span> <span class="st">"no_cop"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Run these but take a while</span></span>
+<span><span class="co">#model_summary_cop &lt;- runInfRJMCMC(model_cop, rj_settings, save_info = save_info_cop)</span></span>
+<span><span class="co">#model_summary_no_cop &lt;- runInfRJMCMC(model_no_cop, rj_settings, save_info = save_info_no_cop)</span></span>
+<span></span>
+<span><span class="va">model_summary_cop</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"outputs"</span>, <span class="st">"fits"</span>, <span class="va">save_info_cop</span><span class="op">$</span><span class="va">file_name</span>, <span class="va">save_info_cop</span><span class="op">$</span><span class="va">model_name</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"model_summary.RDS"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">model_summary_no_cop</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"outputs"</span>, <span class="st">"fits"</span>, <span class="va">save_info_no_cop</span><span class="op">$</span><span class="va">file_name</span>, <span class="va">save_info_no_cop</span><span class="op">$</span><span class="va">model_name</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"model_summary.RDS"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">modelname_sim</span> <span class="op">&lt;-</span> <span class="st">"cesCOP_notd"</span></span>
+<span><span class="va">sim_model_cop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"outputs"</span>, <span class="st">"sim_data"</span>, <span class="va">modelname_sim</span>, <span class="st">"inputs.RDS"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">sim_res_cop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"outputs"</span>, <span class="st">"sim_data"</span>, <span class="va">modelname_sim</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"sim_data_"</span>, <span class="st">"0.5"</span>, <span class="st">".rds"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/plotMCMCDiagnosis.html">plotMCMCDiagnosis</a></span><span class="op">(</span><span class="va">model_summary_cop</span>, save_info <span class="op">=</span> <span class="va">save_info_cop</span><span class="op">)</span></span>
+<span><span class="fu">plotPostFigsSim</span><span class="op">(</span><span class="va">model_summary_cop</span>, <span class="va">sim_model_cop</span>, <span class="va">sim_res_cop</span>, save_info <span class="op">=</span> <span class="va">save_info_cop</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">modelname_sim</span> <span class="op">&lt;-</span> <span class="st">"cesNoCOP_notd"</span></span>
+<span><span class="va">sim_model_no_cop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"outputs"</span>, <span class="st">"sim_data"</span>, <span class="va">modelname_sim</span>, <span class="st">"inputs.RDS"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">sim_res_no_cop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"outputs"</span>, <span class="st">"sim_data"</span>, <span class="va">modelname_sim</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"sim_data_"</span>, <span class="st">"0.5"</span>, <span class="st">".rds"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/plotMCMCDiagnosis.html">plotMCMCDiagnosis</a></span><span class="op">(</span><span class="va">model_summary_no_cop</span>, save_info <span class="op">=</span> <span class="va">save_info_no_cop</span><span class="op">)</span></span>
+<span><span class="fu">plotPostFigsSim</span><span class="op">(</span><span class="va">model_summary_no_cop</span>, <span class="va">sim_model_no_cop</span>, <span class="va">sim_res_no_cop</span>, save_info <span class="op">=</span> <span class="va">save_info_no_cop</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
   </div>
