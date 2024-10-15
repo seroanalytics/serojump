@@ -13,17 +13,19 @@ This document describes the steps and components of the provided R code for crea
 ---
 
 ## Step 1: Load Required Libraries
-```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+```{r, message=FALSE, warning=FALSE, results='hide'}
 
 library(devtools)
 library(tidyr)
 library(dplyr)
 library(magrittr)
 library(serojump)
+ library(patchwork)
 
 ```
 
 ## Step 2: Read Simulated Data
+
 This data has been generated using `serosim`.
 
 ```{r}
@@ -124,7 +126,22 @@ model_cop <- createSeroJumpModel(data_titre_model, NULL, modeldefinition_cop)
 
 ```
 
+
+## Step 4B: Prerun sanity plots
+
+Before running the whole model it is good to check the data and the priors. This can be done using a suit of functions `plotPriors` function.
+
+```{r}
+
+p1 <- plotSero(model_cop)
+p2 <- plotPriorPredictive(model_cop)
+
+p1 / p2
+
+```
+
 ## Step 5: Define the Complete Model
+
 
 
 ```{r}
@@ -224,8 +241,20 @@ model_no_cop <- createSeroJumpModel(data_titre_model, NULL, modeldefinition_no_c
 
 ```
 
+## Step 5B: Prerun sanity plots
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+Before running the whole model it is good to check the data and the priors. This can be done using a suit of functions `plotPriors` function.
+
+```{r}
+
+p1 <- plotSero(model_no_cop)
+p2 <- plotPriorPredictive(model_no_cop)
+
+p1 / p2
+
+```
+
+```{r, message=FALSE, warning=FALSE, results='hide'}
 
 rj_settings <- list(
         numberChainRuns = 4, 

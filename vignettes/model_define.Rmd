@@ -14,14 +14,17 @@ This document explains two critical parts of the model defined in the provided R
 
 ---
 
-## 0. The Observational Model
+## 0. Load the necessary packages
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+Install these if they are not already installed.
+
+```{r, message=FALSE, warning=FALSE, results='hide'}
 
 library(devtools)
 library(tidyr)
 library(dplyr)
 library(serojump)
+library(patchwork)
 
 ```
 
@@ -29,7 +32,7 @@ library(serojump)
 
 ### Definition
 
-The observational model captures the process by which observed data (`PreF` in this case) is generated from the underlying system. It defines the relationship between the true (latent) variables and the observed data.
+The observational model captures the process by which observed data (`IgG` in this case) is generated from the underlying system. It defines the relationship between the true (latent) variables and the observed data.
 
 ### Code Breakdown
 
@@ -152,11 +155,13 @@ The antibody kinetics model accounts for the natural waning of antibodies in the
 
 ## 3. Full model definition
 
-This R code defines a serological model using different components such as biomarkers, exposure types, observational and antibody kinetics models, and priors. The code creates a model definitions (`modeldefinition_e1_p1`) and uses these to create a serological model for data analysis (`seroModel_phirst_e1_p1`).
+This R code defines a serological model using different components such as biomarkers, exposure types, observational and antibody kinetics models, and priors. The code creates a model definitions (`modeldefinition`) and uses these to create a serological model for data analysis (`seroModel`).
 
 ## Step-by-Step Breakdown
 
 ### Step 1: Define the First Model `modeldefinition`
+
+Once all the data is loaded in, the first step is to define the model. This includes the biomarkers, exposure types, exposure fitted, observational model, and antibody kinetics model. Then, once the list is created, the `createSeroJumpModel` function is used to create the serojump model.
 
 ```{r}
 
@@ -201,10 +206,24 @@ seroModel <- createSeroJumpModel(data_sero, NULL, modeldefinition)
 
 ```
 
+## 4.Pre run sanity plots
+
+Before running the whoel model it is good to check the data and the priors. This can be done using a suit of functions `plotPriors` function.
+
+```{r}
+
+p1 <- plotSero(seroModel)
+p2 <- plotPriorPredictive(seroModel)
+
+p1 / p2
+
+```
 
 ## 4. Run the model!
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+Once seroModel is defined, the user can run the model using the `runSeroJump` function. This function requires the seroModel, settings for the RJ-MCMC algorithm, and information about saving the model outputs. 
+
+```{r, message=FALSE, warning=FALSE, results='hide'}
 
 save_info <- list(
     file_name = "simple",
@@ -218,13 +237,13 @@ rj_settings <- list(
         thin = 1
 )
 
-model_summary <- runInfRJMCMC(seroModel, rj_settings, save_info = save_info)
+model_summary <- runSeroJump(seroModel, rj_settings, save_info = save_info)
 
 ```
 
 ## 5. Plot the outputs
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+```{r,  message=FALSE, warning=FALSE, results='hide'}
 
 # Need to have save_info model_summary to run these
 plotMCMCDiagnosis(model_summary, save_info = save_info) # plots the convergence diagnosis

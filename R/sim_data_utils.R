@@ -33,7 +33,6 @@ antibody_model_exp_asymp <-  function(i, t1, b, immune_histories, biomarker_stat
 }
 
 
-
 runserosim_edit <- function(
     ## SIMULATION SETTINGS
     simulation_settings, ## List of parameters governing the simulation settings

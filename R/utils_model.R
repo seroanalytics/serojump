@@ -90,44 +90,6 @@ console_update <- function(data_t, modelSeroJump) {
     cat("The fitted exposure type is ", modelSeroJump$abkineticsModel$model$exposureNameInf)
 }
 
-prior_predictive_ab <- function(seroModel) {
-    abModels <- seroModel$model$abkineticsModel 
-    M <- length(abModels)
-    seroModel$model$samplePriorDistributions() 
-
-    full_pp_ab <- map_df(
-        1:4,
-        function(i) {
-            abModel <- abModels[[i]]
-            pars <- abModel$pars
-            funcForm <- abModel$funcForm
-            id <- abModel$id
-
-            map_df(1:1000,
-                function(j) {
-                    samples <- as.numeric(seroModel$model$samplePriorDistributions()[pars] )
-                    prior_samples <- map_dbl(1:250, ~funcForm(0, .x, samples) )
-                    data.frame(
-                        t = 1:250,
-                        titre = prior_samples,
-                        sample = j,
-                        name = id
-                    )
-                }
-            )
-        }
-    )
-    full_pp_ab_sum <- full_pp_ab %>% group_by(t, name) %>% mean_qi(titre)
-
-    full_pp_ab_sum %>%
-        ggplot() + 
-            geom_ribbon(aes(x = t, ymin = .lower, ymax = .upper), alpha = 0.3) + 
-            geom_line(aes(x = t, titre), size = 3) + 
-            facet_wrap(vars(name)) + 
-            theme_minimal()
-}
-
-
 inf_prior_base <- function(N, E, I, K) {
     N_adj <- N - K
     E_adj <- E - K 
@@ -232,17 +194,6 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
                 data_t$knownInfsN = length(know_inf[know_inf > -1])
             }
         }
-   # } #else {
- #       know_inf <- rep(-1, data_t$N)
- #       data_t$knownInfsTimeVec = know_inf
- #       data_t$knownInfsVec = as.numeric(know_inf > -1)
- #       data_t$knownInfsN = length(know_inf[know_inf > -1])
- #       for (i in 1:length(modeldefinition$exposureTypes)) {
- #           modelSeroJump$infoModel$exposureInfo[[i]] <- list()
- #           modelSeroJump$infoModel$exposureInfo[[i]]$exposureType <- modeldefinition$exposureTypes[i]
- #           modelSeroJump$infoModel$exposureInfo[[i]]$known_inf <- know_inf
- #       }
- #   }
 
     if (!is.null(known_exp_bool)) {
         data_t$knownExpVec <- data_t$knownInfsTimeVec
@@ -263,6 +214,8 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
     }
 
     # Add help with exposure prior
+    data_t$raw_sero <- data_sero
+    data_t$raw_exp <- data_known
 
     list(
         data = data_t,
@@ -271,9 +224,8 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
 }
 
 
-
 #' @title run the RJMCMC algorithm
-#' @name runRJMCMC
+#' @name runSeroJump
 #' @description This function runs the RJMCMC algorithm given a defined seroModel, settings and filepaths for output
 #' @param seroModel The seroModel previously defined.
 #' @param settings Settings used for the calibration
@@ -281,86 +233,7 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
 #' @param modelname Name of the model outputs (in outputs/fits/filename)
 #' @return A list with the posterior samples, the model and the data.
 #' @export
-runRJMCMC <- function(seroModel, settings, filename, modelname) {
-    settings <- settings
-    settings$numberFittedPar <- seroModel$model$namesOfParameters %>% length
-    settings$lowerParBounds <- seroModel$model$lowerParSupport_fitted
-    settings$upperParBounds <- seroModel$model$upperParSupport_fitted
-    settings$lengthJumpVec <- seroModel$data$N
-    
-    post <- rjmc_full_func(model = seroModel$model, data = seroModel$data, settings = settings)
-    fitfull <- list(post = post,  model = seroModel$model, data_t = seroModel$data)
-
-
-
-    dir.create(here::here("outputs", "fits", filename, modelname, "figs"), recursive = TRUE, showWarnings = FALSE)
-    saveRDS(fitfull, here::here("outputs", "fits", filename, modelname, paste0("fit_", modelname, ".RDS")))
-}
-
-#' @title run the RJMCMC algorithm
-#' @name runRJMCMC
-#' @description This function runs the RJMCMC algorithm given a defined seroModel, settings and filepaths for output
-#' @param seroModel The seroModel previously defined.
-#' @param settings Settings used for the calibration
-#' @param filename Filepath of where the outputs are saved (outputs/fits/filename)
-#' @param modelname Name of the model outputs (in outputs/fits/filename)
-#' @return A list with the posterior samples, the model and the data.
-#' @export
-runInfRJMCMCold <- function(seroModel, settings, filename, modelname, priorPred = TRUE) {
-
-    settings <- settings
-    settings$numberFittedPar <- seroModel$model$namesOfParameters %>% length
-    settings$lowerParBounds <- seroModel$model$lowerParSupport_fitted
-    settings$upperParBounds <- seroModel$model$upperParSupport_fitted
-    settings$lengthJumpVec <- seroModel$data$N
-
-    dir.create(here::here("outputs", "fits", filename, "figs", modelname), recursive = TRUE, showWarnings = FALSE)
-
-    if (!priorPred) {
-        out_pp <- rjmc_sero_func(model = seroModel$model, data = seroModel$data, settings = settings)
-        fitfull <- list(post = out_pp,  model = seroModel$model, data_t = seroModel$data)
-        saveRDS(fitfull, here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
-    } else {
-        seroModel_pp <- seroModel
-        seroModel_pp$data$priorPredFlag <- TRUE
-        
-        if(settings$runParallel) {
-            out_pp_full <- mclapply(list(seroModel, seroModel_pp), 
-            function(i) { 
-                rjmc_sero_func(model = i$model, data = i$data, settings = settings)
-            },
-            mc.cores = 8
-            )
-        } else {
-            out_pp_full <- lapply(list(seroModel, seroModel_pp), 
-            function(i) { 
-                rjmc_sero_func(model = i$model, data = i$data, settings = settings)
-            }
-            )
-        }
-
-       # fitfull <- list(post = out_pp_full[[1]],  model = seroModel$model, data_t = seroModel$data)
-        fitfull <- list(post = out_pp_full[[1]],  model = seroModel$model, data_t = seroModel$data)
-        fitfull_pp <- list(post = out_pp_full[[2]],  model = seroModel_pp$model, data_t = seroModel_pp$data)
-
-        dir.create(here::here("outputs", "fits", filename, "figs", modelname), recursive = TRUE, showWarnings = FALSE)
-        saveRDS(fitfull_pp, here::here("outputs", "fits", filename, paste0("fit_prior_", modelname, ".RDS")))
-        saveRDS(fitfull, here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
-       # saveRDS(fitfull, here::here("outputs", "fits", filename, paste0("fit_", modelname, ".RDS")))
-    }
-}
-
-
-#' @title run the RJMCMC algorithm
-#' @name runRJMCMC
-#' @description This function runs the RJMCMC algorithm given a defined seroModel, settings and filepaths for output
-#' @param seroModel The seroModel previously defined.
-#' @param settings Settings used for the calibration
-#' @param filename Filepath of where the outputs are saved (outputs/fits/filename)
-#' @param modelname Name of the model outputs (in outputs/fits/filename)
-#' @return A list with the posterior samples, the model and the data.
-#' @export
-runInfRJMCMC <- function(seroModel, settings, priorPred = FALSE, save_info = NULL) {
+runSeroJump <- function(seroModel, settings, priorPred = FALSE, save_info = NULL) {
    
 
     settings <- settings
