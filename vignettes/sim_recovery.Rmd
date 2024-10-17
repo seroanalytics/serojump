@@ -1,0 +1,291 @@
+# R Code Description
+
+This document describes the steps and components of the provided R code for creating and running serological models using simulated data. The code defines observational models, antibody kinetics models, and runs inference using MCMC methods.
+
+---
+
+## Step 1: Load Required Libraries
+```{r, message=FALSE, warning=FALSE, results='hide'}
+
+library(devtools)
+library(tidyr)
+library(dplyr)
+library(magrittr)
+#library(serojump)
+devtools::load_all()
+library(patchwork)
+
+```
+
+## Step 2: Read Simulated Data
+
+This data has been generated using `serosim`.
+
+```{r}
+
+modelname_sim <- "cesCOP_notd"
+obs_er <- "0.5"
+
+modeli <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
+res <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", obs_er, ".rds")))
+data_titre_model <- res$observed_biomarker_states %>% select(i, t, value) %>% rename(id = i, time = t, titre = value) 
+
+data_titre_model <- data_titre_model %>% mutate(biomarker = "sVNT") %>% as.data.frame %>% rename(sVNT = titre)
+
+
+```
+
+## Step 3: Define Likelihood and Kinetics Functions
+
+```{r}
+
+obsLogLikelihood <- function(titre_val, titre_est, pars) {
+    ll <- dnorm(titre_val, titre_est, pars[1], log = TRUE)
+}
+
+infSerumKinetics <- function(titre_est, timeSince, pars) {
+    a <- pars[1]
+    b <- pars[2]
+    c <- pars[3]
+    if (timeSince < 14) {
+        titre_est <- titre_est + log(exp(a) + exp(c)) * (timeSince) / 14;
+    } else {
+        titre_est <- titre_est + log(exp(a) * exp(-b/10 * (timeSince - 14)) + exp(c));
+    }
+    titre_est
+}
+
+noInfSerumKinetics <- function(titre_est, timeSince, pars) {
+    titre_est_log <- titre_est - pars[1] * (timeSince)
+    titre_est_log <- max(0, titre_est_log)
+    titre_est_log
+}
+
+```
+
+## Step 4: Define the Observational and Kinetics Models
+
+```{r}
+
+
+# Define the biomarkers and exposure types in the model
+biomarkers <- c("sVNT")
+exposureTypes <- c("none", "inf")
+exposureFitted <- "inf"
+
+# Define the observational model
+observationalModel <- list(
+    names = c("sVNT"),
+    model = makeModel(
+        addObservationalModel("sVNT", c("sigma"), obsLogLikelihood)
+        ), # observational model,
+    prior = bind_rows(
+            add_par_df("sigma", 0.0001, 4, "unif", 0.0001, 4)
+    )
+)
+
+# Define the antibody kinetics model
+abkineticsModel <- list(
+    model = makeModel(
+            addAbkineticsModel("none", "sVNT", "none",  c("wane"), noInfSerumKinetics),
+            addAbkineticsModel("inf", "sVNT", "inf", c("a", "b", "c"), infSerumKinetics)
+        ),
+    prior = bind_rows(
+        add_par_df("wane", 0.0, 0.01, "unif", 0.0, 0.01), # observational model
+        add_par_df("a", -6, 6, "norm",  2, 2), # ab kinetics
+        add_par_df("b", 0, 1, "norm",  0.3, 0.05), # ab kinetics
+        add_par_df("c", 0, 4, "unif", 0,  4) # ab kinetics 
+    )
+)
+
+inf_prior <- function(N, E, I, K) {
+    N_adj <- N - K
+    E_adj <- E - K 
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) 
+    logPriorExpInf
+}
+
+modeldefinition_cop <- list(
+    biomarkers = biomarkers,
+    exposureTypes = exposureTypes,
+    exposureFitted = exposureFitted,
+    observationalModel = observationalModel,
+    abkineticsModel = abkineticsModel,
+    expInfPrior = inf_prior
+)
+
+model_cop <- createSeroJumpModel(data_titre_model, NULL, modeldefinition_cop)
+
+
+```
+
+
+## Step 4B: Prerun sanity plots
+
+Before running the whole model it is good to check the data and the priors. This can be done using a suit of functions `plotPriors` function.
+
+```{r}
+
+p1 <- plotSero(model_cop)
+p2 <- plotPriorPredictive(model_cop)
+p3 <- plotPriorInfection(model_cop)
+p1 / p2
+p3
+
+```
+
+## Step 5: Define the Complete Model
+
+
+
+```{r}
+
+modelname_sim <- "cesNoCOP_notd"
+obs_er <- "0.5"
+
+modeli <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
+res <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", obs_er, ".rds")))
+data_titre_model <- res$observed_biomarker_states %>% select(i, t, value) %>% rename(id = i, time = t, titre = value) 
+
+data_titre_model <- data_titre_model %>% mutate(biomarker = "sVNT") %>% as.data.frame %>% rename(sVNT = titre)
+
+
+```
+
+```{r}
+
+obsLogLikelihood <- function(titre_val, titre_est, pars) {
+    ll <- dnorm(titre_val, titre_est, pars[1], log = TRUE)
+}
+
+infSerumKinetics <- function(titre_est, timeSince, pars) {
+    a <- pars[1]
+    b <- pars[2]
+    c <- pars[3]
+    if (timeSince < 14) {
+        titre_est <- titre_est + log(exp(a) + exp(c)) * (timeSince) / 14;
+    } else {
+        titre_est <- titre_est + log(exp(a) * exp(-b/10 * (timeSince - 14)) + exp(c));
+    }
+    titre_est
+}
+
+noInfSerumKinetics <- function(titre_est, timeSince, pars) {
+    titre_est_log <- titre_est - pars[1] * (timeSince)
+    titre_est_log <- max(0, titre_est_log)
+    titre_est_log
+}
+
+```
+
+
+```{r}
+
+
+# Define the biomarkers and exposure types in the model
+biomarkers <- c("sVNT")
+exposureTypes <- c("none", "inf")
+exposureFitted <- "inf"
+
+# Define the observational model
+observationalModel <- list(
+    names = c("sVNT"),
+    model = makeModel(
+        addObservationalModel("sVNT", c("sigma"), obsLogLikelihood)
+        ), # observational model,
+    prior = bind_rows(
+            add_par_df("sigma", 0.0001, 2, "exp", 1, NA)
+    )
+)
+
+# Define the antibody kinetics model
+abkineticsModel <- list(
+    model = makeModel(
+            addAbkineticsModel("none", "sVNT", "none",  c("wane"), noInfSerumKinetics),
+            addAbkineticsModel("inf", "sVNT", "inf", c("a", "b", "c"), infSerumKinetics)
+        ),
+    prior = bind_rows(
+        add_par_df("wane", 0.0, 0.01, "unif", 0.0, 0.01), # observational model
+        add_par_df("a", -6, 6, "norm",  2, 2), # ab kinetics
+        add_par_df("b", 0, 1, "norm",  0.3, 0.05), # ab kinetics
+        add_par_df("c", 0, 4, "unif", 0,  4) # ab kinetics 
+    )
+)
+
+inf_prior <- function(N, E, I, K) {
+    N_adj <- N - K
+    E_adj <- E - K 
+    logPriorExpInf <- lfactorial(E_adj) + lfactorial(N_adj - E_adj) - lfactorial(N_adj ) 
+    logPriorExpInf
+}
+
+
+
+modeldefinition_no_cop <- list(
+    biomarkers = biomarkers,
+    exposureTypes = exposureTypes,
+    exposureFitted = exposureFitted,
+    observationalModel = observationalModel,
+    abkineticsModel = abkineticsModel,
+    expInfPrior = inf_prior
+)
+
+model_no_cop <- createSeroJumpModel(data_titre_model, NULL, modeldefinition_no_cop)
+
+
+```
+
+## Step 5B: Prerun sanity plots
+
+Before running the whole model it is good to check the data and the priors. This can be done using a suit of functions `plotPriors` function.
+
+```{r}
+
+p1 <- plotSero(model_no_cop)
+p2 <- plotPriorPredictive(model_no_cop)
+
+p1 / p2
+
+```
+
+```{r, message=FALSE, warning=FALSE, results='hide'}
+
+rj_settings <- list(
+        numberChainRuns = 4, 
+        iterations = 400000,
+        burninPosterior = 200000,
+        thin = 1000
+    )
+
+save_info_cop <- list(
+    file_name = "simulated_data",
+    model_name = "cop"
+)
+
+save_info_no_cop <- list(
+    file_name = "simulated_data",
+    model_name = "no_cop"
+)
+
+# Run these but take a while
+#model_summary_cop <- runInfRJMCMC(model_cop, rj_settings, save_info = save_info_cop)
+#model_summary_no_cop <- runInfRJMCMC(model_no_cop, rj_settings, save_info = save_info_no_cop)
+
+model_summary_cop <-  readRDS(here::here("outputs", "fits", save_info_cop$file_name, save_info_cop$model_name, paste0("model_summary.RDS")))
+model_summary_no_cop <-  readRDS(here::here("outputs", "fits", save_info_no_cop$file_name, save_info_no_cop$model_name, paste0("model_summary.RDS")))
+
+modelname_sim <- "cesCOP_notd"
+sim_model_cop <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
+sim_res_cop <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", "0.5", ".rds")))
+
+plotMCMCDiagnosis(model_summary_cop, save_info = save_info_cop)
+plotPostFigsSim(model_summary_cop, sim_model_cop, sim_res_cop, save_info = save_info_cop)
+
+modelname_sim <- "cesNoCOP_notd"
+sim_model_no_cop <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
+sim_res_no_cop <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", "0.5", ".rds")))
+
+plotMCMCDiagnosis(model_summary_no_cop, save_info = save_info_no_cop)
+plotPostFigsSim(model_summary_no_cop, sim_model_no_cop, sim_res_no_cop, save_info = save_info_no_cop)
+
+```
