@@ -214,8 +214,10 @@ Before running the whoel model it is good to check the data and the priors. This
 
 p1 <- plotSero(seroModel)
 p2 <- plotPriorPredictive(seroModel)
+p3 <- plotPriorInfection(seroModel)
 
 p1 / p2
+p3
 
 ```
 
