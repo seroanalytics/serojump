@@ -2,7 +2,11 @@
 title: "Case Study 1: Simulation Recovery"
 author: "David Hodgson"
 date: "`r Sys.Date()`"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case Study 1: Simulation Recovery}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 
@@ -31,11 +35,10 @@ This data has been generated using `serosim`.
 
 ```{r}
 
-modelname_sim <- "cesCOP_notd"
-obs_er <- "0.5"
 
-modeli <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
-res <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", obs_er, ".rds")))
+modeli <- readRDS(file = system.file("vig_data", "cesCOP", "inputs.RDS", package = "serojump"))
+res <- readRDS(file = system.file("vig_data", "cesCOP", "sim_data_0.5.RDS", package = "serojump"))
+
 data_titre_model <- res$observed_biomarker_states %>% select(i, t, value) %>% rename(id = i, time = t, titre = value) 
 
 data_titre_model <- data_titre_model %>% mutate(biomarker = "sVNT") %>% as.data.frame %>% rename(sVNT = titre)
@@ -148,13 +151,11 @@ p3
 
 ```{r}
 
-modelname_sim <- "cesNoCOP_notd"
-obs_er <- "0.5"
 
-modeli <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
-res <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", obs_er, ".rds")))
+modeli <- readRDS(file = system.file("vig_data", "cesNoCOP", "inputs.RDS", package = "serojump"))
+res <- readRDS(file = system.file("vig_data", "cesNoCOP", "sim_data_0.5.RDS", package = "serojump"))
+
 data_titre_model <- res$observed_biomarker_states %>% select(i, t, value) %>% rename(id = i, time = t, titre = value) 
-
 data_titre_model <- data_titre_model %>% mutate(biomarker = "sVNT") %>% as.data.frame %>% rename(sVNT = titre)
 
 

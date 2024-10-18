@@ -12,6 +12,11 @@
 NULL
 
 
+#' @title plotPostFigs
+#' @param model_summary Fit from the serojump model
+#' @param sim_model The model description from serosim
+#' @param sim_res The fitted simulated model from serosim
+#' @param save_info Information about saving the figures
 #' @export
 plotPostFigsSim <- function(model_summary, sim_model, sim_res, save_info) {
     #model_summary <- model_summary_cop
@@ -42,10 +47,6 @@ plot_abkinetics_trajectories_ind_sim <- function(model_summary, sim_model, sim_r
 
     fitfull <- model_summary$fit    
     outputfull <- model_summary$post
-
-    require(posterior)
-    require(bayesplot) 
-    require(ggdist)
 
     filename <- outputfull$filename
     modelname <- outputfull$modelname
@@ -94,9 +95,7 @@ plot_abkinetics_trajectories_ind_sim <- function(model_summary, sim_model, sim_r
 
     exposures <- model_outline$infoModel$exposureInfo %>% map(~.x$exposureType) %>% unlist
 
-    library(dtplyr)
-
-    fit_states_dt <- as.data.table(outputfull$fit_states)
+    fit_states_dt <- data.table::as.data.table(outputfull$fit_states)
 
     df_know_exp <- map_df(1:length(exposures),
         function(e) { 
@@ -119,8 +118,6 @@ plot_abkinetics_trajectories_ind_sim <- function(model_summary, sim_model, sim_r
 
     exposures_fit <- model_outline$infoModel$exposureFitted
     exposures <- model_outline$exposureTypes
-
-    require(future)
 
     plan(multisession, workers = 8)
 
@@ -315,7 +312,7 @@ plot_abkinetics_trajectories_ind_sim <- function(model_summary, sim_model, sim_r
                         function(bio_i) {
                             map(sample_s,
                                 function(s) {
-                                    df_exposure_order_i <- as.data.table(df_exposure_order) %>% filter(id == i, sample == s, biomarker == bio_i) %>% arrange(time, .by_group = TRUE)
+                                    df_exposure_order_i <- data.table::as.data.table(df_exposure_order) %>% filter(id == i, sample == s, biomarker == bio_i) %>% arrange(time, .by_group = TRUE)
                             
                                     times <- c(df_exposure_order_i[["time"]], T_max)
                                     timesince_vec <- times %>% diff
@@ -593,9 +590,7 @@ plot_titre_exp_sim <- function(model_summary, sim_model, sim_res, file_path) {
 
 
 plot_abkinetics_trajectories_sim <- function(model_summary,  sim_model, sim_res, file_path) {
-    require(posterior)
-    require(bayesplot)
-    require(ggdist)
+
 
     fitfull <- model_summary$fit    
     outputfull <- model_summary$post
@@ -708,7 +703,6 @@ plot_abkinetics_trajectories_sim <- function(model_summary,  sim_model, sim_res,
         scale_colour_manual(name = "Line type", 
          values =c('black'='black','red'='red'), labels = c('Simualted trajectory','Posterior trajectory'))
 
-    require(patchwork)
 
     p1 / p2 + plot_annotation(title = "Simualtion recovery of the antibody kinetics")
     ggsave(here::here(file_path, "ab_kinetics_recov.png"), height = 10, width = 10)
@@ -717,9 +711,6 @@ plot_abkinetics_trajectories_sim <- function(model_summary,  sim_model, sim_res,
 
 plot_inf_rec_sim <- function(model_summary,  sim_model, sim_res, file_path) {
 
-    require(posterior)
-    require(bayesplot)
-    require(ggdist)
 
     fitfull <- model_summary$fit    
     outputfull <- model_summary$post

@@ -8,6 +8,8 @@ plotSero(seroModel, N_max = 100)
 }
 \arguments{
 \item{seroModel}{A serological model object}
+
+\item{N_max}{Maximum number of individuals to plot}
 }
 \value{
 A ggplot object with the plotted data

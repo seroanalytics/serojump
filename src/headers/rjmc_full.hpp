@@ -15,7 +15,6 @@
 #define EIGEN_DONT_VECTORIZE
 #define EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
 
-
 using namespace Rcpp;
 using namespace std;
 using namespace Eigen;

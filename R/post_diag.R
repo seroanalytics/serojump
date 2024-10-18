@@ -14,10 +14,8 @@ NULL
 
 
 #' Postprocess the posteriors of the simulation study
-#' @param modelname The nams of the model
-#' @param modelname_sim The name of the simulation model
-#' @param obs_er The observation error
-#' @param n_chains The number of chains
+#' @param model_summary The fitted model from serojump
+#' @param save_info Information on how to save the diagnosis figures
 #' @export 
 plotMCMCDiagnosis <- function(model_summary, save_info) {
     
@@ -41,7 +39,6 @@ plotMCMCDiagnosis <- function(model_summary, save_info) {
 
 plotRhatTime <- function(model_summary, file_path) {
 
-    require(data.table)
     outputfull <- model_summary$post
 
     model_outline <- model_summary$fit$model
@@ -180,11 +177,7 @@ transDimConvPlot <- function(df_smi_df, file_path) {
 invariantParamConvPlot <- function(model_summary, file_path) {
 
     fit <- model_summary$fit
-
-    require(bayesplot)
-    require(posterior)
-
-    p1 <- (fit$post$mcmc  %>% mcmc_trace) + theme_minimal() + theme(legend.position = "top")
+    p1 <- (fit$post$mcmc  %>% bayesplot::mcmc_trace()) + theme_minimal() + theme(legend.position = "top")
     p2 <- fit$post$lpost %>% ggplot() + geom_line(aes(x = sample_no, y = lpost, color = chain_no))  + theme_minimal() + theme(legend.position = "top")
 
     p3 <- df_conver_stat <- summarise_draws(fit$post$mcmc ) %>% select(variable, rhat, ess_bulk, ess_tail) %>% 

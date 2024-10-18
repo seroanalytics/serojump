@@ -1,10 +1,6 @@
 #ifndef RJMC_INF_HPP
 #define RJMC_INF_HPP
 
-#pragma clang diagnostic ignored "-Wunknown-pragmas"
-#pragma clang diagnostic ignored "-Wlanguage-extension-token"
-#pragma clang diagnostic ignored "-Wunused-but-set-variable"
-
 // Load all libraries and headers
 // Requires Rcpp, Eigen and boost
 #include <RcppCommon.h>

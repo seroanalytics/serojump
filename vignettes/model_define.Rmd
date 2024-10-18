@@ -2,7 +2,11 @@
 title: "Intro 2: Explanation of observational and antibody kinetics models"
 author: "David Hodgson"
 date: "`r Sys.Date()`"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Intro 2: Explanation of observational and antibody kinetics models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ## Introduction

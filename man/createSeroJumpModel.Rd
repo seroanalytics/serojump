@@ -17,6 +17,8 @@ createSeroJumpModel(
 \item{data_known}{The known exposure data.}
 
 \item{modeldefinition}{The model definition.}
+
+\item{known_exp_bool}{Boolean describing if the exposures are known in the model}
 }
 \value{
 A list with the data and the model.
