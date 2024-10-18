@@ -33,19 +33,6 @@ jobs:
         with:
           extra-packages: any::pkgdown, local::.
 
-      # Install Ruby and Jekyll
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.0'  # Set this according to your needs
-          bundler-cache: true
-
-      - name: Install Jekyll
-        run: bundle install
-
-      - name: Build Jekyll Site
-        run: bundle exec jekyll build
-
       - name: Deploy to GitHub Pages 🚀
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.4.1

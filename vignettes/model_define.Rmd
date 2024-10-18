@@ -236,9 +236,16 @@ save_info <- list(
     model_name = "ex1"
 )
 
+# Using more than one core might fail on windows, 
+if (.Platform$OS.type == "windows") {
+  mc.cores <- 1
+} else {
+  mc.cores <- 2 # use as many as available, preferably 4.
+}
+
 rj_settings <- list(
         numberChainRuns = 4, 
-        numberCores = 2,
+        numberCores = mc.cores,
         iterations = 2000,
         burninPosterior = 1000,
         thin = 1
