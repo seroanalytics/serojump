@@ -8,7 +8,7 @@
 
 \item{inf_status}{How long since the last exposur event occured}
 
-\item{pars}{The fitted parameters needed to calculate the estimate titre value. These are defined in the \code{prior} entry of the \ref{abkineticsModel} list.}
+\item{pars}{The fitted parameters needed to calculate the estimate titre value. These are defined in the \code{prior} entry of the abkineticsModel list.}
 }
 \value{
 A function that returns estimate titre value

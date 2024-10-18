@@ -9,7 +9,14 @@ extract_post <- function(mcmc_out, ...) {
 }
 
 #' @title add_par_df
-#' @description This function adds information about the prior parameter to the rjmc model 
+#' @description This function adds information about the prior distributions of the parameter in the serojump model. It takes a list of the form: 
+#' - par_name: The name of the parameter as as string.
+#' - lb: The numerical lower bound of the parameter.
+#' - ub: The numerical upper bound of the parameter.
+#' - dist: The distribution describing the prior distribution from standard R disributions (e.g. unif, norm)
+#' - dist_par1: The first argument of the prior distribution, 
+#' - dist_par2: The second argument of the prior distribution, (NA if only one parameter is taken like in exp)
+#' @param ... The list as described. 
 #' @export
 add_par_df <- function(...) {
     # Convert the ellipsis arguments to a list
@@ -22,7 +29,6 @@ add_par_df <- function(...) {
   return(df)
 }
 
-#' @export
 cal_lprior_non_centered <- function(par_tab, params) {
     p <- 0
     P <- nrow(par_tab)
@@ -39,7 +45,6 @@ cal_lprior_non_centered <- function(par_tab, params) {
     p
 }
 
-#' @export
 add_par_pool_df <- function(...) {
     # Convert the ellipsis arguments to a list
     args_list <- list(...)
@@ -65,7 +70,6 @@ add_par_pool_df <- function(...) {
 # Can add heirarchical priors with the functions below 
 # add_par_pool_df_non_centered("boost_naive_pvnt", length = 5, 0, "boost_naive_sigma_pvnt", "exp", 5, NA)
 
-#' @export
 add_par_pool_df_non_centered <- function(...) {
     # Convert the ellipsis arguments to a list
     args_list <- list(...)
@@ -88,7 +92,6 @@ add_par_pool_df_non_centered <- function(...) {
     return(df)
 }
 
-#' @export
 get_sample_non_centered <- function(par_tab) {
     P <- nrow(par_tab)
     s <- vector(mode = "numeric", length = P)
@@ -111,12 +114,10 @@ get_sample_non_centered <- function(par_tab) {
     s
 }
 
-#' @export
 check_boundaries <- function(x, lb, ub) {
     (x < lb) | (x > ub);
 }
 
-#' @export
 generate_data_alt <- function(data_titre_model, biomarkers, known_exp_bool = NULL) {
 
     #data_titre_model <- data_sero

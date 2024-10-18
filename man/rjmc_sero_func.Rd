@@ -12,6 +12,8 @@ rjmc_sero_func(model, data, settings, par = NULL)
 \item{data}{Data used in the calibration process}
 
 \item{settings}{settings}
+
+\item{par}{NULL}
 }
 \value{
 Returns a list with the fist element being the mcmc samples formatting for analysis and plottig with the CODA package. The second is the log posterior value at each time step.

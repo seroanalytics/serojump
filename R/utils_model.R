@@ -18,9 +18,9 @@ addObservationalModel <- function(biomarker, pars, logLikelihood) {
 
 #' @title addAbkineticsModel
 #' @description This function adds an antibody kinetics model to the model definition.
-#' @param is The name of the biomarker.
+#' @param id The name of the biomarker.
 #' @param biomarker The name of the biomarker.
-#' @param exposureName The name of the exposure type.
+#' @param exposureType The name of the exposure type.
 #' @param pars The parameters of the model.
 #' @param funcForm The antibody kinetics function.
 #' @return A list with the biomarker name, the exposure name, whether the exposure is inferred, the parameters and the antibody kinetics function.
@@ -41,8 +41,9 @@ addAbkineticsModel <- function(id, biomarker, exposureType, pars, funcForm) {
 #' @title addCopModel
 #' @description This function adds a cop model to the model definition.
 #' @param biomarker The name of the biomarker.
-#' @param exposureName The name of the exposure type.
+#' @param exposureType The name of the exposure type.
 #' @param pars The parameters of the model.
+#' @param funcForm The functional form of the observational model.
 #' @param logLikelihood The log likelihood function.
 #' @return A list with the biomarker name, the exposure name, the parameters and the log likelihood function.
 #' @export
@@ -103,6 +104,7 @@ inf_prior_base <- function(N, E, I, K) {
 #' @param data_sero The serology data.
 #' @param data_known The known exposure data.
 #' @param modeldefinition The model definition.
+#' @param known_exp_bool Boolean describing if the exposures are known in the model
 #' @return A list with the data and the model.
 #' @export
 createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_exp_bool = NULL) {
@@ -226,8 +228,8 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
 #' @description This function runs the RJMCMC algorithm given a defined seroModel, settings and filepaths for output
 #' @param seroModel The seroModel previously defined.
 #' @param settings Settings used for the calibration
-#' @param filename Filepath of where the outputs are saved (outputs/fits/filename)
-#' @param modelname Name of the model outputs (in outputs/fits/filename)
+#' @param priorPred Boolean option on whether to run the prior predictive model
+#' @param save_info Filepath of where the outputs are saved
 #' @return A list with the posterior samples, the model and the data.
 #' @export
 runSeroJump <- function(seroModel, settings, priorPred = FALSE, save_info = NULL) {
@@ -305,7 +307,7 @@ check_save_info <- function(save_info) {
 #'
 #' @param titre_val The titre value from the data
 #' @param titre_est The model-estimate titre value.
-#' @param pars The fitted parameters needed to calculate the log likelihood. These are defined in the \code{prior} entry of the \ref{observationalModel} list.
+#' @param pars The fitted parameters needed to calculate the log likelihood. These are defined in the \code{prior} entry of the observationalModel list.
 #' @return A functoion that returns the log likelihood value for the COP model.
 #' 
 #' @details Add information here.
@@ -336,7 +338,7 @@ NULL
 #'
 #' @param inf_status The infection status of an individual binary (0 or 1).
 #' @param esttitreExp The model-estimated titre value at the time of exposure
-#' @param pars The fitted parameters needed to calculate the log likelihood. These are defined in the \code{prior} entry of the \ref{copModel} list.
+#' @param pars The fitted parameters needed to calculate the log likelihood. These are defined in the \code{prior} entry of the copModel list.
 #' @return A function that returns the log likelihood value for the COP model.
 #' 
 #' @details Add information here.
@@ -366,7 +368,7 @@ NULL
 #'
 #' @param titre_est The model-estimated titre value at the observational time
 #' @param inf_status How long since the last exposur event occured
-#' @param pars The fitted parameters needed to calculate the estimate titre value. These are defined in the \code{prior} entry of the \ref{abkineticsModel} list.
+#' @param pars The fitted parameters needed to calculate the estimate titre value. These are defined in the \code{prior} entry of the abkineticsModel list.
 #' @return A function that returns estimate titre value 
 #' 
 #' @details Add information here.

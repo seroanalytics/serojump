@@ -9,11 +9,13 @@ addCopModel(biomarker, exposureType, pars, funcForm, logLikelihood)
 \arguments{
 \item{biomarker}{The name of the biomarker.}
 
+\item{exposureType}{The name of the exposure type.}
+
 \item{pars}{The parameters of the model.}
 
-\item{logLikelihood}{The log likelihood function.}
+\item{funcForm}{The functional form of the observational model.}
 
-\item{exposureName}{The name of the exposure type.}
+\item{logLikelihood}{The log likelihood function.}
 }
 \value{
 A list with the biomarker name, the exposure name, the parameters and the log likelihood function.

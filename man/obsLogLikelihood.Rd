@@ -8,7 +8,7 @@
 
 \item{titre_est}{The model-estimate titre value.}
 
-\item{pars}{The fitted parameters needed to calculate the log likelihood. These are defined in the \code{prior} entry of the \ref{observationalModel} list.}
+\item{pars}{The fitted parameters needed to calculate the log likelihood. These are defined in the \code{prior} entry of the observationalModel list.}
 }
 \value{
 A functoion that returns the log likelihood value for the COP model.

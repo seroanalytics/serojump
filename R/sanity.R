@@ -1,5 +1,6 @@
 #' @title A plotting function for the serological data
 #' @param seroModel A serological model object
+#' @param N_max Maximum number of individuals to plot
 #' @return A ggplot object with the plotted data
 #' @description This function takes a serological model object and plots the serological data. The plot gives an overview of the data across individuals
 #' @export
@@ -100,6 +101,5 @@ plotPriorInfection <- function(seroModel) {
         ggplot() + 
             geom_tile(aes(x = time, y = id, fill = prob), alpha = 0.9) 
 
-    library(patchwork)
     p1 / p2
 }

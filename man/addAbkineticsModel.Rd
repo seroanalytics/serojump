@@ -7,15 +7,15 @@
 addAbkineticsModel(id, biomarker, exposureType, pars, funcForm)
 }
 \arguments{
+\item{id}{The name of the biomarker.}
+
 \item{biomarker}{The name of the biomarker.}
+
+\item{exposureType}{The name of the exposure type.}
 
 \item{pars}{The parameters of the model.}
 
 \item{funcForm}{The antibody kinetics function.}
-
-\item{is}{The name of the biomarker.}
-
-\item{exposureName}{The name of the exposure type.}
 }
 \value{
 A list with the biomarker name, the exposure name, whether the exposure is inferred, the parameters and the antibody kinetics function.

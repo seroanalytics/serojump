@@ -8,7 +8,7 @@
 
 \item{esttitreExp}{The model-estimated titre value at the time of exposure}
 
-\item{pars}{The fitted parameters needed to calculate the log likelihood. These are defined in the \code{prior} entry of the \ref{copModel} list.}
+\item{pars}{The fitted parameters needed to calculate the log likelihood. These are defined in the \code{prior} entry of the copModel list.}
 }
 \value{
 A function that returns the log likelihood value for the COP model.

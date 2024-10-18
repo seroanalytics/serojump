@@ -11,9 +11,9 @@ runSeroJump(seroModel, settings, priorPred = FALSE, save_info = NULL)
 
 \item{settings}{Settings used for the calibration}
 
-\item{filename}{Filepath of where the outputs are saved (outputs/fits/filename)}
+\item{priorPred}{Boolean option on whether to run the prior predictive model}
 
-\item{modelname}{Name of the model outputs (in outputs/fits/filename)}
+\item{save_info}{Filepath of where the outputs are saved}
 }
 \value{
 A list with the posterior samples, the model and the data.

@@ -7,13 +7,9 @@
 plotMCMCDiagnosis(model_summary, save_info)
 }
 \arguments{
-\item{modelname}{The nams of the model}
+\item{model_summary}{The fitted model from serojump}
 
-\item{modelname_sim}{The name of the simulation model}
-
-\item{obs_er}{The observation error}
-
-\item{n_chains}{The number of chains}
+\item{save_info}{Information on how to save the diagnosis figures}
 }
 \description{
 Postprocess the posteriors of the simulation study

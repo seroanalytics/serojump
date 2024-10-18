@@ -112,14 +112,14 @@ data_known_exposures_ex1 <- data.frame(
 #' abkineticsModel <- list(
 #'    names = c("delta"),
 #'    model = makeModel(
-#'            addAbkineticsModel("IgG", "delta", TRUE, c("a_d", "b_d", "c_d"), infSerumKinetics),
+#'            addAbkineticsModel("IgG", "delta", TRUE, c("a_d", "b_d", "c_d"), infSerumKinetics)
 #'        ),
-#'    prior = bind_rows(
+#'    prior = dplyr::bind_rows(
 #'        add_par_df("a_d", -2, 2, "norm",  0, 1), # ab kinetics
 #'        add_par_df("b_d", 0, 1, "norm",  0.3, 0.05), # ab kinetics
-#'        add_par_df("c_d", 0, 4, "unif", 0,  4), # ab kinetics
+#'        add_par_df("c_d", 0, 4, "unif", 0,  4) # ab kinetics
 #'    )
-#' 
+#' )
 #' 
 #' @author David Hodgson
 #' @keywords data format antibody kinetics model

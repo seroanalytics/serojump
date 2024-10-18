@@ -10,6 +10,9 @@
 #' @importFrom magrittr %>% %<>%
 NULL
 
+#' @title plotPostFigs
+#' @param model_summary Fit from the serojump model
+#' @param save_info Information about saving the figures
 #' @export
 plotPostFigs <- function(model_summary, save_info) {
     check_save_info(save_info)
@@ -34,9 +37,6 @@ plotPostFigs <- function(model_summary, save_info) {
 }
 
 postprocess_fit <- function(model_fit) {
-
-    require(ggdist)
-
 
     post <- model_fit$post
     data_t <- model_fit$data_t
@@ -446,10 +446,6 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
     fitfull <- model_summary$fit    
     outputfull <- model_summary$post
 
-    require(posterior)
-    require(bayesplot)
-    require(ggdist)
-
     filename <- outputfull$filename
     modelname <- outputfull$modelname
 
@@ -518,14 +514,12 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
 
 }
 
+#' @importFrom data.table as.data.table rbindlist setDT data.table
+#' @importFrom future plan multisession
 plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
 
     fitfull <- model_summary$fit    
     outputfull <- model_summary$post
-
-    require(posterior)
-    require(bayesplot) 
-    require(ggdist)
 
     filename <- outputfull$filename
     modelname <- outputfull$modelname
@@ -574,9 +568,7 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
 
     exposures <- model_outline$infoModel$exposureInfo %>% map(~.x$exposureType) %>% unlist
 
-    library(dtplyr)
-
-    fit_states_dt <- as.data.table(outputfull$fit_states)
+    fit_states_dt <- data.table::as.data.table(outputfull$fit_states)
 
     df_know_exp <- map_df(1:length(exposures),
         function(e) { 
@@ -600,7 +592,6 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
     exposures_fit <- model_outline$infoModel$exposureFitted
     exposures <- model_outline$exposureTypes
 
-    require(future)
 
     plan(multisession, workers = 8)
 
@@ -803,7 +794,7 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
                         function(bio_i) {
                             map(sample_s,
                                 function(s) {
-                                    df_exposure_order_i <- as.data.table(df_exposure_order) %>% filter(id == i, sample == s, biomarker == bio_i) %>% arrange(time, .by_group = TRUE)
+                                    df_exposure_order_i <- data.table::as.data.table(df_exposure_order) %>% filter(id == i, sample == s, biomarker == bio_i) %>% arrange(time, .by_group = TRUE)
                             
                                     times <- c(df_exposure_order_i[["time"]], T_max)
                                     timesince_vec <- times %>% diff

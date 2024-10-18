@@ -6,6 +6,17 @@
 \usage{
 add_par_df(...)
 }
+\arguments{
+\item{...}{The list as described.}
+}
 \description{
-This function adds information about the prior parameter to the rjmc model
+This function adds information about the prior distributions of the parameter in the serojump model. It takes a list of the form:
+\itemize{
+\item par_name: The name of the parameter as as string.
+\item lb: The numerical lower bound of the parameter.
+\item ub: The numerical upper bound of the parameter.
+\item dist: The distribution describing the prior distribution from standard R disributions (e.g. unif, norm)
+\item dist_par1: The first argument of the prior distribution,
+\item dist_par2: The second argument of the prior distribution, (NA if only one parameter is taken like in exp)
+}
 }
