@@ -690,7 +690,7 @@ plot_abkinetics_trajectories_sim <- function(model_summary,  sim_model, sim_res,
             geom_density(aes(x = value, fill = type), alpha = 0.5) +
             geom_vline(data = true_ab_par, aes(xintercept = value), color = "red", size = 2, alpha = 0.7) +
             scale_fill_manual(values = c("gray", "gray")) +
-            facet_wrap(vars(param), scale = "free") + theme_bw() + 
+            facet_wrap(vars(param), scales = "free") + theme_bw() + 
             labs(x = "Value", y = "Density", fill = "Type") + theme_bw() + 
             ggtitle("Antibody kinetics parameters")
 

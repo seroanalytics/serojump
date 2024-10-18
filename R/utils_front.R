@@ -263,6 +263,7 @@ calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
 #' @return returns a rjmc model
 #' 
 #' @seealso createModelRJCMCFull() and generate_data_t()
+#' @importFrom stats runif
 addExposurePrior <- function(model_type, data_t, exp_prior, type = NULL) {
 
     #model_type <- modelSeroJump

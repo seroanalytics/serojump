@@ -8,6 +8,7 @@
 #' @import patchwork
 #' @import tidybayes
 #' @import furrr
+#' @import utils
 #' @importFrom magrittr %>% %<>%
 NULL
 
