@@ -74,5 +74,6 @@ Email: [david.hodgson@lshtm.ac.uk](mailto:david.hodgson@lshtm.ac.uk)
 ## Project Status
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![R-CMD-check](https://github.com/seroanalytics/serojump/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/seroanalytics/serojump/actions/workflows/R-CMD-check.yaml)
 
 This package is actively maintained and in a stable, usable state. New features and improvements are continually being developed.
