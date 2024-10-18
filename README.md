@@ -1,6 +1,6 @@
 # serojump
 
-![Schematic of the methods behind the `serojump` package](./images/schematic_A.png)
+![Schematic of the methods behind the `serojump` package](./man/figures/schematic_A.png)
 
 ## Overview
 
