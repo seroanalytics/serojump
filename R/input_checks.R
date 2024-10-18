@@ -13,6 +13,7 @@ check_titre <- function(data_titre) {
 }
 
 check_time <- function(data_titre) {
+    
     time_diff_too_small <- data.frame(
         id = 1:(data_titre$id %>% max),
         start_time = data_titre %>% group_by(id) %>% filter(time == min(time)) %>% unique %>% pull(time),
