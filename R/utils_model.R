@@ -262,7 +262,7 @@ runSeroJump <- function(seroModel, settings, priorPred = FALSE, save_info = NULL
         function(i) { 
             rjmc_sero_func(model = i$model, data = i$data, settings = settings)
         },
-        mc.cores = 8
+        mc.cores = settings$numberCores
         )
     } else {
         out_pp_full <- lapply(list(seroModel), 

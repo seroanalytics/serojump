@@ -227,6 +227,7 @@ save_info <- list(
 
 rj_settings <- list(
         numberChainRuns = 4, 
+        numberCores = 2,
         iterations = 2000,
         burninPosterior = 1000,
         thin = 1

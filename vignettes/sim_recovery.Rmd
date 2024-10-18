@@ -11,9 +11,9 @@ library(devtools)
 library(tidyr)
 library(dplyr)
 library(magrittr)
-#library(serojump)
-devtools::load_all()
+library(serojump)
 library(patchwork)
+
 
 ```
 
@@ -24,13 +24,17 @@ This data has been generated using `serosim`.
 ```{r}
 
 
-modeli <- readRDS(file = system.file("vig_data", "cesCOP", "inputs.RDS", package = "serojump"))
-res <- readRDS(file = system.file("vig_data", "cesCOP", "sim_data_0.5.RDS", package = "serojump"))
+sim_model_cop <- readRDS(file = "cesCOP_inputs.RDS")
+sim_res_cop <- readRDS(file = "cesCOP_sim_data_0.5.rds")
 
-data_titre_model <- res$observed_biomarker_states %>% select(i, t, value) %>% rename(id = i, time = t, titre = value) 
+#modeli <- readRDS(file = system.file("extdata", "vig_data", "cesCOP", "cesCOP_inputs.RDS", package = "serojump"))
+#res <- readRDS(file = system.file("extdata","vig_data", "cesCOP", "cesCOP_sim_data_0.5.RDS", package = "serojump"))
 
+#modeli <- readRDS(file = "cesCOP_inputs.RDS")
+#modeli <- readRDS(file = "cesCOP_sin_data_0.5.RDS")
+
+data_titre_model <- sim_res_cop$observed_biomarker_states %>% select(i, t, value) %>% rename(id = i, time = t, titre = value) 
 data_titre_model <- data_titre_model %>% mutate(biomarker = "sVNT") %>% as.data.frame %>% rename(sVNT = titre)
-
 
 ```
 
@@ -139,11 +143,13 @@ p3
 
 ```{r}
 
+sim_model_no_cop <- readRDS(file = "cesNoCOP_inputs.RDS")
+sim_res_no_cop <- readRDS(file = "cesNoCOP_sim_data_0.5.rds")
 
-modeli <- readRDS(file = system.file("vig_data", "cesNoCOP", "inputs.RDS", package = "serojump"))
-res <- readRDS(file = system.file("vig_data", "cesNoCOP", "sim_data_0.5.RDS", package = "serojump"))
+#modeli <- readRDS(file = system.file("extdata", "vig_data", "cesNoCOP", "cesNoCOP_inputs.RDS", package = "serojump"))
+#res <- readRDS(file = system.file("extdata", "vig_data", "cesNoCOP", "cesNoCOP_sim_data_0.5.RDS", package = "serojump"))
 
-data_titre_model <- res$observed_biomarker_states %>% select(i, t, value) %>% rename(id = i, time = t, titre = value) 
+data_titre_model <- sim_res_no_cop$observed_biomarker_states %>% select(i, t, value) %>% rename(id = i, time = t, titre = value) 
 data_titre_model <- data_titre_model %>% mutate(biomarker = "sVNT") %>% as.data.frame %>% rename(sVNT = titre)
 
 
@@ -268,19 +274,11 @@ save_info_no_cop <- list(
 #model_summary_cop <- runInfRJMCMC(model_cop, rj_settings, save_info = save_info_cop)
 #model_summary_no_cop <- runInfRJMCMC(model_no_cop, rj_settings, save_info = save_info_no_cop)
 
-model_summary_cop <-  readRDS(here::here("outputs", "fits", save_info_cop$file_name, save_info_cop$model_name, paste0("model_summary.RDS")))
-model_summary_no_cop <-  readRDS(here::here("outputs", "fits", save_info_no_cop$file_name, save_info_no_cop$model_name, paste0("model_summary.RDS")))
-
-modelname_sim <- "cesCOP_notd"
-sim_model_cop <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
-sim_res_cop <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", "0.5", ".rds")))
+model_summary_cop <-  readRDS("cop_model_summary.RDS")
+model_summary_no_cop <-  readRDS("no_cop_model_summary.RDS")
 
 plotMCMCDiagnosis(model_summary_cop, save_info = save_info_cop)
 plotPostFigsSim(model_summary_cop, sim_model_cop, sim_res_cop, save_info = save_info_cop)
-
-modelname_sim <- "cesNoCOP_notd"
-sim_model_no_cop <- readRDS(here::here("outputs", "sim_data", modelname_sim, "inputs.RDS"))
-sim_res_no_cop <- readRDS(file = here::here("outputs", "sim_data", modelname_sim, paste0("sim_data_", "0.5", ".rds")))
 
 plotMCMCDiagnosis(model_summary_no_cop, save_info = save_info_no_cop)
 plotPostFigsSim(model_summary_no_cop, sim_model_no_cop, sim_res_no_cop, save_info = save_info_no_cop)

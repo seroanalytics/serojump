@@ -516,7 +516,7 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
 
 #' @importFrom data.table as.data.table rbindlist setDT data.table
 #' @importFrom future plan multisession
-plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
+plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel_i = FALSE) {
 
     fitfull <- model_summary$fit    
     outputfull <- model_summary$post
@@ -592,8 +592,9 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path) {
     exposures_fit <- model_outline$infoModel$exposureFitted
     exposures <- model_outline$exposureTypes
 
-
-    plan(multisession, workers = 8)
+    if (parallel_i) {
+        plan(multisession, workers = 8)
+    }
 
 
     cat("\n Get order of all entries, \n")
