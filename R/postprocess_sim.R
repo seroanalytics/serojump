@@ -43,7 +43,7 @@ plotPostFigsSim <- function(model_summary, sim_model, sim_res, save_info) {
 
 }
 
-plot_abkinetics_trajectories_ind_sim <- function(model_summary, sim_model, sim_res, file_path) {
+plot_abkinetics_trajectories_ind_sim <- function(model_summary, sim_model, sim_res, file_path, parallel_i = FALSE) {
 
     fitfull <- model_summary$fit    
     outputfull <- model_summary$post
@@ -119,8 +119,9 @@ plot_abkinetics_trajectories_ind_sim <- function(model_summary, sim_model, sim_r
     exposures_fit <- model_outline$infoModel$exposureFitted
     exposures <- model_outline$exposureTypes
 
-    plan(multisession, workers = 8)
-
+    if (parallel_i) {
+        plan(multisession, workers = 8)
+    }
 
     cat("\n Get order of all entries, \n")
 
