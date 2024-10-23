@@ -7,7 +7,14 @@
 createSeroJumpModel(
   data_sero,
   data_known,
-  modeldefinition,
+  biomarkers,
+  exposureTypes,
+  exposureFitted,
+  observationalModel,
+  abkineticsModel,
+  exposurePriorTime = NULL,
+  exposurePriorTimeType = NULL,
+  exposurePriorPop = NULL,
   known_exp_bool = NULL
 )
 }
@@ -16,7 +23,21 @@ createSeroJumpModel(
 
 \item{data_known}{The known exposure data.}
 
-\item{modeldefinition}{The model definition.}
+\item{biomarkers}{A vector of the biomarkers}
+
+\item{exposureTypes}{A vector of the exposure types}
+
+\item{exposureFitted}{The exposure type that is fitted}
+
+\item{observationalModel}{The observational model}
+
+\item{abkineticsModel}{The antibody kinetics model}
+
+\item{exposurePriorTime}{The prior time of the exposure}
+
+\item{exposurePriorTimeType}{The type of the exposure prior}
+
+\item{exposurePriorPop}{The population prior of the exposure}
 
 \item{known_exp_bool}{Boolean describing if the exposures are known in the model}
 }

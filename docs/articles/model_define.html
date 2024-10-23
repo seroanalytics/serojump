@@ -49,13 +49,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/cs1_sim_recovery.html">Case Study 1: Simulation Recovery</a>
+    </li>
+    <li>
+      <a href="../articles/cs2_sarscov2.html">Case Study 2: SARS-CoV-2 inference in The Gambia</a>
+    </li>
+    <li>
       <a href="../articles/data_format.html">Intro 1: Data format for input files</a>
     </li>
     <li>
       <a href="../articles/model_define.html">Intro 2: Explanation of observational and antibody kinetics models</a>
-    </li>
-    <li>
-      <a href="../articles/sim_recovery.html">Case Study 1: Simulation Recovery</a>
     </li>
   </ul>
 </li>
@@ -78,7 +81,7 @@ antibody kinetics models</h1>
                         <h4 data-toc-skip class="author">David
 Hodgson</h4>
             
-            <h4 data-toc-skip class="date">2024-10-18</h4>
+            <h4 data-toc-skip class="date">2024-10-23</h4>
       
 
       <div class="hidden name"><code>model_define.Rmd</code></div>
@@ -111,7 +114,14 @@ decay (waning) and infection-induced changes.</li>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">serojump</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Using more than one core might fail on windows, </span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="va">.Platform</span><span class="op">$</span><span class="va">OS.type</span> <span class="op">==</span> <span class="st">"windows"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">mc.cores</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="va">mc.cores</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="co"># use as many as available, preferably 4.</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="the-observational-model">1. The Observational Model<a class="anchor" aria-label="anchor" href="#the-observational-model"></a>
@@ -139,8 +149,8 @@ observed data.</p>
 <span>        <span class="fu"><a href="../reference/addObservationalModel.html">addObservationalModel</a></span><span class="op">(</span><span class="st">"IgG"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sigma"</span><span class="op">)</span>, <span class="va">obsLogLikelihood</span><span class="op">)</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    prior <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"sigma"</span>, <span class="fl">0.0001</span>, <span class="fl">4</span>, <span class="st">"unif"</span>, <span class="fl">0.0001</span>, <span class="fl">4</span><span class="op">)</span></span>
-<span>    <span class="op">)</span> <span class="co"># observational model,</span></span>
+<span>        <span class="fu"><a href="../reference/addPrior.html">addPrior</a></span><span class="op">(</span><span class="st">"sigma"</span>, <span class="fl">0.0001</span>, <span class="fl">4</span>, <span class="st">"unif"</span>, <span class="fl">0.0001</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li><p><strong><code>names = c("IgG")</code></strong>: The observed
@@ -158,7 +168,7 @@ relate to the latent variable.</p></li>
 <li><p><strong><code>prior = bind_rows(...)</code></strong>: This block
 defines the prior distribution for the parameter <code>sigma</code>,
 which controls the observation noise.</p></li>
-<li><p><strong><code>add_par_df("sigma", 0.0001, 4, "unif", 0.0001, 4)</code></strong>:
+<li><p><strong><code>addPrior("sigma", 0.0001, 4, "unif", 0.0001, 4)</code></strong>:
 The parameter <code>sigma</code> is given a uniform prior distribution
 between <code>0.0001</code> and <code>4</code>, indicating that the
 model expects a certain range of variability in the observed
@@ -224,11 +234,11 @@ and changes due to infection.</p>
 <span>        <span class="fu"><a href="../reference/addAbkineticsModel.html">addAbkineticsModel</a></span><span class="op">(</span><span class="st">"inf"</span>, <span class="st">"IgG"</span>, <span class="st">"inf"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1_h1"</span>, <span class="st">"t1_h1"</span>, <span class="st">"r_h1"</span>, <span class="st">"s"</span><span class="op">)</span>, <span class="va">infTuenisPower2016</span><span class="op">)</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    prior <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"y1_h1"</span>, <span class="fl">1</span>, <span class="fl">6</span>, <span class="st">"unif"</span>,  <span class="fl">1</span>, <span class="fl">6</span><span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"t1_h1"</span>, <span class="fl">3</span>, <span class="fl">14</span>, <span class="st">"unif"</span>, <span class="fl">3</span>, <span class="fl">14</span><span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"r_h1"</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="st">"unif"</span>, <span class="fl">1</span>, <span class="fl">5</span><span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"s"</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="st">"unif"</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="../reference/add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"wane"</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="st">"unif"</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span>        <span class="fu"><a href="../reference/addPrior.html">addPrior</a></span><span class="op">(</span><span class="st">"y1_h1"</span>, <span class="fl">1</span>, <span class="fl">6</span>, <span class="st">"unif"</span>,  <span class="fl">1</span>, <span class="fl">6</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="../reference/addPrior.html">addPrior</a></span><span class="op">(</span><span class="st">"t1_h1"</span>, <span class="fl">3</span>, <span class="fl">14</span>, <span class="st">"unif"</span>, <span class="fl">3</span>, <span class="fl">14</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="../reference/addPrior.html">addPrior</a></span><span class="op">(</span><span class="st">"r_h1"</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="st">"unif"</span>, <span class="fl">1</span>, <span class="fl">5</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="../reference/addPrior.html">addPrior</a></span><span class="op">(</span><span class="st">"s"</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="st">"unif"</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="../reference/addPrior.html">addPrior</a></span><span class="op">(</span><span class="st">"wane"</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="st">"unif"</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <ul>
@@ -351,15 +361,15 @@ the serojump model.</p>
 <span>  prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">25</span>, <span class="fl">25</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">modeldefinition</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span></span>
+<span><span class="va">seroModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createSeroJumpModel.html">createSeroJumpModel</a></span><span class="op">(</span></span>
+<span>    data_sero <span class="op">=</span> <span class="va">data_sero</span>, </span>
+<span>    data_known  <span class="op">=</span> <span class="cn">NULL</span>,     </span>
 <span>    biomarkers <span class="op">=</span> <span class="va">biomarkers</span>,</span>
 <span>    exposureTypes <span class="op">=</span> <span class="va">exposureTypes</span>,</span>
 <span>    exposureFitted <span class="op">=</span> <span class="va">exposureFitted</span>,</span>
 <span>    observationalModel <span class="op">=</span> <span class="va">observationalModel</span>,</span>
-<span>    abkineticsModel <span class="op">=</span> <span class="va">abkineticsModel</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">seroModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createSeroJumpModel.html">createSeroJumpModel</a></span><span class="op">(</span><span class="va">data_sero</span>, <span class="cn">NULL</span>, <span class="va">modeldefinition</span><span class="op">)</span></span></code></pre></div>
+<span>    abkineticsModel <span class="op">=</span> <span class="va">abkineticsModel</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## OUTLINE OF INPUTTED MODEL</span></span>
 <span><span class="co">## There are  1  measured biomarkers:  IgG </span></span>
 <span><span class="co">## There are  2  exposure types in the study period:  none, inf </span></span>
@@ -367,6 +377,8 @@ the serojump model.</p>
 <span><span class="co">## PRIOR DISTRIBUTIONS </span></span>
 <span><span class="co">## Prior parameters of observationalModel are:  sigma </span></span>
 <span><span class="co">## Prior parameters of abkineticsModel are:  y1_h1, t1_h1, r_h1, s, wane </span></span>
+<span><span class="co">## No single entries in data_sero!, </span></span>
+<span><span class="co">## No individuals with less than 15 days in the study! </span></span>
 <span><span class="co">## Exposure rate is not defined over the time period. Defaulting to uniform distribution between 1 and  50 .</span></span></code></pre>
 </div>
 </div>
@@ -400,13 +412,6 @@ model outputs.</p>
 <span>    model_name <span class="op">=</span> <span class="st">"ex1"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Using more than one core might fail on windows, </span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="va">.Platform</span><span class="op">$</span><span class="va">OS.type</span> <span class="op">==</span> <span class="st">"windows"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">mc.cores</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>  <span class="va">mc.cores</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="co"># use as many as available, preferably 4.</span></span>
-<span><span class="op">}</span></span>
-<span></span>
 <span><span class="va">rj_settings</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>        numberChainRuns <span class="op">=</span> <span class="fl">4</span>, </span>
 <span>        numberCores <span class="op">=</span> <span class="va">mc.cores</span>,</span>
@@ -415,6 +420,7 @@ model outputs.</p>
 <span>        thin <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">model_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runSeroJump.html">runSeroJump</a></span><span class="op">(</span><span class="va">seroModel</span>, <span class="va">rj_settings</span>, save_info <span class="op">=</span> <span class="va">save_info</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">

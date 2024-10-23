@@ -32,13 +32,16 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/cs1_sim_recovery.html">Case Study 1: Simulation Recovery</a>
+    </li>
+    <li>
+      <a href="../articles/cs2_sarscov2.html">Case Study 2: SARS-CoV-2 inference in The Gambia</a>
+    </li>
+    <li>
       <a href="../articles/data_format.html">Intro 1: Data format for input files</a>
     </li>
     <li>
       <a href="../articles/model_define.html">Intro 2: Explanation of observational and antibody kinetics models</a>
-    </li>
-    <li>
-      <a href="../articles/sim_recovery.html">Case Study 1: Simulation Recovery</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
@@ -63,7 +66,14 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">createSeroJumpModel</span><span class="op">(</span></span>
 <span>  <span class="va">data_sero</span>,</span>
 <span>  <span class="va">data_known</span>,</span>
-<span>  <span class="va">modeldefinition</span>,</span>
+<span>  <span class="va">biomarkers</span>,</span>
+<span>  <span class="va">exposureTypes</span>,</span>
+<span>  <span class="va">exposureFitted</span>,</span>
+<span>  <span class="va">observationalModel</span>,</span>
+<span>  <span class="va">abkineticsModel</span>,</span>
+<span>  exposurePriorTime <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exposurePriorTimeType <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exposurePriorPop <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  known_exp_bool <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -80,8 +90,36 @@
 <dd><p>The known exposure data.</p></dd>
 
 
-<dt id="arg-modeldefinition">modeldefinition<a class="anchor" aria-label="anchor" href="#arg-modeldefinition"></a></dt>
-<dd><p>The model definition.</p></dd>
+<dt id="arg-biomarkers">biomarkers<a class="anchor" aria-label="anchor" href="#arg-biomarkers"></a></dt>
+<dd><p>A vector of the biomarkers</p></dd>
+
+
+<dt id="arg-exposuretypes">exposureTypes<a class="anchor" aria-label="anchor" href="#arg-exposuretypes"></a></dt>
+<dd><p>A vector of the exposure types</p></dd>
+
+
+<dt id="arg-exposurefitted">exposureFitted<a class="anchor" aria-label="anchor" href="#arg-exposurefitted"></a></dt>
+<dd><p>The exposure type that is fitted</p></dd>
+
+
+<dt id="arg-observationalmodel">observationalModel<a class="anchor" aria-label="anchor" href="#arg-observationalmodel"></a></dt>
+<dd><p>The observational model</p></dd>
+
+
+<dt id="arg-abkineticsmodel">abkineticsModel<a class="anchor" aria-label="anchor" href="#arg-abkineticsmodel"></a></dt>
+<dd><p>The antibody kinetics model</p></dd>
+
+
+<dt id="arg-exposurepriortime">exposurePriorTime<a class="anchor" aria-label="anchor" href="#arg-exposurepriortime"></a></dt>
+<dd><p>The prior time of the exposure</p></dd>
+
+
+<dt id="arg-exposurepriortimetype">exposurePriorTimeType<a class="anchor" aria-label="anchor" href="#arg-exposurepriortimetype"></a></dt>
+<dd><p>The type of the exposure prior</p></dd>
+
+
+<dt id="arg-exposurepriorpop">exposurePriorPop<a class="anchor" aria-label="anchor" href="#arg-exposurepriorpop"></a></dt>
+<dd><p>The population prior of the exposure</p></dd>
 
 
 <dt id="arg-known-exp-bool">known_exp_bool<a class="anchor" aria-label="anchor" href="#arg-known-exp-bool"></a></dt>

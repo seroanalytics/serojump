@@ -8,7 +8,7 @@ extract_post <- function(mcmc_out, ...) {
         dplyr::select(...) 
 }
 
-#' @title add_par_df
+#' @title addPrior
 #' @description This function adds information about the prior distributions of the parameter in the serojump model. It takes a list of the form: 
 #' - par_name: The name of the parameter as as string.
 #' - lb: The numerical lower bound of the parameter.
@@ -16,18 +16,48 @@ extract_post <- function(mcmc_out, ...) {
 #' - dist: The distribution describing the prior distribution from standard R disributions (e.g. unif, norm)
 #' - dist_par1: The first argument of the prior distribution, 
 #' - dist_par2: The second argument of the prior distribution, (NA if only one parameter is taken like in exp)
-#' @param ... The list as described. 
+#' @param par_name The name of the parameter as as string.
+#' @param lb The numerical lower bound of the parameter.
+#' @param ub The numerical upper bound of the parameter.
+#' @param dist The name of the parameter as as string.
+#' @param dist_par1  The first argument of the prior distribution, 
+#' @param dist_par2 The second argument of the prior distribution, (NA if only one parameter is taken like in exp)
+#' @return a data.frame of the prior information
 #' @export
-add_par_df <- function(...) {
+addPrior <- function(par_name, lb, ub, dist, dist_par1, dist_par2) {
     # Convert the ellipsis arguments to a list
-    args_list <- list(...)
+    args_list <- list(par_name, lb, ub, dist, dist_par1, dist_par2)
     names(args_list) <- c("par_name", "lb", "ub", "dist", "dist_par1", "dist_par2")
     df <- as.data.frame(args_list)
     df$dist_par1 <- as.character(df$dist_par1)
     df$dist_par2 <- as.character(df$dist_par2)
     df$part_type <- "prior"
-  return(df)
+
+    # Check the distribution exists
+    distributions <- ls("package:stats")
+    # Filter for distribution functions
+    distribution_functions <- distributions[grepl("^d", distributions)]
+    if (!paste0("d", dist) %in% distribution_functions) {
+        stop(paste0("Error: `dist` = ", dist," does not correspond to a probability density function in the stats package."))
+    }
+    if (lb >= ub) {
+        stop(paste0("Error: `lower bound`, ", lb, ",  is greater than `upper bound`, ", ub))
+    }
+
+    aschar_dist <- paste0("r", df$dist)
+    my_dist_name <- get(aschar_dist)
+
+    if (df$dist != "exp") {
+        temp <- do.call(my_dist_name, list(1, as.numeric(df$dist_par1), as.numeric(df$dist_par2)) )
+    } else {
+        temp <- do.call(my_dist_name, list(1, as.numeric(df$dist_par1)) )
+    }
+    if (is.nan(temp) | is.na(temp)) {
+        stop("Error: cannot sample a random variable, check inputs")
+    }
+    return(df)
 }
+
 
 cal_lprior_non_centered <- function(par_tab, params) {
     p <- 0
@@ -118,14 +148,161 @@ check_boundaries <- function(x, lb, ub) {
     (x < lb) | (x > ub);
 }
 
-generate_data_alt <- function(data_titre_model, biomarkers, known_exp_bool = NULL) {
+#' @title check_input_data
+#' @details This function checks the data_sero input for the serojump model.
+#' @param data_sero A data.frame with columns id, time and IgG
+#' @param known_inf A data.frame with columns id, time and exposure_type
+#' @return A warning if there are single entries
+#' @export 
+check_input_data  <- function(data_sero, known_inf) {
 
-    #data_titre_model <- data_sero
-   # biomarkers <- modeldefinition$biomarkers
-   # known_exp_bool
+    check_sero_no_single_entries(data_sero)
+    check_sero_timings(data_sero)
+}
+
+#' @title check_no_single_entries
+#' @details This function checks that the data_sero has more than one observation per person.
+#' @param data_sero A data.frame with columns id, time and IgG
+#' @return A warning if there are single entries
+#'
+#' @note This function can be used to check the data_sero before running the serojump model.
+#' 
+#' @export
+check_sero_no_single_entries <- function(data_sero) {
+      data_sero_single_obs <- data_sero %>% group_by(id) %>% mutate(r = row_number()) %>% filter(max(r) == 1)
+    if(nrow(data_sero_single_obs) != 0) {
+        stop("ERROR in data_sero: must have more than one observation be person, check ids: ", 
+        paste(data_sero_single_obs$id, collapse = ", "), 
+        ". Please remove")
+    } else {
+        cat("No single entries in data_sero!, \n")
+    }
+}
+
+#' @title check_sero_timings
+#' @details This function checks that the data_sero has more than one observation per person.
+#' @param data_sero A data.frame with columns id, time and IgG
+#' @return A warning if there are single entries
+#' @note This function can be used to check the data_sero before running the serojump model.
+#' 
+#' @export
+check_sero_timings <- function(data_sero) {
+
+    initialTitreTime <- data_sero %>% group_by(id) %>% filter(time == min(time)) %>% unique %>% .[["time"]]
+    endTitreTime <- data_sero %>% group_by(id) %>% filter(time == max(time)) %>% unique %>% .[["time"]]
+
+    small_time <- vector()
+    for (i in 1:length(initialTitreTime)) {
+        if ((endTitreTime[i] - 15) - initialTitreTime[i] < 0) {
+            small_time <- c(small_time, i)
+        }   
+    }
+    if (length(small_time) != 0) {
+        stop("There are individuals which are in the study for less than 15 days, ids: ",  paste(small_time, collapse = ", "), ". It is hard to perform inference on these people, so we recommend you remove them.")
+    } else {
+        cat("No individuals with less than 15 days in the study! \n")
+    }
+}   
 
 
-    #data_titre_model <- data_sero
+
+check_oos_sample_df <- function(known_exp, exposureType, initialTitreTime, endTitreTime) {
+
+    N <- length(endTitreTime)
+    known_exp %>% filter(exposure_type == exposureType) %>%
+        complete(id = 1:N, fill = list(time = -1)) %>% 
+        mutate(start = initialTitreTime, end = endTitreTime) %>%
+        mutate(type = case_when(time >= start & time <= end ~ "in_sample", TRUE ~ "oos_sample"))
+}
+
+update_exp_prior <- function(exp_prior_list, know_inf_df_i, T, N) {
+
+    for (i in 1:N) {
+        start_t <- know_inf_df_i[i, ]$start
+        end_t <- know_inf_df_i[i, ]$end
+        exp_prior_list[[i]][seq_len(start_t)] <- 0
+        exp_prior_list[[i]][(end_t - 7):T] <- 0
+
+        if(know_inf_df_i[i, ]$time != -1 && know_inf_df_i[i, ]$type == "in_sample") {
+            timeexp <- know_inf_df_i[i, ]$time
+            exp_prior_list[[i]][(timeexp - 14):(timeexp + 14)] <- 0
+        } 
+        # normalise 
+        exp_prior_list[[i]] <- exp_prior_list[[i]] / sum(exp_prior_list[[i]])
+    }
+    exp_prior_list
+}
+
+#' @title check_exposures_times
+#' @details This function checks that the data_sero has exposure times within the range the bleeds taken for an individual
+#' @param data_sero A data.frame with columns id, time and `biomarkers`
+#' @param known_exp A data.frame with columns id, time and exposure_type
+#' @param exposure_types A vector of the exposure types
+#' @param fitted_exp A string of the exposure type that is fitted
+#' @param exposurePriorTime A data.frame describing either a functional or empirical prior
+#' @param exposurePriorTimeType define a type of exposure prior, `func` for functional and 'empirical' for empirical. If blank it will assume a uniform distribution between 1 and T.
+#' @return A warning if there are values outside this range
+#' @note This function can be used to check the data_sero before running the serojump model.
+#' 
+#' @export
+check_exposures_times <- function(data_sero, known_exp, exposure_types, fitted_exp, exposurePriorTime = NULL, exposurePriorTimeType = NULL) {
+
+
+    initialTitreTime <- data_sero %>% group_by(id) %>% filter(time == min(time)) %>% unique %>% .[["time"]]
+    endTitreTime <- data_sero %>% group_by(id) %>% filter(time == max(time)) %>% unique %>% .[["time"]]
+    T <- max(endTitreTime)
+    N <- length(initialTitreTime)
+
+    known_exp_i <- known_exp %>% rename(exp_time = time) 
+
+    outside_obs <- vector()
+    inside_obs <- vector()
+    key_exposure <- vector()
+    
+    exp_prior <- convertExpPriorEmpirical(exposurePriorTime, T, exposurePriorTimeType)
+    exp_prior_list <- lapply(1:N, function(x) exp_prior$prob)
+    
+    T <- length(exp_prior$prob)
+
+    know_inf_df <- map_df(exposure_types, 
+        function(exposureType) {
+        # Get the known infections
+            know_inf_df_i <- check_oos_sample_df(known_exp, exposureType, initialTitreTime, endTitreTime)
+            exp_prior_list <<- update_exp_prior(exp_prior_list, know_inf_df_i, T, N)
+            know_inf_df_i
+        }
+    )
+
+    # Get information on people 
+    outside_obs <- know_inf_df %>% filter(!is.na(exposure_type), type == "oos_sample") %>% pull(id)
+    for (i in 1:N) {
+        if(sum(exp_prior_list[[i]]) == 0 ) {
+            inside_obs <- c(inside_obs, i)
+        }
+    }    
+
+    if (length(outside_obs) != 0) {
+        cat("There are individuals which have exposure before their first bleed or before their last bleed, ids: ",  paste(outside_obs, collapse = ", "), ". It is hard to perform inference on these people, so we recommend you remove the exposures from the known inf, but, if included, the model ignores these exposures.\n")
+    }
+    if (length(inside_obs) != 0) {
+        cat("There are individuals which no possible exposure times after the known infection assumptions have been included, ids:",  paste(outside_obs, collapse = ", "), ". These people cannot be exposure to fitted exposured. \n")
+    }  
+    
+    if (length(outside_obs) == 0 && length(inside_obs) == 0) {
+        cat("No individuals with exposure times outside the bleed times! All inf priors look good, \n")
+    }
+   # known_exp$key_exposure <- key_exposure
+    #known_exp
+}
+
+
+generate_data <- function(data_sero, biomarkers, known_exp_bool = NULL) {
+    
+    # Check the entries!    
+    check_sero_no_single_entries(data_sero)
+    check_sero_timings(data_sero)
+
+    data_titre_model <- data_sero
     N <- data_titre_model$id %>% unique %>% length  
     N_data <- nrow(data_titre_model)
 
@@ -185,6 +362,37 @@ generate_data_alt <- function(data_titre_model, biomarkers, known_exp_bool = NUL
 }
 
 
+convertExpPriorEmpirical <- function(exposurePriorTime, T_max, exposurePriorTimeType = NULL) {
+
+    if (is.null(exposurePriorTimeType)) {
+        cat("Exposure rate is not defined over the time period. Defaulting to uniform distribution between 1 and ", T_max, ". \n")
+
+        exp_prior <- data.frame(
+            time = 1:T_max,
+            prob = dunif(1:T_max, 1, T_max)
+        )
+    } else if (exposurePriorTimeType == "func") {
+        addExposurePrior_checkfunction(exposurePriorTime)
+        dist_name <- paste0("d", exposurePriorTime[1, 3])
+        my_dist_name <- get(dist_name)
+
+        s <- do.call(my_dist_name, list(1:T_max, as.numeric(exposurePriorTime[1, 4]),  as.numeric(exposurePriorTime[1, 5])) )
+
+        exp_prior <- data.frame(
+            time = 1:T_max,
+            prob = s
+        )
+    } else if (exposurePriorTimeType == "empirical") {
+        exp_prior <- exposurePriorTime
+        addExposurePrior_checkempirical(exp_prior, T_max)
+    } else {
+        cat("'exposurePriorTimeType' argument must be either NULL, 'func' or 'empirical'. \n")
+    }
+    exp_prior
+}
+
+
+
 calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
 
     if (is.null(type)) {
@@ -214,6 +422,7 @@ calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
 
     # Get the inidividual level exposure probabilities 
     T <- exp_prior$time %>% length
+    UnknownInfsVec <- rep(-1, data_t$N)
     exp_list <- list()
     for (i in 1:data_t$N) {
         exp_i <- exp_prior$prob
@@ -240,15 +449,18 @@ calculateIndExposure <- function(model_type, data_t, exp_prior_i, type = NULL) {
 
         if ( sum(exp_i) == 0) {
             exp_list[[i]] <- rep(0, T)
-            data_t$knownInfsVec[i] <- 1
+            UnknownInfsVec[i] <- 1
         } else {
             exp_list[[i]] <- exp_i / sum(exp_i)
         }
     }
 
+    data_t$UnknownInfsVec <- UnknownInfsVec
     data_t$knownInfsN <- sum(data_t$knownInfsVec)
+
     data_t$exp_list <- exp_list
     data_t$exp_prior <- exp_prior
+
     data_t
 }
 
@@ -333,7 +545,6 @@ addExposurePrior <- function(model_type, data_t, exp_prior, type = NULL) {
     }
     model_type
 }
-
 
 addFunctionTitreExp <- function(model_type, calculate_titre_exp_func = NULL) {
 

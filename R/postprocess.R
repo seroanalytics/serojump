@@ -53,7 +53,6 @@ postprocess_fit <- function(model_fit) {
 
     n_post <- post$mcmc[[1]] %>% nrow
     post_exp_combine <- post$jump 
-    post_inf_combine <- post$inf 
 
     post_infexp <- 1:n_chains %>% map_df(
         function(i) {

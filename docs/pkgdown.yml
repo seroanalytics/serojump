@@ -2,7 +2,8 @@ pandoc: '3.5'
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
+  cs1_sim_recovery: cs1_sim_recovery.html
+  cs2_sarscov2: cs2_sarscov2.html
   data_format: data_format.html
   model_define: model_define.html
-  sim_recovery: sim_recovery.html
-last_built: 2024-10-18T16:25Z
+last_built: 2024-10-23T11:20Z

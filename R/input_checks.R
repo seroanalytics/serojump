@@ -26,7 +26,7 @@ check_time <- function(data_titre) {
 }
 
 
-addExposurePrior_checkempirical <- function(exp_prior, data_t) {
+addExposurePrior_checkempirical <- function(exp_prior, T) {
     columns <- c("time", "prob")
     existing_columns <- names(exp_prior)
 
@@ -39,53 +39,53 @@ addExposurePrior_checkempirical <- function(exp_prior, data_t) {
         stop(paste("Error: Column(s)", paste(names(column_types[!column_types %in% c("numeric", "integer")]), collapse = ", "), "are not numeric or integers in the exposure prior dataframe"))
     }
 
-    if (data_t$T != nrow(exp_prior) ) {
+    if (T != nrow(exp_prior) ) {
         warning("Warning: The number of rows in the exposure prior dataframe does not match the number of time points in the study\n")
     }
 }
 
 
-check_inputs <- function(data_sero, data_known, modeldefinition) {
+check_inputs <- function(data_sero, data_known, biomarkers, exposureTypes, exposureFitted, observationalModel, abkineticsModel, exposurePrior, exposurePriorType) {
     # CHECK inputs of modeldefinition are present
-    if(is.null(modeldefinition$biomarkers)) {
-        stop("Please define the `biomarkers` variable in `modeldefinition`")
-    }
-    if(is.null(modeldefinition$exposureTypes)) {
-        stop("Please define the `exposureTypes` variable in `modeldefinition`")
-    }
-    if(is.null(modeldefinition$exposureFitted)) {
-        stop("Please define the `exposureFitted` variable in `modeldefinition`")
-    }
-    if(is.null(modeldefinition$observationalModel)) {
-        stop("Please define the `observationalModel` structure in `modeldefinition`")
-    }
-    if(is.null(modeldefinition$abkineticsModel)) {
-        stop("Please define the `abkineticsModel` structure in `modeldefinition`")
-    }
+   # if(is.null(modeldefinition$biomarkers)) {
+  #      stop("Please define the `biomarkers`")
+  #  }
+  #  if(is.null(modeldefinition$exposureTypes)) {
+  #      stop("Please define the `exposureTypes`")
+  #  }
+  #  if(is.null(modeldefinition$exposureFitted)) {
+  #      stop("Please define the `exposureFitted`")
+  #  }
+  #  if(is.null(modeldefinition$observationalModel)) {
+  #      stop("Please define the `observationalModel``")
+   # }
+   ## if(is.null(modeldefinition$abkineticsModel)) {
+   #     stop("Please define the `abkineticsModel`")
+   # }
 
  
     # CHECK BIOMARKERS ARE WELL DEFINED
     # Check columns of data_sero match model definition 
     data_sero_name <- data_sero %>% names
-    biomarkers_md <- modeldefinition$biomarkers
-    biomarkers_obs <- modeldefinition$observationalModel$model %>% map(~.x$biomarker) %>% unlist
-    biomarkers_abkin <- modeldefinition$abkineticsModel$model %>% map(~.x$biomarker) %>% unlist %>% unique
+    biomarkers_md <- biomarkers
+    biomarkers_obs <- observationalModel$model %>% map(~.x$biomarker) %>% unlist
+    biomarkers_abkin <- abkineticsModel$model %>% map(~.x$biomarker) %>% unlist %>% unique
 
     for(b in biomarkers_md) {
         if(!b %in% data_sero_name) {
-            stop("Biomarker, ", b, ", in `modeldefinition$biomarkers` is not a column of serological data; `",
+            stop("Biomarker, ", b, ", in `biomarkers` is not a column of serological data; `",
                 paste(data_sero_name, collapse = ", "), "`")
         }
     }
      if(!identical(biomarkers_md, biomarkers_obs) ) {
-        stop("Biomarkers in observationalModel (", paste(biomarkers_obs, collapse = ", "), ") do not match biomarkers in `modeldefinition$biomarkers` (", paste(biomarkers_md, collapse = ", "), ")")
+        stop("Biomarkers in observationalModel (", paste(biomarkers_obs, collapse = ", "), ") do not match biomarkers in `biomarkers` (", paste(biomarkers_md, collapse = ", "), ")")
     }
     if(!identical(biomarkers_md, biomarkers_abkin) ) {
-        stop("Biomarkers in abkineticsModel (", paste(biomarkers_abkin, collapse = ", "), ") do not match biomarkers in `modeldefinition$biomarkers` (", paste(biomarkers_md, collapse = ", "), ")")
+        stop("Biomarkers in abkineticsModel (", paste(biomarkers_abkin, collapse = ", "), ") do not match biomarkers in `biomarkers` (", paste(biomarkers_md, collapse = ", "), ")")
     }  
 
-    exposures_md <- modeldefinition$exposureTypes
-    exposures_obs <- modeldefinition$abkineticsModel$model %>% map(~.x$exposureType) %>% unlist %>% unique
+    exposures_md <- exposureTypes
+    exposures_obs <- abkineticsModel$model %>% map(~.x$exposureType) %>% unlist %>% unique
 
     # CHECK EXPSURETYPES ARE WELL DEFINED
     if (!is.null(data_known)) {
@@ -93,37 +93,36 @@ check_inputs <- function(data_sero, data_known, modeldefinition) {
         for(e in exposure_type_names) {
             if(!e %in% exposures_md) {
                 stop("Exposure type, ", e, ", in known exposure data.frame column 'exposure_type' (", paste(exposure_type_names, collapse = ", "),
-                    "is not defined in `modeldefinition$exposureTypes` (", paste(exposures_md, collapse = ", "), ")")
+                    "is not defined in `exposureTypes` (", paste(exposures_md, collapse = ", "), ")")
             }
         }
     }
     if(!identical(exposures_md, exposures_obs) ) {
-        stop("Exposure types in abkineticsModel (", paste(exposures_obs, collapse = ", "), ") do not match exposure types in `modeldefinition$exposureTypes` (", paste(exposures_md, collapse = ", "), ")")
+        stop("Exposure types in abkineticsModel (", paste(exposures_obs, collapse = ", "), ") do not match exposure types in `exposureTypes` (", paste(exposures_md, collapse = ", "), ")")
     }
-    if(is.null(modeldefinition$exposureFitted)) {
-        stop("`modeldefinition$exposureFitted` is NULL, please define a biomarker to fit.")
+    if(is.null(exposureFitted)) {
+        stop("`exposureFitted` is NULL, please define a biomarker to fit.")
     }
 
-    exposure_fitted <- modeldefinition$exposureFitted
+    exposure_fitted <- exposureFitted
     if(!exposure_fitted %in% exposures_md) {
-        stop("The fitted exposure type, ", exposure_fitted, ", is not defined in, `modeldefinition$exposureTypes`: ", paste(exposures_md, collapse = ", "))
+        stop("The fitted exposure type, ", exposure_fitted, ", is not defined in, `exposureTypes`: ", paste(exposures_md, collapse = ", "))
     }
 
-    names_obs <- modeldefinition$observationalModel$model %>% map(~.x$name) %>% unlist
-    names_abkin <- modeldefinition$abkineticsModel$model %>% map(~.x$name) %>% unlist %>% unique
+    names_obs <- observationalModel$model %>% map(~.x$name) %>% unlist
+    names_abkin <-abkineticsModel$model %>% map(~.x$name) %>% unlist %>% unique
     # Read out into console
     cat("There are ", length(biomarkers_md), " measured biomarkers: ", paste(biomarkers_md, collapse = ", "), "\n")
     cat("There are ", length(exposures_md), " exposure types in the study period: ", paste(exposures_md, collapse = ", "), "\n")
-    cat("The fitted exposure type is ", modeldefinition$exposureFitted, "\n")
+    cat("The fitted exposure type is ", exposureFitted, "\n")
 }
 
 
 
-check_priors <- function(modeldefinition) {
+check_priors <- function(observationalModel, abkineticsModel) {
     priors <- bind_rows(
-        modeldefinition$observationalModel$prior,
-        modeldefinition$abkineticsModel$prior,
-        modeldefinition$copModel$prior
+        observationalModel$prior,
+        abkineticsModel$prior,
     )
     if(any(duplicated(priors$par_name))) {
         stop("Priors: ", paste0(priors$par_name[duplicated(priors$par_name)], collapse = ", "), " are duplicated, please assign original names to each prior")
@@ -139,7 +138,7 @@ check_priors <- function(modeldefinition) {
     }
 
     cat("PRIOR DISTRIBUTIONS", "\n")
-    cat("Prior parameters of observationalModel are: ", paste(modeldefinition$observationalModel$prior$par_name, collapse = ", "), "\n")
-    cat("Prior parameters of abkineticsModel are: ", paste(modeldefinition$abkineticsModel$prior$par_name, collapse = ", "), "\n")
+    cat("Prior parameters of observationalModel are: ", paste(observationalModel$prior$par_name, collapse = ", "), "\n")
+    cat("Prior parameters of abkineticsModel are: ", paste(abkineticsModel$prior$par_name, collapse = ", "), "\n")
 
 }

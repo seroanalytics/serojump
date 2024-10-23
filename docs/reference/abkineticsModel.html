@@ -32,13 +32,16 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/cs1_sim_recovery.html">Case Study 1: Simulation Recovery</a>
+    </li>
+    <li>
+      <a href="../articles/cs2_sarscov2.html">Case Study 2: SARS-CoV-2 inference in The Gambia</a>
+    </li>
+    <li>
       <a href="../articles/data_format.html">Intro 1: Data format for input files</a>
     </li>
     <li>
       <a href="../articles/model_define.html">Intro 2: Explanation of observational and antibody kinetics models</a>
-    </li>
-    <li>
-      <a href="../articles/sim_recovery.html">Case Study 1: Simulation Recovery</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
@@ -69,7 +72,7 @@
 <dd><p>Description of the model using the <code>makeModel</code> and <code>addAbkineticsModel</code> functions.</p></dd>
 
 <dt>prior</dt>
-<dd><p>Description of the prior distribution using the <code>add_par_df</code> function.</p></dd>
+<dd><p>Description of the prior distribution using the <code>addPrior</code> function.</p></dd>
 
 
 </dl></div>
@@ -79,7 +82,7 @@
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="makeModel.html">makeModel</a></code>, <code><a href="addAbkineticsModel.html">addAbkineticsModel</a></code>, <code><a href="add_par_df.html">add_par_df</a></code>,  for related functions.</p></div>
+    <div class="dont-index"><p><code><a href="makeModel.html">makeModel</a></code>, <code><a href="addAbkineticsModel.html">addAbkineticsModel</a></code>,  for related functions.</p></div>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -110,9 +113,9 @@
 <span class="r-in"><span>           <span class="fu"><a href="addAbkineticsModel.html">addAbkineticsModel</a></span><span class="op">(</span><span class="st">"IgG"</span>, <span class="st">"delta"</span>, <span class="cn">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a_d"</span>, <span class="st">"b_d"</span>, <span class="st">"c_d"</span><span class="op">)</span>, <span class="va">infSerumKinetics</span><span class="op">)</span></span></span>
 <span class="r-in"><span>       <span class="op">)</span>,</span></span>
 <span class="r-in"><span>   prior <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>       <span class="fu"><a href="add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"a_d"</span>, <span class="op">-</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="st">"norm"</span>,  <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="co"># ab kinetics</span></span></span>
-<span class="r-in"><span>       <span class="fu"><a href="add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"b_d"</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="st">"norm"</span>,  <span class="fl">0.3</span>, <span class="fl">0.05</span><span class="op">)</span>, <span class="co"># ab kinetics</span></span></span>
-<span class="r-in"><span>       <span class="fu"><a href="add_par_df.html">add_par_df</a></span><span class="op">(</span><span class="st">"c_d"</span>, <span class="fl">0</span>, <span class="fl">4</span>, <span class="st">"unif"</span>, <span class="fl">0</span>,  <span class="fl">4</span><span class="op">)</span> <span class="co"># ab kinetics</span></span></span>
+<span class="r-in"><span>       <span class="fu"><a href="addPrior.html">addPrior</a></span><span class="op">(</span><span class="st">"a_d"</span>, <span class="op">-</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="st">"norm"</span>,  <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="co"># ab kinetics</span></span></span>
+<span class="r-in"><span>       <span class="fu"><a href="addPrior.html">addPrior</a></span><span class="op">(</span><span class="st">"b_d"</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="st">"norm"</span>,  <span class="fl">0.3</span>, <span class="fl">0.05</span><span class="op">)</span>, <span class="co"># ab kinetics</span></span></span>
+<span class="r-in"><span>       <span class="fu"><a href="addPrior.html">addPrior</a></span><span class="op">(</span><span class="st">"c_d"</span>, <span class="fl">0</span>, <span class="fl">4</span>, <span class="st">"unif"</span>, <span class="fl">0</span>,  <span class="fl">4</span><span class="op">)</span> <span class="co"># ab kinetics</span></span></span>
 <span class="r-in"><span>   <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>

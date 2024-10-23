@@ -8,8 +8,8 @@ A list with the following columns:
 \describe{
 \item{id}{Unique identifier for each biomarker.}
 \item{time}{Description of the model using the \code{makeModel} and \code{addObservationalModel} functions.}
-\item{titre}{Description of the prior distribution using the \code{add_par_df} function.}
-\item{biomarker}{Description of the prior distribution using the \code{add_par_df} function.}
+\item{titre}{Description of the prior distribution using the \code{addPrior} function.}
+\item{biomarker}{Description of the prior distribution using the \code{addPrior} function.}
 }
 }
 \description{

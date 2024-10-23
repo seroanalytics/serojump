@@ -8,7 +8,7 @@ A list with the following columns:
 \describe{
 \item{names}{Unique identifier for each exposure type.}
 \item{model}{Description of the model using the \code{makeModel} and \code{addAbkineticsModel} functions.}
-\item{prior}{Description of the prior distribution using the \code{add_par_df} function.}
+\item{prior}{Description of the prior distribution using the \code{addPrior} function.}
 }
 }
 \description{
@@ -40,15 +40,15 @@ abkineticsModel <- list(
            addAbkineticsModel("IgG", "delta", TRUE, c("a_d", "b_d", "c_d"), infSerumKinetics)
        ),
    prior = dplyr::bind_rows(
-       add_par_df("a_d", -2, 2, "norm",  0, 1), # ab kinetics
-       add_par_df("b_d", 0, 1, "norm",  0.3, 0.05), # ab kinetics
-       add_par_df("c_d", 0, 4, "unif", 0,  4) # ab kinetics
+       addPrior("a_d", -2, 2, "norm",  0, 1), # ab kinetics
+       addPrior("b_d", 0, 1, "norm",  0.3, 0.05), # ab kinetics
+       addPrior("c_d", 0, 4, "unif", 0,  4) # ab kinetics
    )
 )
 
 }
 \seealso{
-\code{\link{makeModel}}, \code{\link{addAbkineticsModel}}, \code{\link{add_par_df}},  for related functions.
+\code{\link{makeModel}}, \code{\link{addAbkineticsModel}},  for related functions.
 }
 \author{
 David Hodgson

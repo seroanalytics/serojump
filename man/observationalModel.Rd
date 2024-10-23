@@ -8,7 +8,7 @@ A list with the following columns:
 \describe{
 \item{names}{Unique identifier for each biomarker.}
 \item{model}{Description of the model using the \code{makeModel} and \code{addObservationalModel} functions.}
-\item{prior}{Description of the prior distribution using the \code{add_par_df} function.}
+\item{prior}{Description of the prior distribution using the \code{addPrior} function.}
 }
 }
 \description{
@@ -33,13 +33,13 @@ obsFunction = function(ll, titre_val, titre_est, pars) {
 observationalModel <- list(
     names = c("IgG"),
     model = makeModel(addObservationalModel("IgG", c("sigma"), obsFunction)),
-    prior = add_par_df("sigma", 0.0001, 4, "unif", 0.0001, 4) # observational model,
+    prior = addPrior("sigma", 0.0001, 4, "unif", 0.0001, 4) # observational model,
 )
 
 
 }
 \seealso{
-\code{\link{makeModel}}, \code{\link{addObservationalModel}}, \code{\link{add_par_df}},  for related functions.
+\code{\link{makeModel}}, \code{\link{addObservationalModel}}, \code{\link{addPrior}},  for related functions.
 }
 \author{
 David Hodgson

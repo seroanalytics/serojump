@@ -61,13 +61,13 @@ addCopModel <- function(biomarker, exposureType, pars, funcForm, logLikelihood) 
 }
 
 
-depth <- function(this,thisdepth=0){
-  if(!is.list(this)){
-    return(thisdepth)
-  }else{
-    return(max(unlist(lapply(this,depth,thisdepth=thisdepth+1))))    
-  }
-}
+#depth <- function(this,thisdepth=0){
+ #   return(thisdepth)
+##  if(!is.list(this)){
+#  }else{
+#  }
+#    return(max(unlist(lapply(this,depth,thisdepth=thisdepth+1))))    
+#}
 
 #' @title makeModel
 #' @description This function creates a model list for observationalModel, copModel, and abKineticsModel.
@@ -83,13 +83,14 @@ makeModel <- function(...) {
     models
 }
 
-console_update <- function(data_t, modelSeroJump) {
-    name_bio <- modelSeroJump$observationalModel$name
-    cat("There are ", length(name_bio), " measured biomarkers: ", name_bio, "\n")
-    name_exp <- modelSeroJump$abkineticsModel$model$exposureNames
-    cat("There are ", length(name_exp), " exposure types in the study period: ", name_exp, "\n")
-    cat("The fitted exposure type is ", modelSeroJump$abkineticsModel$model$exposureNameInf)
-}
+#console_update <- function(data_t, modelSeroJump) {
+#    name_bio <- modelSeroJump$observationalModel$name
+#    cat("There are ", length(name_bio), " measured biomarkers: ", name_bio, "\n")
+#    name_exp <- modelSeroJump$abkineticsModel$model$exposureNames
+#    cat("There are ", length(name_exp), " exposure types in the study period: ", name_exp, "\n")
+#    cat("The fitted exposure type is ", modelSeroJump$abkineticsModel$model$exposureNameInf)
+#}
+
 
 inf_prior_base <- function(N, E, I, K) {
     N_adj <- N - K
@@ -103,23 +104,41 @@ inf_prior_base <- function(N, E, I, K) {
 #' @description This function creates a model for the serology jump model.
 #' @param data_sero The serology data.
 #' @param data_known The known exposure data.
-#' @param modeldefinition The model definition.
+#' @param biomarkers A vector of the biomarkers 
+#' @param exposureTypes A vector of the exposure types
+#' @param exposureFitted The exposure type that is fitted
+#' @param observationalModel The observational model
+#' @param abkineticsModel The antibody kinetics model
+#' @param exposurePriorTime The prior time of the exposure
+#' @param exposurePriorTimeType The type of the exposure prior
+#' @param exposurePriorPop The population prior of the exposure
 #' @param known_exp_bool Boolean describing if the exposures are known in the model
 #' @return A list with the data and the model.
 #' @export
-createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_exp_bool = NULL) {
+createSeroJumpModel <- function(
+    data_sero, 
+    data_known,
+    biomarkers,
+    exposureTypes,
+    exposureFitted,
+    observationalModel,
+    abkineticsModel,
+    exposurePriorTime = NULL,
+    exposurePriorTimeType = NULL,
+    exposurePriorPop = NULL,
+    known_exp_bool = NULL) {
+
     cat("OUTLINE OF INPUTTED MODEL\n")
-    check_inputs(data_sero, data_known, modeldefinition)
-    check_priors(modeldefinition)
+    check_inputs(data_sero, data_known, biomarkers, exposureTypes, exposureFitted, observationalModel, abkineticsModel, exposurePriorTime, exposurePriorTimeType)
+    check_priors(observationalModel, abkineticsModel)
 
     modelSeroJump <- list()
 
     # Generate data for model
     # 1. Extract priors and defined define distributions for model 
     priors <- bind_rows(
-        modeldefinition$observationalModel$prior,
-        modeldefinition$abkineticsModel$prior,
-        modeldefinition$copModel$prior
+        observationalModel$prior,
+        abkineticsModel$prior
     )
 
     modelSeroJump$lowerParSupport_fitted <- priors$lb
@@ -138,79 +157,103 @@ createSeroJumpModel <- function(data_sero, data_known, modeldefinition, known_ex
     modelSeroJump$initialiseJump <- function(datalist) {
     }
 
-    if(is.null(modeldefinition$expInfPrior)) {
+    if(is.null(exposurePriorPop)) {
         modelSeroJump$evaluateLogPriorInfExp <- inf_prior_base
     } else {
-        modelSeroJump$evaluateLogPriorInfExp <- modeldefinition$expInfPrior
+        modelSeroJump$evaluateLogPriorInfExp <- exposurePriorPop
     } 
 
 
     # 2. Define the models for the likelihoods
-    modelSeroJump$observationalModel <- modeldefinition$observationalModel$model
-    modelSeroJump$abkineticsModel <- modeldefinition$abkineticsModel$model
-    modelSeroJump$copModel <- modeldefinition$copModel$model
+    modelSeroJump$observationalModel <- observationalModel$model
+    modelSeroJump$abkineticsModel <- abkineticsModel$model
 
     if (is.null(modelSeroJump$copModel)) {
         modelSeroJump$copModel <- list()
     }
 
     known_exp_bool <- NULL
-    data_t <- generate_data_alt(data_sero, modeldefinition$biomarkers, known_exp_bool)
+
+    data_t <- generate_data(data_sero, biomarkers, known_exp_bool) # look into this later
     data_t$par_names <- priors[, 1]
     data_t$priorPredFlag <- FALSE
+    T <- data_t$T
 
     # Add known infections to the model
-    modelSeroJump$infoModel$biomarkers <- modeldefinition$biomarkers
-    modelSeroJump$infoModel$exposureFitted <- modeldefinition$exposureFitted
-
-    modelSeroJump$exposureTypes <- modeldefinition$exposureTypes
-
+    modelSeroJump$infoModel$biomarkers <- biomarkers
+    modelSeroJump$infoModel$exposureFitted <- exposureFitted
+    modelSeroJump$exposureTypes <- exposureTypes
     modelSeroJump$infoModel$exposureInfo <- list()
 
+    exp_prior <- convertExpPriorEmpirical(exposurePriorTime, T, exposurePriorTimeType = exposurePriorTimeType)
+    exp_prior_list <- lapply(1:data_t$N, function(x) exp_prior$prob)
 
-        know_inf <- list()
-        for (i in 1:length(modeldefinition$exposureTypes)) {
-            modelSeroJump$infoModel$exposureInfo[[i]] <- list()
-            exposureType <- modeldefinition$exposureTypes[i]
+    # Extrac the information from the known exposures to the seorjump model
+    know_inf <- list()
+    for (i in 1:length(exposureTypes)) {
+        # for each exposure type, extract the known exposure times
+        modelSeroJump$infoModel$exposureInfo[[i]] <- list()
+        exposureType <- exposureTypes[i]
+        # The first exposure is the none
+        if (i == 1 & (exposureType != exposureFitted)) {
+            know_inf <- data_t$initialTitreTime
+        } else {
+            if (is.null(data_known)) {
+                know_inf <- rep(-1, data_t$N)
+            } else{
+                initialTitreTime <- data_t$initialTitreTime
+                endTitreTime <- data_t$endTitreTime
 
-            if (i == 1 & (exposureType != modeldefinition$exposureFitted)) {
-                know_inf <- data_t$initialTitreTime
-            } else {
-                if (is.null(data_known)) {
-                    know_inf <- rep(-1, data_t$N)
-                } else{
-                    know_inf <- data_known %>% filter(exposure_type == exposureType) %>%
-                        complete(id = 1:data_t$N, fill = list(time = -1)) %>% 
-                        mutate(start = data_t$initialTitreTime, end = data_t$endTitreTime) %>%
-                        mutate(time = case_when(time >= start & time <= end ~ time, TRUE ~ -1)) %>% pull(time)
-                }
-            }
-            modelSeroJump$infoModel$exposureInfo[[i]]$exposureType <- exposureType
-            modelSeroJump$infoModel$exposureInfo[[i]]$known_inf <- know_inf
-
-            if (exposureType == modeldefinition$exposureFitted) {
-                data_t$knownInfsTimeVec = know_inf
-                data_t$knownInfsVec = as.numeric(know_inf > -1)
-                data_t$knownInfsN = length(know_inf[know_inf > -1])
+                # Trimmed info on known exposure
+                know_inf_df <- check_oos_sample_df(data_known, exposureType, initialTitreTime, endTitreTime) 
+                know_inf <- know_inf_df %>% 
+                    mutate(time = case_when(time >= initialTitreTime & time <= endTitreTime ~ time, TRUE ~ -1)) %>%
+                    pull(time)
+                exp_prior_list <<- update_exp_prior(exp_prior_list, know_inf_df, data_t$T, data_t$N)
             }
         }
 
+        modelSeroJump$infoModel$exposureInfo[[i]]$exposureType <- exposureType
+        modelSeroJump$infoModel$exposureInfo[[i]]$known_inf <- know_inf
+
+        if (exposureType == exposureFitted) {
+            data_t$knownInfsTimeVec = know_inf
+            data_t$knownInfsVec = as.numeric(know_inf > -1)
+            data_t$knownInfsN = length(know_inf[know_inf > -1])
+        }
+    }
+
+    knownNoneInfsVec <- vector(mode = "numeric", length = data_t$N)
+    for (i in 1:data_t$N) {
+        if(sum(exp_prior_list[[i]]) == 0 && data_t$knownInfsVec[i] == -1 ) {
+            knownNoneInfsVec <- 0
+        } else {
+            knownNoneInfsVec[i] <- 1
+        }
+    }    
+    data_t$knownNoneInfsVec <- knownNoneInfsVec
+
+    # then add information on 
     if (!is.null(known_exp_bool)) {
         data_t$knownExpVec <- data_t$knownInfsTimeVec
     }
 
-    data_t <- calculateIndExposure(modelSeroJump, data_t, modeldefinition$exposurePrior, type = modeldefinition$exposurePriorType)
+ #  exp_prior_list <- rep(exp_prior$prob, N)
+  #  data_t <- calculateIndExposure(modelSeroJump, data_t, infPriorTime, type = infPriorTimeType)
 
     # Code to check form of exp_prior
     modelSeroJump$exposureFunctionSample <- function(i) {
-        sample(1:length(data_t$exp_list[[i]]), 1, prob = data_t$exp_list[[i]]) 
+        sample(1:length(exp_prior_list[[i]]), 1, prob = exp_prior_list[[i]]) 
     }
 
+    data_t$exp_list <- exp_prior_list
+    data_t$exp_prior <- exp_prior
+
     modelSeroJump$exposureFunctionDensity <- function(jump_i, i) {
-        if ((data_t$exp_list[[i]][max(round(jump_i, 0), 1)] %>% log) < -100) {
+        if ((exp_prior_list[[i]][max(round(jump_i, 0), 1)] %>% log) < -100) {
 
         }
-        data_t$exp_list[[i]][max(round(jump_i, 0), 1)] %>% log
+        exp_prior_list[[i]][max(round(jump_i, 0), 1)] %>% log
     }
 
     # Add help with exposure prior

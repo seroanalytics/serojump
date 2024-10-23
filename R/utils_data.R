@@ -5,8 +5,8 @@
 #' \describe{
 #'   \item{id}{Unique identifier for each biomarker.}
 #'   \item{time}{Description of the model using the \code{makeModel} and \code{addObservationalModel} functions.}
-#'   \item{titre}{Description of the prior distribution using the \code{add_par_df} function.}
-#'   \item{biomarker}{Description of the prior distribution using the \code{add_par_df} function.}
+#'   \item{titre}{Description of the prior distribution using the \code{addPrior} function.}
+#'   \item{biomarker}{Description of the prior distribution using the \code{addPrior} function.}
 #' }
 #' 
 #' @details Add more data about this model here.
@@ -85,12 +85,12 @@ data_known_exposures_ex1 <- data.frame(
 #' \describe{
 #'   \item{names}{Unique identifier for each exposure type.}
 #'   \item{model}{Description of the model using the \code{makeModel} and \code{addAbkineticsModel} functions.}
-#'   \item{prior}{Description of the prior distribution using the \code{add_par_df} function.}
+#'   \item{prior}{Description of the prior distribution using the \code{addPrior} function.}
 #' }
 #' 
 #' @details Add more data about this model here.
 #'
-#' @seealso \code{\link{makeModel}}, \code{\link{addAbkineticsModel}}, \code{\link{add_par_df}},  for related functions.
+#' @seealso \code{\link{makeModel}}, \code{\link{addAbkineticsModel}},  for related functions.
 #' 
 #' @examples
 #' # Example usage. This describes the antibody kinetics for a SARS-CoV-2 delta wave using IgG data. First define the antibody kinetics function:
@@ -115,9 +115,9 @@ data_known_exposures_ex1 <- data.frame(
 #'            addAbkineticsModel("IgG", "delta", TRUE, c("a_d", "b_d", "c_d"), infSerumKinetics)
 #'        ),
 #'    prior = dplyr::bind_rows(
-#'        add_par_df("a_d", -2, 2, "norm",  0, 1), # ab kinetics
-#'        add_par_df("b_d", 0, 1, "norm",  0.3, 0.05), # ab kinetics
-#'        add_par_df("c_d", 0, 4, "unif", 0,  4) # ab kinetics
+#'        addPrior("a_d", -2, 2, "norm",  0, 1), # ab kinetics
+#'        addPrior("b_d", 0, 1, "norm",  0.3, 0.05), # ab kinetics
+#'        addPrior("c_d", 0, 4, "unif", 0,  4) # ab kinetics
 #'    )
 #' )
 #' 
@@ -134,12 +134,12 @@ NULL
 #' \describe{
 #'   \item{names}{Unique identifier for each biomarker.}
 #'   \item{model}{Description of the model using the \code{makeModel} and \code{addObservationalModel} functions.}
-#'   \item{prior}{Description of the prior distribution using the \code{add_par_df} function.}
+#'   \item{prior}{Description of the prior distribution using the \code{addPrior} function.}
 #' }
 #' 
 #' @details Add more data about this model here.
 #'
-#' @seealso \code{\link{makeModel}}, \code{\link{addObservationalModel}}, \code{\link{add_par_df}},  for related functions.
+#' @seealso \code{\link{makeModel}}, \code{\link{addObservationalModel}}, \code{\link{addPrior}},  for related functions.
 #' 
 #' @examples
 #' # Example usage. This describes the observation model for a SARS-CoV-2 delta wave using IgG data. First define the log likelihood function, which is cauchy, with a LOD at a titre value of log10(40):
@@ -157,7 +157,7 @@ NULL
 #' observationalModel <- list(
 #'     names = c("IgG"),
 #'     model = makeModel(addObservationalModel("IgG", c("sigma"), obsFunction)),
-#'     prior = add_par_df("sigma", 0.0001, 4, "unif", 0.0001, 4) # observational model,
+#'     prior = addPrior("sigma", 0.0001, 4, "unif", 0.0001, 4) # observational model,
 #' )
 #' 
 #' 
