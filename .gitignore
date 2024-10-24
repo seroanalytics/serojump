@@ -1,5 +1,5 @@
 outputs/fits/*
-
+vignettes/int/*
 # Except for the simulate_data directory
 !outputs/fits/simulated_data/
 

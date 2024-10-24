@@ -207,8 +207,8 @@ attack_rate_data <- data.frame(
 
 
 seroModel <- createSeroJumpModel(
-    data_sero = data_sero, 
-    data_known  = NULL,     
+    data_sero = data_sero,
+    data_known  = NULL,
     biomarkers = biomarkers,
     exposureTypes = exposureTypes,
     exposureFitted = exposureFitted,

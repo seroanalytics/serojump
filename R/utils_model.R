@@ -243,8 +243,10 @@ createSeroJumpModel <- function(
         sample(1:length(exp_prior_list[[i]]), 1, prob = exp_prior_list[[i]]) 
     }
 
-    check_exposures_times(data_sero, data_known, exposureTypes, exposureFitted, exposurePriorTime, exposurePriorTimeType)
-
+    if (!is.null(data_known)) {
+        check_exposures_times(data_sero, data_known, exposureTypes, exposureFitted, exposurePriorTime, exposurePriorTimeType)
+    }
+    
     data_t$exp_list <- exp_prior_list
     data_t$exp_prior <- exp_prior
 
