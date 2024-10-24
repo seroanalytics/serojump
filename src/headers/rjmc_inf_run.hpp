@@ -100,10 +100,10 @@ public:
                     if (!this->knownExpInd) {
                         int j = 0;
                         initialJump(i) = this->exposureFunctionSample(i + 1); 
-                        if ((this->endTitreTime(i) - 7)  - (this->initialTitreTime(i) + 7) <= 0) {
+                        if ((this->endTitreTime(i) - 7)  - (this->initialTitreTime(i)) <= 0) {
                             initialJump(i) = -1;
                         } else {
-                            while ((initialJump(i) >= this->endTitreTime(i) - 7) || (initialJump(i) < this->initialTitreTime(i) + 7)) {
+                            while ((initialJump(i) >= this->endTitreTime(i) - 7) || (initialJump(i) < this->initialTitreTime(i))) {
                                 initialJump(i) = this->exposureFunctionSample(i + 1); 
                                 j++;
                                 if (j > 10000) {
@@ -744,7 +744,7 @@ public:
         // Completely new sample time is drawn 5% of the time for an individual.
         if (r < 0.05) {
             this->proposalJump(t) = this->exposureFunctionSample(t + 1);
-            while ((this->proposalJump(t) >= this->endTitreTime(t) - 7) || (this->proposalJump(t) < this->initialTitreTime(t) + 7)) {
+            while ((this->proposalJump(t) >= this->endTitreTime(t) - 7) || (this->proposalJump(t) < this->initialTitreTime(t))) {
                 // check this
                 this->proposalJump(t) = this->exposureFunctionSample(t + 1); 
             }
@@ -756,8 +756,8 @@ public:
             double temp = this->currentJump(t) + normalDistSample(0, exp(this->adaptiveGibbsSD(t)));
             if (temp >= this->endTitreTime(t) - 7) {
                 temp = this->endTitreTime(t) - 7; 
-            } else if (temp < this->initialTitreTime(t) + 7) {
-                temp = this->initialTitreTime(t) + 7; 
+            } else if (temp < this->initialTitreTime(t)) {
+                temp = this->initialTitreTime(t); 
             }
         //  Rcpp::Rcout << "temp: " << temp << std::endl;
             this->proposalJump(t) = temp;
@@ -781,7 +781,7 @@ public:
         if ((this->historicJump(t) < 0) | (r < 0.05)) { 
             // New exposure time is resampled from scratch, only do if first time individual exposed in mcmc chain or 5% of time thereafter.
                 this->proposalJump(t) = this->exposureFunctionSample(t + 1); 
-                while ((this->proposalJump(t) >= this->endTitreTime(t) - 7) || (this->proposalJump(t) < this->initialTitreTime(t) + 7)) {
+                while ((this->proposalJump(t) >= this->endTitreTime(t) - 7) || (this->proposalJump(t) < this->initialTitreTime(t))) {
                     this->proposalJump(t) = this->exposureFunctionSample(t + 1); 
                 }
                 //   proposeInfection(t);

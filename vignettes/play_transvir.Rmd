@@ -21,6 +21,7 @@ This document describes the steps and components of the provided R code for crea
 
 library(devtools)
 library(tidyr)
+
 library(dplyr)
 library(magrittr)
 library(serojump)
@@ -46,7 +47,7 @@ This data has been generated using `serosim`.
 ```{r}
 
 
-wave_full <- readRDS(file = "wave2_export.RDS")
+wave_full <- readRDS(file = "./vignettes/wave2_export.RDS")
 
 sero_data_w2 <- wave_full$sero_data
 known_inf_w2 <- wave_full$known_inf
@@ -57,7 +58,7 @@ check_sero_no_single_entries(sero_data_w2)
 check_sero_timings(sero_data_w2)
 
 
-wave_full <- readRDS(file = "wave3_export.RDS")
+wave_full <- readRDS(file = "./vignettes/wave3_export.RDS")
 
 sero_data_w3 <- wave_full$sero_data
 known_inf_w3 <- wave_full$known_inf
@@ -338,8 +339,8 @@ save_info_w3 <- list(
 #model_summary_w3 <- runSeroJump(model_w3, rj_settings, save_info = save_info_w3)
 
 
-model_summary_w2 <-  readRDS("model_summary_w2.RDS")
-model_summary_w3 <-  readRDS("model_summary_w3.RDS")
+model_summary_w2 <-  readRDS("./vignettes/model_summary_w2.RDS")
+model_summary_w3 <-  readRDS("./vignettes/model_summary_w3.RDS")
 
 plotMCMCDiagnosis(model_summary_w2, save_info = save_info_w2)
 # takes ages to run these so comment out!
@@ -350,3 +351,38 @@ plotMCMCDiagnosis(model_summary_w3, save_info = save_info_w3)
 #plotPostFigs(model_summary_w3,  save_info = save_info_w3)
 
 ```
+
+
+```{R}
+
+# Check out number 5
+
+model_summary_w3$post$fit_states %>% filter(id == 5) 
+model_summary_w3$post$fit_obs %>% filter(id == 5) %>% head
+
+model_summary_w3$fit$data_t$titre_list[[5]]
+model_summary_w3$fit$model$infoModel$exposureInfo[[3]]$known_inf[5]
+model_summary_w3$fit$data_t$raw_exp
+
+model_summary_w3$fit$data_t$N
+model_summary_w3$fit$data_t$exp_prior 
+model_summary_w3$fit$data_t$exp_list[[5]]
+
+# Does exp_list line up?
+model_summary_w3$post$fit_states %>% filter(id == 1) 
+model_summary_w3$post$fit_obs %>% filter(id == 1) %>% head # 1 and 185
+model_summary_w3$fit$data_t$exp_list[[2]]
+model_summary_w3$fit$data_t$times_list[[1]]
+model_summary_w3$fit$data_t$initialTitreTime[1]
+model_summary_w3$fit$data_t$endTitreTime[1]
+
+
+
+model_w2$data$exp_list %>% map(~sum(.)) %>% unlist
+
+model_w2$data$exp_list[[11]]
+
+
+model_w2$data$raw_exp
+
+````

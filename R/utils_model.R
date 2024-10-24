@@ -209,7 +209,8 @@ createSeroJumpModel <- function(
                 know_inf <- know_inf_df %>% 
                     mutate(time = case_when(time >= initialTitreTime & time <= endTitreTime ~ time, TRUE ~ -1)) %>%
                     pull(time)
-                exp_prior_list <<- update_exp_prior(exp_prior_list, know_inf_df, data_t$T, data_t$N)
+
+                exp_prior_list <- update_exp_prior(exp_prior_list, know_inf_df, data_t$T, data_t$N)
             }
         }
 
@@ -222,7 +223,6 @@ createSeroJumpModel <- function(
             data_t$knownInfsN = length(know_inf[know_inf > -1])
         }
     }
-
     knownNoneInfsVec <- vector(mode = "numeric", length = data_t$N)
     for (i in 1:data_t$N) {
         if(sum(exp_prior_list[[i]]) == 0 && data_t$knownInfsVec[i] == -1 ) {
@@ -238,13 +238,12 @@ createSeroJumpModel <- function(
         data_t$knownExpVec <- data_t$knownInfsTimeVec
     }
 
- #  exp_prior_list <- rep(exp_prior$prob, N)
-  #  data_t <- calculateIndExposure(modelSeroJump, data_t, infPriorTime, type = infPriorTimeType)
-
     # Code to check form of exp_prior
     modelSeroJump$exposureFunctionSample <- function(i) {
         sample(1:length(exp_prior_list[[i]]), 1, prob = exp_prior_list[[i]]) 
     }
+
+    check_exposures_times(data_sero, data_known, exposureTypes, exposureFitted, exposurePriorTime, exposurePriorTimeType)
 
     data_t$exp_list <- exp_prior_list
     data_t$exp_prior <- exp_prior

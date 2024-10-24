@@ -122,10 +122,15 @@ public:
         // Evaluate the priors of the model given the exposure times
         logPriorExpTime = 0; 
         for (int i = 0; i < parent->N; i++) {
-            if (jump[i] > -1) {
+            if (jump[i] > -1 && parent->knownInfsVec(i) == 0) {
                 logPriorExpTime += parent->exposureFunctionDensity(jump[i], i + 1);
             }
+            if (std::isinf(logPriorExpTime)) {
+                //Rcpp::Rcout << i + 1 << std::endl;
+               // Rcpp::Rcout << jump[i] << std::endl;
+            }
         }
+
             
         // Evaluate the log likelihood of the model given the exposure times and titre values
         logLikelihood_ab = this->evaluateLogLikelihoodObs_cpp(init) + this->evaluateLogLikelihoodCOP_cpp(jump, init) ;
