@@ -205,32 +205,54 @@ check_sero_timings <- function(data_sero) {
 }   
 
 
+#know_inf_df_i <- data.frame(
+#    id = c(1, 2, 3, 4),
+#    time = c(-1, 40, 30, -1),
+#    start = c(1, 2, 3, 4),
+#    type = c("in_sample", "in_sample", "in_sample", "in_sample"),
+#    end = c(50, 70, 80, 90)
+#)
+#T <- 100
+#N <- 4
+#exp_prior_list_i <- lapply(1:N, function(x) rep(1, 100))
+
+
+#update_exp_prior(exp_prior_list_i, know_inf_df_i, T, N)
+
+#known_exp <- known_inf_w2
+#data_sero <- sero_data_w2
+#exposureType <- "vac"
+#initialTitreTime <- data_sero %>% group_by(id) %>% filter(time == min(time)) %>% unique %>% .[["time"]]
+#endTitreTime <- data_sero %>% group_by(id) %>% filter(time == max(time)) %>% unique %>% .[["time"]]
+
+##know_inf_df_i <- check_oos_sample_df(known_exp, exposureType, initialTitreTime, endTitreTime)
+#update_exp_prior(exp_prior_list, know_inf_df_i, T, N)
 
 check_oos_sample_df <- function(known_exp, exposureType, initialTitreTime, endTitreTime) {
 
     N <- length(endTitreTime)
     known_exp %>% filter(exposure_type == exposureType) %>%
-        complete(id = 1:N, fill = list(time = -1)) %>% 
+        complete(id = 1:N, fill = list(time = -1)) %>%
         mutate(start = initialTitreTime, end = endTitreTime) %>%
         mutate(type = case_when(time >= start & time <= end ~ "in_sample", TRUE ~ "oos_sample"))
 }
 
-update_exp_prior <- function(exp_prior_list, know_inf_df_i, T, N) {
+update_exp_prior <- function(exp_prior_list_par, know_inf_df_i, T, N) {
 
     for (i in 1:N) {
         start_t <- know_inf_df_i[i, ]$start
         end_t <- know_inf_df_i[i, ]$end
-        exp_prior_list[[i]][seq_len(start_t)] <- 0
-        exp_prior_list[[i]][(end_t - 7):T] <- 0
+        exp_prior_list_par[[i]][seq_len(start_t)] <- 0
+        exp_prior_list_par[[i]][(end_t - 7):T] <- 0
 
         if(know_inf_df_i[i, ]$time != -1 && know_inf_df_i[i, ]$type == "in_sample") {
             timeexp <- know_inf_df_i[i, ]$time
-            exp_prior_list[[i]][(timeexp - 14):(timeexp + 14)] <- 0
+            exp_prior_list_par[[i]][(timeexp - 14):(timeexp + 14)] <- 0
         } 
         # normalise 
-        exp_prior_list[[i]] <- exp_prior_list[[i]] / sum(exp_prior_list[[i]])
+        exp_prior_list_par[[i]] <- exp_prior_list_par[[i]] / sum(exp_prior_list_par[[i]])
     }
-    exp_prior_list
+    exp_prior_list_par
 }
 
 #' @title check_exposures_times
@@ -263,15 +285,15 @@ check_exposures_times <- function(data_sero, known_exp, exposure_types, fitted_e
     exp_prior_list <- lapply(1:N, function(x) exp_prior$prob)
     
     T <- length(exp_prior$prob)
-
-    know_inf_df <- map_df(exposure_types, 
-        function(exposureType) {
-        # Get the known infections
-            know_inf_df_i <- check_oos_sample_df(known_exp, exposureType, initialTitreTime, endTitreTime)
-            exp_prior_list <<- update_exp_prior(exp_prior_list, know_inf_df_i, T, N)
-            know_inf_df_i
-        }
-    )
+    know_inf_df_i <- list()
+    j <- 1
+    for (exposureType in exposure_types) { 
+            # Get the known infections
+        know_inf_df_i[[j]] <- check_oos_sample_df(known_exp, exposureType, initialTitreTime, endTitreTime)
+        exp_prior_list <- update_exp_prior(exp_prior_list, know_inf_df_i[[j]], T, N)
+        j <- j + 1  
+    }
+    know_inf_df <- know_inf_df_i %>% bind_rows
 
     # Get information on people 
     outside_obs <- know_inf_df %>% filter(!is.na(exposure_type), type == "oos_sample") %>% pull(id)

@@ -283,6 +283,7 @@ plot_inf_rec <- function(model_summary, file_path) {
     ggsave(here::here(file_path, "infection_recov.png"), height = 10, width = 10)
 }
 
+
 plot_cop_rec <- function(model_summary, file_path) {
 
     fitfull <- model_summary$fit    

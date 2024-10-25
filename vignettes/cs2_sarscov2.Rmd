@@ -47,6 +47,7 @@ This data has been generated using `serosim`.
 
 
 wave_full <- readRDS(file = "wave2_export.RDS")
+#wave_full <- readRDS(file = "./vignettes/wave2_export.RDS")
 
 sero_data_w2 <- wave_full$sero_data
 known_inf_w2 <- wave_full$known_inf
@@ -58,6 +59,7 @@ check_sero_timings(sero_data_w2)
 
 
 wave_full <- readRDS(file = "wave3_export.RDS")
+#wave_full <- readRDS(file = "./vignettes/wave3_export.RDS")
 
 sero_data_w3 <- wave_full$sero_data
 known_inf_w3 <- wave_full$known_inf
@@ -210,31 +212,6 @@ p3
 ```{r}
 
 
-rj_settings <- list(
-        numberChainRuns = 4, 
-        iterations = 200000,
-        burninPosterior = 100000,
-        thin = 100
-    )
-
-save_info <- list(
-    file_name = "transvir_data",
-    model_name = "wave2_p1"
-)
-
-#model_summary_p1_2 <- runSeroJump(model_w2, rj_settings, save_info = save_info)
-
-#plotMCMCDiagnosis(model_summary_p1_2, save_info = save_info)
-#plotPostFigs(model_summary_p1_2, save_info = save_info)
-
-
-
-```
-
-
-```{r}
-
-
 # Define the biomarkers and exposure types in the model
 biomarkers <- c("spike", "NCP")
 exposureTypes <- c("none", "omicron", "vax")
@@ -321,6 +298,8 @@ rj_settings <- list(
         iterations = 200000,
         burninPosterior = 100000,
         thin = 100
+       # onDebug = TRUE, 
+       # runParallel = FALSE
     )
 
 save_info_w2 <- list(
@@ -332,6 +311,8 @@ save_info_w3 <- list(
     file_name = "transvir_data",
     model_name = "wave_3_non"
 )
+
+
 
 # Run these but take a while
 #model_summary_w2 <- runSeroJump(model_w2, rj_settings, save_info = save_info_w2)
