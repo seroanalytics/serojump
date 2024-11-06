@@ -1,0 +1,445 @@
+---
+title: "Case Study 2: SARS-CoV-2 inference in The Gambia"
+author: "David Hodgson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case Study 2: SARS-CoV-2 inference in The Gambia}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+# R Code Description
+
+This document describes the steps and components of the provided R code for creating and running serological models using simulated data. The code defines observational models, antibody kinetics models, and runs inference using MCMC methods.
+
+---
+
+## Step 1: Load Required Libraries
+```{r, message=FALSE, warning=FALSE, results='hide'}
+
+library(devtools)
+library(tidyr)
+library(dplyr)
+library(magrittr)
+library(serojump)
+#devtools::load_all()
+library(patchwork)
+
+
+# Using more than one core might fail on windows, 
+if (.Platform$OS.type == "windows") {
+  mc.cores <- 1
+}else {
+  mc.cores <- 2
+} # use as many as available, preferably 4.}
+
+
+
+```
+
+## Step 2: Read Simulated Data
+
+This data has been generated using `serosim`.
+
+```{r}
+
+
+#wave_full <- readRDS(file = "wave2_export.RDS")
+wave_full <- readRDS(file = "./vignettes/wave2_export.RDS")
+
+sero_data_w2 <- wave_full$sero_data
+known_inf_w2 <- wave_full$known_inf %>% filter(exposure_type != "delta")
+inf_prior_w2 <- wave_full$inf_prior
+
+# Check the entries are sensible
+check_sero_no_single_entries(sero_data_w2)
+check_sero_timings(sero_data_w2)
+
+
+#wave_full <- readRDS(file = "wave3_export.RDS")
+wave_full <- readRDS(file = "./vignettes/wave3_export.RDS")
+
+sero_data_w3 <- wave_full$sero_data
+known_inf_w3 <- wave_full$known_inf %>% filter(exposure_type != "delta")
+inf_prior_w3 <- wave_full$inf_prior
+
+# Check the entries are sensible
+check_sero_no_single_entries(sero_data_w3)
+check_sero_timings(sero_data_w3)
+
+#known_inf_w2 <- known_inf_w2_check %>% filter(key_exposure == "inferrable")
+
+```
+
+## Step 3: Define Likelihood and Kinetics Functions
+
+```{r}
+
+obsLogLikelihood <- function(titre_val, titre_est, pars) {
+    ll <- dnorm(titre_val, titre_est, pars[1], log = TRUE)
+}
+
+noInfSerumKinetics <- function(titre_est, timeSince, pars) {
+    titre_est_log <- titre_est - (pars[1] * titre_est) * (timeSince)
+    titre_est_log <- max(0, titre_est_log)
+    titre_est_log
+}
+
+
+infTuenisPower2016 <- function(titre_est, timeSince, pars) {
+
+    y1 <- pars[1]
+    t1 <- pars[2]
+    r <- pars[3]
+    alpha <- pars[4]
+
+    v <- 0.001
+    mu <- 1 / t1 * y1
+
+    if (timeSince < t1) {
+        titre_est_boost <- exp(mu * timeSince)
+    } else {
+        titre_est_boost <- exp(y1) * (1 + (r - 1) * exp(y1)^{r - 1} * v * (timeSince - t1)) ^ {-1 / (r - 1)}
+    }
+
+    titre_est_log <- titre_est + log(titre_est_boost) * max(0, 1 - titre_est * alpha)
+    titre_est_log
+}
+
+```
+
+## Step 4: Define the Observational and Kinetics Models
+
+```{r}
+
+
+
+# Define the biomarkers and exposure types in the model
+biomarkers <- c("spike", "NCP")
+exposureTypes <- c("none", "delta", "vax", "predelta")
+exposureFitted <- "delta"
+
+# Define the observational model
+observationalModel <- list(
+    names = c("spike", "NCP"),
+    model = makeModel(
+        addObservationalModel("spike", c("sigma"), obsLogLikelihood),
+        addObservationalModel("NCP", c("sigma_a"), obsLogLikelihood)),
+    prior = bind_rows(
+        addPrior("sigma", 0.0001, 2, "exp", 1, NA),
+        addPrior("sigma_a", 0.0001, 2, "exp", 1, NA)
+        ) # observational model,
+)
+
+# Define the antibody kinetics model
+abkineticsModel <- list(
+    model = makeModel(
+            addAbkineticsModel("none_s", "spike", "none",  c("wane"), noInfSerumKinetics),
+            addAbkineticsModel("delta_s", "spike", "delta", c("y1_d", "t1_d", "r_d", "s"), infTuenisPower2016),
+            addAbkineticsModel("vax_s", "spike", "vax", c("y1_vax", "t1_vax", "r_vax", "s"), infTuenisPower2016),
+            addAbkineticsModel("predelta_s", "spike", "predelta", c("y1_pd", "t1_pd", "r_pd", "s"), infTuenisPower2016),
+            addAbkineticsModel("none_ncp", "NCP", "none",  c("wane_a"), noInfSerumKinetics),
+            addAbkineticsModel("delta_ncp", "NCP", "delta", c("y1_d_a", "t1_d_a", "r_d_a", "s_a"), infTuenisPower2016),
+            addAbkineticsModel("vax_ncp", "NCP", "vax", c("y1_vax_a", "t1_vax_a", "r_vax_a", "s_a"), infTuenisPower2016),
+            addAbkineticsModel("predelta_ncp", "NCP", "predelta", c("y1_pd_a", "t1_pd_a", "r_pd_a", "s_a"), infTuenisPower2016)
+        ),
+    prior = bind_rows(
+        addPrior("y1_d", 0, 6, "unif",  0, 6), # ab kinetics
+        addPrior("t1_d", 7, 21,  "unif",  7, 21), # ab kinetics
+        addPrior("r_d", 1, 5, "unif", 1, 5), # ab kinetics 
+        addPrior("y1_vax", 0, 6, "unif",  0, 6), # ab kinetics
+        addPrior("t1_vax", 7, 21,  "unif",  7, 21), # ab kinetics
+        addPrior("r_vax", 1, 5, "unif", 1, 5), # ab kinetics 
+        addPrior("y1_pd", 0, 6, "unif",  0, 6), # ab kinetics
+        addPrior("t1_pd", 7, 21,  "unif",  7, 21), # ab kinetics
+        addPrior("r_pd", 1, 5, "unif", 1, 5), # ab kinetics 
+        addPrior("s",  0, 1, "unif", 0, 1), # ab kinetics 
+        addPrior("wane", 0.0, 0.01, "unif", 0.0, 0.01), # observational model
+        addPrior("y1_d_a", 0, 6, "unif",  0, 6), # ab kinetics
+        addPrior("t1_d_a", 7, 21,  "unif",  7, 21), # ab kinetics
+        addPrior("r_d_a", 1, 5, "unif", 1, 5), # ab kinetics 
+        addPrior("y1_vax_a", 0, 6, "unif",  0, 6), # ab kinetics
+        addPrior("t1_vax_a", 7, 21, "unif",  7, 21), # ab kinetics
+        addPrior("r_vax_a", 1, 5, "unif", 1, 5), # ab kinetics 
+        addPrior("y1_pd_a", 0, 6, "unif",  0, 6), # ab kinetics
+        addPrior("t1_pd_a", 7, 21,  "unif", 7, 21), # ab kinetics
+        addPrior("r_pd_a", 1, 5, "unif", 1, 5), # ab kinetics 
+        addPrior("s_a", 0, 1, "unif", 0, 1), # ab kinetics 
+        addPrior("wane_a", 0.0, 0.01, "unif", 0.0, 0.01) # observational model
+    )
+)
+
+
+
+model_w2 <- createSeroJumpModel(
+    data_sero = sero_data_w2, 
+    data_known = known_inf_w2, 
+    biomarkers = biomarkers,
+    exposureTypes = exposureTypes,
+    exposureFitted = exposureFitted,
+    observationalModel = observationalModel,
+    abkineticsModel = abkineticsModel,
+    exposurePriorTime = inf_prior_w2,
+    exposurePriorTimeType = "empirical"
+)
+
+
+
+
+```
+
+
+## Step 4B: Prerun sanity plots
+
+Before running the whole model it is good to check the data and the priors. This can be done using a suit of functions `plotPriors` function.
+
+```{r}
+
+p1 <- plotSero(model_w2)
+p2 <- plotPriorPredictive(model_w2)
+p3 <- plotPriorInfection(model_w2)
+p1 / p2
+p3
+
+```
+
+## Step 5: Define the Complete Model
+
+
+
+```{r}
+
+
+# Define the biomarkers and exposure types in the model
+biomarkers <- c("spike", "NCP")
+exposureTypes <- c("none", "omicron", "vax")
+exposureFitted <- "omicron"
+
+# Define the observational model
+observationalModel <- list(
+    names = c("spike", "NCP"),
+    model = makeModel(
+        addObservationalModel("spike", c("sigma"), obsLogLikelihood),
+        addObservationalModel("NCP", c("sigma_a"), obsLogLikelihood)),
+
+    prior = bind_rows(
+        addPrior("sigma", 0.0001, 2, "exp", 1, NA),
+        addPrior("sigma_a", 0.0001, 2, "exp", 1, NA)
+        ) # observational model,
+)
+
+# Define the antibody kinetics model
+abkineticsModel <- list(
+    model = makeModel(
+            addAbkineticsModel("none_s", "spike", "none",  c("wane"), noInfSerumKinetics),
+            addAbkineticsModel("omicron_s", "spike", "omicron", c("y1_o", "t1_o", "r_o", "s"), infTuenisPower2016),
+            addAbkineticsModel("vax_s", "spike", "vax", c("y1_vax", "t1_vax", "r_vax", "s"), infTuenisPower2016),
+            addAbkineticsModel("none_ncp", "NCP", "none",  c("wane_a"), noInfSerumKinetics),
+            addAbkineticsModel("omicron_ncp", "NCP", "omicron", c("y1_o_a", "t1_o_a", "r_o_a", "s_a"), infTuenisPower2016),
+            addAbkineticsModel("vax_ncp", "NCP", "vax", c("y1_vax_a", "t1_vax_a", "r_vax_a", "s_a"), infTuenisPower2016)
+        ),
+    prior = bind_rows(
+        addPrior("y1_o", 0, 6, "unif",  0, 6), # ab kinetics
+        addPrior("t1_o", 7, 21,"unif",  7, 21), # ab kinetics
+        addPrior("r_o", 1, 5, "unif", 1, 5), # ab kinetics 
+        addPrior("y1_vax", 0, 6, "unif",  0, 6), # ab kinetics
+        addPrior("t1_vax", 7, 21, "unif",  7, 21), # ab kinetics
+        addPrior("r_vax", 1, 5, "unif", 1, 5), # ab kinetics 
+        addPrior("s",  0, 1, "unif", 0, 1), # ab kinetics 
+        addPrior("wane", 0.0, 0.01, "unif", 0.0, 0.01), # observational model
+        addPrior("y1_o_a", 0, 6, "unif",  0, 6), # ab kinetics
+        addPrior("t1_o_a", 7, 21, "unif",  7, 21), # ab kinetics
+        addPrior("r_o_a", 1, 5, "unif", 1, 5), # ab kinetics 
+        addPrior("y1_vax_a", 0, 6, "unif",  0, 6), # ab kinetics
+        addPrior("t1_vax_a", 7, 21, "unif",  7, 21), # ab kinetics
+        addPrior("r_vax_a", 1, 5, "unif", 1, 5), # ab kinetics 
+        addPrior("s_a", 0, 1, "unif", 0, 1), # ab kinetics 
+        addPrior("wane_a", 0.0, 0.01, "unif", 0.0, 0.01) # observational model
+    )
+)
+
+
+model_w3 <- createSeroJumpModel(
+    data_sero = sero_data_w3, 
+    data_known = known_inf_w3, 
+    biomarkers = biomarkers,
+    exposureTypes = exposureTypes,
+    exposureFitted = exposureFitted,
+    observationalModel = observationalModel,
+    abkineticsModel = abkineticsModel,
+    exposurePriorTime = inf_prior_w3,
+    exposurePriorTimeType = "empirical"
+)
+
+
+```
+
+## Step 5B: Prerun sanity plots
+
+Before running the whole model it is good to check the data and the priors. This can be done using a suit of functions `plotPriors` function.
+
+```{r}
+
+p1 <- plotSero(model_w3)
+p2 <- plotPriorPredictive(model_w3)
+p3 <- plotPriorInfection(model_w3)
+p1 / p2
+p3
+
+```
+
+```{r, message=FALSE, warning=FALSE, results='hide'}
+
+
+rj_settings <- list(
+        numberChainRuns = 4, 
+        iterations = 200000,
+        burninPosterior = 100000,
+        thin = 100
+       # onDebug = TRUE, 
+       # runParallel = FALSE
+    )
+
+save_info_w2 <- list(
+    file_name = "transvir_data",
+    model_name = "wave_2_no_pcr_non"
+)
+
+save_info_w3 <- list(
+    file_name = "transvir_data",
+    model_name = "wave_3_no_pcr_non"
+)
+
+
+
+# Run these but take a while
+model_summary_w2 <- runSeroJump(model_w2, rj_settings, save_info = save_info_w2)
+model_summary_w3 <- runSeroJump(model_w3, rj_settings, save_info = save_info_w3)
+
+
+model_summary_w2 <-  readRDS("model_summary_w2.RDS")
+model_summary_w3 <-  readRDS("model_summary_w3.RDS")
+
+plotMCMCDiagnosis(model_summary_w2, save_info = save_info_w2)
+# takes ages to run these so comment out!
+#plotPostFigs(model_summary_w2, save_info = save_info_w2) 
+
+plotMCMCDiagnosis(model_summary_w3, save_info = save_info_w3)
+# takes ages to run these so comment out!
+#plotPostFigs(model_summary_w3,  save_info = save_info_w3)
+
+```
+
+# Detection recovery of `serojump`
+
+```{r}
+
+wave_full <- readRDS(file = "./vignettes/wave2_export.RDS")
+sero_data_w2 <- wave_full$sero_data
+
+pid_linked <- sero_data_w2 %>% select(pid) %>% unique %>% mutate(id = 1:nrow(.))
+known_delta <- wave_full$known_inf %>% filter(exposure_type == "delta") 
+
+
+## Extract the fourfold rise sensitivtiy 
+
+inferred_fourfold_s <- sero_data_w2 %>% group_by(id) %>% mutate(inferred_4_fold = (spike - lag(spike)) > log10(4)) %>%
+    filter(!is.na(inferred_4_fold))
+recover_fourfold_s <- inferred_fourfold_s %>%
+    left_join(known_delta %>% select(!time)) %>% filter(!is.na(exposure_type)) %>% mutate(inferred_4_fold = as.numeric(inferred_4_fold)) %>%
+    mutate(true_pos = inferred_4_fold > 0.5) 
+
+inferred_fourfold_n <- sero_data_w2 %>% group_by(id) %>% mutate(inferred_4_fold = (NCP - lag(NCP)) > log10(4)) %>%
+    filter(!is.na(inferred_4_fold))
+recover_fourfold_n <- inferred_fourfold_n %>%
+    left_join(known_delta %>% select(!time)) %>% filter(!is.na(exposure_type)) %>% mutate(inferred_4_fold = as.numeric(inferred_4_fold)) %>%
+    mutate(true_pos = inferred_4_fold > 0.5) 
+
+
+## Extract the change is seroneg -> seropos sensitivity
+
+recover_seropos_s <- sero_data_w2 %>% group_by(id) %>% mutate(inferred_pos = spike > log10(7)) %>%
+    mutate(inferred_pos_prev = lag(inferred_pos)) %>% mutate(sero_pos = (inferred_pos == 1) & (inferred_pos_prev == 0)) %>%
+    filter(!is.na(inferred_pos_prev)) %>% select(!c( inferred_pos, inferred_pos_prev )) %>%
+    left_join(known_delta %>% select(!time)) %>% filter(!is.na(exposure_type)) %>% mutate(sero_pos = as.numeric(sero_pos)) %>%
+    mutate(true_pos = sero_pos > 0.5) 
+
+recover_seropos_n <- sero_data_w2 %>% group_by(id) %>% mutate(inferred_pos = NCP > log10(2.920)) %>%
+    mutate(inferred_pos_prev = lag(inferred_pos)) %>% mutate(sero_pos = (inferred_pos == 1) & (inferred_pos_prev == 0)) %>%
+    filter(!is.na(inferred_pos_prev)) %>% select(!c( inferred_pos, inferred_pos_prev )) %>%
+    left_join(known_delta %>% select(!time)) %>% filter(!is.na(exposure_type)) %>% mutate(sero_pos = as.numeric(sero_pos)) %>%
+    mutate(true_pos = sero_pos > 0.5) 
+
+
+
+# model predict sensitivity of serojump
+N <- model_summary_w2$fit$data$N
+recover_serojump <- model_summary_w2$post$fit_states %>% group_by(id) %>% filter(inf_time > -1) %>% summarise(n = n() / 4000) %>% 
+    complete(id = 1:N, fill = list(n = 0)) %>% left_join(known_delta, by = join_by(id)) %>% as.data.frame() %>% filter(!is.na(pid)) %>% 
+    mutate(true_pos = n > 0.5) 
+
+sens_4_s <- mean(recover_fourfold_s$true_pos)
+p1 <- recover_fourfold_s %>%
+    ggplot() + geom_point(aes(x = id, inferred_4_fold, color = true_pos), size = 5, alpha = 0.5) + 
+    theme_bw() + theme(text = element_text(size = 20)) + 
+    labs(x = "Id of individual", y = "Posterior probability of recovery", title = "Sensitivity of four-fold spike rise", 
+        color = "Inferred positive")
+
+
+sens_4_n <- mean(recover_fourfold_n$true_pos)
+p2 <- recover_fourfold_n %>%
+    ggplot() + geom_point(aes(x = id, inferred_4_fold, color = true_pos), size = 5, alpha = 0.5) + 
+    theme_bw() + theme(text = element_text(size = 20)) + 
+    labs(x = "Id of individual", y = "Posterior probability of recovery", title = "Sensitivity of four-fold NCP rise", 
+        color = "Inferred positive")
+
+sens_p_s <- mean(recover_seropos_s$true_pos)
+
+p3 <- recover_seropos_s %>%
+    ggplot() + geom_point(aes(x = id, sero_pos, color = true_pos), size = 5, alpha = 0.5) + 
+    theme_bw() + theme(text = element_text(size = 20)) + 
+    labs(x = "Id of individual", y = "Posterior probability of recovery", title = "Sensitivity of seropos threshold spike", 
+        color = "Inferred positive")
+
+sens_p_n <- mean(recover_seropos_n$true_pos)
+
+p4 <- recover_seropos_n %>%
+    ggplot() + geom_point(aes(x = id, sero_pos, color = true_pos), size = 5, alpha = 0.5) + 
+    theme_bw() + theme(text = element_text(size = 20)) + 
+    labs(x = "Id of individual", y = "Posterior probability of recovery", title = "Sensitivity of seropos threshold NCP", 
+        color = "Inferred positive")
+
+
+sens_sj <- mean(recover_serojump$true_pos)
+
+p5 <- recover_serojump %>%
+    ggplot() + geom_point(aes(x = id, n, color = true_pos), size = 5, alpha = 0.5) + 
+    theme_bw() + theme(text = element_text(size = 20)) + 
+    labs(x = "Id of individual", y = "Posterior probability of recovery", title = "Sensitivity of `serojump`", 
+        color = "Inferred positive")
+
+(p1 + p2) / (p3 + p4)
+
+require(ggplot2)
+
+
+
+p6 <- data.frame(
+    `Spike four-fold` = sens_4_s,
+    `NCP four-fold` = sens_4_n,
+    `Spike seropos` = sens_p_s,
+    `NCP seropos` = sens_p_n,
+    `serojump` = sens_sj
+) %>% pivot_longer(everything()) %>% 
+    mutate(name = factor(name, levels = c("Spike.four.fold", "NCP.four.fold", "Spike.seropos", "NCP.seropos", "serojump"))) %>%
+    ggplot() + 
+        geom_col(aes(x = name, y = value, fill = name), color = "black") + theme_bw() + theme(text = element_text(size = 20)) +
+        guides(fill = "none")
+
+(p1 + p2 + p3) / (p4 + p5) / p6 + plot_layout(guides = "collect", heights = c(1,1,2))  + 
+    labs(x = "Biomarker used for serological detection", y = "Sensitivity", title = "Sensitivity of serological detection")
+ggsave(here::here("outputs", "figs", "sensitivity_recovery_transvir.png"), width = 20, height = 20)
+
+```

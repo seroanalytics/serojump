@@ -225,8 +225,7 @@ plot_sim <- function(modeli) {
 # Run simulations for a continuous epidemic surveillance study (CES)
 # Run simulations for a Pre- and Post-epidemic serosurvey (PPES)
 
-uncert_vec <- c(0.1, 0.3, 0.5)
-
+uncert_vec <- c(0.01, seq(0.1, 1, 0.1))
 
 
 simpar <- list(
