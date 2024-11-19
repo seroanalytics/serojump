@@ -3,6 +3,7 @@ vignettes/int/*
 # Except for the simulate_data directory
 !outputs/fits/simulated_data/
 
+scp/
 # Ensure the contents of simulate_data are tracked
 !outputs/fits/simulated_data/*
 

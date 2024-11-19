@@ -283,9 +283,8 @@ plot_inf_rec <- function(model_summary, file_path) {
     ggsave(here::here(file_path, "infection_recov.png"), height = 10, width = 10)
 }
 
-
-plot_cop_rec <- function(model_summary, file_path) {
-
+calculate_cop_internal <- function(model_summary) {
+    
     fitfull <- model_summary$fit    
     outputfull <- model_summary$post
 
@@ -341,6 +340,12 @@ plot_cop_rec <- function(model_summary, file_path) {
 
         })
 
+
+}
+
+plot_cop_rec <- function(model_summary, file_path) {
+
+    cop_exp_sum_plot_all <- calculate_cop_internal(model_summary)
 
 
    figA <- cop_exp_sum_plot_all %>%

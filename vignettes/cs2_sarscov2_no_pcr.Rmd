@@ -290,6 +290,7 @@ p3
 
 ```
 
+
 ```{r, message=FALSE, warning=FALSE, results='hide'}
 
 
@@ -373,10 +374,11 @@ recover_seropos_n <- sero_data_w2 %>% group_by(id) %>% mutate(inferred_pos = NCP
     mutate(true_pos = sero_pos > 0.5) 
 
 
+model_summary <- readRDS(file = "./outputs/fits/transvir_data/wave_2_no_pcr_non/model_summary.RDS")
 
 # model predict sensitivity of serojump
-N <- model_summary_w2$fit$data$N
-recover_serojump <- model_summary_w2$post$fit_states %>% group_by(id) %>% filter(inf_time > -1) %>% summarise(n = n() / 4000) %>% 
+N <- model_summary$fit$data$N
+recover_serojump <- model_summary$post$fit_states %>% group_by(id) %>% filter(inf_time > -1) %>% summarise(n = n() / 4000) %>% 
     complete(id = 1:N, fill = list(n = 0)) %>% left_join(known_delta, by = join_by(id)) %>% as.data.frame() %>% filter(!is.na(pid)) %>% 
     mutate(true_pos = n > 0.5) 
 
@@ -420,7 +422,7 @@ p5 <- recover_serojump %>%
     labs(x = "Id of individual", y = "Posterior probability of recovery", title = "Sensitivity of `serojump`", 
         color = "Inferred positive")
 
-(p1 + p2) / (p3 + p4)
+(p1 + p2) / (p3 + p4) 
 
 require(ggplot2)
 
@@ -438,8 +440,8 @@ p6 <- data.frame(
         geom_col(aes(x = name, y = value, fill = name), color = "black") + theme_bw() + theme(text = element_text(size = 20)) +
         guides(fill = "none")
 
-(p1 + p2 + p3) / (p4 + p5) / p6 + plot_layout(guides = "collect", heights = c(1,1,2))  + 
-    labs(x = "Biomarker used for serological detection", y = "Sensitivity", title = "Sensitivity of serological detection")
+((p1 + p2 + p3) / (p4 + p5) ) / p6 + plot_layout(guides = "collect", heights = c(1,1,2))  + 
+    labs(x = "Heuristic used for serologically detecting infection", y = "Sensitivity", title = "Sensitivity of serological detection")
 ggsave(here::here("outputs", "figs", "sensitivity_recovery_transvir.png"), width = 20, height = 20)
 
 ```

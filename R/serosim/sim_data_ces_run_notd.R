@@ -97,7 +97,7 @@ run_uncert_model_bi <- function(modeli, uncert_vec) {
       biomarker_id = rep("covid_svnt", 4),
       name = c("a", "b", "c", "wane_short"),
       mean = c(a, b, c, 0),
-      sd = c(a * uncert, b * uncert, c * uncert,  0 * uncert),
+      sd = c(a * 0.01, b * 0.01, c * 0.01,  0),
       distribution = c("normal", "normal", "normal", "normal")
     )
 
@@ -107,7 +107,7 @@ run_uncert_model_bi <- function(modeli, uncert_vec) {
         name = c("biomarker_ceiling_threshold", "biomarker_ceiling_gradient", 
             "biomarker_prot_midpoint", "biomarker_prot_width", "obs_sd"),
         mean = c(biomarker_ceiling_threshold, biomarker_ceiling_gradient, 2, 1, NA),
-        sd = c(rep(NA, 4), 0.01),
+        sd = c(rep(NA, 4), uncert),
         distribution = c(rep("", 4), "normal")
     )
 
@@ -154,7 +154,7 @@ run_uncert_model_bi <- function(modeli, uncert_vec) {
     )
 
     dir.create(here::here("outputs", "sim_data", modeli$name), showWarnings = FALSE)
-    saveRDS(res, file = here::here("outputs", "sim_data", modeli$name, paste0("sim_data_", round(uncert, 1), ".rds")))
+    saveRDS(res, file = here::here("outputs", "sim_data", modeli$name, paste0("sim_data_", round(uncert, 2), ".rds")))
 
     }
   )
@@ -225,7 +225,7 @@ plot_sim <- function(modeli) {
 # Run simulations for a continuous epidemic surveillance study (CES)
 # Run simulations for a Pre- and Post-epidemic serosurvey (PPES)
 
-uncert_vec <- c(0.01, seq(0.1, 1, 0.1))
+uncert_vec <- c(0.01, seq(0.05, 1, 0.05))
 
 
 simpar <- list(

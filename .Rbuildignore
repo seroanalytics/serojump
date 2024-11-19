@@ -7,3 +7,4 @@ old/
 ^pkgdown$
 ^LICENSE\.md$
 ^\.github$
+scp/

@@ -27,9 +27,11 @@ plotPostFigsSim <- function(model_summary, sim_model, sim_res, save_info) {
     
     if (model_summary$fit$data$priorPredFlag) {
         dir.create(here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs_pp", "post"), showWarnings = FALSE, recursive = TRUE)
+        dir.create(here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs_pp", "post", "plt_data"), showWarnings = FALSE, recursive = TRUE)
         file_path <- here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs_pp", "post")
     } else{
         dir.create(here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs", "post"), showWarnings = FALSE, recursive = TRUE)
+        dir.create(here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs", "post", "plt_data"), showWarnings = FALSE, recursive = TRUE)
         file_path <- here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs", "post")
     }
 
@@ -113,8 +115,8 @@ plot_abkinetics_trajectories_ind_sim <- function(model_summary, sim_model, sim_r
     S <- 100
     sample_s <- sample(1:M, S)
 
+    # still right 
     fit_states_dt_trim <- fit_states_dt %>% filter(sample %in% sample_s)
-
 
     exposures_fit <- model_outline$infoModel$exposureFitted
     exposures <- model_outline$exposureTypes
@@ -123,11 +125,10 @@ plot_abkinetics_trajectories_ind_sim <- function(model_summary, sim_model, sim_r
         plan(multisession, workers = 8)
     }
 
+
     cat("\n Get order of all entries, \n")
 
 
-   # i <- 1
-   # s <- 1
     df_exposure_order <- future_map(1:N, 
         function(i) {
             df_know_exp_i <- df_know_exp %>% filter(id == i) %>% filter(time > -1)
@@ -157,7 +158,8 @@ plot_abkinetics_trajectories_ind_sim <- function(model_summary, sim_model, sim_r
                         )
                     })
                     fit_i_s_long <- rbindlist(c(list(fit_i_s_long), new_rows_list), fill = TRUE)
-                    fit_i_s_long <- fit_i_s_long %>% arrange(time)
+                    fit_i_s_long <- fit_i_s_long %>% arrange(time) %>% mutate(
+                            exp_type = factor(exp_type, levels = exposures)) %>% arrange(id, exp_type, time)
                 }
 
                 fit_i_s_long
@@ -167,10 +169,13 @@ plot_abkinetics_trajectories_ind_sim <- function(model_summary, sim_model, sim_r
         }
     ) %>% rbindlist
 
+
+    #df_exposure_order %>% filter(id == 35)
+
       # Perform final mutations and groupings
     df_exposure_order <- df_exposure_order %>% mutate(time = round(time, 0))
     df_exposure_order <- df_exposure_order %>% group_by(id, biomarker, sample) %>% mutate(row_id = row_number())
-    df_exposure_order <- df_exposure_order %>% arrange(id, biomarker, time)
+    #df_exposure_order <- df_exposure_order %>% arrange(id, biomarker, time)
 
 
     bio_map_ab <- model_outline$abkineticsModel %>% map(~.x$biomarker) %>% unlist
@@ -370,6 +375,7 @@ plot_abkinetics_trajectories_ind_sim <- function(model_summary, sim_model, sim_r
         ) %>% rbindlist
 
         data_fit_b <- data_fit %>% rename(biomarker = bio)
+        saveRDS(list(df_traj_post_ind, data_fit_b), here::here(file_path, "plt_data", paste0("ab_kinetics_trajectories_", name_i, ".RDS")))
 
         plots_list <- map(bio_all,
             function(bio_i) {
@@ -487,6 +493,7 @@ plot_exp_times_rec_sim <- function(model_summary, sim_model, sim_res, file_path)
     theme(legend.position = "bottom")
     figB / figC + plot_annotation(tag_levels = "A") 
 
+  saveRDS(list(df_data_t, dataplt), here::here(file_path, "plt_data", "exposure_time_recov.RDS"))
   ggsave(here::here(file_path, "exposure_time_recov.png"), height = 10, width = 10)
 
     dataplt_error <- dataplt %>% mutate(id = factor(id, levels = pid_order1)) %>% filter(inf == "Infected") %>% 
@@ -502,6 +509,8 @@ plot_exp_times_rec_sim <- function(model_summary, sim_model, sim_res, file_path)
             theme(axis.text.x = element_blank(), legend.position = "top") + 
             ggtitle("Model error in recovering exposure itime of infected individuals") 
     figD
+
+    saveRDS(list(dataplt_error), here::here(file_path, "plt_data", "exposure_time_recov_diff.RDS"))
     ggsave(here::here(file_path, "exposure_time_recov_diff.png"), height = 10, width = 10)
 
 }
@@ -531,6 +540,8 @@ plot_titre_obs_sim <- function(model_summary, file_path) {
         ggplot() + geom_point(aes(x = row_id, y = titre)) +
             geom_linerange(aes(x = row_id, ymin = .lower, ymax = .upper)) +
             geom_point(data = data_plot, aes(row_id, titre), color = "red") + facet_wrap(vars(biomarker)) 
+
+    saveRDS(list(model_plot), here::here(file_path, "plt_data", "titre_obs.RDS"))
 
     ggsave(here::here(file_path, "titre_obs.png"), height = 10, width = 10)
 
@@ -584,7 +595,8 @@ plot_titre_exp_sim <- function(model_summary, sim_model, sim_res, file_path) {
    #     p1 <- p1 + scale_x_continuous(breaks = scale_ab %>% as.numeric, labels = scale_ab %>% names)
    # }
 
-    p1 
+    saveRDS(list(cop_exp_sum_plot_sum), here::here(file_path, "plt_data", "titre_exp_recovery.RDS"))
+
     ggsave(here::here(file_path, "titre_exp_recovery.png"), height = 10, width = 10)
 
 }   
@@ -705,6 +717,8 @@ plot_abkinetics_trajectories_sim <- function(model_summary,  sim_model, sim_res,
          values =c('black'='black','red'='red'), labels = c('Simualted trajectory','Posterior trajectory'))
 
 
+    saveRDS(list(compare, traj_post_summ), here::here(file_path, "plt_data", "ab_kinetics_recov.RDS"))
+
     p1 / p2 + plot_annotation(title = "Simualtion recovery of the antibody kinetics")
     ggsave(here::here(file_path, "ab_kinetics_recov.png"), height = 10, width = 10)
 
@@ -767,6 +781,9 @@ plot_inf_rec_sim <- function(model_summary,  sim_model, sim_res, file_path) {
             labs(y = "Posterior density", x = expression("Estimated number of exposures in epidemic, n"[Z])) + 
             ggtitle("Recovery of population-level infection burden")
 
+    saveRDS(list(no_inf_fit_df), here::here(file_path, "plt_data", "exposure_recov.RDS"))
+
+
     figB + plot_annotation(tag_levels = "A") 
     ggsave(here::here(file_path, "exposure_recov.png"), height = 10, width = 10)
 
@@ -817,6 +834,9 @@ plot_cop_rec_sim <- function(model_summary, file_path) {
 
     cop_exp_sum_plot <- titre_cop_sum %>% left_join(df_data_post) %>% mutate(id = factor(id, levels = u_ids)) %>%
         filter(!is.na(n)) %>% mutate(biomarker = !!biomarker)
+
+    saveRDS(list(cop_exp_sum_plot), here::here(file_path, "plt_data", "cop_recov.RDS"))
+
 
     cop_exp_sum_plot %>% ggplot() + 
         geom_smooth(aes(x = titre_val, y = inf_post), method = "glm", method.args = list(family = "binomial")) +
