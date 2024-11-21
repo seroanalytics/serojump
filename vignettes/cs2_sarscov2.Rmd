@@ -46,8 +46,8 @@ This data has been generated using `serosim`.
 ```{r}
 
 
-wave_full <- readRDS(file = "wave2_export.RDS")
-#wave_full <- readRDS(file = "./vignettes/wave2_export.RDS")
+#wave_full <- readRDS(file = "wave2_export.RDS")
+wave_full <- readRDS(file = "./vignettes/wave2_export.RDS")
 
 sero_data_w2 <- wave_full$sero_data
 known_inf_w2 <- wave_full$known_inf
@@ -58,8 +58,8 @@ check_sero_no_single_entries(sero_data_w2)
 check_sero_timings(sero_data_w2)
 
 
-wave_full <- readRDS(file = "wave3_export.RDS")
-#wave_full <- readRDS(file = "./vignettes/wave3_export.RDS")
+#wave_full <- readRDS(file = "wave3_export.RDS")
+wave_full <- readRDS(file = "./vignettes/wave3_export.RDS")
 
 sero_data_w3 <- wave_full$sero_data
 known_inf_w3 <- wave_full$known_inf
@@ -304,12 +304,12 @@ rj_settings <- list(
 
 save_info_w2 <- list(
     file_name = "transvir_data",
-    model_name = "wave_2_non"
+    model_name = "wave2_base"
 )
 
 save_info_w3 <- list(
     file_name = "transvir_data",
-    model_name = "wave_3_non"
+    model_name = "wave3_base"
 )
 
 
@@ -318,16 +318,15 @@ save_info_w3 <- list(
 #model_summary_w2 <- runSeroJump(model_w2, rj_settings, save_info = save_info_w2)
 #model_summary_w3 <- runSeroJump(model_w3, rj_settings, save_info = save_info_w3)
 
-
 model_summary_w2 <-  readRDS("model_summary_w2.RDS")
 model_summary_w3 <-  readRDS("model_summary_w3.RDS")
 
 plotMCMCDiagnosis(model_summary_w2, save_info = save_info_w2)
 # takes ages to run these so comment out!
-#plotPostFigs(model_summary_w2, save_info = save_info_w2) 
+plotPostFigs(model_summary_w2, save_info = save_info_w2) 
 
 plotMCMCDiagnosis(model_summary_w3, save_info = save_info_w3)
 # takes ages to run these so comment out!
-#plotPostFigs(model_summary_w3,  save_info = save_info_w3)
+plotPostFigs(model_summary_w3,  save_info = save_info_w3)
 
 ```

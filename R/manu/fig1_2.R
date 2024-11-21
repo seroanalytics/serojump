@@ -75,10 +75,92 @@ for (i in 1:22) {
 }
 
 
+## Figure 1 
+
+i <- 3
+model_summary_i <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0(types[i], "_", vals[i]), "model_summary.RDS"))
+
+ab_kin <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0(types[i], "_", vals[i]), "figs", "post", "plt_data",  "ab_kinetics_trajectories_High.RDS"))
+exp_times <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0(types[i], "_", vals[i]), "figs", "post", "plt_data",  "exposure_recov.RDS"))
+exp_times_A <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0(types[i], "_", vals[i]), "figs", "post", "plt_data",  "exposure_time_recov.RDS"))
+exp_times_B <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0(types[i], "_", vals[i]), "figs", "post", "plt_data",  "exposure_time_recov_diff.RDS"))
+
+# trajecotries for subset of individuals 
+p1A <- ab_kin[[1]] %>% 
+    ggplot() +
+        geom_line(aes(x = t, y = titre_traj, group = sample), color = "#960319", alpha = 0.05) + facet_wrap(vars(id)) + 
+        geom_point(aes(x = times, y = titre), data = ab_kin[[2]] %>% filter(id %in% unique(ab_kin[[1]]$id)), shape = 21, size = 2, fill = "gray") + theme_bw() + 
+        labs(x = "Time in study", y = "Titre value (log)", color = "Exposure type") + ggtitle(paste0("Individual-level antibody kinetics for sVNT (with COP)"))  + 
+        theme(text = element_text(size = 12))
 
 
-# Now check the trajectories 
+id_figD <- exp_times_B[[1]] %>% pull(id)
+p2A <- exp_times_B[[1]] %>% mutate(id = factor(id, levels = id_figD)) %>% 
+    ggplot() + 
+        geom_hline(yintercept = c(14, -14), size = 0.5, color = "gray") +
+        geom_linerange(aes(x = id, ymin = .lower, ymax = .upper, color = inf_post), 
+                size = 3) + 
+        geom_point(aes(x = id, y = inf_time), size = 3) + 
+        labs(y = "Difference between model-predicted \ninfection day time and \nsimulated infection day", x = "ID", color = "Posterior probability of exposure") + theme_bw() + 
+        theme(axis.text.x = element_blank(), legend.position = "bottom") + 
+        ggtitle("Model error in recovering exposure times (with COP)")  + 
+        theme(text = element_text(size = 12)) + guides(color = "none")
+    
 
+p3A <- exp_times_A[[2]] %>%
+    ggplot() +
+        geom_histogram(aes(x = inf_time_sim, fill = "Data (with COP)"), color = "black", alpha = 0.7 ) + 
+        geom_histogram(aes(x = inf_time, fill = "Model"), color = "black", alpha = 0.5) + theme_bw() + 
+        labs(y = "Density", x = "Infection time", fill = "") +
+        scale_fill_manual(values = c("Data (with COP)" = "gray", "Model" = "#960319")) +
+        ggtitle("Distribution of infection times between \nsimulated data (with COP) and model") + 
+        theme(text = element_text(size = 12), legend.position = "bottom")
+
+
+i <- 14
+
+model_summary_i <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0(types[i], "_", vals[i]), "model_summary.RDS"))
+
+ab_kin <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0(types[i], "_", vals[i]), "figs", "post", "plt_data",  "ab_kinetics_trajectories_High.RDS"))
+exp_times <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0(types[i], "_", vals[i]), "figs", "post", "plt_data",  "exposure_recov.RDS"))
+exp_times_A <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0(types[i], "_", vals[i]), "figs", "post", "plt_data",  "exposure_time_recov.RDS"))
+exp_times_B <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0(types[i], "_", vals[i]), "figs", "post", "plt_data",  "exposure_time_recov_diff.RDS"))
+
+# trajecotries for subset of individuals 
+p1B <- ab_kin[[1]] %>% 
+    ggplot() +
+        geom_line(aes(x = t, y = titre_traj, group = sample), color = "#960319", alpha = 0.05) + facet_wrap(vars(id)) + 
+        geom_point(aes(x = times, y = titre), data = ab_kin[[2]] %>% filter(id %in% unique(ab_kin[[1]]$id)), shape = 21, size = 2, fill = "gray") + theme_bw() + 
+        labs(x = "Time in study", y = "Titre value (log)", color = "Exposure type") + ggtitle(paste0("Individual-level antibody kinetics for sVNT (no COP)"))  + 
+        theme(text = element_text(size = 12))
+
+
+id_figD <- exp_times_B[[1]] %>% pull(id)
+p2B <- exp_times_B[[1]] %>% mutate(id = factor(id, levels = id_figD)) %>% 
+    ggplot() + 
+        geom_hline(yintercept = c(14, -14), size = 0.5, color = "gray") +
+        geom_linerange(aes(x = id, ymin = .lower, ymax = .upper, color = inf_post), 
+                size = 3) + 
+        geom_point(aes(x = id, y = inf_time), size = 3) + 
+        labs(y = "Difference between model-predicted \ninfection day time and \nsimulated infection day", x = "ID", color = "Posterior probability of exposure") + theme_bw() + 
+        theme(axis.text.x = element_blank(), legend.position = "bottom") + 
+        ggtitle("Model error in recovering exposure times (no COP)")  + 
+        theme(text = element_text(size = 12)) + guides(color = "none")
+    
+
+p3B <- exp_times_A[[2]] %>%
+    ggplot() +
+        geom_histogram(aes(x = inf_time_sim, fill = "Data (no COP)"), color = "black", alpha = 0.7 ) + 
+        geom_histogram(aes(x = inf_time, fill = "Model"), color = "black", alpha = 0.5) + theme_bw() + 
+        labs(y = "Density", x = "Infection time", fill = "") +
+        scale_fill_manual(values = c("Data (no COP)" = "gray", "Model" = "#960319")) +
+        ggtitle("Distribution of infection times between \nsimulated data (no COP) and model") + 
+        theme(text = element_text(size = 12)) + 
+        theme(text = element_text(size = 12), legend.position = "bottom")
+
+
+(p1A | p1B) / ( (p2A / p2B) | (p3A / p3B)) + plot_annotation(tag_level = "A") & theme(text = element_text(size = 15))
+ggsave(here::here("outputs", "figs", "fig1.png"), width = 15, height = 17)
 
 
 
@@ -319,13 +401,13 @@ p3 <- df_full_time_mean %>%
     ggplot() + 
         geom_line(aes(x = uncert, y = mean_crps, color = types), size = 4, alpha = 0.8, position = position_dodge(0.05)) + theme_bw() +
         geom_ribbon( aes(x = uncert, ymin = mean_crps - 2*sd_crps,  ymax = mean_crps + 2*sd_crps, fill = types), size = 2, alpha = 0.2, position = position_dodge(0.05)) + theme_bw() +
-        labs(y = "Mean Continuous Ranked Probability Score of infection times", x = "Simulated uncertainty in the observational model", 
+        labs(y = "Mean CRPS of infection times", x = "Simulated uncertainty in the observational model", 
         color = "Model type") + 
          guides(fill = "none") + 
         ggtitle("Accuracy in recovering epidemic curve") + 
         scale_color_manual(values = c("#434c69", "#c09741")) +
         scale_fill_manual(values = c("#434c69", "#c09741")) +
-        scale_x_continuous(breaks = seq(0, 1, 0.1))        
+        scale_x_continuous(breaks = seq(0, 1, 0.1)) 
 
 
 
@@ -401,7 +483,7 @@ for (i in 1:22) {
             int<lower=0> N;
             real scal;
             vector[N] x;
-            int<lower=0, upper=1> y[N];
+            array[N] int y;
             int N_pred;
             vector[N_pred] x_pred; 
         }
@@ -451,7 +533,7 @@ p4A <- df_post %>% group_by(name, type, uncert) %>% summarise(mean = mean(value)
         geom_line(data = data_plot, aes(x = name, y = obs_cop), color = "red", linetype = "dashed", size = 2, alpha = 0.7) +
         labs(y = "Mean probability of infection", x = "Titre value at exposure", 
         color = "Uncertainty") + 
-        scale_x_continuous(breaks = seq(0, 4, 0.2)) + ylim(0, 0.8) + ggtitle("Simulated data with COP")
+        scale_x_continuous(breaks = seq(0, 4, 0.5)) + ylim(0, 0.8) + ggtitle("Simulated data with COP")
 
 
 p4B <- df_post %>% group_by(name, type, uncert) %>% summarise(mean = mean(value)) %>% mutate(name = as.numeric(name)) %>%
@@ -461,7 +543,7 @@ p4B <- df_post %>% group_by(name, type, uncert) %>% summarise(mean = mean(value)
         geom_line(data = data_plot, aes(x = name, y = obs_no_cop), color = "red", linetype = "dashed", size = 2, alpha = 0.7) +
         labs(y = "Mean probability of infection", x = "Titre value at exposure", 
         color = "Uncertainty") + 
-        scale_x_continuous(breaks = seq(0, 4, 0.2)) + ylim(0, 0.8) + ggtitle("Simulated data without COP")
+        scale_x_continuous(breaks = seq(0, 4, 0.5)) + ylim(0, 0.8) + ggtitle("Simulated data without COP")
 
 p4C <- data.frame(
     uncert = vals,
@@ -486,5 +568,5 @@ p4
 ggsave(here::here("outputs", "figs", "cor_rec.png"), width = 20, height = 10)
 
 
-p1 / p2 / p4 + plot_annotation(tag_level = "A")
-ggsave(here::here("outputs", "figs", "crps_all.png"), width = 20, height = 25)
+p1 / p2 / p4 + plot_annotation(tag_level = "A") & theme(text = element_text(size = 15))
+ggsave(here::here("outputs", "figs", "crps_all.png"), width = 15, height = 18)
