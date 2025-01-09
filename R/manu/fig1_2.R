@@ -26,6 +26,24 @@ library(purrr)
 
 values_i <- c(0.01, seq(0.05, 0.5, 0.05))
 
+library(ggridges)
+simulated_normal <- map_df(seq_along(values_i),
+    ~data.frame(
+        sd = values_i[.x],
+        values = rnorm(1e4, 0, values_i[.x])
+    )
+)
+
+require(ggdist)
+
+p0 <- simulated_normal %>% 
+   ggplot() + 
+        stat_pointinterval(aes(x = values, y = as.character(sd)), point_size = 10, .width = c(0.5, 0.95))  + 
+        theme_bw() + 
+        theme(text = element_text(size = 15)) + labs(x = "Observational error", y = "Standard deviation of the error") 
+
+
+
 vals <- c(values_i, values_i)
 types <- c(rep("cop", 11), rep("no_cop", 11))
 
@@ -42,7 +60,7 @@ for (i in 1:22) {
         ggplot() +
             geom_line(aes(x = t, y = titre_traj, group = sample), color = "#960319", alpha = 0.05) + facet_wrap(vars(id)) + 
             geom_point(aes(x = times, y = titre), data = ab_kin[[2]] %>% filter(id %in% unique(ab_kin[[1]]$id)), shape = 21, size = 2, fill = "gray") + theme_bw() + 
-            labs(x = "Time in study", y = "Titre value", color = "Exposure type") + ggtitle(paste0("Individual-level antibody kinetics for sVNT (subset)"))  + 
+            labs(x = "Time in study", y = "Titre value", color = "Exposure type") + ggtitle(paste0("Individual-level antibody kinetics for simulated titre (subset)"))  + 
             theme(text = element_text(size = 12))
 
 
@@ -61,8 +79,9 @@ for (i in 1:22) {
 
     p3 <- exp_times_A[[2]] %>%
         ggplot() +
-            geom_histogram(aes(x = inf_time_sim), fill = "gray", color = "black", alpha = 0.7 ) + 
-            geom_histogram(aes(x = inf_time), fill = "#960319", color = "black", alpha = 0.5) + theme_bw() + 
+            geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "gray") + 
+            geom_linerange(aes(x = inf_time_sim, y = inf_time, ymin =  .lower, ymax = .upper), color = "black", alpha = 0.7 ) + 
+            geom_point(aes(x = inf_time_sim, y = inf_time), color = "black", alpha = 0.7 ) + 
             labs(y = "Density", x = "Infection time") +
             ggtitle("Distribution of infection times between data and model") + 
             theme(text = element_text(size = 12))
@@ -90,7 +109,7 @@ p1A <- ab_kin[[1]] %>%
     ggplot() +
         geom_line(aes(x = t, y = titre_traj, group = sample), color = "#960319", alpha = 0.05) + facet_wrap(vars(id)) + 
         geom_point(aes(x = times, y = titre), data = ab_kin[[2]] %>% filter(id %in% unique(ab_kin[[1]]$id)), shape = 21, size = 2, fill = "gray") + theme_bw() + 
-        labs(x = "Time in study", y = "Titre value (log)", color = "Exposure type") + ggtitle(paste0("Individual-level antibody kinetics for sVNT (with COP)"))  + 
+        labs(x = "Time in study", y = "Titre value (log)", color = "Exposure type") + ggtitle(paste0("Individual-level antibody kinetics for simulated titre\n (with COP)"))  + 
         theme(text = element_text(size = 12))
 
 
@@ -103,18 +122,20 @@ p2A <- exp_times_B[[1]] %>% mutate(id = factor(id, levels = id_figD)) %>%
         geom_point(aes(x = id, y = inf_time), size = 3) + 
         labs(y = "Difference between model-predicted \ninfection day time and \nsimulated infection day", x = "ID", color = "Posterior probability of exposure") + theme_bw() + 
         theme(axis.text.x = element_blank(), legend.position = "bottom") + 
-        ggtitle("Model error in recovering exposure times (with COP)")  + 
+        ggtitle("Model error in recovering infection times (with COP)")  + 
         theme(text = element_text(size = 12)) + guides(color = "none")
     
 
-p3A <- exp_times_A[[2]] %>%
+p3A <- exp_times_A[[2]] %>% 
     ggplot() +
-        geom_histogram(aes(x = inf_time_sim, fill = "Data (with COP)"), color = "black", alpha = 0.7 ) + 
-        geom_histogram(aes(x = inf_time, fill = "Model"), color = "black", alpha = 0.5) + theme_bw() + 
-        labs(y = "Density", x = "Infection time", fill = "") +
+        geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "gray") + 
+        geom_linerange(aes(x = inf_time_sim, y = inf_time, ymin =  .lower, ymax = .upper), color = "black", alpha = 0.7 ) + 
+        geom_point(aes(x = inf_time_sim, y = inf_time), color = "black", alpha = 0.7 ) + 
+        labs(y = "Recovered infection time", x = "Simulated infection time", fill = "") +
+        theme_bw() + 
         scale_fill_manual(values = c("Data (with COP)" = "gray", "Model" = "#960319")) +
         ggtitle("Distribution of infection times between \nsimulated data (with COP) and model") + 
-        theme(text = element_text(size = 12), legend.position = "bottom")
+        theme(text = element_text(size = 12))
 
 
 i <- 14
@@ -131,7 +152,7 @@ p1B <- ab_kin[[1]] %>%
     ggplot() +
         geom_line(aes(x = t, y = titre_traj, group = sample), color = "#960319", alpha = 0.05) + facet_wrap(vars(id)) + 
         geom_point(aes(x = times, y = titre), data = ab_kin[[2]] %>% filter(id %in% unique(ab_kin[[1]]$id)), shape = 21, size = 2, fill = "gray") + theme_bw() + 
-        labs(x = "Time in study", y = "Titre value (log)", color = "Exposure type") + ggtitle(paste0("Individual-level antibody kinetics for sVNT (no COP)"))  + 
+        labs(x = "Time in study", y = "Titre value (log)", color = "Exposure type") + ggtitle(paste0("Individual-level antibody kinetics for simulated titre\n (no COP)"))  + 
         theme(text = element_text(size = 12))
 
 
@@ -144,19 +165,20 @@ p2B <- exp_times_B[[1]] %>% mutate(id = factor(id, levels = id_figD)) %>%
         geom_point(aes(x = id, y = inf_time), size = 3) + 
         labs(y = "Difference between model-predicted \ninfection day time and \nsimulated infection day", x = "ID", color = "Posterior probability of exposure") + theme_bw() + 
         theme(axis.text.x = element_blank(), legend.position = "bottom") + 
-        ggtitle("Model error in recovering exposure times (no COP)")  + 
+        ggtitle("Model error in recovering infection times (no COP)")  + 
         theme(text = element_text(size = 12)) + guides(color = "none")
     
 
 p3B <- exp_times_A[[2]] %>%
     ggplot() +
-        geom_histogram(aes(x = inf_time_sim, fill = "Data (no COP)"), color = "black", alpha = 0.7 ) + 
-        geom_histogram(aes(x = inf_time, fill = "Model"), color = "black", alpha = 0.5) + theme_bw() + 
-        labs(y = "Density", x = "Infection time", fill = "") +
-        scale_fill_manual(values = c("Data (no COP)" = "gray", "Model" = "#960319")) +
-        ggtitle("Distribution of infection times between \nsimulated data (no COP) and model") + 
-        theme(text = element_text(size = 12)) + 
-        theme(text = element_text(size = 12), legend.position = "bottom")
+        geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "gray") + 
+        geom_linerange(aes(x = inf_time_sim, y = inf_time, ymin =  .lower, ymax = .upper), color = "black", alpha = 0.7 ) + 
+        geom_point(aes(x = inf_time_sim, y = inf_time), color = "black", alpha = 0.7 ) + 
+        labs(y = "Recovered infection time", x = "Simulated infection time", fill = "") +
+        theme_bw() + 
+        scale_fill_manual(values = c("Data (with COP)" = "gray", "Model" = "#960319")) +
+        ggtitle("Distribution of infection times between \nsimulated data (with COP) and model") + 
+        theme(text = element_text(size = 12))
 
 
 (p1A | p1B) / ( (p2A / p2B) | (p3A / p3B)) + plot_annotation(tag_level = "A") & theme(text = element_text(size = 15))
@@ -209,10 +231,10 @@ df_full_ab_mean <- data.frame(
 
 p1 <- df_full_ab_mean %>% 
     ggplot() + 
-        geom_line(aes(x = uncert, y = mean_crps, color = types), size = 4, alpha = 0.8, position = position_dodge(0.05)) + theme_bw() +
-        geom_ribbon( aes(x = uncert, ymin = mean_crps - 2*sd_crps,  ymax = mean_crps + 2*sd_crps, fill = types), size = 2, alpha = 0.2, position = position_dodge(0.05)) + theme_bw() +
+        geom_line(aes(x = uncert, y = 1 - mean_crps, color = types), size = 4, alpha = 0.8, position = position_dodge(0.05)) + theme_bw() +
+        geom_ribbon( aes(x = uncert, ymin = 1 - mean_crps - 2*sd_crps,  ymax = 1 - mean_crps + 2*sd_crps, fill = types), size = 2, alpha = 0.2, position = position_dodge(0.05)) + theme_bw() +
       #  geom_linerange( aes(x = uncert, ymin = mean_crps - 2*sd_crps,  ymax = mean_crps + 2*sd_crps, color = types), size = 2, alpha = 0.8, position = position_dodge(0.05)) + theme_bw() +
-        labs(y = "Mean CRPS of observational across all bleeds", x = "Simulated uncertainty in the observational model", 
+        labs(y = "Mean 1 - CRPS of observational across all bleeds", x = "Simulated uncertainty in the observational model", 
         color = "Model type") + 
         guides(fill = "none") + 
         scale_color_manual(values = c("#434c69", "#c09741")) +
@@ -399,9 +421,9 @@ df_full_time_mean <- data.frame(
 
 p3 <- df_full_time_mean %>% 
     ggplot() + 
-        geom_line(aes(x = uncert, y = mean_crps, color = types), size = 4, alpha = 0.8, position = position_dodge(0.05)) + theme_bw() +
-        geom_ribbon( aes(x = uncert, ymin = mean_crps - 2*sd_crps,  ymax = mean_crps + 2*sd_crps, fill = types), size = 2, alpha = 0.2, position = position_dodge(0.05)) + theme_bw() +
-        labs(y = "Mean CRPS of infection times", x = "Simulated uncertainty in the observational model", 
+        geom_line(aes(x = uncert, y = 1 - mean_crps, color = types), size = 4, alpha = 0.8, position = position_dodge(0.05)) + theme_bw() +
+        geom_ribbon( aes(x = uncert, ymin = 1 - mean_crps - 2*sd_crps,  ymax = 1 - mean_crps + 2*sd_crps, fill = types), size = 2, alpha = 0.2, position = position_dodge(0.05)) + theme_bw() +
+        labs(y = "Mean 1 - CRPS of infection times", x = "Simulated uncertainty in the observational model", 
         color = "Model type") + 
          guides(fill = "none") + 
         ggtitle("Accuracy in recovering epidemic curve") + 
@@ -551,8 +573,8 @@ p4C <- data.frame(
     cprs = crps_cop %>% map_dbl(~(1 - exp(.x$estimates[1]))) 
 ) %>% 
     ggplot() + 
-        geom_line(aes(x = uncert, y = cprs, color = type), size = 4, alpha = 0.8) + theme_bw() + 
-        labs(y = "Mean CRPS of correlate of risk", x = "Simulated uncertainty in the observational model", 
+        geom_line(aes(x = uncert, y = 1 - cprs, color = type), size = 4, alpha = 0.8) + theme_bw() + 
+        labs(y = "Mean 1 - CRPS of correlate of risk", x = "Simulated uncertainty in the observational model", 
         color = "Model type")  + ggtitle("Accuracy in recovering correlate") +
         scale_color_manual(values = c("#434c69", "#c09741")) 
 

@@ -49,46 +49,61 @@ recover_serojump <- model_summary$post$fit_states %>% group_by(id) %>% filter(in
 
 sens_4_s <- mean(recover_fourfold_s$true_pos)
 p1 <- recover_fourfold_s %>%
-    ggplot() + geom_point(aes(x = id, inferred_4_fold, color = true_pos), size = 5, alpha = 0.5) + 
+    ggplot() + geom_point(aes(x = id, inferred_4_fold, fill = true_pos), size = 5, shape = 21, alpha = 0.5) + 
     theme_bw() + theme(text = element_text(size = 20)) + 
-    labs(x = "Id of individual", y = "Posterior probability of recovery", title = "Sensitivity of four-fold spike rise", 
-        color = "Inferred positive")
+    geom_hline(yintercept = sens_4_s, size = 2, color = "#E8B88D") + 
+    geom_text(x = 100, y = sens_4_s + 0.05, label = paste0("Sensitivity: ", round(sens_4_s, 2)), size= 8) + 
+    scale_fill_manual(values = c( "#E74C3C", "#6DBE45")) + 
+    labs(x = "Id of individual", y = "Inferred infection status", title = "Four-fold rise (spike)", 
+        fill = "Inferred positive") + theme(legend.position = "top")
 
 
 sens_4_n <- mean(recover_fourfold_n$true_pos)
 p2 <- recover_fourfold_n %>%
-    ggplot() + geom_point(aes(x = id, inferred_4_fold, color = true_pos), size = 5, alpha = 0.5) + 
+    ggplot() + geom_point(aes(x = id, inferred_4_fold, fill = true_pos), size = 5, shape = 21, alpha = 0.5) + 
     theme_bw() + theme(text = element_text(size = 20)) + 
-    labs(x = "Id of individual", y = "Posterior probability of recovery", title = "Sensitivity of four-fold NCP rise", 
-        color = "Inferred positive")
+    geom_hline(yintercept = sens_4_n, size = 2, color = "#E8B88D") + 
+    geom_text(x = 100, y = sens_4_n + 0.05, label = paste0("Sensitivity: ", round(sens_4_n, 2)), size= 8) + 
+    scale_fill_manual(values = c( "#E74C3C", "#6DBE45")) + 
+    labs(x = "Id of individual", y = "Inferred infection status", title = "Four-fold rise (NCP)", 
+        fill = "Inferred positive") + theme(legend.position = "top")
 
 sens_p_s <- mean(recover_seropos_s$true_pos)
 
 p3 <- recover_seropos_s %>%
-    ggplot() + geom_point(aes(x = id, sero_pos, color = true_pos), size = 5, alpha = 0.5) + 
+    ggplot() + geom_point(aes(x = id, sero_pos, fill = true_pos), size = 5, shape = 21, alpha = 0.5) + 
     theme_bw() + theme(text = element_text(size = 20)) + 
-    labs(x = "Id of individual", y = "Posterior probability of recovery", title = "Sensitivity of seropos threshold spike", 
-        color = "Inferred positive")
+    geom_hline(yintercept = sens_p_s, size = 2, color = "#E8B88D") + 
+    scale_fill_manual(values = c( "#E74C3C", "#6DBE45")) + 
+    geom_text(x = 100, y = sens_p_s + 0.05, label = paste0("Sensitivity: ", round(sens_p_s, 2)), size= 8) + 
+    labs(x = "Id of individual", y = "Inferred infection status", title = "Seropos threshold (spike)", 
+        fill = "Inferred positive") + theme(legend.position = "top")
 
 sens_p_n <- mean(recover_seropos_n$true_pos)
 
 p4 <- recover_seropos_n %>%
-    ggplot() + geom_point(aes(x = id, sero_pos, color = true_pos), size = 5, alpha = 0.5) + 
+    ggplot() + geom_point(aes(x = id, sero_pos, fill = true_pos), size = 5, shape = 21, alpha = 0.5) + 
     theme_bw() + theme(text = element_text(size = 20)) + 
-    labs(x = "Id of individual", y = "Posterior probability of recovery", title = "Sensitivity of seropos threshold NCP", 
-        color = "Inferred positive")
+    geom_hline(yintercept = sens_p_n, size = 2, color = "#E8B88D") + 
+    scale_fill_manual(values = c( "#E74C3C", "#6DBE45")) + 
+    geom_text(x = 100, y = sens_p_n + 0.05, label = paste0("Sensitivity: ", round(sens_p_n, 2)), size= 8) + 
+    labs(x = "Id of individual", y = "Inferred infection status", title = "Seropos threshold (NCP)", 
+        fill = "Inferred positive") + theme(legend.position = "top")
 
 
 sens_sj <- mean(recover_serojump$true_pos)
 
 p5 <- recover_serojump %>%
-    ggplot() + geom_point(aes(x = id, n, color = true_pos), size = 5, alpha = 0.5) + 
+    ggplot() + geom_point(aes(x = id, n, fill = true_pos), size = 5, shape = 21, alpha = 0.5) + 
     theme_bw() + theme(text = element_text(size = 20)) + 
-    labs(x = "Id of individual", y = "Posterior probability of recovery", title = "Sensitivity of `serojump`", 
-        color = "Inferred positive")
+    geom_hline(yintercept = sens_sj, size = 2, color = "#E8B88D") + 
+    scale_fill_manual(values = c( "#E74C3C", "#6DBE45")) + 
+    geom_text(x = 100, y = sens_sj + 0.05, label = paste0("Sensitivity: ", round(sens_sj, 2)), size= 8) + 
+    labs(x = "Id of individual", y = "Posterior probability of infection", title = "`serojump`", 
+        fill = "Inferred positive")  + theme(legend.position = "top")
 
-(p1 + p2) / (p3 + p4) 
-
+p0 <- (p1 + p2 + p3) / (p4 + p5) + plot_layout(guides = "collect", heights = c(1,1)) + plot_annotation(tag_levels = "A") & theme(legend.position = "bottom") 
+ggsave(here::here("outputs", "figs", "fig3.png"), width = 15, height = 15)
 require(ggplot2)
 
 
@@ -107,4 +122,4 @@ p6 <- data.frame(
 
 ((p1 + p2 + p3) / (p4 + p5) ) / p6 + plot_layout(guides = "collect", heights = c(1,1,2))  + 
     labs(x = "Heuristic used for serologically detecting infection", y = "Sensitivity", title = "Sensitivity of serological detection")
-ggsave(here::here("outputs", "figs", "fig3.png"), width = 20, height = 20)
+#ggsave(here::here("outputs", "figs", "fig3.png"), width = 20, height = 20)

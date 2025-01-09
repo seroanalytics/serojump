@@ -11,6 +11,26 @@ library(extraDistr)
 ####### Titre-dep boost and no wane #######
 ####################################
 
+
+library(finalsize)
+r0 <- 1.5
+uk_pop <- 67 * 1e6
+contact_matrix <- matrix(1.0) / uk_pop
+susceptibility_full <- matrix(1)
+susceptibility <- matrix(0.5)
+p_susceptibility <- matrix(1)
+# calculate final size
+final_size_data <- final_size(
+  r0 = r0,
+  contact_matrix = contact_matrix,
+  demography_vector = uk_pop,
+  susceptibility = susceptibility_full,
+  p_susceptibility = p_susceptibility
+)
+
+# view the output data frame
+final_size_data
+
 biomarker_protection <- function(biomarker_quantity, biomarker_prot_midpoint, biomarker_prot_width) {
     risk <- 1 - 1/(1 + exp(biomarker_prot_width * (biomarker_quantity - biomarker_prot_midpoint)))
     return(risk)
