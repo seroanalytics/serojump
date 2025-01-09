@@ -87,7 +87,7 @@ Hodgson</h4>
             <h4 data-toc-skip class="date">2025-01-09</h4>
       
 
-      <div class="hidden name"><code>cs2_sarscov2.Rmd</code></div>
+      <div class="hidden name"><code>cs2_sarscov2_no_pcr.Rmd</code></div>
 
     </div>
 
@@ -130,7 +130,7 @@ runs inference using MCMC methods.</p>
 <span><span class="co">#wave_full &lt;- readRDS(file = "./vignettes/wave2_export.RDS")</span></span>
 <span></span>
 <span><span class="va">sero_data_w2</span> <span class="op">&lt;-</span> <span class="va">wave_full</span><span class="op">$</span><span class="va">sero_data</span></span>
-<span><span class="va">known_inf_w2</span> <span class="op">&lt;-</span> <span class="va">wave_full</span><span class="op">$</span><span class="va">known_inf</span></span>
+<span><span class="va">known_inf_w2</span> <span class="op">&lt;-</span> <span class="va">wave_full</span><span class="op">$</span><span class="va">known_inf</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">exposure_type</span> <span class="op">!=</span> <span class="st">"delta"</span><span class="op">)</span></span>
 <span><span class="va">inf_prior_w2</span> <span class="op">&lt;-</span> <span class="va">wave_full</span><span class="op">$</span><span class="va">inf_prior</span></span>
 <span></span>
 <span><span class="co"># Check the entries are sensible</span></span>
@@ -144,7 +144,7 @@ runs inference using MCMC methods.</p>
 <span><span class="co">#wave_full &lt;- readRDS(file = "./vignettes/wave3_export.RDS")</span></span>
 <span></span>
 <span><span class="va">sero_data_w3</span> <span class="op">&lt;-</span> <span class="va">wave_full</span><span class="op">$</span><span class="va">sero_data</span></span>
-<span><span class="va">known_inf_w3</span> <span class="op">&lt;-</span> <span class="va">wave_full</span><span class="op">$</span><span class="va">known_inf</span></span>
+<span><span class="va">known_inf_w3</span> <span class="op">&lt;-</span> <span class="va">wave_full</span><span class="op">$</span><span class="va">known_inf</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">exposure_type</span> <span class="op">!=</span> <span class="st">"delta"</span><span class="op">)</span></span>
 <span><span class="va">inf_prior_w3</span> <span class="op">&lt;-</span> <span class="va">wave_full</span><span class="op">$</span><span class="va">inf_prior</span></span>
 <span></span>
 <span><span class="co"># Check the entries are sensible</span></span>
@@ -274,7 +274,7 @@ runs inference using MCMC methods.</p>
 <span><span class="co">## No individuals with less than 15 days in the study!</span></span></code></pre>
 <pre><code><span><span class="co">## Warning in addExposurePrior_checkempirical(exp_prior, T_max): Warning: The number of rows in the exposure prior dataframe does not match the number of time points in the study</span></span>
 <span><span class="co">## Warning in addExposurePrior_checkempirical(exp_prior, T_max): Warning: The number of rows in the exposure prior dataframe does not match the number of time points in the study</span></span></code></pre>
-<pre><code><span><span class="co">## There are individuals which have exposure before their first bleed or before their last bleed, ids:  19, 23, 45, 92, 95, 147, 162, 205, 218, 6, 18, 24, 30, 63, 98, 142, 181, 192, 199, 208, 210, 214, 215, 245, 246, 254, 265 . It is hard to perform inference on these people, so we recommend you remove the exposures from the known inf, but, if included, the model ignores these exposures.</span></span></code></pre>
+<pre><code><span><span class="co">## There are individuals which have exposure before their first bleed or before their last bleed, ids:  6, 18, 24, 30, 63, 98, 142, 181, 192, 199, 208, 210, 214, 215, 245, 246, 254, 265 . It is hard to perform inference on these people, so we recommend you remove the exposures from the known inf, but, if included, the model ignores these exposures.</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="step-4b-prerun-sanity-plots">Step 4B: Prerun sanity plots<a class="anchor" aria-label="anchor" href="#step-4b-prerun-sanity-plots"></a>
@@ -287,10 +287,10 @@ priors. This can be done using a suit of functions
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotPriorPredictive.html">plotPriorPredictive</a></span><span class="op">(</span><span class="va">model_w2</span><span class="op">)</span></span>
 <span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotPriorInfection.html">plotPriorInfection</a></span><span class="op">(</span><span class="va">model_w2</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">/</span> <span class="va">p2</span></span></code></pre></div>
-<p><img src="cs2_sarscov2_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="cs2_sarscov2_no_pcr_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p3</span></span></code></pre></div>
-<p><img src="cs2_sarscov2_files/figure-html/unnamed-chunk-5-2.png" width="700"></p>
+<p><img src="cs2_sarscov2_no_pcr_files/figure-html/unnamed-chunk-5-2.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="step-5-define-the-complete-model">Step 5: Define the Complete Model<a class="anchor" aria-label="anchor" href="#step-5-define-the-complete-model"></a>
@@ -380,28 +380,26 @@ priors. This can be done using a suit of functions
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotPriorPredictive.html">plotPriorPredictive</a></span><span class="op">(</span><span class="va">model_w3</span><span class="op">)</span></span>
 <span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotPriorInfection.html">plotPriorInfection</a></span><span class="op">(</span><span class="va">model_w3</span><span class="op">)</span></span>
 <span><span class="va">p1</span> <span class="op">/</span> <span class="va">p2</span></span></code></pre></div>
-<p><img src="cs2_sarscov2_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="cs2_sarscov2_no_pcr_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p3</span></span></code></pre></div>
-<p><img src="cs2_sarscov2_files/figure-html/unnamed-chunk-7-2.png" width="700"></p>
+<p><img src="cs2_sarscov2_no_pcr_files/figure-html/unnamed-chunk-7-2.png" width="700"></p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rj_settings</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>        numberChainRuns <span class="op">=</span> <span class="fl">4</span>, </span>
 <span>        iterations <span class="op">=</span> <span class="fl">200000</span>,</span>
 <span>        burninPosterior <span class="op">=</span> <span class="fl">100000</span>,</span>
 <span>        thin <span class="op">=</span> <span class="fl">100</span></span>
-<span>       <span class="co"># onDebug = TRUE, </span></span>
-<span>       <span class="co"># runParallel = FALSE</span></span>
 <span>    <span class="op">)</span></span>
 <span></span>
 <span><span class="va">save_info_w2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    file_name <span class="op">=</span> <span class="st">"transvir_data"</span>,</span>
-<span>    model_name <span class="op">=</span> <span class="st">"wave2_base"</span></span>
+<span>    model_name <span class="op">=</span> <span class="st">"wave2_no_pcr"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">save_info_w3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    file_name <span class="op">=</span> <span class="st">"transvir_data"</span>,</span>
-<span>    model_name <span class="op">=</span> <span class="st">"wave3_base"</span></span>
+<span>    model_name <span class="op">=</span> <span class="st">"wave3_no_pcr"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span></span>
@@ -409,6 +407,7 @@ priors. This can be done using a suit of functions
 <span><span class="co"># Run these but take a while</span></span>
 <span><span class="co">#model_summary_w2 &lt;- runSeroJump(model_w2, rj_settings, save_info = save_info_w2)</span></span>
 <span><span class="co">#model_summary_w3 &lt;- runSeroJump(model_w3, rj_settings, save_info = save_info_w3)</span></span>
+<span></span>
 <span></span>
 <span><span class="va">model_summary_w2</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"model_summary_w2.RDS"</span><span class="op">)</span></span>
 <span><span class="va">model_summary_w3</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"model_summary_w3.RDS"</span><span class="op">)</span></span>

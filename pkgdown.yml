@@ -3,7 +3,8 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   cs1_sim_recovery: cs1_sim_recovery.html
+  cs2_sarscov2_no_pcr: cs2_sarscov2_no_pcr.html
   cs2_sarscov2: cs2_sarscov2.html
   data_format: data_format.html
   model_define: model_define.html
-last_built: 2024-10-25T08:24Z
+last_built: 2025-01-09T15:25Z
