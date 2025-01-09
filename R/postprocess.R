@@ -19,9 +19,11 @@ plotPostFigs <- function(model_summary, save_info) {
     
     if (model_summary$fit$data$priorPredFlag) {
         dir.create(here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs_pp", "post"), showWarnings = FALSE, recursive = TRUE)
+        dir.create(here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs_pp", "post", "plt_data"), showWarnings = FALSE, recursive = TRUE)
         file_path <- here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs_pp", "post")
     } else{
         dir.create(here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs", "post"), showWarnings = FALSE, recursive = TRUE)
+        dir.create(here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs", "post", "plt_data"), showWarnings = FALSE, recursive = TRUE)
         file_path <- here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs", "post")
     }
 
@@ -246,6 +248,8 @@ plot_exp_times_rec <- function(model_summary, file_path) {
             ggtitle("Recovery of infection timings") + 
     theme(legend.position = "bottom")
  
+    saveRDS(list(df_data_t, hist_data, mean_counts, std_counts), here::here(file_path, "plt_data", "exposure_time.RDS"))
+
     figB / figC + plot_annotation(tag_levels = "A") 
     ggsave(here::here(file_path, "exposure_time_recov.png"), height = 10, width = 10)
 }
@@ -279,13 +283,14 @@ plot_inf_rec <- function(model_summary, file_path) {
             labs(y = "Posterior density", x = expression("Estimated number of infections in epidemic, n"[Z])) + 
             ggtitle("Recovery of population-level infection burden")
 
+    saveRDS(list(no_inf_fit_df), here::here(file_path, "plt_data", "inf_recov.RDS"))
+
     figC + plot_annotation(tag_levels = "A")
     ggsave(here::here(file_path, "infection_recov.png"), height = 10, width = 10)
 }
 
-
-plot_cop_rec <- function(model_summary, file_path) {
-
+calculate_cop_internal <- function(model_summary) {
+    
     fitfull <- model_summary$fit    
     outputfull <- model_summary$post
 
@@ -342,6 +347,13 @@ plot_cop_rec <- function(model_summary, file_path) {
         })
 
 
+}
+
+plot_cop_rec <- function(model_summary, file_path) {
+
+    cop_exp_sum_plot_all <- calculate_cop_internal(model_summary)
+
+    saveRDS(list(cop_exp_sum_plot_all), here::here(file_path, "plt_data", "cop_data.RDS"))
 
    figA <- cop_exp_sum_plot_all %>%
             ggplot() + geom_point(aes(x = titre_val, y = prop)) + theme_bw() + 
@@ -404,6 +416,7 @@ plot_titre_exp <- function(model_summary, file_path) {
    # if (!is.null(scale_ab)) {
    #     p1 <- p1 + scale_x_continuous(breaks = scale_ab %>% as.numeric, labels = scale_ab %>% names)
    # }
+    saveRDS(list(cop_exp_sum_plot_sum), here::here(file_path, "plt_data", "titre_exp_recovery.RDS"))
 
     p1 
     ggsave(here::here(file_path, "titre_exp_recovery.png"), height = 10, width = 10)
@@ -434,6 +447,8 @@ plot_titre_obs <- function(model_summary, file_path) {
         ggplot() + geom_point(aes(x = row_id, y = titre)) +
             geom_linerange(aes(x = row_id, ymin = .lower, ymax = .upper)) +
             geom_point(data = data_plot, aes(row_id, titre), color = "red") + facet_wrap(vars(biomarker)) 
+
+    saveRDS(list(model_plot), here::here(file_path, "plt_data", "titre_obs.RDS"))
 
     ggsave(here::here(file_path, "titre_obs.png"), height = 10, width = 10)
 
@@ -501,6 +516,9 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
                 mutate(biomarker = biomarker)
         }
     )
+
+    saveRDS(list(posteriorsAllExposure), here::here(file_path, "plt_data", "ab_kinetics_recov.RDS"))
+
 
     p1 <- posteriorsAllExposure %>%  
         ggplot() + 
@@ -852,6 +870,7 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel_
         ) %>% rbindlist
 
         data_fit_b <- data_fit %>% rename(biomarker = bio)
+        saveRDS(list(df_traj_post_ind, data_fit_b), here::here(file_path, "plt_data", paste0("ab_kinetics_trajectories_", name_i, ".RDS")))
 
         plots_list <- map(bio_all,
             function(bio_i) {

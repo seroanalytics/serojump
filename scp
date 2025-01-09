@@ -1,0 +1,11 @@
+# these all run in the serojump folder locally
+# to copy everything
+scp -r . lshdh2@loginhpc:/home/lshdh2/github/serojump/
+
+# to copy the local hpc folder to the hpc/hpc folder
+scp -r ./hpc lshdh2@loginhpc:/home/lshdh2/github/serojump/
+
+# to copy back from the hpc folder to the local hpc folder
+scp -r lshdh2@loginhpc:/home/lshdh2/github/serojump/hpc ~/Documents/research/rjmcmc/Rpackage/serojump
+scp -r lshdh2@loginhpc:/home/lshdh2/github/serojump/outputs/fits/simulated_data_hpc ~/Documents/research/rjmcmc/Rpackage/serojump/outputs/fits
+scp -r lshdh2@loginhpc:/home/lshdh2/github/serojump/outputs/fits/transvir_data ~/Documents/research/rjmcmc/Rpackage/serojump/outputs/fits

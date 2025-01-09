@@ -12,7 +12,7 @@ require(tidybayes)
 ####################################
 ####### Titre-dep boost and no wane #######
 ####################################
-uncert_vec <- c(0.1, 0.3, 0.5)
+uncert_vec <- c(0.01, seq(0.1, 1, 0.1))
 T <- 120
 
 plot_sim <- function(modeli) {
