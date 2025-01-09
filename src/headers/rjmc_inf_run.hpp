@@ -369,7 +369,7 @@ public:
                     this->exposureFunctionDensity(this->proposalJump(this->currJumpIdx), this->currJumpIdx + 1);// - 
                     // rjadjustmentFactor2; 
             }
-            this->alpha = min(1.0, exp((this->proposedLogPosterior - this->currentLogPosterior + rjadjustmentFactor)));
+            this->alpha = std::min(1.0, exp((this->proposedLogPosterior - this->currentLogPosterior + rjadjustmentFactor)));
         }
     }
 
@@ -424,7 +424,7 @@ public:
         this->currJumpType = 1;
         // Calcuate the number of samples to resample
         int NoSample = roundDown( this->adaptiveResampleNo);
-        int adaptiveGibbStep = min(max(NoSample, 1), this->N);
+        int adaptiveGibbStep = std::min(std::max(NoSample, 1), this->N);
     //  Rcpp::Rcout << "adaptiveGibbStep: " << adaptiveGibbStep << std::endl;
         vector<int> resampleIdx;
     //  for (int i = 0; i < this->noGibbsSteps; i++) { 
