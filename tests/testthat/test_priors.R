@@ -20,9 +20,9 @@ test_that("Check that addPrior lower bound is below upper bound", {
     }
 )
 
-test_that("Check that addPrior can sample a value from defined distribution ", {
+test_that("Check that addPrior can't sample from a poorly defined arguments", {
         # these take a while, so don't run on CI
         expect_error(addPrior("alpha", 0, 1, "unif", 5, 1), 
-           "Error: cannot sample a random variable, check inputs")
+           "Invalid arguments: for a uniform distribution, lower must be less than upper.")
     }
 )

@@ -47,6 +47,12 @@ addPrior <- function(par_name, lb, ub, dist, dist_par1, dist_par2) {
     aschar_dist <- paste0("r", df$dist)
     my_dist_name <- get(aschar_dist)
 
+    if (df$dist != "exp"){
+        if (dist_par1 >= dist_par2) {
+            stop("Invalid arguments: for a uniform distribution, lower must be less than upper.")
+        }
+    }
+
     if (df$dist != "exp") {
         temp <- do.call(my_dist_name, list(1, as.numeric(df$dist_par1), as.numeric(df$dist_par2)) )
     } else {
@@ -122,7 +128,10 @@ add_par_pool_df_non_centered <- function(...) {
     return(df)
 }
 
-get_sample_non_centered <- function(par_tab) {
+get_sample_non_centered <- function(par_tab, seed = -1) {
+    if (seed > -1) {
+        set.seed(seed)
+    }
     P <- nrow(par_tab)
     s <- vector(mode = "numeric", length = P)
     names(s) <- par_tab$par_name

@@ -289,7 +289,38 @@ plot_inf_rec <- function(model_summary, file_path) {
     ggsave(here::here(file_path, "infection_recov.png"), height = 10, width = 10)
 }
 
-calculate_cop_internal <- function(model_summary) {
+calculate_reference_titre_full <- function(model_summary) {
+    
+    model_summary <- model_summary_i
+
+    fitfull <- model_summary$fit    
+    outputfull <- model_summary$post
+
+    fit_states <- outputfull$fit_states
+    filename <- outputfull$filename
+    modelname <- outputfull$modelname
+
+    post <- fitfull$post
+    data_t <- fitfull$data_t
+
+    n_chains <- outputfull$n_chains
+    n_post <- outputfull$n_post
+    n_length <- n_chains * n_post
+    chain_samples <- 1:n_chains %>% map(~c(rep(.x, n_post))) %>% unlist
+
+    model_outline <- fitfull$model
+
+    post_fit <- post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
+
+    n_post <- outputfull$n_post
+    n_length <- n_chains * n_post
+  
+
+   df_full_rf <- fit_states %>% group_by(id) %>% mutate(sample = row_number())
+
+}
+
+calculate_reference_titre_expectation <- function(model_summary) {
     
     fitfull <- model_summary$fit    
     outputfull <- model_summary$post
@@ -313,7 +344,11 @@ calculate_cop_internal <- function(model_summary) {
     n_post <- outputfull$n_post
     n_length <- n_chains * n_post
   
-    cop_exp_sum_plot_all <- map_df(1:length(model_outline$observationalModel), 
+
+   df_full_info <- fit_states %>% group_by(id) %>% mutate(sample = row_number())
+
+
+    df_exp_rf <- map_df(1:length(model_outline$observationalModel), 
         function(i) {
         biomarker <- model_outline$observationalModel[[i]]$biomarker
 
@@ -345,13 +380,13 @@ calculate_cop_internal <- function(model_summary) {
             rename(titre_val = !!(biomarker)) %>% mutate(biomarker = !!biomarker) 
 
         })
-
-
+    df_exp_rf %>% unique
 }
+
 
 plot_cop_rec <- function(model_summary, file_path) {
 
-    cop_exp_sum_plot_all <- calculate_cop_internal(model_summary)
+    cop_exp_sum_plot_all <- calculate_reference_titre_expectation(model_summary)
 
     saveRDS(list(cop_exp_sum_plot_all), here::here(file_path, "plt_data", "cop_data.RDS"))
 

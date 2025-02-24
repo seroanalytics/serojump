@@ -126,7 +126,8 @@ createSeroJumpModel <- function(
     exposurePriorTime = NULL,
     exposurePriorTimeType = NULL,
     exposurePriorPop = NULL,
-    known_exp_bool = NULL) {
+    known_exp_bool = NULL, 
+    seed = NULL) {
 
     cat("OUTLINE OF INPUTTED MODEL\n")
     check_inputs(data_sero, data_known, biomarkers, exposureTypes, exposureFitted, observationalModel, abkineticsModel, exposurePriorTime, exposurePriorTimeType)
@@ -147,7 +148,7 @@ createSeroJumpModel <- function(
 
     # Add in custom functions
     modelSeroJump$samplePriorDistributions <- function(datalist) {
-        get_sample_non_centered(priors)
+        get_sample_non_centered(priors, seed)
     }
 
     modelSeroJump$evaluateLogPrior <- function(params, jump, datalist) {
@@ -274,9 +275,10 @@ createSeroJumpModel <- function(
 #' @param settings Settings used for the calibration
 #' @param priorPred Boolean option on whether to run the prior predictive model
 #' @param save_info Filepath of where the outputs are saved
+#' @param seed Seed for the random number generator 
 #' @return A list with the posterior samples, the model and the data.
 #' @export
-runSeroJump <- function(seroModel, settings, priorPred = FALSE, save_info = NULL) {
+runSeroJump <- function(seroModel, settings, priorPred = FALSE, save_info = NULL, seed = -1) {
    
 
     settings <- settings
@@ -304,14 +306,14 @@ runSeroJump <- function(seroModel, settings, priorPred = FALSE, save_info = NULL
     if(settings$runParallel) {
         out_pp_full <- mclapply(list(seroModel), 
         function(i) { 
-            rjmc_sero_func(model = i$model, data = i$data, settings = settings)
+            rjmc_sero_func(model = i$model, data = i$data, settings = settings, seed = seed)
         },
         mc.cores = settings$numberCores
         )
     } else {
         out_pp_full <- lapply(list(seroModel), 
             function(i) { 
-                rjmc_sero_func(model = i$model, data = i$data, settings = settings)
+                rjmc_sero_func(model = i$model, data = i$data, settings = settings, seed = seed)
             }
         )
     }

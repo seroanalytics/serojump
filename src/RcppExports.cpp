@@ -12,8 +12,8 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // run_rjmc_sero
-List run_rjmc_sero(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i);
-RcppExport SEXP _serojump_run_rjmc_sero(SEXP modelSEXP, SEXP dataListSEXP, SEXP settingsSEXP, SEXP update_indSEXP, SEXP RJMCparSEXP, SEXP iSEXP) {
+List run_rjmc_sero(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i, int seed);
+RcppExport SEXP _serojump_run_rjmc_sero(SEXP modelSEXP, SEXP dataListSEXP, SEXP settingsSEXP, SEXP update_indSEXP, SEXP RJMCparSEXP, SEXP iSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -23,13 +23,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type update_ind(update_indSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type RJMCpar(RJMCparSEXP);
     Rcpp::traits::input_parameter< int >::type i(iSEXP);
-    rcpp_result_gen = Rcpp::wrap(run_rjmc_sero(model, dataList, settings, update_ind, RJMCpar, i));
+    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
+    rcpp_result_gen = Rcpp::wrap(run_rjmc_sero(model, dataList, settings, update_ind, RJMCpar, i, seed));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_serojump_run_rjmc_sero", (DL_FUNC) &_serojump_run_rjmc_sero, 6},
+    {"_serojump_run_rjmc_sero", (DL_FUNC) &_serojump_run_rjmc_sero, 7},
     {NULL, NULL, 0}
 };
 

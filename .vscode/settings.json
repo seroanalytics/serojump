@@ -80,6 +80,13 @@
         "utility": "cpp",
         "format": "cpp",
         "stop_token": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "cfenv": "cpp",
+        "csetjmp": "cpp",
+        "deque": "cpp",
+        "queue": "cpp",
+        "set": "cpp",
+        "unordered_set": "cpp",
+        "stdfloat": "cpp"
     }
 }

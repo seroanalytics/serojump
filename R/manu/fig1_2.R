@@ -104,6 +104,9 @@ exp_times <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0
 exp_times_A <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0(types[i], "_", vals[i]), "figs", "post", "plt_data",  "exposure_time_recov.RDS"))
 exp_times_B <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0(types[i], "_", vals[i]), "figs", "post", "plt_data",  "exposure_time_recov_diff.RDS"))
 
+write.csv(ab_kin[[2]], here::here("outputs", "fits", "simulated_data_hpc", "export", "sim_sero.csv") )
+
+
 # trajecotries for subset of individuals 
 p1A <- ab_kin[[1]] %>% 
     ggplot() +
@@ -454,7 +457,7 @@ biomarker_protection <- function(biomarker_quantity, biomarker_prot_midpoint, bi
 
 # with cop
 scalar_cop <-  sim_model_cop$simpar$N_exp / 200
-obs_cop <- scalar_cop * (1 - biomarker_protection(seq(0, 4, 0.1), 2, 2))
+obs_cop <-  (biomarker_protection(seq(0, 5, length.out = 100), 2, 2))
 result_inf_cop <- apply( sim_model_cop$simpar$foe_pars[,,1], 1, 
 function(x) {
     y = which(x == 1)
@@ -468,7 +471,7 @@ function(x) {
 
 # withput cop
 scalar_no_cop <-  sim_model_no_cop$simpar$N_exp / 200
-obs_no_cop <- scalar_no_cop * (1 - biomarker_protection(seq(0, 4, 0.1), 2, 0))
+obs_no_cop <- ( biomarker_protection(seq(0, 5, length.out = 100), 2, 0))
 result_inf_no_cop <- apply( sim_model_no_cop$simpar$foe_pars[,,1], 1, 
 function(x) {
     y = which(x == 1)
@@ -479,11 +482,12 @@ function(x) {
     }
 }) %>% unlist
 
+
 crps_cop <- list()
 df_post <- list()
 for (i in 1:22) {
     model_summary_i <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0(types[i], "_", vals[i]), "model_summary.RDS"))
-    extract_info <- calculate_cop_internal(model_summary_i) %>% unique 
+    extract_info <- calculate_reference_titre_expectation(model_summary_i) 
 
     if (i <= 11) {
         scalar_i <- scalar_cop
@@ -493,14 +497,142 @@ for (i in 1:22) {
 
     data_list <- list(
         N = 200,
-        scal = scalar_i,
+        L = scalar_i,
         x = extract_info$titre_val,
-        y = round(extract_info$prop),
-        N_pred = length(seq(0, 4, 0.1)),
-        x_pred = seq(0, 4, 0.1)
+        y = extract_info$prop
     )
 
-    stan_code <- "
+    stan_code <- "data {
+            int<lower=1> N;          // Number of observations
+            vector[N] x;             // Predictor variable (e.g., titre)
+            vector[N] y;             // Continuous response variable
+            real L;
+        }
+        transformed data {
+            
+            real x_min = min(x);
+            real x_max = max(x);
+            real step = (x_max - x_min) / 99;
+            real midpoint = (x_min + x_max) / 2;
+        }
+        parameters {
+            real<lower = 0> k;                  // Steepness of the curve
+            real<lower = x_min, upper = x_max> x0;                 // Midpoint (inflection point)
+            real<lower=0> sigma;     // Standard deviation of errors
+        }
+        model {
+            vector[N] y_hat;
+            
+            // Logistic function for curve fitting
+            for (n in 1:N) {
+                y_hat[n] = L * (1 - 1 / (1 + exp(-k * (x[n] - x0))));
+            }
+
+            // Likelihood: Assume normal residuals
+            y ~ normal(y_hat, sigma);
+
+            // Priors
+            L ~ uniform(0, 1);      // Prior for upper asymptote
+            k ~ normal(0, 5);        // Prior for steepness
+            x0 ~ normal(midpoint, midpoint / 2);       // Prior for midpoint
+            sigma ~ normal(0, 1);    // Prior for standard deviation
+        }
+        generated quantities {
+            vector[100] y_hat_rel;
+            vector[100] y_hat_new;
+            vector[100] y_prot;
+            vector[100] x_new;
+            
+            // Posterior prediction
+            for (i in 1:100) {
+            x_new[i] = x_min + (i - 1) * step;
+            y_prot[i] =  1 / (1 + exp(-k * (x_new[i] - x0)));
+            y_hat_new[i] = L * (1 - 1 / (1 + exp(-k * (x_new[i] - x0))));
+            y_hat_rel[i] = y_hat_new[i] / y_hat_new[1];
+            }
+        }"
+
+   
+
+    fit <- stan(model_code = stan_code, data = data_list, iter = 2000, chains = 4, cores = 4)
+
+    mat_extract <- rstan::extract(fit, pars = "y_prot")$y_prot %>% as.matrix
+
+    colnames(mat_extract) <- seq(min(data_list$x), max(data_list$x), length.out = 100)
+    df_post_tmp <- mat_extract %>% as.data.frame %>% pivot_longer(everything()) %>% mutate(type = types[i], uncert = vals[i])
+    df_post <- bind_rows(df_post, df_post_tmp)
+    if (i <= 11) {
+        obs_i <- obs_cop
+    } else {
+        obs_i <- obs_no_cop
+    }
+
+    crps_cop[[i]] <- crps(mat_extract, mat_extract, obs_i)
+
+}
+
+data_plot <- data.frame(
+    name = seq(0, 5, length = 100),
+    obs_cop = obs_cop,
+    obs_no_cop = obs_no_cop
+)
+
+p4A <- df_post %>% group_by(name, type, uncert) %>% summarise(mean = mean(value)) %>% mutate(name = as.numeric(name)) %>%
+    filter(type == "cop") %>%
+    ggplot() + 
+        geom_line(aes(x = name, y = mean, color = uncert, group = uncert), size = 1.8, alpha = 0.6) + theme_bw() +
+        geom_line(data = data_plot, aes(x = name, y = obs_cop), color = "red", linetype = "dashed", size = 2, alpha = 0.7) +
+        labs(y = "Protection probability (COP)", x = "Titre value at exposure (log)", 
+        color = "Uncertainty") + 
+        scale_x_continuous(breaks = seq(0, 5, 0.5)) + ylim(0, 1) + ggtitle("Simulated data with COP")
+
+
+p4B <- df_post %>% group_by(name, type, uncert) %>% summarise(mean = mean(value)) %>% mutate(name = as.numeric(name)) %>%
+    filter(type == "no_cop") %>%
+    ggplot() + 
+        geom_line(aes(x = name, y = mean, color = uncert, group = uncert), size = 1.8, alpha = 0.6) + theme_bw() +
+        geom_line(data = data_plot, aes(x = name, y = obs_no_cop), color = "red", linetype = "dashed", size = 2, alpha = 0.7) +
+        labs(y = "Protection probability (COP)", x = "Titre value at exposure (log)", 
+        color = "Uncertainty") + 
+        scale_x_continuous(breaks = seq(0, 5, 0.5)) + ylim(0, 1) + ggtitle("Simulated data without COP")
+
+p4C <- data.frame(
+    uncert = vals,
+    type = types,
+    cprs = crps_cop %>% map_dbl(~(1 - exp(.x$estimates[1]))) 
+) %>% 
+    ggplot() + 
+        geom_line(aes(x = uncert, y = 1 - cprs, color = type), size = 4, alpha = 0.8) + theme_bw() + 
+        labs(y = "Mean 1 - CRPS of correlate of risk", x = "Simulated uncertainty in the observational model", 
+        color = "Model type")  + ggtitle("Accuracy in recovering correlate of protection") +
+        scale_color_manual(values = c("#434c69", "#c09741")) 
+
+
+p4 <- (p4A / p4B +
+    plot_layout(guides = "collect")) | p4C +
+    plot_layout(guides = "collect") + plot_annotation(title = "Recovery of the correlate of protection with different levels of uncertainty") 
+
+p4
+ggsave(here::here("outputs", "figs", "cor_rec.png"), width = 20, height = 10)
+
+
+p1 / p2 / p4 + plot_annotation(tag_level = "A") & theme(text = element_text(size = 15))
+ggsave(here::here("outputs", "figs", "crps_all.png"), width = 15, height = 18)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ stan_code <- "
         data {
             int<lower=0> N;
             real scal;
@@ -524,71 +656,3 @@ for (i in 1:22) {
                 y_pred[n] = scal * inv_logit(beta_0 + beta_1 * x_pred[n]);
         }
     "
-
-    fit <- stan(model_code = stan_code, data = data_list, iter = 2000, chains = 4, cores = 4)
-
-    mat_extract <- rstan::extract(fit, pars = "y_pred")$y_pred %>% as.matrix
-
-    colnames(mat_extract) <- seq(0, 4, 0.1)
-    df_post_tmp <- mat_extract %>% as.data.frame %>% pivot_longer(everything()) %>% mutate(type = types[i], uncert = vals[i])
-    df_post <- bind_rows(df_post, df_post_tmp)
-    if (i <= 11) {
-        obs_i <- obs_cop
-    } else {
-        obs_i <- obs_no_cop
-    }
-
-    crps_cop[[i]] <- crps(mat_extract, mat_extract, obs_i)
-
-}
-
-data_plot <- data.frame(
-    name = seq(0, 4, 0.1),
-    obs_cop = obs_cop,
-    obs_no_cop = obs_no_cop
-)
-
-p4A <- df_post %>% group_by(name, type, uncert) %>% summarise(mean = mean(value)) %>% mutate(name = as.numeric(name)) %>%
-    filter(type == "cop") %>%
-    ggplot() + 
-        geom_line(aes(x = name, y = mean, color = uncert, group = uncert), size = 1.8, alpha = 0.6) + theme_bw() +
-        geom_line(data = data_plot, aes(x = name, y = obs_cop), color = "red", linetype = "dashed", size = 2, alpha = 0.7) +
-        labs(y = "Mean probability of infection", x = "Titre value at exposure", 
-        color = "Uncertainty") + 
-        scale_x_continuous(breaks = seq(0, 4, 0.5)) + ylim(0, 0.8) + ggtitle("Simulated data with COP")
-
-
-p4B <- df_post %>% group_by(name, type, uncert) %>% summarise(mean = mean(value)) %>% mutate(name = as.numeric(name)) %>%
-    filter(type == "no_cop") %>%
-    ggplot() + 
-        geom_line(aes(x = name, y = mean, color = uncert, group = uncert), size = 1.8, alpha = 0.6) + theme_bw() +
-        geom_line(data = data_plot, aes(x = name, y = obs_no_cop), color = "red", linetype = "dashed", size = 2, alpha = 0.7) +
-        labs(y = "Mean probability of infection", x = "Titre value at exposure", 
-        color = "Uncertainty") + 
-        scale_x_continuous(breaks = seq(0, 4, 0.5)) + ylim(0, 0.8) + ggtitle("Simulated data without COP")
-
-p4C <- data.frame(
-    uncert = vals,
-    type = types,
-    cprs = crps_cop %>% map_dbl(~(1 - exp(.x$estimates[1]))) 
-) %>% 
-    ggplot() + 
-        geom_line(aes(x = uncert, y = 1 - cprs, color = type), size = 4, alpha = 0.8) + theme_bw() + 
-        labs(y = "Mean 1 - CRPS of correlate of risk", x = "Simulated uncertainty in the observational model", 
-        color = "Model type")  + ggtitle("Accuracy in recovering correlate") +
-        scale_color_manual(values = c("#434c69", "#c09741")) 
-
-
-p4 <- (p4A / p4B +
-    plot_layout(guides = "collect")) | p4C +
-    plot_layout(guides = "collect") + plot_annotation(title = "Recovery of the correlate of risk with different levels of uncertainty") 
-
-
-
-
-p4
-ggsave(here::here("outputs", "figs", "cor_rec.png"), width = 20, height = 10)
-
-
-p1 / p2 / p4 + plot_annotation(tag_level = "A") & theme(text = element_text(size = 15))
-ggsave(here::here("outputs", "figs", "crps_all.png"), width = 15, height = 18)
