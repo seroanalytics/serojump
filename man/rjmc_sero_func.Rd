@@ -4,7 +4,7 @@
 \alias{rjmc_sero_func}
 \title{Create a model}
 \usage{
-rjmc_sero_func(model, data, settings, par = NULL)
+rjmc_sero_func(model, data, settings, par = NULL, seed = -1)
 }
 \arguments{
 \item{model}{The model to run ptmc.}

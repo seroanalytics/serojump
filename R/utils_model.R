@@ -34,9 +34,73 @@ addAbkineticsModel <- function(id, biomarker, exposureType, pars, funcForm) {
         biomarker = biomarker,
         exposureType = exposureType,
         pars = pars,
-        funcForm = funcForm
+        funcForm = funcForm,
+        hierFlag = FALSE
     )
 }
+
+#' @title addAbkineticsModelHier
+#' @description This function adds an antibody kinetics model to the model definition.
+#' @param id The name of the biomarker.
+#' @param biomarker The name of the biomarker.
+#' @param exposureType The name of the exposure type.
+#' @param pars The parameters of the model.
+#' @param parsHier The parameters of the Hierarchical model.
+#' @param dataHier The data for the Hierarchical model.
+#' @param funcForm The antibody kinetics function.
+#' @return A list with the biomarker name, the exposure name, whether the exposure is inferred, the parameters and the antibody kinetics function.
+#' @export
+addAbkineticsModelHier <- function(id, biomarker, exposureType, pars, parsHier, dataHier, funcForm) {
+    if (is.null(id) || is.null(biomarker) || is.null(exposureType) || 
+        is.null(pars) || is.null(parsHier) || is.null(dataHier) || is.null(funcForm)) {
+        stop("One or more arguments of `addAbkineticsModelHier` are NULL.")
+    }
+    
+    # Check that elements of parsHier are a subset of pars
+    if (!all(parsHier %in% pars)) {
+        stop("All elements of parsHier must be a subset of pars.")
+    }
+    
+    # Check that dataHier is a numeric vector
+    if (!is.numeric(dataHier) || !is.vector(dataHier)) {
+        stop("dataHier must be a numeric vector.")
+    }
+    
+    # Check that funcForm is a function and its formals are (titre, time, pars)
+    if (!is.function(funcForm)) {
+        stop("funcForm must be a function.")
+    }
+
+    M <- length(unique(dataHier))
+    add_pars <- c()
+    k <- 1
+    for (j in 1:length(pars)) {
+        add_pars <- c(add_pars, pars[j])
+        if (pars[j] %in% parsHier) {
+            for (i in 1:M) {
+                add_pars <- c(add_pars, paste0("z_" , parsHier[k], "_", i))
+            }
+            add_pars <- c(add_pars, paste0("sigma_", parsHier[k]))
+            k <- k + 1
+        }
+    }
+
+
+  
+    list(
+        id = id,
+        biomarker = biomarker,
+        exposureType = exposureType,
+        pars = add_pars,
+        parsBase = pars,
+        parsHier = parsHier,
+        dataHier = dataHier,
+        dataHierN = M,
+        funcForm = funcForm,
+        hierFlag = TRUE
+    )
+}
+
 
 #' @title addCopModel
 #' @description This function adds a cop model to the model definition.
@@ -126,7 +190,8 @@ createSeroJumpModel <- function(
     exposurePriorTime = NULL,
     exposurePriorTimeType = NULL,
     exposurePriorPop = NULL,
-    known_exp_bool = NULL) {
+    known_exp_bool = NULL, 
+    seed = -1) {
 
     cat("OUTLINE OF INPUTTED MODEL\n")
     check_inputs(data_sero, data_known, biomarkers, exposureTypes, exposureFitted, observationalModel, abkineticsModel, exposurePriorTime, exposurePriorTimeType)
@@ -147,7 +212,7 @@ createSeroJumpModel <- function(
 
     # Add in custom functions
     modelSeroJump$samplePriorDistributions <- function(datalist) {
-        get_sample_non_centered(priors)
+        get_sample_non_centered(priors, seed)
     }
 
     modelSeroJump$evaluateLogPrior <- function(params, jump, datalist) {
@@ -274,9 +339,10 @@ createSeroJumpModel <- function(
 #' @param settings Settings used for the calibration
 #' @param priorPred Boolean option on whether to run the prior predictive model
 #' @param save_info Filepath of where the outputs are saved
+#' @param seed Seed for the random number generator 
 #' @return A list with the posterior samples, the model and the data.
 #' @export
-runSeroJump <- function(seroModel, settings, priorPred = FALSE, save_info = NULL) {
+runSeroJump <- function(seroModel, settings, priorPred = FALSE, save_info = NULL, seed = -1) {
    
 
     settings <- settings
@@ -304,14 +370,14 @@ runSeroJump <- function(seroModel, settings, priorPred = FALSE, save_info = NULL
     if(settings$runParallel) {
         out_pp_full <- mclapply(list(seroModel), 
         function(i) { 
-            rjmc_sero_func(model = i$model, data = i$data, settings = settings)
+            rjmc_sero_func(model = i$model, data = i$data, settings = settings, seed = seed)
         },
         mc.cores = settings$numberCores
         )
     } else {
         out_pp_full <- lapply(list(seroModel), 
             function(i) { 
-                rjmc_sero_func(model = i$model, data = i$data, settings = settings)
+                rjmc_sero_func(model = i$model, data = i$data, settings = settings, seed = seed)
             }
         )
     }

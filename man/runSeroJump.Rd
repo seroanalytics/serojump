@@ -4,7 +4,13 @@
 \alias{runSeroJump}
 \title{run the RJMCMC algorithm}
 \usage{
-runSeroJump(seroModel, settings, priorPred = FALSE, save_info = NULL)
+runSeroJump(
+  seroModel,
+  settings,
+  priorPred = FALSE,
+  save_info = NULL,
+  seed = -1
+)
 }
 \arguments{
 \item{seroModel}{The seroModel previously defined.}
@@ -14,6 +20,8 @@ runSeroJump(seroModel, settings, priorPred = FALSE, save_info = NULL)
 \item{priorPred}{Boolean option on whether to run the prior predictive model}
 
 \item{save_info}{Filepath of where the outputs are saved}
+
+\item{seed}{Seed for the random number generator}
 }
 \value{
 A list with the posterior samples, the model and the data.

@@ -289,7 +289,38 @@ plot_inf_rec <- function(model_summary, file_path) {
     ggsave(here::here(file_path, "infection_recov.png"), height = 10, width = 10)
 }
 
-calculate_cop_internal <- function(model_summary) {
+calculate_reference_titre_full <- function(model_summary) {
+    
+    model_summary <- model_summary_i
+
+    fitfull <- model_summary$fit    
+    outputfull <- model_summary$post
+
+    fit_states <- outputfull$fit_states
+    filename <- outputfull$filename
+    modelname <- outputfull$modelname
+
+    post <- fitfull$post
+    data_t <- fitfull$data_t
+
+    n_chains <- outputfull$n_chains
+    n_post <- outputfull$n_post
+    n_length <- n_chains * n_post
+    chain_samples <- 1:n_chains %>% map(~c(rep(.x, n_post))) %>% unlist
+
+    model_outline <- fitfull$model
+
+    post_fit <- post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame %>% mutate(chain = as.character(chain_samples ))
+
+    n_post <- outputfull$n_post
+    n_length <- n_chains * n_post
+  
+
+   df_full_rf <- fit_states %>% group_by(id) %>% mutate(sample = row_number())
+
+}
+
+calculate_reference_titre_expectation <- function(model_summary) {
     
     fitfull <- model_summary$fit    
     outputfull <- model_summary$post
@@ -313,7 +344,11 @@ calculate_cop_internal <- function(model_summary) {
     n_post <- outputfull$n_post
     n_length <- n_chains * n_post
   
-    cop_exp_sum_plot_all <- map_df(1:length(model_outline$observationalModel), 
+
+   df_full_info <- fit_states %>% group_by(id) %>% mutate(sample = row_number())
+
+
+    df_exp_rf <- map_df(1:length(model_outline$observationalModel), 
         function(i) {
         biomarker <- model_outline$observationalModel[[i]]$biomarker
 
@@ -345,13 +380,13 @@ calculate_cop_internal <- function(model_summary) {
             rename(titre_val = !!(biomarker)) %>% mutate(biomarker = !!biomarker) 
 
         })
-
-
+    df_exp_rf %>% unique
 }
+
 
 plot_cop_rec <- function(model_summary, file_path) {
 
-    cop_exp_sum_plot_all <- calculate_cop_internal(model_summary)
+    cop_exp_sum_plot_all <- calculate_reference_titre_expectation(model_summary)
 
     saveRDS(list(cop_exp_sum_plot_all), here::here(file_path, "plt_data", "cop_data.RDS"))
 
@@ -485,7 +520,7 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
             functionalForm <- model_outline$abkineticsModel[[name1]]$funcForm
             biomarker <- model_outline$abkineticsModel[[name1]]$biomarker
             exposureType <- model_outline$abkineticsModel[[name1]]$exposureType
-            cat(pars_extract)
+
             compare <- bind_rows(
                 post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
                     mutate(type = "Posterior distribution") %>% filter(param %in% pars_extract)
@@ -498,36 +533,90 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
                 ) %>% unlist
             }
 
-            post_par <- data.frame(post_fit[[pars_extract[1]]])
-            if (length(pars_extract) > 1) {
-                for (i in 2:length(pars_extract)) {
-                    post_par <- cbind(post_par, post_fit[[pars_extract[i]]])
-                }   
+            ## hierarchical effects
+            hierFlag_value <- model_outline$abkineticsModel[[name1]]$hierFlag
+
+            if (!is.null(hierFlag_value) && is.logical(hierFlag_value) && length(hierFlag_value) == 1 && hierFlag_value) {
+                dataHier <- model_outline$abkineticsModel[[name1]]$dataHier
+                parsHier <- model_outline$abkineticsModel[[name1]]$parsHier
+                parsBase <- model_outline$abkineticsModel[[name1]]$parsBase
+                N <- model_outline$abkineticsModel[[name1]]$dataHierN
+
+                pars_extract_list <- list()
+                for (j in 1:N) {
+                    pars_names <- c()
+                    for (k in 1:length(parsBase)) {
+                        if (parsBase[[k]] %in% parsHier) {
+                            pars_names <- c(pars_names, parsBase[[k]], paste0("z_", parsBase[[k]], "_", j), paste0("sigma_", parsBase[[k]]))
+
+                        } else {
+                            pars_names <- c(pars_names, parsBase[[k]])
+                        }
+
+                    }
+                    pars_extract_list[[j]] <- pars_names
+                }
+            } else {
+                pars_extract_list <- list(pars_extract)
             }
 
-            T <- T_max
-            traj_post <- 1:(100) %>% purrr::map_df(
-                ~data.frame(
-                    time = 1:T,
-                    value = ab_function(T, as.numeric(post_par[.x, ]))
-                )
+            map_df(1:length(pars_extract_list), 
+                function(k) { 
+                    # extract all argument values
+                    post_par_list <- list()
+                    post_par <- data.frame(post_fit[[pars_extract_list[[k]][1]]])
+                    if (length(pars_extract_list[[k]]) > 1) {
+                        for (i in 2:length(pars_extract_list[[k]])) {
+                            post_par <- cbind(post_par, post_fit[[pars_extract_list[[k]][i]]])
+                        }   
+                    }
+                    colnames(post_par) <- pars_extract_list[[k]]
+
+                    # adjust for hierarchicial values 
+                    if (!is.null(hierFlag_value) && is.logical(hierFlag_value) && length(hierFlag_value) == 1 && hierFlag_value) {
+                        for (j in 1:length(parsHier)) {
+                            post_fit <- post_fit %>% mutate(!!str2lang(pars_extract_list[[k]][1]) := !!str2lang(pars_extract_list[[k]][1]) +
+                                !!str2lang(pars_extract_list[[k]][2]) * !!str2lang(pars_extract_list[[k]][3]), .keep =  ) 
+                        }
+                        post_par <- post_fit %>% select(!!parsBase)
+                    }
+
+                    T <- T_max
+                    traj_post <- 1:(100) %>% purrr::map_df(
+                        ~data.frame(
+                            time = 1:T,
+                            value = ab_function(T, as.numeric(post_par[.x, ]))
+                        )
+                    )
+                    traj_post_summ <- traj_post %>% group_by(time) %>% mean_qi() %>% mutate(exposure_type = exposureType) %>% 
+                        mutate(biomarker = biomarker, covar = k)
+                        
+                }
             )
-            traj_post_summ <- traj_post %>% group_by(time) %>% mean_qi() %>% mutate(exposure_type = exposureType) %>% 
-                mutate(biomarker = biomarker)
         }
     )
 
     saveRDS(list(posteriorsAllExposure), here::here(file_path, "plt_data", "ab_kinetics_recov.RDS"))
 
+    if (max(posteriorsAllExposure$covar) == 1) {
+        p1 <- posteriorsAllExposure %>%  
+            ggplot() + 
+            geom_ribbon(aes(ymin = .lower, ymax = .upper, x = time, fill = exposure_type), size = 3, alpha = 0.3) + 
+            geom_line(aes(y = value, x = time, color = exposure_type), size = 2) + 
+            theme_bw() + labs(x = "Time post-infection/since bleed, s", y = "Titre change", color = "type", fill = "type") + 
+            ggtitle("Antibody kinetic trajectories") +
+            facet_wrap(vars(biomarker))
+    } else {
+        p1 <- posteriorsAllExposure %>%  
+            ggplot() + 
+            geom_ribbon(aes(ymin = .lower, ymax = .upper, x = time, fill = paste(exposure_type, as.character(covar), sep = "_")), size = 3, alpha = 0.3) + 
+            geom_line(aes(y = value, x = time, color =  paste(exposure_type, as.character(covar), sep = "_")), size = 2) + 
+            theme_bw() + labs(x = "Time post-infection/since bleed, s", y = "Titre change", color = "type", fill = "type") + 
+            ggtitle("Antibody kinetic trajectories") +
+            facet_wrap(vars(biomarker))
+    }
 
-    p1 <- posteriorsAllExposure %>%  
-        ggplot() + 
-        geom_ribbon(aes(ymin = .lower, ymax = .upper, x = time, fill = exposure_type), size = 3, alpha = 0.3) + 
-        geom_line(aes(y = value, x = time, color = exposure_type), size = 2) + 
-        theme_bw() + labs(x = expression("Time post-infection/since bleed, s", y = "Titre change, f"[ab])) + 
-        ggtitle("Antibody kinetic trajectories") +
-        facet_wrap(vars(biomarker))
-
+    p1
     ggsave(here::here(file_path, "ab_kinetics_trajectories.png"), height = 10, width = 10)
 
 }

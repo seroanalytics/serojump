@@ -275,7 +275,7 @@ private:
 
                 // Update time since last event
                 time_since = orderedEvents[i].value - anchor_time;
-                titre_obs = abkineticsFunction(anchor_titre, bio, anchor_func, time_since ); // Calcualte titre at new event
+                titre_obs = abkineticsFunction(anchor_titre, bio, anchor_func, time_since, i_idx ); // Calcualte titre at new event
                 df_order_titre_b.emplace_back(orderedEvents[i].name, titre_obs); // add to vector
             /*    if (i == 1) {
                     Rcpp::Rcout << "1" << std::endl;
@@ -331,6 +331,77 @@ private:
 
     }
 
+    double get_value_par(NumericVector pars_base, StringVector params, string par_name) {
+        double value;
+        int idx;
+
+        for (int j = 0; j < params.size(); j++) {
+            string params_s =  Rcpp::as<std::string>(params[j]);
+            if (par_name == params_s) {
+                value = pars_base[j];
+            }
+        }
+        //Rcpp::Rcout << "value: " << value << std::endl;
+        return value;
+    }
+
+    double getArgumentValuesHier(NumericVector pars_base, StringVector params, string param_name, NumericVector dataHier, int M, int i_idx) {
+        int cov_i = dataHier[i_idx];
+
+       // Rcpp::Rcout << "cov_i: " << cov_i << std::endl;
+        //Rcpp::Rcout << "i_idx: " << i_idx << std::endl;
+
+        double c[3];
+        string stringname;
+        stringname = param_name;
+        c[0] = get_value_par(pars_base, params, stringname);
+        //Rcpp::Rcout << "stringname A : " << stringname << std::endl;
+
+        stringname = "z_" + param_name + "_" + to_string(cov_i);
+        //Rcpp::Rcout << "stringname B : " << stringname << std::endl;
+        //Rcpp::Rcout << "pars_base: " << pars_base << std::endl;
+        //Rcpp::Rcout << "params: " << params << std::endl;
+
+        c[1] = get_value_par(pars_base, params, stringname);
+        //Rcpp::Rcout << "stringname B : " << stringname << std::endl;
+
+       // Rcpp::Rcout << "cov_i: " << cov_i << std::endl;
+      //  Rcpp::Rcout << "c[1]: " << c[1] << std::endl;
+        stringname = "sigma_" + param_name;
+
+        c[2] = get_value_par(pars_base, params, stringname);
+        //Rcpp::Rcout << "stringname C : " << stringname << std::endl;
+
+        double argument = c[0] + c[1] * c[2];
+        //Rcpp::Rcout << "argument: " << i_idx << std::endl;
+
+        return argument;
+    }
+
+    NumericVector extractHierPars(NumericVector pars_base, string abID_i, int i_idx) {
+        NumericVector dataHier = parent->dataAbHier[abID_i];  // hierarchical data
+        int M = parent->dataAbHierN[abID_i];
+        // name of all the parameters
+        StringVector params = parent->parsAbKinN[abID_i]; // all the parameter names
+        StringVector params_base = parent->parsAbKinNBase[abID_i]; // all the argument parameter names
+        StringVector params_hier = parent->parsAbKinNHier[abID_i]; // all the Hierarchical parameter names
+        NumericVector arguments;
+
+        for (int i = 0; i < params_base.size(); i++) {
+            std::string param_name_A = Rcpp::as<std::string>(params_base[i]);
+            if (std::find(params_hier.begin(), params_hier.end(), param_name_A) != params_hier.end()) {
+                double argumentvalue = getArgumentValuesHier(pars_base, params, param_name_A, dataHier, M, i_idx);
+                arguments.push_back(argumentvalue);
+            } else {
+                //Rcpp::Rcout << "In not here: " << std::endl;
+                double argumentvalue = get_value_par(pars_base, params, param_name_A);
+                arguments.push_back(argumentvalue);
+            }
+        }
+      
+        return arguments;
+    }
+
     /** 
      * @brief Calculate the titre value at a given time since the last event
      * @param titre_est The titre value at the last event
@@ -342,21 +413,32 @@ private:
      * This function takes the string inputs and uses the mapOfAbkinetics to find the correct antibody kinetics function to use
      * 
      */
-    double abkineticsFunction(double titre_est, string biomarker, string exposureType_i, double timeSince) {
+    double abkineticsFunction(double titre_est, string biomarker, string exposureType_i, double timeSince, int i_idx) {
         if (parent->onDebug) Rcpp::Rcout << "In: calTitre1" << std::endl;
         int abkey = parent->mapOfAbkinetics[{biomarker, exposureType_i}];
         if (parent->onDebug) Rcpp::Rcout << "In: calTitre2" << std::endl;
         string abID_i = parent->abID[abkey] ;
         if (parent->onDebug) Rcpp::Rcout << "In: calTitre3" << std::endl;
-      /*  Rcpp::Rcout << "abkey: " << abkey << std::endl;
-        Rcpp::Rcout << "titre_est: " << titre_est << std::endl;
-        Rcpp::Rcout << "timeSince: " << timeSince << std::endl;
-        Rcpp::Rcout << "parent->abinfo[abkey].params: " << parent->abinfo[abkey].params << std::endl;*/
+     
+        // 
+        if (!parent->isAbHier[abkey]) { 
+            NumericVector pars_base = parent->abinfo[abkey].params; // the base parameter VALUES
+            titre_est = Rcpp::as<double>(parent->abinfo[abkey].func(titre_est, timeSince, pars_base));
+        } else {
 
-        titre_est = Rcpp::as<double>(parent->abinfo[abkey].func(titre_est, timeSince, parent->abinfo[abkey].params));
-        if (parent->onDebug) Rcpp::Rcout << "Out: calTitr4" << std::endl;
+            NumericVector pars_base = parent->abinfo[abkey].params; // base parameters ALL VALUES
+            NumericVector pars_extracted_hier = extractHierPars(pars_base, abID_i, i_idx);
+            titre_est = Rcpp::as<double>(parent->abinfo[abkey].func(titre_est, timeSince, pars_extracted_hier));
+            //Rcpp::Rcout << "titre_est_end: " << titre_est << std::endl;
+
+        }
+
+
+
+        if (parent->onDebug) Rcpp::Rcout << "Out: calTitre4" << std::endl;
         return titre_est;
     }
+
 
     // A shared pointer to the SeroJumpBase object
     std::shared_ptr<SeroJumpBase> parent;

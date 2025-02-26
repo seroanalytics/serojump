@@ -1,9 +1,19 @@
 
 #include "./headers/rjmc_inf.hpp"
 
+void set_rng_seed(unsigned int seed) {
+    rng.seed(seed);
+}
+
 // [[Rcpp::export]]
-List run_rjmc_sero(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i)
+List run_rjmc_sero(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings, bool update_ind, Rcpp::List RJMCpar, int i, int seed = -1)
 {
+
+  // Define a random number generator
+  if (seed > -1) {
+    rng.seed(seed);
+  }
+  double a = uniformContinuousDist(0, 1);
 
   List exposureInfo = model["infoModel"];
   List observationalModel = model["observationalModel"];

@@ -25,7 +25,8 @@ public:
     void updateCholesky(const Eigen::VectorXd& mu, const Eigen::MatrixXd& sigma) {
         mean = mu;
         Eigen::LLT<Eigen::MatrixXd> cholSolver(sigma);
-        L = cholSolver.matrixL();
+        this->L = cholSolver.matrixL();
+        this->sigma = sigma;
     }
     
     /**
@@ -36,21 +37,20 @@ public:
     Eigen::VectorXd sample(int nr_iterations)
     {
         int n = mean.rows();
-        
+        Eigen::VectorXd sum = Eigen::VectorXd::Zero(n);
         // Generate x from the N(0, I) distribution
-        Eigen::VectorXd x(n);
-        Eigen::VectorXd sum(n);
-        sum.setZero();
+        std::uniform_real_distribution<double> unif(0.0, 1.0);
         
-        for (unsigned int i = 0; i < nr_iterations; i++)
-        {
-            x.setRandom();  // Generates random values in the range [-1, 1]
-            x = 0.5 * (x + Eigen::VectorXd::Ones(n)); // Shifts and scales the random values to be in the range [0, 1].
-            sum = sum + x; // Sums the random values
+        for (unsigned int i = 0; i < nr_iterations; i++) {
+            Eigen::VectorXd x(n);
+            for (int j = 0; j < n; j++) {
+                x(j) = unif(rng);
+            }
+            sum += x;
         }
         // Normalise: Shift and scale the sum to have mean 0 and variance 1
         sum = sum - (static_cast<double>(nr_iterations) / 2) * Eigen::VectorXd::Ones(n);
-        x = sum / (std::sqrt(static_cast<double>(nr_iterations) / 12));
+        Eigen::VectorXd normalized = sum / std::sqrt(static_cast<double>(nr_iterations) / 12.0);
     
         
         // Cholesky Decomposition and Eigen Decomposition
@@ -61,7 +61,7 @@ public:
         //Constructs the transformation matrix Q that will be used to scale the random samples.        
         Eigen::MatrixXd Q = eigenvectors * eigenvalues;
         
-        return Q * x + mean;
+        return Q * normalized + mean;
     }
 
     /** 
@@ -72,11 +72,12 @@ public:
     Eigen::VectorXd sample_chol(int nr_iterations)
     {
         int n = mean.rows();
-        
-        // Generate x from the N(0, I) distribution
         Eigen::VectorXd x(n);
+        std::uniform_real_distribution<double> unif(0.0, 1.0);
+
+        // Generate a sample with values in [0, 1], then shift to [-1, 1]
         for (int i = 0; i < n; ++i) {
-            x(i) = static_cast<double>(rand()) / RAND_MAX;
+            x(i) = unif(rng);
         }
         x = (x * 2.0) - Eigen::VectorXd::Ones(n);
                 

@@ -18,19 +18,19 @@ NULL
 #' @return Returns a list with the fist element being the mcmc samples formatting for analysis and plottig with the CODA package. The second is the log posterior value at each time step.
 #'
 #' @export
-rjmc_sero_func <- function(model, data, settings, par = NULL) {
+rjmc_sero_func <- function(model, data, settings, par = NULL, seed = -1) {
   settings <- check_settings_sero(settings)
 
   if (length(par) == 0) {
     par <- rep(list(list(type = "None")), settings[["numberChainRuns"]])
-    output <- get_output_sero(model, data, settings, FALSE, par)
+    output <- get_output_sero(model, data, settings, FALSE, par, seed)
   } else {
-    output <- get_output_sero(model, data, settings, TRUE, par)
+    output <- get_output_sero(model, data, settings, TRUE, par, seed)
   }
   output
 }
 
-get_output_sero <- function(model, data_list, settings, update_ind, par) {
+get_output_sero <- function(model, data_list, settings, update_ind, par, seed = -1) {
 
   outPTpost <- vector(mode = "list", length = settings[["numberChainRuns"]])
   outPTjump <- vector(mode = "list", length = settings[["numberChainRuns"]])
@@ -46,7 +46,7 @@ get_output_sero <- function(model, data_list, settings, update_ind, par) {
   if (settings[["runParallel"]]) {
     out_raw <- mclapply(1:settings[["numberChainRuns"]], 
       function(i) {
-        run_rjmc_sero(model, data_list, settings, update_ind, par[[i]], i)
+        run_rjmc_sero(model, data_list, settings, update_ind, par[[i]], i, seed)
       },
       mc.cores = settings[["numberCores"]]
     )
