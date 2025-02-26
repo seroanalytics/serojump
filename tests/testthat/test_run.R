@@ -1,4 +1,4 @@
-test_that("run_rjmc_sero produces reproducible output", {
+test_that("runSeroJump produces reproducible output", {
 
     seed_i <- 123
     set.seed(seed_i)

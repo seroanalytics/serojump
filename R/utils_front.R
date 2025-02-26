@@ -47,7 +47,7 @@ addPrior <- function(par_name, lb, ub, dist, dist_par1, dist_par2) {
     aschar_dist <- paste0("r", df$dist)
     my_dist_name <- get(aschar_dist)
 
-    if (df$dist != "exp"){
+    if (df$dist == "unif"){
         if (dist_par1 >= dist_par2) {
             stop("Invalid arguments: for a uniform distribution, lower must be less than upper.")
         }
@@ -61,6 +61,54 @@ addPrior <- function(par_name, lb, ub, dist, dist_par1, dist_par2) {
     if (is.nan(temp) | is.na(temp)) {
         stop("Error: cannot sample a random variable, check inputs")
     }
+    return(df)
+}
+
+addPriorHeir <- function(par_name, lb, ub, dist, dist_par1, dist_par2, dist_sd, dist_sd_par1, dist_sd_par2, dim) {
+
+    
+    mean_df <- addPrior(par_name, lb, ub, dist, dist_par1, dist_par2)
+    # Convert the ellipsis arguments to a list
+
+    args_list <- list(par_name, dim, dist_sd, dist_sd_par1, dist_sd_par2)
+    names(args_list) <- c("par_name", "dim", "dist_sd", "dist_sd_par1", "dist_sd_par2")
+    
+    list_par_pool <- list(mode = "list", length = args_list$dim)
+    for (i in 1:args_list$dim) {
+        args_list_temp <- list(par_name = paste0("z_", args_list$par_name, "_", i), lb = -10, ub = 10, dist = "norm",
+            dist_par1 = "0", dist_par2 = "1")
+        list_par_pool[[i]] <- as.data.frame(args_list_temp)
+        list_par_pool[[i]]$part_type <- "hprior"
+    }
+    list_par_reg <- list(paste0("sigma_", args_list$par_name), 0, 5, args_list$dist_sd, args_list$dist_sd_par1, args_list$dist_sd_par2)
+    names(list_par_reg) <-  c("par_name", "lb", "ub", "dist", "dist_par1", "dist_par2")
+    list_par_reg$dist_par1 <- as.character(list_par_reg$dist_par1)
+    list_par_reg$dist_par2 <- as.character(list_par_reg$dist_par2)
+    list_par_reg$part_type <- "hprior"
+
+    df <- mean_df %>% bind_rows(bind_rows(list_par_pool)) %>% bind_rows( as.data.frame(list_par_reg))
+
+    
+    # Check the distribution exists
+    distributions <- ls("package:stats")
+    # Filter for distribution functions
+    distribution_functions <- distributions[grepl("^d", distributions)]
+    if (!paste0("d", list_par_reg$dist) %in% distribution_functions) {
+        stop(paste0("Error: `dist_sd` = ", list_par_reg$dist," does not correspond to a probability density function in the stats package."))
+    }
+
+    aschar_dist <- paste0("r", list_par_reg$dist)
+    my_dist_name <- get(aschar_dist)
+
+    if (list_par_reg$dist != "exp") {
+        temp <- do.call(my_dist_name, list(1, as.numeric(args_list$dist_sd_par1), as.numeric(args_list$dist_sd_par2)) )
+    } else {
+        temp <- do.call(my_dist_name, list(1, as.numeric(args_list$dist_sd_par1)) )
+    }
+    if (is.nan(temp) | is.na(temp)) {
+        stop("Error: cannot sample a random variable, check inputs")
+    }
+
     return(df)
 }
 
@@ -81,52 +129,10 @@ cal_lprior_non_centered <- function(par_tab, params) {
     p
 }
 
-add_par_pool_df <- function(...) {
-    # Convert the ellipsis arguments to a list
-    args_list <- list(...)
-    names(args_list) <- c("par_name", "length", "mean", "dist_name", "dist_sd", "dist_sd_par1", "dist_sd_par2")
-    
-    list_par_pool <- list(mode = "list", length = args_list$length)
-    for (i in 1:args_list$length) {
-        args_list_temp <- list(par_name = paste0(args_list$par_name, "_", i), lb = -5, ub = 5, dist = "norm",
-            dist_par1 = as.character(args_list$mean), dist_par2 = args_list$dist_name)
-        list_par_pool[[i]] <- as.data.frame(args_list_temp)
-        list_par_pool[[i]]$part_type <- "hprior"
-    }
-    list_par_reg <- list(args_list$dist_name, 0, 5, args_list$dist_sd, args_list$dist_sd_par1, args_list$dist_sd_par2)
-    names(list_par_reg) <-  c("par_name", "lb", "ub", "dist", "dist_par1", "dist_par2")
-    list_par_reg$dist_par1 <- as.character(list_par_reg$dist_par1)
-    list_par_reg$dist_par2 <- as.character(list_par_reg$dist_par2)
-    list_par_reg$part_type <- "prior"
-
-    df <- bind_rows(as.data.frame(list_par_reg)) %>% bind_rows(bind_rows(list_par_pool) )
-    return(df)
-}
 
 # Can add heirarchical priors with the functions below 
 # add_par_pool_df_non_centered("boost_naive_pvnt", length = 5, 0, "boost_naive_sigma_pvnt", "exp", 5, NA)
 
-add_par_pool_df_non_centered <- function(...) {
-    # Convert the ellipsis arguments to a list
-    args_list <- list(...)
-    names(args_list) <- c("par_name", "length", "mean", "dist_name", "dist_sd", "dist_sd_par1", "dist_sd_par2")
-    
-    list_par_pool <- list(mode = "list", length = args_list$length)
-    for (i in 1:args_list$length) {
-        args_list_temp <- list(par_name = paste0(args_list$par_name, "_", i), lb = -5, ub = 5, dist = "norm",
-            dist_par1 = as.character(args_list$mean), dist_par2 = "1")
-        list_par_pool[[i]] <- as.data.frame(args_list_temp)
-        list_par_pool[[i]]$part_type <- "hprior"
-    }
-    list_par_reg <- list(args_list$dist_name, 0, 5, args_list$dist_sd, args_list$dist_sd_par1, args_list$dist_sd_par2)
-    names(list_par_reg) <-  c("par_name", "lb", "ub", "dist", "dist_par1", "dist_par2")
-    list_par_reg$dist_par1 <- as.character(list_par_reg$dist_par1)
-    list_par_reg$dist_par2 <- as.character(list_par_reg$dist_par2)
-    list_par_reg$part_type <- "prior"
-
-    df <- bind_rows(as.data.frame(list_par_reg)) %>% bind_rows(bind_rows(list_par_pool) )
-    return(df)
-}
 
 get_sample_non_centered <- function(par_tab, seed = -1) {
     if (seed > -1) {

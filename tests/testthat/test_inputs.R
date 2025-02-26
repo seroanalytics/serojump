@@ -1,4 +1,4 @@
-test_that("Check that data_sero has no single observations", {
+test_that("check_sero_no_single_entries Check that data_sero has no single observations", {
     # these take a while, so don't run on CI
         data_sero <- data.frame(
             id = c(1, 1, 2, 2, 3, 3, 3, 4),
@@ -9,7 +9,7 @@ test_that("Check that data_sero has no single observations", {
     }
 )
 
-test_that("Check that data_sero has no small intervals", {
+test_that("check_sero_timings Check that data_sero has no small intervals", {
     # these take a while, so don't run on CI
         data_sero <- data.frame(
             id = c(1, 1, 2, 2, 3, 3, 3, 4),
@@ -20,7 +20,7 @@ test_that("Check that data_sero has no small intervals", {
     }
 )
 
-test_that("Check that data_sero has no small intervals", {
+test_that("check_exposures_times Check that data_sero has no small intervals", {
     # these take a while, so don't run on CI
         data_sero <- data.frame(
             id = c(1, 1, 2, 2, 3, 3, 3),

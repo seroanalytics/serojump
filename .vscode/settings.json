@@ -87,6 +87,8 @@
         "queue": "cpp",
         "set": "cpp",
         "unordered_set": "cpp",
-        "stdfloat": "cpp"
+        "stdfloat": "cpp",
+        "text_encoding": "cpp",
+        "stack": "cpp"
     }
 }

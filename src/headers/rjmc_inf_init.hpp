@@ -81,6 +81,10 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
     bool isSampleAccepted, isProposalAdaptive;
     double stepSizeRobbinsMonro;
 
+    // heirarchicial things
+    std::vector<bool> isAbHeir;
+    List dataAbHeir, dataAbHeirN,parsAbKinNBase, parsAbKinNHeir;
+
     // Variables to be filled
     int counterFuncEval, counterAccepted, counterPosterior ,counterAdaptive;
     int counterNonAdaptive;
@@ -202,8 +206,37 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
             StringVector temp3 = temp1["pars"];
             string temp4 = temp1["biomarker"];
             string temp5 = temp1["exposureType"];
-            this->mapOfAbkinetics[std::make_pair(temp4, temp5)] = i;
+            StringVector temp6;
+            // heirachy stuff
+            this->isAbHeir.push_back(temp1["heirFlag"]);
 
+            if (temp1["heirFlag"]) {
+                temp6 = temp1["parsHeir"];
+                this->parsAbKinNHeir[temp0] = temp6;
+
+                StringVector temp9 = temp1["parsBase"];
+                this->parsAbKinNBase[temp0] = temp9;
+
+                NumericVector temp7 = temp1["dataHeir"];
+                this->dataAbHeir[temp0] = temp7;
+
+                NumericVector temp10 = temp1["dataHeirN"];
+                this->dataAbHeirN[temp0] = temp10;
+            } else {
+                temp6 = StringVector(0);
+                this->parsAbKinNHeir[temp0] = temp6;
+
+                StringVector temp9 = StringVector(0);
+                this->parsAbKinNBase[temp0] = temp9;
+
+                NumericVector temp7 = NumericVector(0);
+                this->dataAbHeir[temp0] = temp7;
+
+                NumericVector temp10 = NumericVector(0);
+                this->dataAbHeirN[temp0] = temp10;
+            }
+            
+            this->mapOfAbkinetics[std::make_pair(temp4, temp5)] = i;
             this->evalabkineticsFunc[temp0] = temp2;
             this->parsAbKinN[temp0] = temp3;
         }
