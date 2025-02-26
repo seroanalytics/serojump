@@ -520,7 +520,7 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
             functionalForm <- model_outline$abkineticsModel[[name1]]$funcForm
             biomarker <- model_outline$abkineticsModel[[name1]]$biomarker
             exposureType <- model_outline$abkineticsModel[[name1]]$exposureType
-            cat(pars_extract)
+
             compare <- bind_rows(
                 post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame  %>% pivot_longer(everything(), names_to = "param", values_to = "value") %>%
                     mutate(type = "Posterior distribution") %>% filter(param %in% pars_extract)
@@ -533,36 +533,90 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
                 ) %>% unlist
             }
 
-            post_par <- data.frame(post_fit[[pars_extract[1]]])
-            if (length(pars_extract) > 1) {
-                for (i in 2:length(pars_extract)) {
-                    post_par <- cbind(post_par, post_fit[[pars_extract[i]]])
-                }   
+            ## heirarchical effects
+            heirFlag_value <- model_outline$abkineticsModel[[name1]]$heirFlag
+
+            if (!is.null(heirFlag_value) && is.logical(heirFlag_value) && length(heirFlag_value) == 1 && heirFlag_value) {
+                dataHeir <- model_outline$abkineticsModel[[name1]]$dataHeir
+                parsHeir <- model_outline$abkineticsModel[[name1]]$parsHeir
+                parsBase <- model_outline$abkineticsModel[[name1]]$parsBase
+                N <- model_outline$abkineticsModel[[name1]]$dataHeirN
+
+                pars_extract_list <- list()
+                for (j in 1:N) {
+                    pars_names <- c()
+                    for (k in 1:length(parsBase)) {
+                        if (parsBase[[k]] %in% parsHeir) {
+                            pars_names <- c(pars_names, parsBase[[k]], paste0("z_", parsBase[[k]], "_", j), paste0("sigma_", parsBase[[k]]))
+
+                        } else {
+                            pars_names <- c(pars_names, parsBase[[k]])
+                        }
+
+                    }
+                    pars_extract_list[[j]] <- pars_names
+                }
+            } else {
+                pars_extract_list <- list(pars_extract)
             }
 
-            T <- T_max
-            traj_post <- 1:(100) %>% purrr::map_df(
-                ~data.frame(
-                    time = 1:T,
-                    value = ab_function(T, as.numeric(post_par[.x, ]))
-                )
+            map_df(1:length(pars_extract_list), 
+                function(k) { 
+                    # extract all argument values
+                    post_par_list <- list()
+                    post_par <- data.frame(post_fit[[pars_extract_list[[k]][1]]])
+                    if (length(pars_extract_list[[k]]) > 1) {
+                        for (i in 2:length(pars_extract_list[[k]])) {
+                            post_par <- cbind(post_par, post_fit[[pars_extract_list[[k]][i]]])
+                        }   
+                    }
+                    colnames(post_par) <- pars_extract_list[[k]]
+
+                    # adjust for heirarchicial values 
+                    if (!is.null(heirFlag_value) && is.logical(heirFlag_value) && length(heirFlag_value) == 1 && heirFlag_value) {
+                        for (j in 1:length(parsHeir)) {
+                            post_fit <- post_fit %>% mutate(!!str2lang(pars_extract_list[[k]][1]) := !!str2lang(pars_extract_list[[k]][1]) +
+                                !!str2lang(pars_extract_list[[k]][2]) * !!str2lang(pars_extract_list[[k]][3]), .keep =  ) 
+                        }
+                        post_par <- post_fit %>% select(!!parsBase)
+                    }
+
+                    T <- T_max
+                    traj_post <- 1:(100) %>% purrr::map_df(
+                        ~data.frame(
+                            time = 1:T,
+                            value = ab_function(T, as.numeric(post_par[.x, ]))
+                        )
+                    )
+                    traj_post_summ <- traj_post %>% group_by(time) %>% mean_qi() %>% mutate(exposure_type = exposureType) %>% 
+                        mutate(biomarker = biomarker, covar = k)
+                        
+                }
             )
-            traj_post_summ <- traj_post %>% group_by(time) %>% mean_qi() %>% mutate(exposure_type = exposureType) %>% 
-                mutate(biomarker = biomarker)
         }
     )
 
     saveRDS(list(posteriorsAllExposure), here::here(file_path, "plt_data", "ab_kinetics_recov.RDS"))
 
+    if (max(posteriorsAllExposure$covar) == 1) {
+        p1 <- posteriorsAllExposure %>%  
+            ggplot() + 
+            geom_ribbon(aes(ymin = .lower, ymax = .upper, x = time, fill = exposure_type), size = 3, alpha = 0.3) + 
+            geom_line(aes(y = value, x = time, color = exposure_type), size = 2) + 
+            theme_bw() + labs(x = "Time post-infection/since bleed, s", y = "Titre change", color = "type", fill = "type") + 
+            ggtitle("Antibody kinetic trajectories") +
+            facet_wrap(vars(biomarker))
+    } else {
+        p1 <- posteriorsAllExposure %>%  
+            ggplot() + 
+            geom_ribbon(aes(ymin = .lower, ymax = .upper, x = time, fill = paste(exposure_type, as.character(covar), sep = "_")), size = 3, alpha = 0.3) + 
+            geom_line(aes(y = value, x = time, color =  paste(exposure_type, as.character(covar), sep = "_")), size = 2) + 
+            theme_bw() + labs(x = "Time post-infection/since bleed, s", y = "Titre change", color = "type", fill = "type") + 
+            ggtitle("Antibody kinetic trajectories") +
+            facet_wrap(vars(biomarker))
+    }
 
-    p1 <- posteriorsAllExposure %>%  
-        ggplot() + 
-        geom_ribbon(aes(ymin = .lower, ymax = .upper, x = time, fill = exposure_type), size = 3, alpha = 0.3) + 
-        geom_line(aes(y = value, x = time, color = exposure_type), size = 2) + 
-        theme_bw() + labs(x = expression("Time post-infection/since bleed, s", y = "Titre change, f"[ab])) + 
-        ggtitle("Antibody kinetic trajectories") +
-        facet_wrap(vars(biomarker))
-
+    p1
     ggsave(here::here(file_path, "ab_kinetics_trajectories.png"), height = 10, width = 10)
 
 }
