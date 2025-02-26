@@ -166,7 +166,6 @@ private:
                 }
             } else {
                 // Extract the titre values for the individual across all their event times
-                //List titre_list_i = parent->titre_list[i_idx];
                 std::vector<std::vector<DoubleWithString> > proposalTitreFull_i = parent->proposalTitreFull[i_idx]; 
                 // For all biomarkers, extract the titre value for the individual at the new exposure time
                 for (int bio = 0; bio < parent->B; bio++) {

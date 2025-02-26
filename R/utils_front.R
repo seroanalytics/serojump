@@ -64,6 +64,26 @@ addPrior <- function(par_name, lb, ub, dist, dist_par1, dist_par2) {
     return(df)
 }
 
+#' @title addPrior
+#' @description This function adds information about the prior distributions of the parameter in the serojump model. It takes a list of the form: 
+#' - par_name: The name of the parameter as as string.
+#' - lb: The numerical lower bound of the parameter.
+#' - ub: The numerical upper bound of the parameter.
+#' - dist: The distribution describing the prior distribution from standard R disributions (e.g. unif, norm)
+#' - dist_par1: The first argument of the prior distribution, 
+#' - dist_par2: The second argument of the prior distribution, (NA if only one parameter is taken like in exp)
+#' @param par_name The name of the parameter as as string.
+#' @param lb The numerical lower bound of the parameter.
+#' @param ub The numerical upper bound of the parameter.
+#' @param dist The name of the parameter as as string.
+#' @param dist_par1  The first argument of the prior distribution, 
+#' @param dist_par2 The second argument of the prior distribution, (NA if only one parameter is taken like in exp)
+#' @param dist_sd The name of the parameter as as string.
+#' @param dist_sd_par1  The first argument of the prior distribution,
+#' @param dist_sd_par2 The second argument of the prior distribution, (NA if only one parameter is taken like in exp)
+#' @param dim The number of parameters in the hierarchical prior
+#' @return a data.frame of the prior information
+#' @export
 addPriorHier <- function(par_name, lb, ub, dist, dist_par1, dist_par2, dist_sd, dist_sd_par1, dist_sd_par2, dim) {
 
     
