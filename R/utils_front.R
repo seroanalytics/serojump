@@ -64,7 +64,7 @@ addPrior <- function(par_name, lb, ub, dist, dist_par1, dist_par2) {
     return(df)
 }
 
-addPriorHeir <- function(par_name, lb, ub, dist, dist_par1, dist_par2, dist_sd, dist_sd_par1, dist_sd_par2, dim) {
+addPriorHier <- function(par_name, lb, ub, dist, dist_par1, dist_par2, dist_sd, dist_sd_par1, dist_sd_par2, dim) {
 
     
     mean_df <- addPrior(par_name, lb, ub, dist, dist_par1, dist_par2)
@@ -130,7 +130,7 @@ cal_lprior_non_centered <- function(par_tab, params) {
 }
 
 
-# Can add heirarchical priors with the functions below 
+# Can add hierarchical priors with the functions below 
 # add_par_pool_df_non_centered("boost_naive_pvnt", length = 5, 0, "boost_naive_sigma_pvnt", "exp", 5, NA)
 
 

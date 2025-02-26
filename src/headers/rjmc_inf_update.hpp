@@ -345,8 +345,8 @@ private:
         return value;
     }
 
-    double getArgumentValuesHeir(NumericVector pars_base, StringVector params, string param_name, NumericVector dataHeir, int M, int i_idx) {
-        int cov_i = dataHeir[i_idx];
+    double getArgumentValuesHier(NumericVector pars_base, StringVector params, string param_name, NumericVector dataHier, int M, int i_idx) {
+        int cov_i = dataHier[i_idx];
 
        // Rcpp::Rcout << "cov_i: " << cov_i << std::endl;
         //Rcpp::Rcout << "i_idx: " << i_idx << std::endl;
@@ -378,19 +378,19 @@ private:
         return argument;
     }
 
-    NumericVector extractHeirPars(NumericVector pars_base, string abID_i, int i_idx) {
-        NumericVector dataHeir = parent->dataAbHeir[abID_i];  // heirarchical data
-        int M = parent->dataAbHeirN[abID_i];
+    NumericVector extractHierPars(NumericVector pars_base, string abID_i, int i_idx) {
+        NumericVector dataHier = parent->dataAbHier[abID_i];  // hierarchical data
+        int M = parent->dataAbHierN[abID_i];
         // name of all the parameters
         StringVector params = parent->parsAbKinN[abID_i]; // all the parameter names
         StringVector params_base = parent->parsAbKinNBase[abID_i]; // all the argument parameter names
-        StringVector params_heir = parent->parsAbKinNHeir[abID_i]; // all the heirarchical parameter names
+        StringVector params_hier = parent->parsAbKinNHier[abID_i]; // all the Hierarchical parameter names
         NumericVector arguments;
 
         for (int i = 0; i < params_base.size(); i++) {
             std::string param_name_A = Rcpp::as<std::string>(params_base[i]);
-            if (std::find(params_heir.begin(), params_heir.end(), param_name_A) != params_heir.end()) {
-                double argumentvalue = getArgumentValuesHeir(pars_base, params, param_name_A, dataHeir, M, i_idx);
+            if (std::find(params_hier.begin(), params_hier.end(), param_name_A) != params_hier.end()) {
+                double argumentvalue = getArgumentValuesHier(pars_base, params, param_name_A, dataHier, M, i_idx);
                 arguments.push_back(argumentvalue);
             } else {
                 //Rcpp::Rcout << "In not here: " << std::endl;
@@ -420,19 +420,15 @@ private:
         string abID_i = parent->abID[abkey] ;
         if (parent->onDebug) Rcpp::Rcout << "In: calTitre3" << std::endl;
      
-        // VectorXd pars_base = parent->abinfo[abkey].params;
-        // VectorXd pars_effects = parent->abinfoheir[abkey].params;
-        // findHeirParameters(pars_base, pars_effects);
         // 
-        if (!parent->isAbHeir[abkey]) { 
+        if (!parent->isAbHier[abkey]) { 
             NumericVector pars_base = parent->abinfo[abkey].params; // the base parameter VALUES
             titre_est = Rcpp::as<double>(parent->abinfo[abkey].func(titre_est, timeSince, pars_base));
         } else {
 
             NumericVector pars_base = parent->abinfo[abkey].params; // base parameters ALL VALUES
-            NumericVector pars_extracted_heir = extractHeirPars(pars_base, abID_i, i_idx);
-            //Rcpp::Rcout <<  "pars_extracted_heir: " << pars_extracted_heir << std::endl;
-            titre_est = Rcpp::as<double>(parent->abinfo[abkey].func(titre_est, timeSince, pars_extracted_heir));
+            NumericVector pars_extracted_hier = extractHierPars(pars_base, abID_i, i_idx);
+            titre_est = Rcpp::as<double>(parent->abinfo[abkey].func(titre_est, timeSince, pars_extracted_hier));
             //Rcpp::Rcout << "titre_est_end: " << titre_est << std::endl;
 
         }
@@ -442,9 +438,7 @@ private:
         if (parent->onDebug) Rcpp::Rcout << "Out: calTitre4" << std::endl;
         return titre_est;
     }
-  //        NumericVector findHeirParameters(NumericVecto pars_base, NumericVector, dataHeir) {
 
-   //     }
 
     // A shared pointer to the SeroJumpBase object
     std::shared_ptr<SeroJumpBase> parent;

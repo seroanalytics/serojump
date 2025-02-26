@@ -5,60 +5,60 @@ correctFunc <- function(titre, time, pars) {
 
 test_that("errors when any argument is NULL", {
   expect_error(
-    addAbkineticsModelHeir(NULL, "bio", "exp", c("a", "b"), c("a"), 1:10, correctFunc),
-    "One or more arguments of `addAbkineticsModelHeir` are NULL."
+    addAbkineticsModelHier(NULL, "bio", "exp", c("a", "b"), c("a"), 1:10, correctFunc),
+    "One or more arguments of `addAbkineticsModelHier` are NULL."
   )
 })
 
-test_that("errors if parsHeir is not a subset of pars", {
+test_that("errors if dataHier is not a subset of pars", {
   expect_error(
-    addAbkineticsModelHeir("id", "bio", "exp", c("a", "b"), c("a", "c", "d"), 1:10, correctFunc),
-    "All elements of parsHeir must be a subset of pars."
+    addAbkineticsModelHier("id", "bio", "exp", c("a", "b"), c("a", "c", "d"), 1:10, correctFunc),
+    "All elements of parsHier must be a subset of pars."
   )
 })
 
-test_that("errors if dataHeir is not a numeric vector", {
+test_that("errors if dataHier is not a numeric vector", {
   expect_error(
-    addAbkineticsModelHeir("id", "bio", "exp", c("a", "b"), c("a"), letters[1:10], correctFunc),
-    "dataHeir must be a numeric vector."
+    addAbkineticsModelHier("id", "bio", "exp", c("a", "b"), c("a"), letters[1:10], correctFunc),
+    "dataHier must be a numeric vector."
   )
 })
 
 test_that("errors if funcForm is not a function", {
   expect_error(
-    addAbkineticsModelHeir("id", "bio", "exp", c("a", "b"), c("a"), 1:10, "not a function"),
+    addAbkineticsModelHier("id", "bio", "exp", c("a", "b"), c("a"), 1:10, "not a function"),
     "funcForm must be a function."
   )
 })
 
 
 test_that("returns a proper list when all conditions are met", {
-  result <- addAbkineticsModelHeir("id", "bio", "exp", c("a", "b"), c("a"), c(rep(1, 5), rep(2, 5)), correctFunc)
+  result <- addAbkineticsModelHier("id", "bio", "exp", c("a", "b"), c("a"), c(rep(1, 5), rep(2, 5)), correctFunc)
   
   expect_type(result, "list")
   expect_equal(result$id, "id")
   expect_equal(result$biomarker, "bio")
   expect_equal(result$exposureType, "exp")
   expect_equal(result$pars, c("a", "z_a_1", "z_a_2", "sigma_a", "b"))
-  expect_equal(result$parsHeir, c("a"))
-  expect_equal(result$dataHeir, c(rep(1, 5), rep(2, 5)))
+  expect_equal(result$parsHier, c("a"))
+  expect_equal(result$dataHier, c(rep(1, 5), rep(2, 5)))
   expect_equal(result$funcForm, correctFunc)
 })
 
 test_that("returns a proper list when all conditions are met", {
-  result <- addAbkineticsModelHeir("id", "bio", "exp", c("a", "b"), c("a", "b"), c(rep(1, 5), rep(2, 5)), correctFunc)
+  result <- addAbkineticsModelHier("id", "bio", "exp", c("a", "b"), c("a", "b"), c(rep(1, 5), rep(2, 5)), correctFunc)
   
   expect_type(result, "list")
   expect_equal(result$id, "id")
   expect_equal(result$biomarker, "bio")
   expect_equal(result$exposureType, "exp")
   expect_equal(result$pars, c("a", "z_a_1", "z_a_2", "sigma_a", "b", "z_b_1", "z_b_2", "sigma_b"))
-  expect_equal(result$parsHeir, c("a", "b"))
-  expect_equal(result$dataHeir, c(rep(1, 5), rep(2, 5)))
+  expect_equal(result$parsHier, c("a", "b"))
+  expect_equal(result$dataHier, c(rep(1, 5), rep(2, 5)))
   expect_equal(result$funcForm, correctFunc)
 })
 
-test_that("runSeroJump produces reproducible output with heirarchical effects", {
+test_that("runSeroJump produces reproducible output with hierarchical effects", {
 
     seed_i <- 123
     set.seed(seed_i)
@@ -108,11 +108,11 @@ test_that("runSeroJump produces reproducible output with heirarchical effects", 
     abkineticsModel <- list(
         model = makeModel(
                 addAbkineticsModel("none", "sVNT", "none",  c("wane"), noInfSerumKinetics),
-                addAbkineticsModelHeir("inf", "sVNT", "inf", c("a"),  "a", as.numeric(covar_key), infSerumKinetics)
+                addAbkineticsModelHier("inf", "sVNT", "inf", c("a"),  "a", as.numeric(covar_key), infSerumKinetics)
             ),
         prior = bind_rows(
             addPrior("wane", 0.0, 0.01, "unif", 0.0, 0.01), # observational model
-            addPriorHeir("a", 0.0, 6, "unif", 0.0, 6, "exp", 1, NA, 2) # ab kinetics
+            addPriorHier("a", 0.0, 6, "unif", 0.0, 6, "exp", 1, NA, 2) # ab kinetics
         )
     )
 

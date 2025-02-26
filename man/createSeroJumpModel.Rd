@@ -15,7 +15,8 @@ createSeroJumpModel(
   exposurePriorTime = NULL,
   exposurePriorTimeType = NULL,
   exposurePriorPop = NULL,
-  known_exp_bool = NULL
+  known_exp_bool = NULL,
+  seed = -1
 )
 }
 \arguments{

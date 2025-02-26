@@ -93,7 +93,7 @@ calcScaleModelIndicator <- function(model_summary) {
 
     C <- length(fit$post$jump)
     dims <- dim(fit$post$jump[[1]])
-    cat(str(fit$post$jump[[1]]))
+
     M <- dims[1]
     N <- dims[2]
 

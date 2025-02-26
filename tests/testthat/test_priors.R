@@ -24,9 +24,9 @@ test_that("addPrior Check that addPrior can't sample from a poorly defined argum
 )
 
 
-test_that("addPriorHeir Check that addPrior makes correct dataframe", {
+test_that("addPriorHier Check that addPrior makes correct dataframe", {
 
-        expect_equivalent(addPriorHeir("alpha", 0, 1, "unif", 1, 5, "exp", 1, NA, 2),
+        expect_equivalent(addPriorHier("alpha", 0, 1, "unif", 1, 5, "exp", 1, NA, 2),
     
             bind_rows(
                 data.frame(par_name = "alpha", lb = 0, ub = 1, dist = "unif", dist_par1 = "1", dist_par2 = "5", part_type = "prior"),
@@ -38,9 +38,9 @@ test_that("addPriorHeir Check that addPrior makes correct dataframe", {
     }
 )
 
-test_that("addPriorHeir Check that addPrior fails distribtion is unkown", {
+test_that("addPriorHier Check that addPrior fails distribtion is unkown", {
 
-        expect_error(addPriorHeir("alpha", 0, 1, "unif", 1, 5, "XX", 1, NA, 2), 
+        expect_error(addPriorHier("alpha", 0, 1, "unif", 1, 5, "XX", 1, NA, 2), 
             "Error: `dist_sd` = XX does not correspond to a probability density function in the stats package.")
     }
 )

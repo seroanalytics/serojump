@@ -533,20 +533,20 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
                 ) %>% unlist
             }
 
-            ## heirarchical effects
-            heirFlag_value <- model_outline$abkineticsModel[[name1]]$heirFlag
+            ## hierarchical effects
+            hierFlag_value <- model_outline$abkineticsModel[[name1]]$hierFlag
 
-            if (!is.null(heirFlag_value) && is.logical(heirFlag_value) && length(heirFlag_value) == 1 && heirFlag_value) {
-                dataHeir <- model_outline$abkineticsModel[[name1]]$dataHeir
-                parsHeir <- model_outline$abkineticsModel[[name1]]$parsHeir
+            if (!is.null(hierFlag_value) && is.logical(hierFlag_value) && length(hierFlag_value) == 1 && hierFlag_value) {
+                dataHier <- model_outline$abkineticsModel[[name1]]$dataHier
+                parsHier <- model_outline$abkineticsModel[[name1]]$parsHier
                 parsBase <- model_outline$abkineticsModel[[name1]]$parsBase
-                N <- model_outline$abkineticsModel[[name1]]$dataHeirN
+                N <- model_outline$abkineticsModel[[name1]]$dataHierN
 
                 pars_extract_list <- list()
                 for (j in 1:N) {
                     pars_names <- c()
                     for (k in 1:length(parsBase)) {
-                        if (parsBase[[k]] %in% parsHeir) {
+                        if (parsBase[[k]] %in% parsHier) {
                             pars_names <- c(pars_names, parsBase[[k]], paste0("z_", parsBase[[k]], "_", j), paste0("sigma_", parsBase[[k]]))
 
                         } else {
@@ -572,9 +572,9 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
                     }
                     colnames(post_par) <- pars_extract_list[[k]]
 
-                    # adjust for heirarchicial values 
-                    if (!is.null(heirFlag_value) && is.logical(heirFlag_value) && length(heirFlag_value) == 1 && heirFlag_value) {
-                        for (j in 1:length(parsHeir)) {
+                    # adjust for hierarchicial values 
+                    if (!is.null(hierFlag_value) && is.logical(hierFlag_value) && length(hierFlag_value) == 1 && hierFlag_value) {
+                        for (j in 1:length(parsHier)) {
                             post_fit <- post_fit %>% mutate(!!str2lang(pars_extract_list[[k]][1]) := !!str2lang(pars_extract_list[[k]][1]) +
                                 !!str2lang(pars_extract_list[[k]][2]) * !!str2lang(pars_extract_list[[k]][3]), .keep =  ) 
                         }

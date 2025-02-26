@@ -35,35 +35,35 @@ addAbkineticsModel <- function(id, biomarker, exposureType, pars, funcForm) {
         exposureType = exposureType,
         pars = pars,
         funcForm = funcForm,
-        heirFlag = FALSE
+        hierFlag = FALSE
     )
 }
 
-#' @title addAbkineticsModelHeir
+#' @title addAbkineticsModelHier
 #' @description This function adds an antibody kinetics model to the model definition.
 #' @param id The name of the biomarker.
 #' @param biomarker The name of the biomarker.
 #' @param exposureType The name of the exposure type.
 #' @param pars The parameters of the model.
-#' @param parsHeir The parameters of the heirarchical model.
-#' @param dataHeir The data for the heirarchical model.
+#' @param parsHier The parameters of the Hierarchical model.
+#' @param dataHier The data for the Hierarchical model.
 #' @param funcForm The antibody kinetics function.
 #' @return A list with the biomarker name, the exposure name, whether the exposure is inferred, the parameters and the antibody kinetics function.
 #' @export
-addAbkineticsModelHeir <- function(id, biomarker, exposureType, pars, parsHeir, dataHeir, funcForm) {
+addAbkineticsModelHier <- function(id, biomarker, exposureType, pars, parsHier, dataHier, funcForm) {
     if (is.null(id) || is.null(biomarker) || is.null(exposureType) || 
-        is.null(pars) || is.null(parsHeir) || is.null(dataHeir) || is.null(funcForm)) {
-        stop("One or more arguments of `addAbkineticsModelHeir` are NULL.")
+        is.null(pars) || is.null(parsHier) || is.null(dataHier) || is.null(funcForm)) {
+        stop("One or more arguments of `addAbkineticsModelHier` are NULL.")
     }
     
-    # Check that elements of parsHeir are a subset of pars
-    if (!all(parsHeir %in% pars)) {
-        stop("All elements of parsHeir must be a subset of pars.")
+    # Check that elements of parsHier are a subset of pars
+    if (!all(parsHier %in% pars)) {
+        stop("All elements of parsHier must be a subset of pars.")
     }
     
-    # Check that dataHeir is a numeric vector
-    if (!is.numeric(dataHeir) || !is.vector(dataHeir)) {
-        stop("dataHeir must be a numeric vector.")
+    # Check that dataHier is a numeric vector
+    if (!is.numeric(dataHier) || !is.vector(dataHier)) {
+        stop("dataHier must be a numeric vector.")
     }
     
     # Check that funcForm is a function and its formals are (titre, time, pars)
@@ -71,16 +71,16 @@ addAbkineticsModelHeir <- function(id, biomarker, exposureType, pars, parsHeir, 
         stop("funcForm must be a function.")
     }
 
-    M <- length(unique(dataHeir))
+    M <- length(unique(dataHier))
     add_pars <- c()
     k <- 1
     for (j in 1:length(pars)) {
         add_pars <- c(add_pars, pars[j])
-        if (pars[j] %in% parsHeir) {
+        if (pars[j] %in% parsHier) {
             for (i in 1:M) {
-                add_pars <- c(add_pars, paste0("z_" , parsHeir[k], "_", i))
+                add_pars <- c(add_pars, paste0("z_" , parsHier[k], "_", i))
             }
-            add_pars <- c(add_pars, paste0("sigma_", parsHeir[k]))
+            add_pars <- c(add_pars, paste0("sigma_", parsHier[k]))
             k <- k + 1
         }
     }
@@ -93,11 +93,11 @@ addAbkineticsModelHeir <- function(id, biomarker, exposureType, pars, parsHeir, 
         exposureType = exposureType,
         pars = add_pars,
         parsBase = pars,
-        parsHeir = parsHeir,
-        dataHeir = dataHeir,
-        dataHeirN = M,
+        parsHier = parsHier,
+        dataHier = dataHier,
+        dataHierN = M,
         funcForm = funcForm,
-        heirFlag = TRUE
+        hierFlag = TRUE
     )
 }
 

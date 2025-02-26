@@ -81,9 +81,9 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
     bool isSampleAccepted, isProposalAdaptive;
     double stepSizeRobbinsMonro;
 
-    // heirarchicial things
-    std::vector<bool> isAbHeir;
-    List dataAbHeir, dataAbHeirN,parsAbKinNBase, parsAbKinNHeir;
+    // hierarchicial things
+    std::vector<bool> isAbHier;
+    List dataAbHier, dataAbHierN,parsAbKinNBase, parsAbKinNHier;
 
     // Variables to be filled
     int counterFuncEval, counterAccepted, counterPosterior ,counterAdaptive;
@@ -207,33 +207,33 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
             string temp4 = temp1["biomarker"];
             string temp5 = temp1["exposureType"];
             StringVector temp6;
-            // heirachy stuff
-            this->isAbHeir.push_back(temp1["heirFlag"]);
+            // hierachy stuff
+            this->isAbHier.push_back(temp1["hierFlag"]);
 
-            if (temp1["heirFlag"]) {
-                temp6 = temp1["parsHeir"];
-                this->parsAbKinNHeir[temp0] = temp6;
+            if (temp1["hierFlag"]) {
+                temp6 = temp1["parsHier"];
+                this->parsAbKinNHier[temp0] = temp6;
 
                 StringVector temp9 = temp1["parsBase"];
                 this->parsAbKinNBase[temp0] = temp9;
 
-                NumericVector temp7 = temp1["dataHeir"];
-                this->dataAbHeir[temp0] = temp7;
+                NumericVector temp7 = temp1["dataHier"];
+                this->dataAbHier[temp0] = temp7;
 
-                NumericVector temp10 = temp1["dataHeirN"];
-                this->dataAbHeirN[temp0] = temp10;
+                NumericVector temp10 = temp1["dataHierN"];
+                this->dataAbHierN[temp0] = temp10;
             } else {
                 temp6 = StringVector(0);
-                this->parsAbKinNHeir[temp0] = temp6;
+                this->parsAbKinNHier[temp0] = temp6;
 
                 StringVector temp9 = StringVector(0);
                 this->parsAbKinNBase[temp0] = temp9;
 
                 NumericVector temp7 = NumericVector(0);
-                this->dataAbHeir[temp0] = temp7;
+                this->dataAbHier[temp0] = temp7;
 
                 NumericVector temp10 = NumericVector(0);
-                this->dataAbHeirN[temp0] = temp10;
+                this->dataAbHierN[temp0] = temp10;
             }
             
             this->mapOfAbkinetics[std::make_pair(temp4, temp5)] = i;
