@@ -318,6 +318,7 @@ calculate_reference_titre_full <- function(model_summary) {
 
 }
 
+#' @export
 calculate_reference_titre_expectation <- function(model_summary) {
     
     fitfull <- model_summary$fit    
