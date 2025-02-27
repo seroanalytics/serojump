@@ -291,8 +291,6 @@ plot_inf_rec <- function(model_summary, file_path) {
 
 calculate_reference_titre_full <- function(model_summary) {
     
-    model_summary <- model_summary_i
-
     fitfull <- model_summary$fit    
     outputfull <- model_summary$post
 
