@@ -582,7 +582,7 @@ p4A <- df_post %>% group_by(name, type, uncert) %>% summarise(mean = mean(value)
     ggplot() + 
         geom_line(aes(x = name, y = mean, color = uncert, group = uncert), size = 1.8, alpha = 0.6) + theme_bw() +
         geom_line(data = data_plot, aes(x = name, y = obs_cop), color = "red", linetype = "dashed", size = 2, alpha = 0.7) +
-        labs(y = "Protection probability (COP)", x = "Titre value at exposure (log)", 
+        labs(y = "Protection probability", x = "Titre value at exposure (log)", 
         color = "Uncertainty") + 
         scale_x_continuous(breaks = seq(0, 5, 0.5)) + ylim(0, 1) + ggtitle("Simulated data with COP")
 
@@ -592,7 +592,7 @@ p4B <- df_post %>% group_by(name, type, uncert) %>% summarise(mean = mean(value)
     ggplot() + 
         geom_line(aes(x = name, y = mean, color = uncert, group = uncert), size = 1.8, alpha = 0.6) + theme_bw() +
         geom_line(data = data_plot, aes(x = name, y = obs_no_cop), color = "red", linetype = "dashed", size = 2, alpha = 0.7) +
-        labs(y = "Protection probability (COP)", x = "Titre value at exposure (log)", 
+        labs(y = "Protection probability", x = "Titre value at exposure (log)", 
         color = "Uncertainty") + 
         scale_x_continuous(breaks = seq(0, 5, 0.5)) + ylim(0, 1) + ggtitle("Simulated data without COP")
 

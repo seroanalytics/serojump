@@ -2,13 +2,14 @@
 generate_convergence_plot <- function(model_summary, title_i) {
     df_smi_df <- calcScaleModelIndicator(model_summary)
 
+    df_smi_df <- df_smi_df %>% filter(.chain != 4)
 
     fit <- model_summary$fit
-    p1 <- (fit$post$mcmc  %>% bayesplot::mcmc_trace()) + theme_minimal() + theme(legend.position = "top") + ggtitle("A. Trace plots for fitted parameters")
-    p2 <- fit$post$lpost %>% ggplot() + geom_line(aes(x = sample_no, y = lpost, color = chain_no))  + theme_minimal() + theme(legend.position = "top")  + ggtitle("B. Trace plots for log posterior") + 
+    p1 <- (fit$post$mcmc[1:3]  %>% bayesplot::mcmc_trace()) + theme_minimal() + theme(legend.position = "top") + ggtitle("A. Trace plots for fitted parameters")
+    p2 <- fit$post$lpost %>% filter(chain_no !=4) %>% ggplot() + geom_line(aes(x = sample_no, y = lpost, color = chain_no))  + theme_minimal() + theme(legend.position = "top")  + ggtitle("B. Trace plots for log posterior") + 
         labs(x = "Sample number", y = "Log-posterior")
 
-    p3 <- df_conver_stat <- summarise_draws(fit$post$mcmc ) %>% select(variable, rhat, ess_bulk, ess_tail) %>% 
+    p3 <- df_conver_stat <- summarise_draws(fit$post$mcmc[1:3]  ) %>% select(variable, rhat, ess_bulk, ess_tail) %>% 
         pivot_longer(!variable, names_to = "stat", values_to = "value") %>%
         ggplot() + 
             geom_col(aes(y = variable, x = value)) +
@@ -70,7 +71,7 @@ plot_Rhat_time_alt <- function(model_summary, title_i) {
     model_outline <- model_summary$fit$model
     bio_all <- model_outline$infoModel$biomarkers
 
-    fit_states_dt <- as.data.table(outputfull$fit_states)
+    fit_states_dt <- as.data.table(outputfull$fit_states) %>% filter(chain_no != 4)
     S <- fit_states_dt %>% filter(id == 1) %>% nrow
 
     ids <- fit_states_dt %>% group_by(id) %>% summarise(prob = sum(inf_ind) / S) %>% filter(prob > 0.5) %>% pull(id) %>% unique
@@ -113,30 +114,11 @@ plot_Rhat_time_alt <- function(model_summary, title_i) {
 
 }
 
-# CASE STUDY 1: COP
-model_summary <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0("cop", "_", "0.1"), "model_summary.RDS"))
-p1 <- generate_convergence_plot(model_summary, "SIMULATED DATA WITH COP AND 0.1 UNCERTAINTTY IN OBSERVATIONAL ERROR")
-ggsave(here::here("outputs", "figs", "supp", "conv", "cop_0.1_full.png"), height = 12, width = 15)
-p2 <- plot_Rhat_time_alt(model_summary, "SIMULATED DATA WITH COP AND 0.1 UNCERTAINTTY IN OBSERVATIONAL ERROR")
-ggsave(here::here("outputs", "figs", "supp", "conv", "cop_0.1_time.png"), height = 12, width = 15)
 
-# CASE STUDY 1: NO COP
-model_summary <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0("no_cop", "_", "0.1"), "model_summary.RDS"))
-p1 <- generate_convergence_plot(model_summary, "SIMULATED DATA NO COP AND 0.1 UNCERTAINTTY IN OBSERVATIONAL ERROR")
-ggsave(here::here("outputs", "figs", "supp", "conv", "no_cop_0.1_full.png"), height = 12, width = 15)
-p2 <- plot_Rhat_time_alt(model_summary, "SIMULATED DATA NO COP AND 0.1 UNCERTAINTTY IN OBSERVATIONAL ERROR")
-ggsave(here::here("outputs", "figs", "supp", "conv", "no_cop_0.1_time.png"), height = 12, width = 15)
 
 # CASE STUDY 2: TRANSVIR, NO PCR
 model_summary <-  readRDS(here::here("outputs", "fits", "transvir_data", "wave2_no_pcr", "model_summary.RDS"))
 p1 <- generate_convergence_plot(model_summary, "EMPIRICAL DATA WITH NO PCR")
 ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_no_pcr_full.png"), height = 20)
 p2 <- plot_Rhat_time_alt(model_summary,  "EMPIRICAL DATA WITH NO PCR")
-ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_no_pcr_time.png"))
-
-# CASE STUDY 2: TRANSVIR, PCR
-model_summary <-  readRDS(here::here("outputs", "fits", "transvir_data", "wave2_base", "model_summary.RDS"))
-p1 <- generate_convergence_plot(model_summary, "EMPIRICAL DATA WITH PCR")
-ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_pcr_full.png"), height = 20)
-p2 <- plot_Rhat_time_alt(model_summary,  "EMPIRICAL DATA WITH PCR")
-ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_pcr_time.png"))
+ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_no_pcr_time.png"), height = 20)
