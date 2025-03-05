@@ -102,6 +102,12 @@ addAbkineticsModelHier <- function(id, biomarker, exposureType, pars, parsHier, 
 }
 
 
+# testing hierarchical model
+logit_inverse <- function(x) {
+    exp(x) / (1 + exp(x))
+}
+
+
 #' @title addCopModel
 #' @description This function adds a cop model to the model definition.
 #' @param biomarker The name of the biomarker.

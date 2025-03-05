@@ -345,6 +345,15 @@ private:
         return value;
     }
 
+    int find_index( std::string target) {
+        for (int i = 0; i < parent->fittedParamNames.size(); i++) {
+            if (parent->fittedParamNames[i] == target) {
+                return i;  // Convert to 1-based index for R
+            }
+        }
+        return -1;  // Return -1 if not found
+    }
+
     double getArgumentValuesHier(NumericVector pars_base, StringVector params, string param_name, NumericVector dataHier, int M, int i_idx) {
         int cov_i = dataHier[i_idx];
 
@@ -372,7 +381,11 @@ private:
         c[2] = get_value_par(pars_base, params, stringname);
         //Rcpp::Rcout << "stringname C : " << stringname << std::endl;
 
-        double argument = c[0] + c[1] * c[2];
+
+        int heir_idx = find_index(param_name);
+     //   Rcpp::Rcout <<  parent->upperParBounds(heir_idx) -  parent->lowerParBounds(heir_idx) << std::endl;
+
+        double argument = logit_inverse(c[0] + c[1] * c[2]) * ( parent->upperParBounds(heir_idx) -  parent->lowerParBounds(heir_idx)) + parent->lowerParBounds(heir_idx);
         //Rcpp::Rcout << "argument: " << i_idx << std::endl;
 
         return argument;

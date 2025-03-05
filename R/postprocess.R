@@ -490,6 +490,8 @@ plot_titre_obs <- function(model_summary, file_path) {
 
 plot_abkinetics_trajectories <- function(model_summary, file_path) {
 
+    #model_summary <- output_1
+
     fitfull <- model_summary$fit    
     outputfull <- model_summary$post
 
@@ -513,6 +515,7 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
 
     posteriorsAllExposure <- map_df(1:length(model_outline$abkineticsModel),
         function(name1) {
+        #    name1 <- 2
             pars_extract <- model_outline$abkineticsModel[[name1]]$pars
             functionalForm <- model_outline$abkineticsModel[[name1]]$funcForm
             biomarker <- model_outline$abkineticsModel[[name1]]$biomarker
@@ -559,6 +562,7 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
 
             map_df(1:length(pars_extract_list), 
                 function(k) { 
+                 #   k <- 2
                     # extract all argument values
                     post_par_list <- list()
                     post_par <- data.frame(post_fit[[pars_extract_list[[k]][1]]])
@@ -572,10 +576,13 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
                     # adjust for hierarchicial values 
                     if (!is.null(hierFlag_value) && is.logical(hierFlag_value) && length(hierFlag_value) == 1 && hierFlag_value) {
                         for (j in 1:length(parsHier)) {
-                            post_fit <- post_fit %>% mutate(!!str2lang(pars_extract_list[[k]][1]) := !!str2lang(pars_extract_list[[k]][1]) +
-                                !!str2lang(pars_extract_list[[k]][2]) * !!str2lang(pars_extract_list[[k]][3]), .keep =  ) 
+                            upper <- model_summary$fit$model$upperParSupport_fitted[which(model_summary$fit$model$namesOfParameters == parsHier[j])]
+                            lower <- model_summary$fit$model$lowerParSupport_fitted[which(model_summary$fit$model$namesOfParameters == parsHier[j])]
+
+                            post_fit_i <- post_fit %>% mutate(!!str2lang(pars_extract_list[[k]][j]) := logit_inverse(!!str2lang(pars_extract_list[[k]][1]) +
+                                !!str2lang(pars_extract_list[[k]][2]) * !!str2lang(pars_extract_list[[k]][3])) * (upper - lower) + lower  ) 
                         }
-                        post_par <- post_fit %>% select(!!parsBase)
+                        post_par <- post_fit_i %>% select(!!parsBase)
                     }
 
                     T <- T_max
@@ -621,6 +628,8 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
 #' @importFrom data.table as.data.table rbindlist setDT data.table
 #' @importFrom future plan multisession
 plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel_i = FALSE) {
+
+  #  model_summary <- output_1
 
     fitfull <- model_summary$fit    
     outputfull <- model_summary$post
@@ -768,6 +777,7 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel_
         post$mcmc %>% lapply(as.data.frame) %>% do.call(rbind, .) %>% as.data.frame  
     )
 
+
     # Get the simulated trajectories for each individual and exposure type and biomarker
 
 
@@ -889,16 +899,25 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel_
 #
     map(types_traj, 
         function(name_i) {
+            ##
+            ##
+
         cat("Calculate trajectories for for subsets of ", name_i, " \n")
         df_ids_plot_i <- df_ids_plot %>% filter(type == name_i)
          
         df_traj_post_ind <- map(
             df_ids_plot_i$id,
-            function(i) {
+            function(i) {           
+                ##
+                ##
                     lol <- map(bio_all, 
                         function(bio_i) {
+                            ##
+                            ##
                             map(sample_s,
                                 function(s) {
+                                    ##
+                                    ##
                                     df_exposure_order_i <- data.table::as.data.table(df_exposure_order) %>% filter(id == i, sample == s, biomarker == bio_i) %>% arrange(time, .by_group = TRUE)
                             
                                     times <- c(df_exposure_order_i[["time"]], T_max)
@@ -908,12 +927,73 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel_
                                     titre_anchor <- NULL
 
                                     for (j in seq_len(nrow(df_exposure_order_i))) {
+                                        ##
+                                        ##
                                         exp_type_i <- df_exposure_order_i[j,] %>% pull(exp_type)
                                         id_key <- df_map_ab_list[[bio_i]] %>% filter(exp == exp_type_i) %>% pull(k)
                                         ab_func <- model_outline$abkineticsModel[[id_key]]$funcForm
                                         pars_extract <- model_outline$abkineticsModel[[id_key]]$pars
-                                        par_in <- as.numeric(par_sample[s, ] %>% select(pars_extract))
-                                    #   cat(par_in)
+
+                                                    ## hierarchical effects
+                                        hierFlag_value <- model_outline$abkineticsModel[[id_key]]$hierFlag
+
+                                        if (!is.null(hierFlag_value) && is.logical(hierFlag_value) && length(hierFlag_value) == 1 && hierFlag_value) {
+                                            dataHier <- model_outline$abkineticsModel[[id_key]]$dataHier
+                                            parsHier <- model_outline$abkineticsModel[[id_key]]$parsHier
+                                            parsBase <- model_outline$abkineticsModel[[id_key]]$parsBase
+                                            N <- model_outline$abkineticsModel[[id_key]]$dataHierN
+
+                                            pars_extract_list <- list()
+                                            for (j in 1:N) {
+                                                pars_names <- c()
+                                                for (k in 1:length(parsBase)) {
+                                                    if (parsBase[[k]] %in% parsHier) {
+                                                        pars_names <- c(pars_names, parsBase[[k]], paste0("z_", parsBase[[k]], "_", j), paste0("sigma_", parsBase[[k]]))
+
+                                                    } else {
+                                                        pars_names <- c(pars_names, parsBase[[k]])
+                                                    }
+
+                                                }
+                                                pars_extract_list[[j]] <- pars_names
+                                            }
+                                        } else {
+                                            pars_extract_list <- list(pars_extract)
+                                        }
+
+                                        # Get k 
+                                        if (!is.null(hierFlag_value) && is.logical(hierFlag_value) && length(hierFlag_value) == 1 && hierFlag_value) {
+                                            k <- model_outline$abkineticsModel[[j]]$dataHier[i]
+                                        } else {
+                                            k <- 1
+                                        }
+                                        # bit the extract the parameterrs
+                                           # extract all argument values
+                                        post_par_list <- list()
+                                        post_par <- data.frame(post_fit[[pars_extract_list[[k]][1]]])
+                                        if (length(pars_extract_list[[k]]) > 1) {
+                                            for (l in 2:length(pars_extract_list[[k]])) {
+                                                post_par <- cbind(post_par, post_fit[[pars_extract_list[[k]][l]]])
+                                            }   
+                                        }
+                                        colnames(post_par) <- pars_extract_list[[k]]
+
+                                        # adjust for hierarchicial values 
+                                        if (!is.null(hierFlag_value) && is.logical(hierFlag_value) && length(hierFlag_value) == 1 && hierFlag_value) {
+                                            for (j in 1:length(parsHier)) {
+                                                upper <- model_summary$fit$model$upperParSupport_fitted[which(model_summary$fit$model$namesOfParameters == parsHier[j])]
+                                                lower <- model_summary$fit$model$lowerParSupport_fitted[which(model_summary$fit$model$namesOfParameters == parsHier[j])]
+                                                post_fit <- par_sample
+                                                post_fit_i <- post_fit %>% mutate(!!str2lang(pars_extract_list[[k]][j]) := logit_inverse(!!str2lang(pars_extract_list[[k]][1]) +
+                                                    !!str2lang(pars_extract_list[[k]][2]) * !!str2lang(pars_extract_list[[k]][3])) * (upper - lower) + lower  ) 
+                                            }
+                                            par_in <- post_fit_i %>% select(!!parsBase) %>% .[s, ]
+                                        } else{
+                                            par_in <- as.numeric(par_sample[s, ] %>% select(pars_extract))
+                                        }
+
+
+                                     #   cat(par_in)
                                         titre_start <- data_fit_list[[i]] %>% filter(row_num == 1, bio == bio_i) %>% pull(titre)
 
                                         if (nrow(df_exposure_order_i) == 0) {

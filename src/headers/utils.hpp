@@ -168,6 +168,11 @@ double uniformDiscreteDist(int minValue, int maxValue)
     boost::random::uniform_int_distribution<> u(minValue, maxValue); return u(rng);
 }
 
+
+double logit_inverse(double x) {
+    return exp(x) / (1.0 + exp(x));
+}
+
 /** 
  * @brief Sample a value from a normal distribution
  * @param mean The mean of the distribution
