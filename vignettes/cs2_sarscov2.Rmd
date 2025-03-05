@@ -46,8 +46,8 @@ This data has been generated using `serosim`.
 ```{r}
 
 
-#wave_full <- readRDS(file = "wave2_export.RDS")
-wave_full <- readRDS(file = "./vignettes/wave2_export.RDS")
+wave_full <- readRDS(file = "wave2_export.RDS")
+#wave_full <- readRDS(file = "./vignettes/wave2_export.RDS")
 
 sero_data_w2 <- wave_full$sero_data
 known_inf_w2 <- wave_full$known_inf

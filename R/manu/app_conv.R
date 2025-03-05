@@ -132,11 +132,11 @@ model_summary <-  readRDS(here::here("outputs", "fits", "transvir_data", "wave2_
 p1 <- generate_convergence_plot(model_summary, "EMPIRICAL DATA WITH NO PCR")
 ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_no_pcr_full.png"), height = 20)
 p2 <- plot_Rhat_time_alt(model_summary,  "EMPIRICAL DATA WITH NO PCR")
-ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_no_pcr_time.png"))
+ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_no_pcr_time.png"), height = 20)
 
 # CASE STUDY 2: TRANSVIR, PCR
 model_summary <-  readRDS(here::here("outputs", "fits", "transvir_data", "wave2_base", "model_summary.RDS"))
 p1 <- generate_convergence_plot(model_summary, "EMPIRICAL DATA WITH PCR")
 ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_pcr_full.png"), height = 20)
 p2 <- plot_Rhat_time_alt(model_summary,  "EMPIRICAL DATA WITH PCR")
-ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_pcr_time.png"))
+ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_pcr_time.png"), height = 15)

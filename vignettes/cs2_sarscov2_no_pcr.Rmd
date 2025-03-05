@@ -1,10 +1,10 @@
 ---
-title: "Case Study 2: SARS-CoV-2 inference in The Gambia"
+title: "Case Study 2: SARS-CoV-2 inference in The Gambia (no PCR)"
 author: "David Hodgson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Case Study 2: SARS-CoV-2 inference in The Gambia}
+  %\VignetteIndexEntry{Case Study 2: SARS-CoV-2 inference in The Gambia (no PCR)}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
