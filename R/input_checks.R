@@ -123,7 +123,7 @@ check_priors <- function(observationalModel, abkineticsModel) {
     priors <- bind_rows(
         observationalModel$prior,
         abkineticsModel$prior,
-    )
+    ) %>% filter(part_type == "prior")
     if(any(duplicated(priors$par_name))) {
         stop("Priors: ", paste0(priors$par_name[duplicated(priors$par_name)], collapse = ", "), " are duplicated, please assign original names to each prior")
     }

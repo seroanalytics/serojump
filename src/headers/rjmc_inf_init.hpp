@@ -128,9 +128,9 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
     VectorXd times_full, id_full;
     MatrixXd titre_full;
     List titre_list, times_list;
+    DataFrame logitBoundaries;
     //StringVector exposurePeriods;
     //string exposureNameInf;
-
 
     VectorXd initInfFunc() {
         VectorXd initialInf = VectorXd::Zero(this->N);
@@ -158,6 +158,7 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
         this->B = this->biomarkers.size();
         this->exposureFitted = as<string>(this->infoModel["exposureFitted"]);
         this->exposureInfo = this->infoModel["exposureInfo"];
+        this->logitBoundaries = this->infoModel["logitBoundaries"];
 
         // Extract the information from the exposureInfo, mainly the exposure type, known exposures and the map of the exposure
         for (int i = 0; i < this->exposureInfo.size(); i++) {

@@ -84,11 +84,24 @@ addPrior <- function(par_name, lb, ub, dist, dist_par1, dist_par2) {
 #' @param dim The number of parameters in the hierarchical prior
 #' @return a data.frame of the prior information
 #' @export
-addPriorHier <- function(par_name, lb, ub, dist, dist_par1, dist_par2, dist_sd, dist_sd_par1, dist_sd_par2, dim) {
-
+addPriorHier <- function(par_name, lb, ub, dist, dist_par1, dist_par2, dist_sd, dist_sd_par1, dist_sd_par2, dim, logit_scale = NULL) {
+   # par_name <- "a"
+   # lb <- -10
+   # ub <- 10
+   # dist <- "norm"
+   # dist_par1 <- 0
+   # dist_par2 <- 1.82
+   # dist_sd <- "lnorm"
+   # dist_sd_par1 <- -1
+   # dist_sd_par2 <- 1
+   # dim <- 2
+   # logit_scale <- c(0, 6)
     
     mean_df <- addPrior(par_name, lb, ub, dist, dist_par1, dist_par2)
     # Convert the ellipsis arguments to a list
+    if (is.null(logit_scale)) {
+        stop("ERROR: logit_scale must be defined")
+    }
 
     args_list <- list(par_name, dim, dist_sd, dist_sd_par1, dist_sd_par2)
     names(args_list) <- c("par_name", "dim", "dist_sd", "dist_sd_par1", "dist_sd_par2")
@@ -98,13 +111,13 @@ addPriorHier <- function(par_name, lb, ub, dist, dist_par1, dist_par2, dist_sd, 
         args_list_temp <- list(par_name = paste0("z_", args_list$par_name, "_", i), lb = -10, ub = 10, dist = "norm",
             dist_par1 = "0", dist_par2 = "1")
         list_par_pool[[i]] <- as.data.frame(args_list_temp)
-        list_par_pool[[i]]$part_type <- "hprior"
+        list_par_pool[[i]]$part_type <- "prior"
     }
     list_par_reg <- list(paste0("sigma_", args_list$par_name), 0, 5, args_list$dist_sd, args_list$dist_sd_par1, args_list$dist_sd_par2)
     names(list_par_reg) <-  c("par_name", "lb", "ub", "dist", "dist_par1", "dist_par2")
     list_par_reg$dist_par1 <- as.character(list_par_reg$dist_par1)
     list_par_reg$dist_par2 <- as.character(list_par_reg$dist_par2)
-    list_par_reg$part_type <- "hprior"
+    list_par_reg$part_type <- "prior"
 
     df <- mean_df %>% bind_rows(bind_rows(list_par_pool)) %>% bind_rows( as.data.frame(list_par_reg))
 
@@ -129,6 +142,11 @@ addPriorHier <- function(par_name, lb, ub, dist, dist_par1, dist_par2, dist_sd, 
         stop("Error: cannot sample a random variable, check inputs")
     }
 
+    args_list <- list(par_name, logit_scale[1], logit_scale[2], NA, NA, NA, "logit_boundary")
+    names(args_list) <- c("par_name", "lb", "ub", "dist", "dist_par1", "dist_par2", "part_type")
+    
+    df <- bind_rows(args_list %>% as.data.frame, df)
+
     return(df)
 }
 
@@ -138,12 +156,14 @@ cal_lprior_non_centered <- function(par_tab, params) {
     P <- nrow(par_tab)
     names(params) <- par_tab$par_name
     for (i in 1:P) {
-        dist_name <- paste0("d", par_tab[i, 4])
-        my_dist_name <- get(dist_name)
-        if (par_tab[i, 4] == "exp") {
-            p <- p + do.call(my_dist_name, list(as.numeric(params[i]), as.numeric(par_tab[i, 5]), log = TRUE) )
-        } else {
-            p <- p + do.call(my_dist_name, list(as.numeric(params[i]), as.numeric(par_tab[i, 5]), as.numeric(par_tab[i, 6]), log = TRUE) )
+        if (par_tab[i, 7] == "prior") {
+            dist_name <- paste0("d", par_tab[i, 4])
+            my_dist_name <- get(dist_name)
+            if (par_tab[i, 4] == "exp") {
+                p <- p + do.call(my_dist_name, list(as.numeric(params[i]), as.numeric(par_tab[i, 5]), log = TRUE) )
+            } else {
+                p <- p + do.call(my_dist_name, list(as.numeric(params[i]), as.numeric(par_tab[i, 5]), as.numeric(par_tab[i, 6]), log = TRUE) )
+            }
         }
     }
     p
@@ -162,18 +182,22 @@ get_sample_non_centered <- function(par_tab, seed = -1) {
     s <- vector(mode = "numeric", length = P)
     names(s) <- par_tab$par_name
     for (i in 1:P) {
-        dist_name <- paste0("r", par_tab[i, 4])
-        my_dist_name <- get(dist_name)
-        if (par_tab[i, 4] == "exp") {
-            s[i] <- do.call(my_dist_name, list(1, as.numeric(par_tab[i, 5])) )
-            while (check_boundaries(s[i], par_tab[i, 2],  par_tab[i, 3])) {
-                s[i] <- do.call(my_dist_name, list(1, as.numeric(par_tab[i, 5]) ))
+        if (par_tab[i, 7] == "prior") {
+            dist_name <- paste0("r", par_tab[i, 4])
+            my_dist_name <- get(dist_name)
+            if (par_tab[i, 4] == "exp") {
+                s[i] <- do.call(my_dist_name, list(1, as.numeric(par_tab[i, 5])) )
+                while (check_boundaries(s[i], par_tab[i, 2],  par_tab[i, 3])) {
+                    s[i] <- do.call(my_dist_name, list(1, as.numeric(par_tab[i, 5]) ))
+                }
+            } else {
+                s[i] <- do.call(my_dist_name, list(1, as.numeric(par_tab[i, 5]),  as.numeric(par_tab[i, 6])) )
+                while (check_boundaries(s[i], par_tab[i, 2],  par_tab[i, 3])) {
+                    s[i] <- do.call(my_dist_name, list(1,  as.numeric(par_tab[i, 5]),  as.numeric(par_tab[i, 6])) )
+                }
             }
         } else {
-            s[i] <- do.call(my_dist_name, list(1, as.numeric(par_tab[i, 5]),  as.numeric(par_tab[i, 6])) )
-            while (check_boundaries(s[i], par_tab[i, 2],  par_tab[i, 3])) {
-                s[i] <- do.call(my_dist_name, list(1,  as.numeric(par_tab[i, 5]),  as.numeric(par_tab[i, 6])) )
-            }
+            s[i] <- runif(1, -10, 10)
         }
     }
     s

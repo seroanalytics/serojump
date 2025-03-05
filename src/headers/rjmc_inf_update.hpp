@@ -366,6 +366,9 @@ private:
         c[0] = get_value_par(pars_base, params, stringname);
         //Rcpp::Rcout << "stringname A : " << stringname << std::endl;
 
+        NumericVector lower_upper = get_values_by_key(parent->logitBoundaries, param_name);
+
+
         stringname = "z_" + param_name + "_" + to_string(cov_i);
         //Rcpp::Rcout << "stringname B : " << stringname << std::endl;
         //Rcpp::Rcout << "pars_base: " << pars_base << std::endl;
@@ -379,13 +382,13 @@ private:
         stringname = "sigma_" + param_name;
 
         c[2] = get_value_par(pars_base, params, stringname);
-        //Rcpp::Rcout << "stringname C : " << stringname << std::endl;
+       // Rcpp::Rcout << "lower_upper: " << lower_upper << std::endl;
 
 
-        int heir_idx = find_index(param_name);
+       // int heir_idx = find_index(param_name);
      //   Rcpp::Rcout <<  parent->upperParBounds(heir_idx) -  parent->lowerParBounds(heir_idx) << std::endl;
 
-        double argument = logit_inverse(c[0] + c[1] * c[2]) * ( parent->upperParBounds(heir_idx) -  parent->lowerParBounds(heir_idx)) + parent->lowerParBounds(heir_idx);
+        double argument = logit_inverse(c[0] + c[1] * c[2]) * ( lower_upper[1] - lower_upper[0]) + lower_upper[0];
         //Rcpp::Rcout << "argument: " << i_idx << std::endl;
 
         return argument;

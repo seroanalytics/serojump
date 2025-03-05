@@ -27,7 +27,7 @@ plotPostFigs <- function(model_summary, save_info) {
         file_path <- here::here("outputs", "fits", save_info$file_name, save_info$model_name,  "figs", "post")
     }
 
-
+  #  model_summary <- output_1
     plot_titre_obs(model_summary, file_path)
     plot_titre_exp(model_summary, file_path)
     plot_cop_rec(model_summary, file_path)
@@ -562,7 +562,9 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
 
             map_df(1:length(pars_extract_list), 
                 function(k) { 
-                 #   k <- 2
+                  #  k <- 3
+                    post_fit_i <- post_fit
+                    # k is the index of the datahier
                     # extract all argument values
                     post_par_list <- list()
                     post_par <- data.frame(post_fit[[pars_extract_list[[k]][1]]])
@@ -576,14 +578,18 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
                     # adjust for hierarchicial values 
                     if (!is.null(hierFlag_value) && is.logical(hierFlag_value) && length(hierFlag_value) == 1 && hierFlag_value) {
                         for (j in 1:length(parsHier)) {
-                            upper <- model_summary$fit$model$upperParSupport_fitted[which(model_summary$fit$model$namesOfParameters == parsHier[j])]
-                            lower <- model_summary$fit$model$lowerParSupport_fitted[which(model_summary$fit$model$namesOfParameters == parsHier[j])]
+                           #
 
-                            post_fit_i <- post_fit %>% mutate(!!str2lang(pars_extract_list[[k]][j]) := logit_inverse(!!str2lang(pars_extract_list[[k]][1]) +
-                                !!str2lang(pars_extract_list[[k]][2]) * !!str2lang(pars_extract_list[[k]][3])) * (upper - lower) + lower  ) 
+                            lower_upper <- model_summary$fit$model$infoModel$logitBoundaries %>% filter(par_name ==  parsHier[j])
+                            upper <- lower_upper %>% pull(ub)
+                            lower <- lower_upper %>% pull(lb)
+
+                            post_fit_i <- post_fit_i %>% mutate(!!str2lang(pars_extract_list[[k]][1 + 3 * (j - 1)]) := logit_inverse(!!str2lang(pars_extract_list[[k]][1 + 3 * (j - 1)]) +
+                                !!str2lang(pars_extract_list[[k]][2 + 3 * (j - 1)]) * !!str2lang(pars_extract_list[[k]][3 + 3 * (j - 1)])) * (upper - lower) + lower  )
                         }
                         post_par <- post_fit_i %>% select(!!parsBase)
                     }
+
 
                     T <- T_max
                     traj_post <- 1:(100) %>% purrr::map_df(
@@ -981,11 +987,12 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel_
                                         # adjust for hierarchicial values 
                                         if (!is.null(hierFlag_value) && is.logical(hierFlag_value) && length(hierFlag_value) == 1 && hierFlag_value) {
                                             for (j in 1:length(parsHier)) {
-                                                upper <- model_summary$fit$model$upperParSupport_fitted[which(model_summary$fit$model$namesOfParameters == parsHier[j])]
-                                                lower <- model_summary$fit$model$lowerParSupport_fitted[which(model_summary$fit$model$namesOfParameters == parsHier[j])]
+                                                lower_upper <- model_summary$fit$model$infoModel$logitBoundaries %>% filter(par_name ==  parsHier[j])
+                                                upper <- lower_upper %>% pull(ub)
+                                                lower <- lower_upper %>% pull(lb)
                                                 post_fit <- par_sample
-                                                post_fit_i <- post_fit %>% mutate(!!str2lang(pars_extract_list[[k]][j]) := logit_inverse(!!str2lang(pars_extract_list[[k]][1]) +
-                                                    !!str2lang(pars_extract_list[[k]][2]) * !!str2lang(pars_extract_list[[k]][3])) * (upper - lower) + lower  ) 
+                                                post_fit_i <- post_fit %>% mutate(!!str2lang(pars_extract_list[[k]][1 + 3 * (j - 1)]) := logit_inverse(!!str2lang(pars_extract_list[[k]][1 + 3 * (j - 1)]) +
+                                                    !!str2lang(pars_extract_list[[k]][2 + 3 * (j - 1)]) * !!str2lang(pars_extract_list[[k]][3 + 3 * (j - 1)])) * (upper - lower) + lower  ) 
                                             }
                                             par_in <- post_fit_i %>% select(!!parsBase) %>% .[s, ]
                                         } else{

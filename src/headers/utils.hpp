@@ -168,6 +168,20 @@ double uniformDiscreteDist(int minValue, int maxValue)
     boost::random::uniform_int_distribution<> u(minValue, maxValue); return u(rng);
 }
 
+// [[Rcpp::export]]
+NumericVector get_values_by_key(DataFrame df, std::string key) {
+    CharacterVector first_col = df[0];  // Extract first column (strings)
+    NumericVector col2 = df[1];  // Second column (numeric)
+    NumericVector col3 = df[2];  // Third column (numeric)
+
+    for (int i = 0; i < first_col.size(); i++) {
+        if (first_col[i] == key) {
+            return NumericVector::create(col2[i], col3[i]);  // Return values as vector
+        }
+    }
+
+    return NumericVector::create(NA_REAL, NA_REAL);  // Return NA if not found
+}
 
 double logit_inverse(double x) {
     return exp(x) / (1.0 + exp(x));

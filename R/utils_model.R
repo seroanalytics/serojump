@@ -210,7 +210,8 @@ createSeroJumpModel <- function(
     priors <- bind_rows(
         observationalModel$prior,
         abkineticsModel$prior
-    )
+    ) %>% filter(part_type == "prior")
+
 
     modelSeroJump$lowerParSupport_fitted <- priors$lb
     modelSeroJump$upperParSupport_fitted <- priors$ub
@@ -255,6 +256,8 @@ createSeroJumpModel <- function(
     modelSeroJump$infoModel$exposureFitted <- exposureFitted
     modelSeroJump$exposureTypes <- exposureTypes
     modelSeroJump$infoModel$exposureInfo <- list()
+    modelSeroJump$infoModel$logitBoundaries <- abkineticsModel$prior %>% filter(part_type == "logit_boundary") %>% .[1:3]
+
 
     exp_prior <- convertExpPriorEmpirical(exposurePriorTime, T, exposurePriorTimeType = exposurePriorTimeType)
     exp_prior_list <- lapply(1:data_t$N, function(x) exp_prior$prob)
@@ -331,6 +334,7 @@ createSeroJumpModel <- function(
     # Add help with exposure prior
     data_t$raw_sero <- data_sero
     data_t$raw_exp <- data_known
+   # data_t$logitBoundaries <- modelSeroJump$logitBoundaries
 
     list(
         data = data_t,
