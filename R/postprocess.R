@@ -913,7 +913,8 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel_
          
         df_traj_post_ind <- map(
             df_ids_plot_i$id,
-            function(i) {           
+            function(i) {   
+              #  cat("!!!!!!!!!!i: ", i, "\n")       
                 ##
                 ##
                     lol <- map(bio_all, 
@@ -923,6 +924,7 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel_
                             map(sample_s,
                                 function(s) {
                                     ##
+              #  cat("s: ", s, "\n")       
                                     ##
                                     df_exposure_order_i <- data.table::as.data.table(df_exposure_order) %>% filter(id == i, sample == s, biomarker == bio_i) %>% arrange(time, .by_group = TRUE)
                             
@@ -934,6 +936,7 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel_
 
                                     for (j in seq_len(nrow(df_exposure_order_i))) {
                                         ##
+                                 #                       cat("j: ", j, "\n")       
                                         ##
                                         exp_type_i <- df_exposure_order_i[j,] %>% pull(exp_type)
                                         id_key <- df_map_ab_list[[bio_i]] %>% filter(exp == exp_type_i) %>% pull(k)
@@ -950,18 +953,18 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel_
                                             N <- model_outline$abkineticsModel[[id_key]]$dataHierN
 
                                             pars_extract_list <- list()
-                                            for (j in 1:N) {
+                                            for (j1 in 1:N) {
                                                 pars_names <- c()
                                                 for (k in 1:length(parsBase)) {
                                                     if (parsBase[[k]] %in% parsHier) {
-                                                        pars_names <- c(pars_names, parsBase[[k]], paste0("z_", parsBase[[k]], "_", j), paste0("sigma_", parsBase[[k]]))
+                                                        pars_names <- c(pars_names, parsBase[[k]], paste0("z_", parsBase[[k]], "_", j1), paste0("sigma_", parsBase[[k]]))
 
                                                     } else {
                                                         pars_names <- c(pars_names, parsBase[[k]])
                                                     }
 
                                                 }
-                                                pars_extract_list[[j]] <- pars_names
+                                                pars_extract_list[[j1]] <- pars_names
                                             }
                                         } else {
                                             pars_extract_list <- list(pars_extract)
@@ -969,7 +972,7 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel_
 
                                         # Get k 
                                         if (!is.null(hierFlag_value) && is.logical(hierFlag_value) && length(hierFlag_value) == 1 && hierFlag_value) {
-                                            k <- model_outline$abkineticsModel[[j]]$dataHier[i]
+                                            k <- model_outline$abkineticsModel[[id_key]]$dataHier[i]
                                         } else {
                                             k <- 1
                                         }
@@ -986,13 +989,13 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel_
 
                                         # adjust for hierarchicial values 
                                         if (!is.null(hierFlag_value) && is.logical(hierFlag_value) && length(hierFlag_value) == 1 && hierFlag_value) {
-                                            for (j in 1:length(parsHier)) {
-                                                lower_upper <- model_summary$fit$model$infoModel$logitBoundaries %>% filter(par_name ==  parsHier[j])
+                                            for (j2 in 1:length(parsHier)) {
+                                                lower_upper <- model_summary$fit$model$infoModel$logitBoundaries %>% filter(par_name ==  parsHier[j2])
                                                 upper <- lower_upper %>% pull(ub)
                                                 lower <- lower_upper %>% pull(lb)
                                                 post_fit <- par_sample
-                                                post_fit_i <- post_fit %>% mutate(!!str2lang(pars_extract_list[[k]][1 + 3 * (j - 1)]) := logit_inverse(!!str2lang(pars_extract_list[[k]][1 + 3 * (j - 1)]) +
-                                                    !!str2lang(pars_extract_list[[k]][2 + 3 * (j - 1)]) * !!str2lang(pars_extract_list[[k]][3 + 3 * (j - 1)])) * (upper - lower) + lower  ) 
+                                                post_fit_i <- post_fit %>% mutate(!!str2lang(pars_extract_list[[k]][1 + 3 * (j2 - 1)]) := logit_inverse(!!str2lang(pars_extract_list[[k]][1 + 3 * (j2 - 1)]) +
+                                                    !!str2lang(pars_extract_list[[k]][2 + 3 * (j2 - 1)]) * !!str2lang(pars_extract_list[[k]][3 + 3 * (j2 - 1)])) * (upper - lower) + lower  ) 
                                             }
                                             par_in <- post_fit_i %>% select(!!parsBase) %>% .[s, ]
                                         } else{
@@ -1037,6 +1040,7 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel_
                                     ) %>% filter(!is.na(titre_traj))
                                 }
                             ) %>% rbindlist
+
                         }
                     )  %>% rbindlist
             }
