@@ -14,7 +14,8 @@ addPriorHier(
   dist_sd,
   dist_sd_par1,
   dist_sd_par2,
-  dim
+  dim,
+  logit_scale = NULL
 )
 }
 \arguments{
