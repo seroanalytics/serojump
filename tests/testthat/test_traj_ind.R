@@ -115,3 +115,162 @@ test_that("compute_individual_trajectories returns expected output", {
  
   }
 )
+
+# Test the calculate_param_list function
+
+test_that("calculate_param_list works correctly", {
+  mock_model_1 <- list(
+  abkineticsModel = list(
+    "test_id" = list(
+      parsHier = c("param1", "param2"),
+      parsBase = c("param1", "param2", "param3"),
+      dataHierN = 2
+    )
+  )
+)
+
+  mock_model_2 <- list(
+  abkineticsModel = list(
+    "test_id" = list(
+      parsHier = c("param1", "param2", "param3"),
+      parsBase = c("param1", "param2", "param3"),
+      dataHierN = 2
+    )
+  )
+)
+  
+  # Non-hierarchical case
+  result_non_hier <- calculate_param_list(c("param1", "param2", "param3"), FALSE, mock_model_1, "test_id")
+  expect_equal(result_non_hier, list(c("param1", "param2", "param3")))
+  
+  # Hierarchical case
+  result_hier <- calculate_param_list(NULL, TRUE, mock_model_1, "test_id")
+  expected_hier <- list(
+    c("param1", "z_param1_1", "sigma_param1", "param2", "z_param2_1", "sigma_param2", "param3"),
+    c("param1", "z_param1_2", "sigma_param1", "param2", "z_param2_2", "sigma_param2", "param3")
+  )
+  expect_equal(result_hier, expected_hier)
+
+  result_hier <- calculate_param_list(NULL, TRUE, mock_model_2, "test_id")
+  expected_hier <- list(
+    c("param1", "z_param1_1", "sigma_param1", "param2", "z_param2_1", "sigma_param2", "param3", "z_param3_1", "sigma_param3"),
+    c("param1", "z_param1_2", "sigma_param1", "param2", "z_param2_2", "sigma_param2", "param3", "z_param3_2", "sigma_param3")
+  )
+  expect_equal(result_hier, expected_hier)
+})
+
+
+
+
+# Define a mock logit_inverse function
+logit_inverse <- function(x) {
+  exp(x) / (1 + exp(x))
+}
+
+# Define a mock model summary
+test_that("apply_hierarchical_adjustment works correctly", {
+
+  # Test initial plotting function 
+
+  mock_model_1 <- list(
+    abkineticsModel = list(
+      "test_id" = list(
+        parsHier = c("param1", "param2"),
+        parsBase = c("param1", "param2", "param3"),
+        dataHierN = 2,
+        dataHier = 1
+      )
+    ),
+    fit = list(
+      model = list(
+        infoModel = list(
+          logitBoundaries = tibble(
+            par_name = c("param1", "param2"),
+            ub = c(1, 2),
+            lb = c(0, 1)
+          )
+        )
+      )
+    )
+  )
+
+  id_key <- 1
+  group_idx <- extract_hierarchical_data_value(mock_model_1, 1, 1)
+  mock_post_fit_1 <- tibble(
+    param1 = 1, z_param1_1 = 2, sigma_param1 = 1, param2 = 0.5, z_param2_1 = 0.5, sigma_param2 = 1, param3 = 4
+  )
+
+  result_hier <- calculate_param_list(c("param1", "param2", "param3"), FALSE, mock_model_1, "test_id")
+
+  resultnon <- as.numeric(mock_post_fit_1[1, result_hier[[group_idx]]])
+  expect_equal(resultnon, c(1, 0.5, 4))
+
+  result_hier <- calculate_param_list(c("param1", "param2", "param3"), TRUE, mock_model_1, "test_id")
+
+
+    
+  result <- apply_hierarchical_adjustment(
+    post_fit = mock_post_fit_1,
+    base_params = mock_model_1$abkineticsModel[[id_key]]$parsBase,
+    hier_params =  mock_model_1$abkineticsModel[[id_key]]$parsHier,
+    model_summary = mock_model_1,
+    group_idx = group_idx
+  )
+
+  expected_value <- c(
+    logit_inverse(mock_post_fit_1$param1 + mock_post_fit_1$z_param1_1 * mock_post_fit_1$sigma_param1),  
+    logit_inverse(mock_post_fit_1$param2 + mock_post_fit_1$z_param2_1 * mock_post_fit_1$sigma_param2) * 1 + 1,  
+    mock_post_fit_1$param3
+  )
+
+  expect_equal(as.numeric(result), expected_value)
+
+
+  mock_model_2 <- list(
+    abkineticsModel = list(
+      "test_id" = list(
+        parsHier = c("param1", "param2", "param3"),
+        parsBase = c("param1", "param2", "param3"),
+        dataHierN = 2,
+        dataHier = 1
+      )
+    ),
+    fit = list(
+      model = list(
+        infoModel = list(
+          logitBoundaries = tibble(
+            par_name = c("param1", "param2", "param3"),
+            ub = c(1, 2, 1),
+            lb = c(0, 1, 0)
+          )
+        )
+      )
+    )
+  )
+
+  id_key <- 1
+  group_idx <- extract_hierarchical_data_value(mock_model_2, 1, 1)
+  result_hier <- calculate_param_list(c("param1", "param2", "param3"), TRUE, mock_model_2, "test_id")
+
+  mock_post_fit_2 <- tibble(
+    param1 = 1, z_param1_1 = 2, sigma_param1 = 1, param2 = 0.5, z_param2_1 = 0.5, sigma_param2 = 1, param3 = 4, z_param3_1 = 1, sigma_param3 = 1,
+  )
+    
+  result <- apply_hierarchical_adjustment(
+    post_fit = mock_post_fit_2,
+    base_params = mock_model_2$abkineticsModel[[id_key]]$parsBase,
+    hier_params =  mock_model_2$abkineticsModel[[id_key]]$parsHier,
+    model_summary = mock_model_2,
+    group_idx = group_idx
+  )
+
+  expected_value <- c(
+    logit_inverse(mock_post_fit_2$param1 + mock_post_fit_2$z_param1_1 * mock_post_fit_2$sigma_param1),  
+    logit_inverse(mock_post_fit_2$param2 + mock_post_fit_2$z_param2_1 * mock_post_fit_2$sigma_param2) * 1 + 1,  
+    logit_inverse(mock_post_fit_2$param3 + mock_post_fit_2$z_param3_1 * mock_post_fit_2$sigma_param3)  
+  )
+
+  expect_equal(as.numeric(result), expected_value)
+
+
+})
