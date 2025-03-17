@@ -749,6 +749,7 @@ prepare_posterior_samples <- function(post, chain_samples) {
 
 # Compute individual trajectories
 compute_individual_trajectories <- function(id, bio_markers, samples, exposure_order, model_outline, param_samples, T_max, data_fit_list) {
+    require(data.table)
 
          #   id = selected_ids
          #   bio_markers = bio_markers
@@ -937,7 +938,7 @@ summarize_exposure_intensity <- function(df_exposure_order, params, bio_all) {
 
 # Main function to plot antibody kinetics trajectories
 plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel = FALSE) {
-    params <- initialize_parameters(model_summary, 10)
+    params <- initialize_parameters(model_summary, 100)
     
    # if (parallel) {
    #     plan(multisession, workers = 8)
@@ -966,9 +967,9 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel 
         selected_ids <- df_inferred_exp_sum %>% filter(type == traj_type) %>% pull(id) %>% unique()
         selected_ids <- sample(selected_ids, min(20, length(selected_ids)))
 
-        df_inferred_exp %>% filter(id %in% selected_ids) %>% filter(id == 162, sample == 772)
+     #   df_inferred_exp %>% filter(id %in% selected_ids) %>% filter(id == 162, sample == 772)
         
-        traj_data <- compute_individual_trajectories(
+        traj_model <- compute_individual_trajectories(
             id = selected_ids,
             bio_markers = bio_markers,
             samples = sample_ids,
@@ -978,13 +979,18 @@ plot_abkinetics_trajectories_ind <- function(model_summary, file_path, parallel 
             T_max = params$T_max,
             data_fit_list = data_fit_list
         )
+
+        saveRDS(list(traj_model), here::here(file_path, "plt_data", paste0("ab_kinetics_recov_indiv_ ", traj_type, ".RDS")) )
+
+        data_sero_filter <- data_fit_list %>% bind_rows %>% filter(id %in% selected_ids )
         
-        plot <- ggplot(traj_data, aes(x = t, y = titre_trajectory, color = exp_type, group = sample)) +
-        geom_line(alpha = 0.2) +
-        facet_wrap(vars(id)) +
-        theme_bw() +
-        labs(title = paste("Antibody kinetics for", traj_type), x = "Time", y = "Titre value")
-        
+        plot <- ggplot(traj_model) +
+            geom_point(data = data_sero_filter, aes(x = times, y = titre)) +
+            geom_line(  aes(x = t, y = titre_trajectory, color = exp_type, group = sample), alpha = 0.2) +
+            facet_wrap(vars(id)) +
+            theme_bw() +
+            labs(title = paste("Antibody kinetics for", traj_type), x = "Time", y = "Titre value")
+            
         ggsave(file.path(file_path, paste0("ab_kinetics_trajectories_", traj_type, ".png")), plot, width = 10, height = 8)
     }
 }

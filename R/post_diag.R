@@ -40,6 +40,8 @@ plotMCMCDiagnosis <- function(model_summary, save_info) {
 
 plotRhatTime <- function(model_summary, file_path) {
 
+    require(data.table)
+
     outputfull <- model_summary$post
 
     model_outline <- model_summary$fit$model
