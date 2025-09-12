@@ -12,7 +12,7 @@ vignette: >
 
 # R Code Description
 
-This document describes the steps and components of the provided R code for creating and running serological models using simulated data. The code defines observational models, antibody kinetics models, and runs inference using MCMC methods.
+This document describes the steps and components of the provided R code for creating and running serological models using simulated data. The code defines observational models, antibody kinetics models, and runs inference using MCMC methods. 
 
 ---
 
@@ -39,7 +39,7 @@ if (.Platform$OS.type == "windows") {
 
 ## Step 2: Read Simulated Data
 
-This data has been generated using `serosim`.
+This data has been generated using `serosim`. The code the generate this data can be found at in the folder `R/serosim` in the package. The data is generated using the `cesCOP` and `cesNoCOP` models.
 
 ```{r}
 

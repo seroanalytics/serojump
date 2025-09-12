@@ -186,6 +186,7 @@ p3B <- exp_times_A[[2]] %>%
 
 (p1A | p1B) / ( (p2A / p2B) | (p3A / p3B)) + plot_annotation(tag_level = "A") & theme(text = element_text(size = 15))
 ggsave(here::here("outputs", "figs", "fig1.png"), width = 15, height = 17)
+ggsave(here::here("outputs", "figs", "fig1.tiff"), width = 15, height = 17)
 
 
 
@@ -356,7 +357,7 @@ types <- c(rep("cop", 11), rep("no_cop", 11))
 
 for(i in 1:22) {
         cat(i, "\n")
-        model_summary_i <-  readRDS(here::here("outputs", "fits", "simulated_data_hpc", paste0(types[i], "_", vals[i]), "model_summary.RDS"))
+        model_summary_i <-  readRDS(here::here("outputs", "fits", "simulated_data", paste0(types[i], "_", vals[i]), "model_summary.RDS"))
 
         post_status <- model_summary_i$post$fit_states %>% 
             filter( inf_time > -1) %>%

@@ -170,7 +170,7 @@ p2 <- df_outputs_cop %>%
         sec.axis = sec_axis(~ . * 1, 
         breaks = seq(0, 1, length.out = 10), labels = labels_x_ncp, name = "log10 Titre value (NCP)")
     ) + theme_minimal() + 
-    ggtitle("E. Fitted curves for absolute COP")
+    ggtitle("E. Fitted curves for CPC")
 
 p3 <- df_outputs_cop %>% 
     ggplot() + stat_lineribbon(aes(x = x_new, y = y_hat_rel, group = biomarker, color = biomarker, fill = biomarker), .width = 0.01,alpha = 1, size = 2) + theme_bw()+ 
@@ -182,7 +182,7 @@ p3 <- df_outputs_cop %>%
         sec.axis = sec_axis(~ . * 1, 
         breaks = seq(0, 1, length.out = 10), labels = labels_x_ncp, name = "log10 Titre value (NCP)")
     ) + theme_minimal() + 
-    ggtitle("F. Fitted curves for relative COP")
+    ggtitle("F. Fitted curves for Relative Risk")
 
 
 pCOP <- p1 / (p2 + p3) + plot_layout(guides = "collect")
@@ -190,6 +190,7 @@ pCOP <- p1 / (p2 + p3) + plot_layout(guides = "collect")
 
 (pA / pBC) / pCOP + plot_layout(height = c(1, 1, 3)) & theme(text = element_text(size = 12, color = "black")) 
 ggsave(here::here("outputs", "figs", "fig4.png"), width = 12, height = 15)
+ggsave(here::here("outputs", "figs", "fig4.tiff"), width = 12, height = 15)
 
 
 

@@ -58,6 +58,7 @@ p1 <- recover_fourfold_s %>%
         fill = "Inferred positive") + theme(legend.position = "top")
 
 
+
 sens_4_n <- mean(recover_fourfold_n$true_pos)
 p2 <- recover_fourfold_n %>%
     ggplot() + geom_point(aes(x = id, inferred_4_fold, fill = true_pos), size = 5, shape = 21, alpha = 0.5) + 

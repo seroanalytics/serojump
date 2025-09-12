@@ -103,7 +103,8 @@ plot_Rhat_time_alt <- function(model_summary, title_i) {
         p2 <- df_summary_disc %>% ggplot() + geom_col(aes(x = rhat, y = as.character(variable))) + theme_bw() + 
             geom_vline(xintercept = 1.1, color = "red", linetype = "dashed") + 
             labs(x = "Rhat", y = "ID") +
-            scale_x_continuous(labels = seq(0, 2, 0.2), breaks = seq(0, 2, 0.2)) + 
+            scale_x_continuous(labels = seq(0, 2, 0.1), breaks = seq(0, 2, 0.1)) + 
+            coord_cartesian(xlim = c(0.95, 1.15)) + 
             ggtitle("B. Convergence diagnostics for timing of infection \nindividuals with posterior P(Z) > 0.5")
 
         p1 + p2 + plot_annotation(title = paste0("TIMING CONVERGENCE DIAGNOSITICS FOR ", title_i)) &
@@ -130,13 +131,13 @@ ggsave(here::here("outputs", "figs", "supp", "conv", "no_cop_0.1_time.png"), hei
 # CASE STUDY 2: TRANSVIR, NO PCR
 model_summary <-  readRDS(here::here("outputs", "fits", "transvir_data", "wave2_no_pcr", "model_summary.RDS"))
 p1 <- generate_convergence_plot(model_summary, "EMPIRICAL DATA WITH NO PCR")
-ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_no_pcr_full.png"), height = 20)
+ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_no_pcr_full.png"), height = 20, width = 16)
 p2 <- plot_Rhat_time_alt(model_summary,  "EMPIRICAL DATA WITH NO PCR")
-ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_no_pcr_time.png"), height = 20)
+ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_no_pcr_time.png"), height = 20, width = 16)
 
 # CASE STUDY 2: TRANSVIR, PCR
 model_summary <-  readRDS(here::here("outputs", "fits", "transvir_data", "wave2_base", "model_summary.RDS"))
 p1 <- generate_convergence_plot(model_summary, "EMPIRICAL DATA WITH PCR")
-ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_pcr_full.png"), height = 20)
+ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_pcr_full.png"), height = 20, width = 16)
 p2 <- plot_Rhat_time_alt(model_summary,  "EMPIRICAL DATA WITH PCR")
-ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_pcr_time.png"), height = 15)
+ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_pcr_time.png"), height = 20, width = 16)

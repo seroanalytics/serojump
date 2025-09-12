@@ -1,15 +1,18 @@
 
+chains_keep <- c(2, 6, 4, 5)  # c(2, 6, 4, 5)
+
 generate_convergence_plot <- function(model_summary, title_i) {
     df_smi_df <- calcScaleModelIndicator(model_summary)
 
-    df_smi_df <- df_smi_df %>% filter(.chain != 4)
+    df_smi_df <- df_smi_df %>% filter(.chain %in% chains_keep) %>% mutate(.chain = recode(.chain, "2" = "1", "6" = "2", "4" = "3", "5" = "4") )
 
     fit <- model_summary$fit
-    p1 <- (fit$post$mcmc[1:3]  %>% bayesplot::mcmc_trace()) + theme_minimal() + theme(legend.position = "top") + ggtitle("A. Trace plots for fitted parameters")
-    p2 <- fit$post$lpost %>% filter(chain_no !=4) %>% ggplot() + geom_line(aes(x = sample_no, y = lpost, color = chain_no))  + theme_minimal() + theme(legend.position = "top")  + ggtitle("B. Trace plots for log posterior") + 
-        labs(x = "Sample number", y = "Log-posterior")
+    p1 <- (fit$post$mcmc[chains_keep]  %>% bayesplot::mcmc_trace()) + theme_minimal() + theme(legend.position = "top") + ggtitle("A. Trace plots for fitted parameters")
+    p2 <- fit$post$lpost %>% filter(chain_no %in% chains_keep) %>% mutate(chain_no = recode(chain_no, "2" = "1", "6" = "2", "4" = "3", "5" = "4")) %>% 
+        ggplot() + geom_line(aes(x = sample_no, y = lpost, color = chain_no))  + theme_minimal() + theme(legend.position = "top")  + ggtitle("B. Trace plots for log posterior") + 
+            labs(x = "Sample number", y = "Log-posterior")
 
-    p3 <- df_conver_stat <- summarise_draws(fit$post$mcmc[1:3]  ) %>% select(variable, rhat, ess_bulk, ess_tail) %>% 
+    p3 <- df_conver_stat <- summarise_draws(fit$post$mcmc[chains_keep]  ) %>% select(variable, rhat, ess_bulk, ess_tail) %>% 
         pivot_longer(!variable, names_to = "stat", values_to = "value") %>%
         ggplot() + 
             geom_col(aes(y = variable, x = value)) +
@@ -71,7 +74,7 @@ plot_Rhat_time_alt <- function(model_summary, title_i) {
     model_outline <- model_summary$fit$model
     bio_all <- model_outline$infoModel$biomarkers
 
-    fit_states_dt <- as.data.table(outputfull$fit_states) %>% filter(chain_no != 4)
+    fit_states_dt <- as.data.table(outputfull$fit_states) %>% filter(chain_no %in% chains_keep)
     S <- fit_states_dt %>% filter(id == 1) %>% nrow
 
     ids <- fit_states_dt %>% group_by(id) %>% summarise(prob = sum(inf_ind) / S) %>% filter(prob > 0.5) %>% pull(id) %>% unique
@@ -104,7 +107,8 @@ plot_Rhat_time_alt <- function(model_summary, title_i) {
         p2 <- df_summary_disc %>% ggplot() + geom_col(aes(x = rhat, y = as.character(variable))) + theme_bw() + 
             geom_vline(xintercept = 1.1, color = "red", linetype = "dashed") + 
             labs(x = "Rhat", y = "ID") +
-            scale_x_continuous(labels = seq(0, 2, 0.2), breaks = seq(0, 2, 0.2)) + 
+            scale_x_continuous(labels = seq(0, 2, 0.1), breaks = seq(0, 2, 0.1)) + 
+            coord_cartesian(xlim = c(0.95, 1.15)) + 
             ggtitle("B. Convergence diagnostics for timing of infection \nindividuals with posterior P(Z) > 0.5")
 
         p1 + p2 + plot_annotation(title = paste0("TIMING CONVERGENCE DIAGNOSITICS FOR ", title_i)) &
@@ -119,6 +123,6 @@ plot_Rhat_time_alt <- function(model_summary, title_i) {
 # CASE STUDY 2: TRANSVIR, NO PCR
 model_summary <-  readRDS(here::here("outputs", "fits", "transvir_data", "wave2_no_pcr", "model_summary.RDS"))
 p1 <- generate_convergence_plot(model_summary, "EMPIRICAL DATA WITH NO PCR")
-ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_no_pcr_full.png"), height = 20)
+ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_no_pcr_full.png"), height = 20, width = 16)
 p2 <- plot_Rhat_time_alt(model_summary,  "EMPIRICAL DATA WITH NO PCR")
-ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_no_pcr_time.png"), height = 15)
+ggsave(here::here("outputs", "figs", "supp", "conv", "wave2_no_pcr_time.png"), height = 20, width = 16)

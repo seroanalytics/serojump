@@ -156,7 +156,7 @@ run_uncert_model_bi <- function(modeli, uncert_vec) {
       demography,
       observation_times,
       foe_pars,
-      biomarker_map, 
+      biomarker_map,
       model_pars,
       exposure_model,
       immunity_model,
@@ -259,7 +259,7 @@ simpar <- list(
   # Titre-dep boosting
   biomarker_ceiling_gradient = 0, # decline per sVNT unit
   biomarker_ceiling_threshold = 4, # fixed
-  times = seq(1, T ,by=1)
+  times = seq(1, T, by=1)
 )
 simpar <- simpar %>% get_start_titre  # add foe_pars, biomarker_map, start_titre
 

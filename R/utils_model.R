@@ -355,6 +355,7 @@ createSeroJumpModel <- function(
 runSeroJump <- function(seroModel, settings, priorPred = FALSE, save_info = NULL, seed = -1) {
    
 
+    #seroModel <- models_all[[m]]$model
     settings <- settings
     settings$numberFittedPar <- seroModel$model$namesOfParameters %>% length
     settings$lowerParBounds <- seroModel$model$lowerParSupport_fitted

@@ -7,6 +7,7 @@
 #' @import ggdist
 #' @import patchwork
 #' @import tidybayes
+#' @import bench
 #' @importFrom magrittr %>% %<>%
 NULL
 
@@ -552,81 +553,6 @@ plot_abkinetics_trajectories <- function(model_summary, file_path) {
             ) 
         }
     )
-
-
-
-       #     if (!is.null(hierFlag_value) && is.logical(hierFlag_value) && length(hierFlag_value) == 1 && hierFlag_value) {
-        #        dataHier <- model_outline$abkineticsModel[[name1]]$dataHier
-        #        parsHier <- model_outline$abkineticsModel[[name1]]$parsHier
-        #        parsBase <- model_outline$abkineticsModel[[name1]]$parsBase
-        #        N <- model_outline$abkineticsModel[[name1]]$dataHierN
-
-         #       pars_extract_list <- list()
-         #       for (j in 1:N) {
-         #           pars_names <- c()
-         #           for (k in 1:length(parsBase)) {
-         #               if (parsBase[[k]] %in% parsHier) {
-         #                   pars_names <- c(pars_names, parsBase[[k]], paste0("z_", parsBase[[k]], "_", j), paste0("sigma_", parsBase[[k]]))
-
-         #               } else {
-         #                   pars_names <- c(pars_names, parsBase[[k]])
-         #               }
-
-         #           }
-         #           pars_extract_list[[j]] <- pars_names
-         #       }
-         #   } else {
-         #       pars_extract_list <- list(pars_extract)
-         #   }
-
-
-
-
-
-                # map_df(1:length(pars_extract_list), 
-                #     function(k) { 
-                        #  k <- 3
-                #         post_fit_i <- post_fit
-                    # k is the index of the datahier
-                    # extract all argument values
-                #         post_par_list <- list()
-                #         post_par <- data.frame(post_fit[[pars_extract_list[[k]][1]]])
-                #         if (length(pars_extract_list[[k]]) > 1) {
-                #             for (i in 2:length(pars_extract_list[[k]])) {
-                #                 post_par <- cbind(post_par, post_fit[[pars_extract_list[[k]][i]]])
-             #            }   
-              #         }
-                #        colnames(post_par) <- pars_extract_list[[k]]
-
-                    # adjust for hierarchicial values 
-             #       if (!is.null(hierFlag_value) && is.logical(hierFlag_value) && length(hierFlag_value) == 1 && hierFlag_value) {
-             #           for (j in 1:length(parsHier)) {
-                           #
-
-             #               lower_upper <- model_summary$fit$model$infoModel$logitBoundaries %>% filter(par_name ==  parsHier[j])
-             #               upper <- lower_upper %>% pull(ub)
-             #               lower <- lower_upper %>% pull(lb)
-
-             #               post_fit_i <- post_fit_i %>% mutate(!!str2lang(pars_extract_list[[k]][1 + 3 * (j - 1)]) := logit_inverse(!!str2lang(pars_extract_list[[k]][1 + 3 * (j - 1)]) +
-                    #            !!str2lang(pars_extract_list[[k]][2 + 3 * (j - 1)]) * !!str2lang(pars_extract_list[[k]][3 + 3 * (j - 1)])) * (upper - lower) + lower  )
-             #           }
-             #           post_par <- post_fit_i %>% select(!!parsBase)
-             #       }
-
-
-             #       T <- T_max
-             #       traj_post <- 1:(100) %>% purrr::map_df(
-             #           ~data.frame(
-             #               time = 1:T,
-               #             value = ab_function(T, as.numeric(post_par[.x, ]))
-              #          )
-              #      )
-              #      traj_post_summ <- traj_post %>% group_by(time) %>% mean_qi() %>% mutate(exposure_type = exposureType) %>% 
-              #          mutate(biomarker = biomarker, covar = k)
-              #          
-              #  }
-            
-        
     
 
     saveRDS(list(posteriorsAllExposure), here::here(file_path, "plt_data", "ab_kinetics_recov.RDS"))

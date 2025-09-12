@@ -3,6 +3,10 @@ vignettes/working/*
 # Except for the simulate_data directory
 !outputs/fits/simulated_data/
 
+R/manu/app_conv.R
+R/manu/app_conv_alt.R
+R/manu/app_conv_alt_2.Rp0
+
 scp/
 # Ensure the contents of simulate_data are tracked
 !outputs/fits/simulated_data/*
