@@ -84,7 +84,7 @@ antibody kinetics models</h1>
                         <h4 data-toc-skip class="author">David
 Hodgson</h4>
             
-            <h4 data-toc-skip class="date">2025-03-17</h4>
+            <h4 data-toc-skip class="date">2025-09-12</h4>
       
 
       <div class="hidden name"><code>model_define.Rmd</code></div>
@@ -393,12 +393,22 @@ priors. This can be done using a suit of functions
 <code>plotPriors</code> function.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotSero.html">plotSero</a></span><span class="op">(</span><span class="va">seroModel</span><span class="op">)</span></span>
-<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotPriorPredictive.html">plotPriorPredictive</a></span><span class="op">(</span><span class="va">seroModel</span><span class="op">)</span></span>
-<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotPriorInfection.html">plotPriorInfection</a></span><span class="op">(</span><span class="va">seroModel</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotPriorPredictive.html">plotPriorPredictive</a></span><span class="op">(</span><span class="va">seroModel</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">serojump</span> package.</span></span>
+<span><span class="co">##   Please report the issue to the authors.</span></span>
+<span><span class="co">## <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">## <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">## <span style="color: #555555;">generated.</span></span></span></code></pre>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotPriorInfection.html">plotPriorInfection</a></span><span class="op">(</span><span class="va">seroModel</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p1</span> <span class="op">/</span> <span class="va">p2</span></span></code></pre></div>
+<pre><code><span><span class="co">## Ignoring unknown labels:</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">colour</span> : <span style="color: #0000BB;">"Exposure type"</span></span></span></code></pre>
 <p><img src="model_define_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p3</span></span></code></pre></div>
 <p><img src="model_define_files/figure-html/unnamed-chunk-6-2.png" width="700"></p>
 </div>
@@ -409,7 +419,7 @@ priors. This can be done using a suit of functions
 <code>runSeroJump</code> function. This function requires the seroModel,
 settings for the RJ-MCMC algorithm, and information about saving the
 model outputs.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">save_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    file_name <span class="op">=</span> <span class="st">"simple"</span>,</span>
 <span>    model_name <span class="op">=</span> <span class="st">"ex1"</span></span>
@@ -429,7 +439,7 @@ model outputs.</p>
 <div class="section level2">
 <h2 id="plot-the-outputs">5. Plot the outputs<a class="anchor" aria-label="anchor" href="#plot-the-outputs"></a>
 </h2>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Need to have save_info model_summary to run these</span></span>
 <span><span class="fu"><a href="../reference/plotMCMCDiagnosis.html">plotMCMCDiagnosis</a></span><span class="op">(</span><span class="va">model_summary</span>, save_info <span class="op">=</span> <span class="va">save_info</span><span class="op">)</span> <span class="co"># plots the convergence diagnosis</span></span>
 <span><span class="fu"><a href="../reference/plotPostFigs.html">plotPostFigs</a></span><span class="op">(</span><span class="va">model_summary</span>, save_info <span class="op">=</span> <span class="va">save_info</span><span class="op">)</span> <span class="co">#plots some plots of the posteriors</span></span></code></pre></div>
@@ -453,7 +463,7 @@ which the user can extract and plot themselves!</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer>
