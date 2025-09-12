@@ -47,8 +47,8 @@ This data has been generated using `serosim`. The code the generate this data ca
 sim_model_cop <- readRDS(file = "cesCOP_inputs.RDS")
 sim_res_cop <- readRDS(file = "cesCOP_sim_data_0.5.rds")
 
-#modeli <- readRDS(file = system.file("extdata", "vig_data", "cesCOP", "cesCOP_inputs.RDS", package = "serojump"))
-#res <- readRDS(file = system.file("extdata","vig_data", "cesCOP", "cesCOP_sim_data_0.5.RDS", package = "serojump"))
+#sim_model_cop <- readRDS(file = system.file("extdata", "vig_data", "cesCOP", "cesCOP_inputs.RDS", package = "serojump"))
+#sim_res_cop <- readRDS(file = system.file("extdata","vig_data", "cesCOP", "cesCOP_sim_data_0.5.RDS", package = "serojump"))
 
 #modeli <- readRDS(file = "cesCOP_inputs.RDS")
 #modeli <- readRDS(file = "cesCOP_sin_data_0.5.RDS")

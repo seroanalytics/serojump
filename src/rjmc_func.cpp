@@ -25,7 +25,7 @@ List run_rjmc_sero(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings
 
   List output_full;
   MatrixXd output, jump, inf;
-  RObject titreexp, obstitre;
+  RObject titreexp, obstitre, obsloglik;
 
   init_samplePriorDistributions(SeroJumpRunInst.get(), model["samplePriorDistributions"]);
   init_evaluateLogPrior(SeroJumpRunInst.get(), model["evaluateLogPrior"]);
@@ -41,7 +41,10 @@ List run_rjmc_sero(Rcpp::List model, Rcpp::RObject dataList, Rcpp::List settings
   jump = output_full[1];
   titreexp = output_full[2];
   obstitre = output_full[3];
+  obsloglik = output_full[4];
 
-  return Rcpp::List::create(_["output"] = output, _["jump"] = jump, _["titreexp"] = titreexp, _["obstitre"] = obstitre, _["RJMCpar"] = RJMCpar);
+
+  return Rcpp::List::create(_["output"] = output, _["jump"] = jump, _["titreexp"] = titreexp, 
+      _["obstitre"] = obstitre, _["obsloglik"] = obsloglik, _["RJMCpar"] = RJMCpar);
 
 }

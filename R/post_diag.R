@@ -217,3 +217,44 @@ invariantParamConvPriorPlot <- function(model_summary, file_path) {
 
 }
            
+
+
+#' @export 
+reshape_obsloglik_for_loo <- function(model_summary) {
+  # Extract obsloglik data from model_summary
+  obsloglik_data <- model_summary$fit$post$obsloglik
+  
+  # Extract dimensions from the model object
+  n_chains <- model_summary$post$n_chains
+  n_iterations <- model_summary$post$n_post
+  n_datapoints <- nrow(obsloglik_data[[1]][[1]])  # Number of data points per iteration
+  
+  # Extract the number of biomarkers from the first chain, first iteration
+  n_biomarkers <- ncol(obsloglik_data[[1]][[1]])
+  
+  # Initialize the output array: iterations x chains x datapoints
+  loglik_array <- array(NA, dim = c(n_iterations, n_chains, n_datapoints))
+  
+  # Reshape data from each chain
+  for (chain in 1:n_chains) {
+    # Extract the list of matrices for this chain
+    chain_data <- obsloglik_data[[chain]]
+    
+    # Process each iteration in this chain
+    for (iter in 1:n_iterations) {
+      if (iter <= length(chain_data)) {
+        # Extract the matrix for this iteration
+        iter_matrix <- chain_data[[iter]]
+        # Store the log-likelihood values for this iteration
+        loglik_array[iter, chain, ] <- iter_matrix[, 1]  # Assuming single biomarker
+      } else {
+        warning(paste("Chain", chain, "iteration", iter, "not available"))
+      }
+    }
+  }
+  
+  # Reshape to the format expected by loo: iterations * chains x datapoints
+  loglik_matrix <- matrix(loglik_array, nrow = n_iterations * n_chains, ncol = n_datapoints)
+  
+  return(loglik_matrix)
+}

@@ -20,7 +20,6 @@ NULL
 #' @export
 rjmc_sero_func <- function(model, data, settings, par = NULL, seed = -1) {
   settings <- check_settings_sero(settings)
-
   if (length(par) == 0) {
     par <- rep(list(list(type = "None")), settings[["numberChainRuns"]])
     output <- get_output_sero(model, data, settings, FALSE, par, seed)
@@ -36,6 +35,7 @@ get_output_sero <- function(model, data_list, settings, update_ind, par, seed = 
   outPTjump <- vector(mode = "list", length = settings[["numberChainRuns"]])
   outPTtitreexp <- vector(mode = "list", length = settings[["numberChainRuns"]])
   outPTobstitre <- vector(mode = "list", length = settings[["numberChainRuns"]])
+  outPTobsloglik <- vector(mode = "list", length = settings[["numberChainRuns"]])
   outPTlp <- vector(mode = "list", length = settings[["numberChainRuns"]])
   outPTacc <- vector(mode = "list", length = settings[["numberChainRuns"]])
   outPTpar <- vector(mode = "list", length = settings[["numberChainRuns"]])
@@ -67,6 +67,7 @@ get_output_sero <- function(model, data_list, settings, update_ind, par, seed = 
     outPTjump[[i]] <- out_raw[[i]][["jump"]]
     outPTtitreexp[[i]] <- out_raw[[i]][["titreexp"]]
     outPTobstitre[[i]] <- out_raw[[i]][["obstitre"]]
+    outPTobsloglik[[i]] <- out_raw[[i]][["obsloglik"]]
     outPTlp[[i]] <- out_raw[[i]][["output"]][, settings$numberFittedPar + 1]
     outPTacc[[i]] <- out_raw[[i]][["output"]][, settings$numberFittedPar + 2]
   }
@@ -86,6 +87,7 @@ get_output_sero <- function(model, data_list, settings, update_ind, par, seed = 
     jump = outPTjump,
     titreexp = outPTtitreexp,
     obstitre = outPTobstitre,
+    obsloglik = outPTobsloglik,
     lpost = outlpv,
     acc = outlaccv,
     outPTpar = outPTpar
