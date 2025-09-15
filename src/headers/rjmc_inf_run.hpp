@@ -92,7 +92,6 @@ public:
 
         // Get initial Inf values
         initialInf = this->knownInfsVec;
-
         if (this->onDebug) Rcpp::Rcout << "In: Check 7ii" << std::endl;
         for (int i = 0; i < this->N; i++) {
             if (this->knownInfsVec(i) == 0) {
@@ -174,6 +173,7 @@ public:
         this->currentCovarianceMatrix = this->nonadaptiveScalar*this->nonadaptiveCovarianceMat;
       //  updateAbKineticParams(initialSample);
 
+
         initialLogLikelihood = loglikInit->evalLogPosterior(initialSample, initialJump, this->currentCovarianceMatrix, this->dataList, true);
 
         if (this->onDebug) Rcpp::Rcout << "In: Check 9" << std::endl;
@@ -206,7 +206,7 @@ public:
         // initalise FUNCTION
         if (this->onDebug) Rcpp::Rcout << "Pre: iterations" << std::endl;
         for (int i = 0; i < this->iterations; i++){
-            
+
             this->workingIteration = i;
             //if (this->onDebug) Rcpp::Rcout << "Pre: updateAllChains" << std::endl;
             runIteration();
@@ -217,7 +217,8 @@ public:
             _["pars"] = this->posteriorOut,
             _["jump"] = this->posteriorJump,
             _["titreexp"] = this->posteriorTitreExp,
-            _["obstitre"] = this->posteriorObsTitre
+            _["obstitre"] = this->posteriorObsTitre,
+            _["obsloglik"] = this->posteriorObsLogLik
         );
 
         return out;
@@ -388,6 +389,7 @@ public:
 
             this->currentTitreExp = this->proposalTitreExp;
             this->currentObsTitre = this->proposalObsTitre;
+            this->currentObsLogLik = this->proposalObsLogLik;
             this->currentCORPars = this->proposalCORPars;
 
             this->currentEventsFull = this->proposalEventsFull;
@@ -404,6 +406,7 @@ public:
 
             this->proposalTitreExp = this->currentTitreExp;
             this->proposalObsTitre = this->currentObsTitre;
+            this->proposalObsLogLik = this->currentObsLogLik;
             this->proposalCORPars = this->currentCORPars;
 
             this->proposalEventsFull = this->currentEventsFull;
@@ -525,6 +528,7 @@ public:
             // Get the titre at exposure values and observational values
             this->posteriorTitreExp.push_back(this->currentTitreExp);
             this->posteriorObsTitre.push_back(this->currentObsTitre);
+            this->posteriorObsLogLik.push_back(this->currentObsLogLik);
             this->posteriorCORPars.push_back(this->currentCORPars);
 
             this->counterPosterior++;            

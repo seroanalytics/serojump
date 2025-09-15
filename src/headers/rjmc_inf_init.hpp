@@ -59,6 +59,8 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
     // VectorXd currentInf, proposalInf;
     MatrixXd currentTitreExp, proposalTitreExp;
     MatrixXd currentObsTitre, proposalObsTitre;
+    MatrixXd currentObsLogLik, proposalObsLogLik;
+
     MatrixXd currentCORPars, proposalCORPars;
 
     VectorXd historicJump;
@@ -69,7 +71,7 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
 
     // Outputs for posterior
     MatrixXd posteriorOut, posteriorJump, posteriorInf;
-    std::vector<MatrixXd> posteriorTitreExp, posteriorObsTitre, posteriorCORPars;
+    std::vector<MatrixXd> posteriorTitreExp, posteriorObsTitre, posteriorObsLogLik, posteriorCORPars;
 
     // Information extracted from the settingd
     int iPosterior;
@@ -241,6 +243,7 @@ struct SeroJumpBase : public std::enable_shared_from_this<SeroJumpBase>
             this->evalabkineticsFunc[temp0] = temp2;
             this->parsAbKinN[temp0] = temp3;
         }
+
     }    
 
     void initialiseBaseClass(List settings, RObject dataList, int i)

@@ -343,10 +343,10 @@ private:
  */
     double evaluateLogLikelihoodObs_cpp( bool init) {
         if (parent->onDebug) Rcpp::Rcout << "In: evaluateLogLikelihoodObs_cpp" << std::endl;
-
         std::vector<DoubleWithString> df_order_exp; 
         MatrixXd obsTitre(parent->N_data, parent->B);
-    
+        MatrixXd logLik(parent->N_data, parent->B);
+
         double titre_est ;
         double titre_val;
         double ll = 0;
@@ -368,39 +368,33 @@ private:
                 int j_data = 0;
                 std::vector<DoubleWithString> proposalTitreFull_i_b = proposalTitreFull_i[bio];
                 for (int j = 0; j < proposalTitreFull_i_b.size(); j++) {
-                  //  Rcpp::Rcout << "i_idx: " << i_idx << std::endl;
-                  //  Rcpp::Rcout << "biomarker_b: " << biomarker_b << std::endl;
-                 //   Rcpp::Rcout << "j: j: " << j << std::endl;
-                   //Rcpp::Rcout << "proposalTitreFull_i_b[j].name: " << proposalTitreFull_i_b[j].name << std::endl;
 
                     if(proposalTitreFull_i_b[j].name == "bleed") {
                        // Rcpp::Rcout << "" << std::endl;
                         titre_est = proposalTitreFull_i_b[j].value;
                         obsTitre(k_idx + k_count, bio) = titre_est; 
-
-                        k_count++;
+                        // obsTitre is the observed titre values
                         titre_val = titre_val_i_b[j_data];
-
-                      //  Rcpp::Rcout << "COP: titre_est: " << titre_est << std::endl;
-                     //   Rcpp::Rcout << "COP: titre_val: " << titre_val << std::endl;
+                        // titre_val is the observed titre value
 
                         j_data ++;
                         if (!parent->priorPredFlag) {
-                          //  Rcpp::Rcout << "as<double>(evalLoglikelhoodObs_i(titre_val, titre_est, pars) ): " << as<double>(evalLoglikelhoodObs_i(titre_val, titre_est, pars) ) << std::endl;
-                            ll += as<double>(evalLoglikelhoodObs_i(titre_val, titre_est, pars) );
+                            logLik(k_idx + k_count, bio) = as<double>(evalLoglikelhoodObs_i(titre_val, titre_est, pars) );
+                            ll += logLik(k_idx + k_count, bio);
                         }
+                        k_count++;
                     }
                 }
             }
             k_idx = k_idx + k_count;        
         }
         if (init) {
+            parent->currentObsLogLik = logLik;
             parent->currentObsTitre = obsTitre;
         } else {
+            parent->proposalObsLogLik = logLik;
             parent->proposalObsTitre = obsTitre;
         }
-       // Rcpp::Rcout << "Obs: ll: " << ll << std::endl;
-       // Rcpp::Rcout << "pars: " << pars[0] << std::endl;
 
         return ll;
     }
