@@ -1,7 +1,7 @@
 # serojump
 
 <div align="center">
-  <img src="serojump_hex.png" alt="serojump hex logo" width="200"/>
+  <img src="https://raw.githubusercontent.com/seroanalytics/serojump/main/serojump_hex.png" alt="serojump hex logo" width="200"/>
 </div>
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
