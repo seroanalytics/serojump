@@ -1,6 +1,12 @@
 # serojump
+
+<div align="center">
+  <img src="serojump_hex.png" alt="serojump hex logo" width="200"/>
+</div>
+
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-CMD-check](https://github.com/seroanalytics/serojump/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/seroanalytics/serojump/actions/workflows/R-CMD-check.yaml)
+
 
 ![Schematic of the methods behind the `serojump` package](./man/figures/schematic_A.png)
 
@@ -46,6 +52,7 @@ library(serojump)
 
 ```
 
+
 ## Usage
 
 For detailed usage instructions, please refer to the package vignettes and examples. These vignettes explain:
@@ -58,6 +65,12 @@ In addition we have several worked examples of `serojump` on:
 - Simulated data click [here](https://seroanalytics.org/serojump/articles/sim_recovery.html).
 
 ---
+
+## Citation
+
+If you use `serojump` in your research, please cite our paper:
+
+**Hodgson D, Hay J, Jarju S, Jobe D, Wenlock R, et al. (2025) serojump: A Bayesian tool for inferring infection timing and antibody kinetics from longitudinal serological data. PLOS Computational Biology 21(9): e1013467.** [https://doi.org/10.1371/journal.pcbi.1013467](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013467)
 
 ## Contributing
 
