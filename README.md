@@ -82,7 +82,7 @@ We welcome contributions and suggestions! If you'd like to contribute to the `se
 If you have any questions or feedback, or would like more informative vignettes, you can contact the package maintainer at:
 
 **David Hodgson**  
-Email: [david.hodgson@lshtm.ac.uk](mailto:david.hodgson@lshtm.ac.uk)
+Email: [david.hodgson@lshtm.ac.uk](mailto:david.hodgson@charite.de)
 
 ---
 
