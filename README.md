@@ -20,7 +20,7 @@ This package is ideal for researchers looking to:
 - Estimate infection rates and antibody waning using serological data
 - Perform MCMC inference on serological models
 
-The best place to get started with serojump is our paper [here](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013467) or our interactive widget [here](https://seroanalytics.org/serojump-widget/)). In this repo, several model templates are provided to simplify usage, while also allowing users to customise models for specific research questions.
+The best place to get started with serojump is our paper [here](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013467) or our interactive widget [here](https://seroanalytics.org/serojump-widget/). In this repo, several model templates are provided to simplify usage, while also allowing users to customise models for specific research questions.
 
 ## Installation
 
