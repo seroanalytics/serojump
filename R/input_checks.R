@@ -63,10 +63,19 @@ check_inputs <- function(data_sero, data_known, biomarkers, exposureTypes, expos
    #     stop("Please define the `abkineticsModel`")
    # }
 
+    # CHECK ID COLUMN EXISTS AND IS NUMERIC
+    data_sero_name <- data_sero %>% names
+    
+    if(!"id" %in% data_sero_name) {
+        stop("Error: Column 'id' does not exist in data_sero. Please rename your ID column to 'id'.")
+    }
+    
+    if(!is.numeric(data_sero$id)) {
+        stop("Error: Column 'id' in data_sero is not numeric. Please convert it using: \ndata_sero <- data_sero %>% mutate(id = factor(id, levels = unique(id))) %>% mutate(id = as.numeric(id))")
+    }
  
     # CHECK BIOMARKERS ARE WELL DEFINED
-    # Check columns of data_sero match model definition 
-    data_sero_name <- data_sero %>% names
+    # Check columns of data_sero match model definition
     biomarkers_md <- biomarkers
     biomarkers_obs <- observationalModel$model %>% map(~.x$biomarker) %>% unlist
     biomarkers_abkin <- abkineticsModel$model %>% map(~.x$biomarker) %>% unlist %>% unique
