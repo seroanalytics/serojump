@@ -9,8 +9,10 @@ plotSero <- function(seroModel, N_max = 100){
 
     if (N > N_max) {
         sero_plot <- seroModel$data$raw_sero %>% filter(id <= N_max)  %>% mutate(id = factor(id, levels = unique(id))) 
+        N_plot <- N_max
     } else {
         sero_plot <- seroModel$data$raw_sero %>% mutate(id = factor(id, levels = unique(id))) 
+        N_plot <- N
     }
 
     T <- sero_plot %>% pull(time) %>% max
@@ -26,7 +28,7 @@ plotSero <- function(seroModel, N_max = 100){
         geom_point(aes(x = time, y = id), shape = "|", size = 2.5) + 
       #  geom_point(data = epi_times_sims, aes(x = t, y = i, color = exp_type) ,  shape = 4) 
         labs(x = "Time in study (days)", y = "Id of individual", color = "Exposure type") + 
-        geom_hline(yintercept = seq(0.5, N + 0.5, 1), color = "gray90") +
+        geom_hline(yintercept = seq(0.5, N_plot + 0.5, 1), color = "gray90") +
         theme(panel.grid.major.y = element_blank()) + theme_bw()
 }
 
