@@ -42,6 +42,15 @@ devtools::install_github("seroanalytics/serojump")
 
 ```
 
+
+If this fails it might be because serojump is too big, if so please run:
+
+```
+options(timeout = 300)
+```
+
+Then try and install again. Note, I removed a lot out the files in the outputs (files which helped with the serojump paper), in order to save space for people. If you want these down load https://github.com/seroanalytics/serojump/releases/tag/v1.1.0 . The published version is https://github.com/seroanalytics/serojump/releases/tag/v1.0.0.
+
 ### Step 3: Load `serojump` from GitHub
 After installation, you can load the serojump package into your R session with:
 
